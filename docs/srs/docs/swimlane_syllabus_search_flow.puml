@@ -1,0 +1,40 @@
+@startuml
+title Luồng Tìm Kiếm Syllabus - So sánh Admin và Sinh viên
+
+skinparam shadowing false
+skinparam backgroundColor white
+skinparam activity {
+  BackgroundColor #F8FAFC
+  BorderColor #1D4ED8
+  DiamondBackgroundColor #DBEAFE
+  DiamondBorderColor #2563EB
+  FontColor #1E3A8A
+}
+
+start
+
+fork
+  |Admin|
+  :Nhập Subject Code gần đúng;
+  |Frontend Admin|
+  :Gửi yêu cầu fuzzy search;
+  |Backend API|
+  :Truy vấn tất cả syllabus\nkhông giới hạn trạng thái;
+  |Frontend Admin|
+  :Hiển thị bảng kết quả gồm\nSyllabus ID, Subject Code,\nSubject Name, Syllabus Name,\nIsActive, IsApproved, DecisionNo;
+  :Cho phép sort, filter\nvà cuộn vô hạn;
+fork again
+  |Sinh viên|
+  :Nhập Subject Code;
+  |Frontend Web|
+  :Gửi yêu cầu tìm kiếm môn học;
+  |Backend API|
+  :Chỉ lọc syllabus với\n`is_active = true` và `is_approved = true`;
+  |Frontend Web|
+  :Hiển thị danh sách môn phù hợp;
+  |Sinh viên|
+  :Chọn môn để mở trang chi tiết;
+end fork
+
+stop
+@enduml

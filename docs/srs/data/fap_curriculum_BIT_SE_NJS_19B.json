@@ -1,0 +1,394 @@
+[
+  {
+    "semester": "Preparatory/Additional",
+    "semester_num": "0",
+    "subject_code": "SubjectName",
+    "subject_name": "TermNo",
+    "credits": "",
+    "prerequisite": ""
+  },
+  {
+    "semester": "Preparatory/Additional",
+    "semester_num": "0",
+    "subject_code": "Vovinam 1",
+    "subject_name": "0",
+    "credits": "",
+    "prerequisite": ""
+  },
+  {
+    "semester": "Preparatory/Additional",
+    "semester_num": "0",
+    "subject_code": "Vovinam 2",
+    "subject_name": "0",
+    "credits": "",
+    "prerequisite": ""
+  },
+  {
+    "semester": "Preparatory/Additional",
+    "semester_num": "0",
+    "subject_code": "Vovinam 3",
+    "subject_name": "0",
+    "credits": "",
+    "prerequisite": ""
+  },
+  {
+    "semester": "Preparatory/Additional",
+    "semester_num": "0",
+    "subject_code": "English 6 (University success)",
+    "subject_name": "0",
+    "credits": "",
+    "prerequisite": ""
+  },
+  {
+    "semester": "Preparatory/Additional",
+    "semester_num": "0",
+    "subject_code": "Traditional musical instrument",
+    "subject_name": "0",
+    "credits": "",
+    "prerequisite": ""
+  },
+  {
+    "semester": "Preparatory/Additional",
+    "semester_num": "0",
+    "subject_code": "Orientation and General Training Program",
+    "subject_name": "0",
+    "credits": "",
+    "prerequisite": ""
+  },
+  {
+    "semester": "Preparatory/Additional",
+    "semester_num": "0",
+    "subject_code": "Introduction to Computer Science",
+    "subject_name": "1",
+    "credits": "",
+    "prerequisite": ""
+  },
+  {
+    "semester": "Preparatory/Additional",
+    "semester_num": "0",
+    "subject_code": "Academic Skills for University Success",
+    "subject_name": "1",
+    "credits": "",
+    "prerequisite": ""
+  },
+  {
+    "semester": "Preparatory/Additional",
+    "semester_num": "0",
+    "subject_code": "Programming Fundamentals",
+    "subject_name": "1",
+    "credits": "",
+    "prerequisite": ""
+  },
+  {
+    "semester": "Preparatory/Additional",
+    "semester_num": "0",
+    "subject_code": "Mathematics for Engineering",
+    "subject_name": "1",
+    "credits": "",
+    "prerequisite": ""
+  },
+  {
+    "semester": "Preparatory/Additional",
+    "semester_num": "0",
+    "subject_code": "Computer Organization and Architecture",
+    "subject_name": "1",
+    "credits": "",
+    "prerequisite": ""
+  },
+  {
+    "semester": "Preparatory/Additional",
+    "semester_num": "0",
+    "subject_code": "Object-Oriented Programming",
+    "subject_name": "2",
+    "credits": "",
+    "prerequisite": ""
+  },
+  {
+    "semester": "Preparatory/Additional",
+    "semester_num": "0",
+    "subject_code": "Discrete mathematics",
+    "subject_name": "2",
+    "credits": "",
+    "prerequisite": ""
+  },
+  {
+    "semester": "Preparatory/Additional",
+    "semester_num": "0",
+    "subject_code": "Operating Systems",
+    "subject_name": "2",
+    "credits": "",
+    "prerequisite": ""
+  },
+  {
+    "semester": "Preparatory/Additional",
+    "semester_num": "0",
+    "subject_code": "Computer Networking",
+    "subject_name": "2",
+    "credits": "",
+    "prerequisite": ""
+  },
+  {
+    "semester": "Preparatory/Additional",
+    "semester_num": "0",
+    "subject_code": "Communication and In-Group Working Skills",
+    "subject_name": "2",
+    "credits": "",
+    "prerequisite": ""
+  },
+  {
+    "semester": "Preparatory/Additional",
+    "semester_num": "0",
+    "subject_code": "Data Structures and Algorithms",
+    "subject_name": "3",
+    "credits": "",
+    "prerequisite": ""
+  },
+  {
+    "semester": "Preparatory/Additional",
+    "semester_num": "0",
+    "subject_code": "Database Systems",
+    "subject_name": "3",
+    "credits": "",
+    "prerequisite": ""
+  },
+  {
+    "semester": "Preparatory/Additional",
+    "semester_num": "0",
+    "subject_code": "OOP with Java Lab",
+    "subject_name": "3",
+    "credits": "",
+    "prerequisite": ""
+  },
+  {
+    "semester": "Preparatory/Additional",
+    "semester_num": "0",
+    "subject_code": "Elementary Japanese 1- A1.1",
+    "subject_name": "3",
+    "credits": "",
+    "prerequisite": ""
+  },
+  {
+    "semester": "Preparatory/Additional",
+    "semester_num": "0",
+    "subject_code": "Web Design",
+    "subject_name": "3",
+    "credits": "",
+    "prerequisite": ""
+  },
+  {
+    "semester": "Preparatory/Additional",
+    "semester_num": "0",
+    "subject_code": "Introduction to Software Engineering",
+    "subject_name": "4",
+    "credits": "",
+    "prerequisite": ""
+  },
+  {
+    "semester": "Preparatory/Additional",
+    "semester_num": "0",
+    "subject_code": "Elementary Japanese 1-A1.2",
+    "subject_name": "4",
+    "credits": "",
+    "prerequisite": ""
+  },
+  {
+    "semester": "Preparatory/Additional",
+    "semester_num": "0",
+    "subject_code": "Internet of Things",
+    "subject_name": "4",
+    "credits": "",
+    "prerequisite": ""
+  },
+  {
+    "semester": "Preparatory/Additional",
+    "semester_num": "0",
+    "subject_code": "Java Web application development",
+    "subject_name": "4",
+    "credits": "",
+    "prerequisite": ""
+  },
+  {
+    "semester": "Preparatory/Additional",
+    "semester_num": "0",
+    "subject_code": "Statistics & Probability",
+    "subject_name": "4",
+    "credits": "",
+    "prerequisite": ""
+  },
+  {
+    "semester": "Preparatory/Additional",
+    "semester_num": "0",
+    "subject_code": "Software Requirements",
+    "subject_name": "5",
+    "credits": "",
+    "prerequisite": ""
+  },
+  {
+    "semester": "Preparatory/Additional",
+    "semester_num": "0",
+    "subject_code": "Software Testing",
+    "subject_name": "5",
+    "credits": "",
+    "prerequisite": ""
+  },
+  {
+    "semester": "Preparatory/Additional",
+    "semester_num": "0",
+    "subject_code": "Software development project",
+    "subject_name": "5",
+    "credits": "",
+    "prerequisite": ""
+  },
+  {
+    "semester": "Preparatory/Additional",
+    "semester_num": "0",
+    "subject_code": "The UI/UX Design",
+    "subject_name": "5",
+    "credits": "",
+    "prerequisite": ""
+  },
+  {
+    "semester": "Preparatory/Additional",
+    "semester_num": "0",
+    "subject_code": "Front-End web development with React",
+    "subject_name": "5",
+    "credits": "",
+    "prerequisite": ""
+  },
+  {
+    "semester": "Preparatory/Additional",
+    "semester_num": "0",
+    "subject_code": "Research Methods & Academic Writing Skills",
+    "subject_name": "6",
+    "credits": "",
+    "prerequisite": ""
+  },
+  {
+    "semester": "Preparatory/Additional",
+    "semester_num": "0",
+    "subject_code": "On the job training",
+    "subject_name": "6",
+    "credits": "",
+    "prerequisite": ""
+  },
+  {
+    "semester": "Preparatory/Additional",
+    "semester_num": "0",
+    "subject_code": "Experiential Entrepreneurship 1",
+    "subject_name": "7",
+    "credits": "",
+    "prerequisite": ""
+  },
+  {
+    "semester": "Preparatory/Additional",
+    "semester_num": "0",
+    "subject_code": "Project Management",
+    "subject_name": "7",
+    "credits": "",
+    "prerequisite": ""
+  },
+  {
+    "semester": "Preparatory/Additional",
+    "semester_num": "0",
+    "subject_code": "Software Architecture and Design",
+    "subject_name": "7",
+    "credits": "",
+    "prerequisite": ""
+  },
+  {
+    "semester": "Preparatory/Additional",
+    "semester_num": "0",
+    "subject_code": "Server-Side development with NodeJS, Express, and MongoDB",
+    "subject_name": "7",
+    "credits": "",
+    "prerequisite": ""
+  },
+  {
+    "semester": "Preparatory/Additional",
+    "semester_num": "0",
+    "subject_code": "Multiplatform Mobile App Development",
+    "subject_name": "7",
+    "credits": "",
+    "prerequisite": ""
+  },
+  {
+    "semester": "Preparatory/Additional",
+    "semester_num": "0",
+    "subject_code": "Web Development Project",
+    "subject_name": "8",
+    "credits": "",
+    "prerequisite": ""
+  },
+  {
+    "semester": "Preparatory/Additional",
+    "semester_num": "0",
+    "subject_code": "Mobile Programming",
+    "subject_name": "8",
+    "credits": "",
+    "prerequisite": ""
+  },
+  {
+    "semester": "Preparatory/Additional",
+    "semester_num": "0",
+    "subject_code": "Experiential Entrepreneurship 2",
+    "subject_name": "8",
+    "credits": "",
+    "prerequisite": ""
+  },
+  {
+    "semester": "Preparatory/Additional",
+    "semester_num": "0",
+    "subject_code": "Ethics in IT",
+    "subject_name": "8",
+    "credits": "",
+    "prerequisite": ""
+  },
+  {
+    "semester": "Preparatory/Additional",
+    "semester_num": "0",
+    "subject_code": "Political economics of Marxism – Leninism",
+    "subject_name": "8",
+    "credits": "",
+    "prerequisite": ""
+  },
+  {
+    "semester": "Preparatory/Additional",
+    "semester_num": "0",
+    "subject_code": "Philosophy of Marxism – Leninism",
+    "subject_name": "8",
+    "credits": "",
+    "prerequisite": ""
+  },
+  {
+    "semester": "Preparatory/Additional",
+    "semester_num": "0",
+    "subject_code": "Scientific socialism",
+    "subject_name": "9",
+    "credits": "",
+    "prerequisite": ""
+  },
+  {
+    "semester": "Preparatory/Additional",
+    "semester_num": "0",
+    "subject_code": "History of Vietnam Communist Party",
+    "subject_name": "9",
+    "credits": "",
+    "prerequisite": ""
+  },
+  {
+    "semester": "Preparatory/Additional",
+    "semester_num": "0",
+    "subject_code": "Ho Chi Minh Ideology",
+    "subject_name": "9",
+    "credits": "",
+    "prerequisite": ""
+  },
+  {
+    "semester": "Preparatory/Additional",
+    "semester_num": "0",
+    "subject_code": "SE Capstone Project",
+    "subject_name": "9",
+    "credits": "",
+    "prerequisite": ""
+  }
+]

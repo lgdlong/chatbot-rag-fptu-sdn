@@ -1,0 +1,69 @@
+@startuml
+title Luồng Admin - Upload và xử lý tài liệu học tập
+
+skinparam shadowing false
+skinparam backgroundColor white
+skinparam activity {
+  BackgroundColor #F5FFF8
+  BorderColor #166534
+  DiamondBackgroundColor #DCFCE7
+  DiamondBorderColor #15803D
+  FontColor #14532D
+}
+
+|Admin|
+start
+:Mở môn học cần bổ sung tài liệu;
+
+|Frontend Admin|
+:Kiểm tra số lượng tài liệu hiện tại;
+
+|Backend API|
+:Trả về tổng số file đã lưu;
+
+if (Số file < 10?) then (Có)
+  |Admin|
+  :Chọn upload file;
+else (Không)
+  |Frontend Admin|
+  :Thông báo đã đạt giới hạn 10 file;
+  |Admin|
+  :Xóa file cũ hoặc dừng thao tác;
+  stop
+endif
+
+|Frontend Admin|
+:Gửi file lên hệ thống;
+
+|Backend API|
+:Kiểm tra dung lượng, định dạng và nội dung rỗng;
+
+if (File hợp lệ?) then (Có)
+  :Đưa file vào hàng đợi xử lý;
+else (Không)
+  |Frontend Admin|
+  :Trả về lý do từ chối upload;
+  stop
+endif
+
+|Pipeline tài liệu|
+:Tách nội dung và chunking;
+:Tạo embedding cho từng chunk;
+
+|Vector DB / Qdrant|
+:Lưu vector và metadata;
+
+if (Index thành công?) then (Có)
+  |Backend API|
+  :Cập nhật trạng thái `Indexed`;
+  |Frontend Admin|
+  :Hiển thị tài liệu sẵn sàng cho chatbot;
+else (Không)
+  |Backend API|
+  :Cập nhật trạng thái `Failed`;
+  |Frontend Admin|
+  :Cho phép admin xóa và upload lại;
+endif
+
+stop
+@enduml

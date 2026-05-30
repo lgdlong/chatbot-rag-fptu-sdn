@@ -1,0 +1,69 @@
+flowchart LR
+    %% Luồng Sinh viên V3 - Mermaid
+
+    subgraph SV["Sinh viên"]
+        SV1["Mở ứng dụng"]
+        SV2["Chọn 'Đăng nhập bằng Google'"]
+        SV3["Nhập Subject Code"]
+        SV4["Chọn môn học cần xem"]
+        SV5["Nhập câu hỏi"]
+        SV6["Gửi câu hỏi tiếp theo"]
+        SV7["Xem hoặc xóa lịch sử chat"]
+        SV8["Thử lại hoặc liên hệ admin"]
+    end
+
+    subgraph FE["Frontend Web"]
+        FE1["Hiển thị trang đăng nhập"]
+        FE2["Chuyển đến trang chủ"]
+        FE3["Thông báo từ chối truy cập"]
+        FE4["Gửi yêu cầu tìm kiếm syllabus"]
+        FE5["Mở trang chi tiết môn học"]
+        FE6["Mở chatbot theo phạm vi môn học"]
+        FE7["Hiển thị câu trả lời, trích dẫn và trạng thái tải"]
+        FE8["Cập nhật lịch sử hội thoại"]
+    end
+
+    subgraph GG["Google OAuth"]
+        GG1["Xác thực tài khoản Google"]
+        GG2["Trả về ID token"]
+    end
+
+    subgraph BEA["Backend Xác thực"]
+        BEA1["Kiểm tra email trong whitelist"]
+        DEC1{"Email được cấp quyền?"}
+    end
+
+    subgraph API["Backend API"]
+        API1["Lọc syllabus đang hoạt động và đã phê duyệt"]
+        API2["Trả về kết quả phù hợp"]
+    end
+
+    subgraph RAG["Backend RAG"]
+        RAG1["Kiểm tra độ dài câu hỏi"]
+        RAG2["Truy vấn ngữ cảnh liên quan"]
+        RAG3["Sinh câu trả lời kèm trích dẫn nguồn"]
+        RAG4["Tiếp tục xử lý trong cùng phiên chat"]
+        DEC2{"Sinh viên hỏi tiếp?"}
+    end
+
+    subgraph KB["Cơ sở tri thức / Vector DB"]
+        KB1["Trả về các đoạn nội dung phù hợp"]
+    end
+
+    SV1 --> FE1 --> SV2 --> GG1 --> GG2 --> BEA1 --> DEC1
+    DEC1 -->|Có| FE2 --> SV3 --> FE4 --> API1 --> API2 --> SV4 --> FE5 --> FE6 --> SV5 --> RAG1 --> RAG2 --> KB1 --> RAG3 --> FE7 --> DEC2
+    DEC1 -->|Không| FE3 --> SV8
+    DEC2 -->|Có| SV6 --> RAG4 --> FE8 --> DEC2
+    DEC2 -->|Không| SV7
+
+    classDef sv fill:#DBEAFE,stroke:#2563EB,color:#1E3A8A,stroke-width:1px;
+    classDef fe fill:#E0F2FE,stroke:#0284C7,color:#0C4A6E,stroke-width:1px;
+    classDef ext fill:#FCE7F3,stroke:#DB2777,color:#831843,stroke-width:1px;
+    classDef be fill:#ECFCCB,stroke:#65A30D,color:#365314,stroke-width:1px;
+    classDef decision fill:#FEF3C7,stroke:#D97706,color:#92400E,stroke-width:1px;
+
+    class SV1,SV2,SV3,SV4,SV5,SV6,SV7,SV8 sv;
+    class FE1,FE2,FE3,FE4,FE5,FE6,FE7,FE8 fe;
+    class GG1,GG2,KB1 ext;
+    class BEA1,API1,API2,RAG1,RAG2,RAG3,RAG4 be;
+    class DEC1,DEC2 decision;

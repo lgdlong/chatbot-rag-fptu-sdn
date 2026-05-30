@@ -1,0 +1,53 @@
+@startuml
+title Luồng Admin - Quản lý chương trình đào tạo
+
+skinparam shadowing false
+skinparam backgroundColor white
+skinparam activity {
+  BackgroundColor #F5F3FF
+  BorderColor #5B21B6
+  DiamondBackgroundColor #DDD6FE
+  DiamondBorderColor #6D28D9
+  FontColor #3B0764
+}
+
+|Admin|
+start
+:Đăng nhập dashboard quản trị;
+:Mở mục Chương trình đào tạo;
+
+if (Muốn quản lý gì?) then (Ngành)
+  |Frontend Admin|
+  :Mở màn hình CRUD ngành;
+  |Admin|
+  :Tạo, sửa hoặc xóa ngành;
+  |Backend API|
+  :Lưu thay đổi ngành đào tạo;
+elseif (Chuyên ngành hẹp) then (CN hẹp)
+  |Frontend Admin|
+  :Mở màn hình CRUD chuyên ngành hẹp;
+  |Admin|
+  :Tạo, sửa hoặc xóa chuyên ngành hẹp;
+  |Backend API|
+  :Lưu thay đổi chuyên ngành hẹp;
+else (Chương trình)
+  |Admin|
+  :Tạo chương trình đào tạo mới;
+  |Frontend Admin|
+  :Nhập mã chương trình,\nngành và chuyên ngành hẹp;
+  :Gán môn học theo từng kỳ;
+  |Backend API|
+  :Kiểm tra số môn đặc thù;
+  if (Đúng 4 môn đặc thù?) then (Đúng)
+    :Lưu chương trình đào tạo;
+  else (Chưa đúng)
+    :Phát cảnh báo số môn đặc thù khác 4;
+    :Vẫn cho phép lưu chương trình;
+  endif
+endif
+
+|Frontend Admin|
+:Thông báo hoàn tất thao tác;
+
+stop
+@enduml

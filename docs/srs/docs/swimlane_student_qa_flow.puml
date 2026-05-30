@@ -1,0 +1,88 @@
+@startuml
+title Luồng Sinh Viên - Đăng nhập, tìm môn học và hỏi đáp
+
+skinparam shadowing false
+skinparam backgroundColor white
+skinparam activity {
+  BackgroundColor #F8FAFC
+  BorderColor #334155
+  DiamondBackgroundColor #E2E8F0
+  DiamondBorderColor #475569
+  FontColor #0F172A
+}
+
+|Sinh viên|
+start
+:Mở ứng dụng;
+
+|Frontend Web|
+:Hiển thị trang đăng nhập;
+
+|Sinh viên|
+:Chọn "Đăng nhập bằng Google";
+
+|Google OAuth|
+:Xác thực tài khoản Google;
+:Trả về ID token;
+
+|Backend Xác thực|
+:Kiểm tra whitelist email;
+
+if (Email được cấp quyền?) then (Có)
+  |Frontend Web|
+  :Chuyển đến trang chủ;
+else (Không)
+  |Frontend Web|
+  :Thông báo từ chối truy cập;
+  |Sinh viên|
+  :Thử lại hoặc liên hệ admin;
+  stop
+endif
+
+|Sinh viên|
+:Nhập Subject Code;
+
+|Frontend Web|
+:Gửi yêu cầu tìm kiếm syllabus;
+
+|Backend API|
+:Lọc syllabus đang hoạt động và đã phê duyệt;
+:Trả về kết quả phù hợp;
+
+|Sinh viên|
+:Chọn môn học cần xem;
+
+|Frontend Web|
+:Mở trang chi tiết môn học;
+:Mở chatbot theo đúng phạm vi môn học;
+
+|Sinh viên|
+:Nhập câu hỏi về môn học;
+
+|Backend RAG|
+:Kiểm tra độ dài câu hỏi;
+:Tìm tài liệu liên quan;
+
+|Cơ sở tri thức / Vector DB|
+:Trả về các đoạn nội dung liên quan;
+
+|Backend RAG|
+:Sinh câu trả lời kèm trích dẫn;
+
+|Frontend Web|
+:Hiển thị câu trả lời và trích dẫn;
+
+if (Sinh viên hỏi tiếp?) then (Có)
+  |Sinh viên|
+  :Đặt câu hỏi tiếp theo;
+  |Backend RAG|
+  :Tiếp tục xử lý trong cùng phiên chat;
+  |Frontend Web|
+  :Cập nhật lịch sử hỏi đáp;
+else (Không)
+  |Sinh viên|
+  :Xem hoặc xóa lịch sử chat;
+endif
+
+stop
+@enduml
