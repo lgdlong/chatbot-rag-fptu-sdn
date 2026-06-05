@@ -1,5 +1,4 @@
-import { readFile, appendFile } from "node:fs/promises";
-import { Prisma } from "@prisma/client";
+import { appendFile } from "node:fs/promises";
 import { GeminiService } from "./gemini.service.js";
 import { prisma } from "../../auth/services/db.service.js";
 import { ENV } from "../../../config/env.js";
@@ -10,27 +9,6 @@ type RagCitation = {
   documentName: string;
   page: number;
 };
-
-type RagContextPart = {
-  text?: string;
-  inlineData?: {
-    mimeType: string;
-    data: string;
-  };
-};
-
-type RagSearchResult = {
-  id: string;
-  document_id: string;
-  page_number: number;
-  document_name: string;
-  file_type: string;
-  distance: number;
-};
-
-function toSafeVectorLiteral(values: number[]) {
-  return `[${values.join(",")}]`;
-}
 
 function normalizeSearchText(value: string) {
   return value
@@ -79,165 +57,12 @@ function extractRescueTerms(query: string) {
   ).slice(0, 6);
 }
 
-async function loadChunkContext(searchResults: RagSearchResult[]) {
-  const contextParts: RagContextPart[] = [];
-  const citations: RagCitation[] = [];
-  const seenChunks = new Set<string>();
-
-  for (const chunk of searchResults) {
-    const dedupeKey = `${chunk.document_id}:${chunk.page_number}`;
-    if (seenChunks.has(dedupeKey)) {
-      continue;
-    }
-    seenChunks.add(dedupeKey);
-
-    const chunkPath = `./uploads/chunks/${chunk.document_id}_page_${chunk.page_number}.pdf`;
-    const chunkBuffer = await readFile(chunkPath).catch(() => null);
-
-    if (!chunkBuffer) {
-      continue;
-    }
-
-    contextParts.push({
-      text: `[Nguồn] Tài liệu: ${chunk.document_name}, Trang: ${chunk.page_number}`,
-    });
-    contextParts.push({
-      inlineData: {
-        mimeType: "application/pdf",
-        data: chunkBuffer.toString("base64"),
-      },
-    });
-
-    citations.push({
-      documentId: chunk.document_id,
-      documentName: chunk.document_name,
-      page: chunk.page_number,
-    });
-  }
-
-  return {
-    contextParts,
-    citations,
-  };
-}
-
-function buildScopeFilter(scope: ResolvedChatScope) {
-  if (scope.documentIds.length > 0) {
-    return Prisma.sql`AND d.id IN (${Prisma.join(scope.documentIds)})`;
-  }
-
-  if (scope.courseIds.length > 0) {
-    return Prisma.sql`AND d.course_id IN (${Prisma.join(scope.courseIds)})`;
-  }
-
-  return Prisma.empty;
-}
-
-function buildCandidateFilter(scope: ResolvedChatScope, candidateDocumentIds: string[]) {
-  if (candidateDocumentIds.length === 0) {
-    return Prisma.empty;
-  }
-
-  const effectiveCandidateIds =
-    scope.documentIds.length > 0
-      ? candidateDocumentIds.filter((candidateId) => scope.documentIds.includes(candidateId))
-      : candidateDocumentIds;
-
-  if (effectiveCandidateIds.length === 0) {
-    return Prisma.sql`AND 1 = 0`;
-  }
-
-  return Prisma.sql`AND d.id IN (${Prisma.join(effectiveCandidateIds)})`;
-}
-
-async function runVectorSearch(
-  queryVector: number[],
-  scope: ResolvedChatScope,
-  candidateDocumentIds: string[],
-  metadataFilter?: { chapter?: string | null },
-) {
-  const vectorString = toSafeVectorLiteral(queryVector);
-  const scopeFilter = buildScopeFilter(scope);
-  const candidateFilter = buildCandidateFilter(scope, candidateDocumentIds);
-
-  const chapterFilter = metadataFilter?.chapter 
-    ? Prisma.sql`AND (dc.metadata->>'chapter') = ${metadataFilter.chapter}` 
-    : Prisma.empty;
-
-  return prisma.$queryRaw<RagSearchResult[]>(Prisma.sql`
-    SELECT
-      dc.id,
-      dc.document_id,
-      dc.page_number,
-      d.name AS document_name,
-      d.file_type AS file_type,
-      (dc.embedding <=> ${vectorString}::vector) AS distance
-    FROM document_chunks dc
-    JOIN documents d ON dc.document_id = d.id
-    WHERE d.status = 'COMPLETED'
-      ${scopeFilter}
-      ${candidateFilter}
-      ${chapterFilter}
-      AND d.file_type IN ('pdf', 'docx', 'pptx')
-      AND (dc.embedding <=> ${vectorString}::vector) <= ${ENV.RAG_MAX_DISTANCE}
-    ORDER BY distance ASC
-    LIMIT 5;
-  `);
-}
-
-async function runLexicalRescueSearch(
-  query: string,
-  scope: ResolvedChatScope,
-  candidateDocumentIds: string[],
-) {
-  const rescueTerms = extractRescueTerms(query);
-  if (rescueTerms.length === 0) {
-    return [];
-  }
-
-  const scopeFilter = buildScopeFilter(scope);
-  const candidateFilter = buildCandidateFilter(scope, candidateDocumentIds);
-  const rescueConditions = rescueTerms.map((term) => Prisma.sql`
-    LOWER(dc.content) LIKE ${`%${term}%`}
-    OR LOWER(d.name) LIKE ${`%${term}%`}
-  `);
-  const rescueWhere = rescueConditions.reduce((combined, condition) => Prisma.sql`${combined} OR ${condition}`);
-
-  return prisma.$queryRaw<RagSearchResult[]>(Prisma.sql`
-    SELECT
-      dc.id,
-      dc.document_id,
-      dc.page_number,
-      d.name AS document_name,
-      d.file_type AS file_type,
-      0 AS distance
-    FROM document_chunks dc
-    JOIN documents d ON dc.document_id = d.id
-    WHERE d.status = 'COMPLETED'
-      ${scopeFilter}
-      ${candidateFilter}
-      AND d.file_type IN ('pdf', 'docx', 'pptx')
-      AND (${rescueWhere})
-    ORDER BY d.created_at DESC, dc.page_number ASC
-    LIMIT 5;
-  `);
-}
-
-function buildNoContextReply(scope: ResolvedChatScope) {
-  if (scope.documentIds.length > 0) {
-    return "Mình không biết. Hiện tại mình chưa tìm thấy nội dung phù hợp trong các tài liệu đã chọn.";
-  }
-
-  return "Mình không biết. Hiện tại mình chưa tìm thấy nội dung phù hợp trong tài liệu đã được giảng viên cung cấp.";
-}
-
 export class RagService {
   public static async retrieveAndGenerate(
     query: string,
     scope: ResolvedChatScope,
     chatHistory: Array<{ role: "user" | "model"; parts: string[] }>,
     onChunk: (text: string) => void,
-    options: { candidateDocumentIds?: string[] } = {},
   ) {
     const logFile = "logs/a.log";
     const writeLog = async (text: string) => {
@@ -249,12 +74,128 @@ export class RagService {
       }
     };
 
-    // Determine workspace slug from course code (e.g., swd392) or default
-    const workspaceSlug = scope.scopedCourses.length > 0 
-      ? scope.scopedCourses[0].code.toLowerCase() 
-      : "default";
+    // 1. Xác định Syllabus đang Active + Approved của môn học
+    const courseId = scope.courseIds.length > 0 ? scope.courseIds[0] : null;
+    let activeSyllabus: any = null;
+    if (courseId) {
+      activeSyllabus = await prisma.syllabus.findFirst({
+        where: {
+          courseId,
+          isActive: true,
+          isApproved: true
+        }
+      });
+    }
 
-    await writeLog(`[RAG] Proxying chat to AnythingLLM workspace slug: "${workspaceSlug}"`);
+    // 2. [INTENT ROUTER] - Phát hiện câu hỏi liên quan đến FLM Syllabus có cấu trúc
+    const queryLower = query.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    let isSyllabusQuery = false;
+    let structuredContext = "";
+    let queryTypeLabel = "";
+
+    if (activeSyllabus) {
+      if (queryLower.match(/(thi|cuoi ky|final|assignment|lab|diem|trong so|percent|weight|%|assessment|danh gia)/g)) {
+        isSyllabusQuery = true;
+        queryTypeLabel = "Assessment Scheme";
+        const assessments = await prisma.assessmentScheme.findMany({
+          where: { syllabusId: activeSyllabus.id }
+        });
+        structuredContext = `[Assessment Scheme - Cơ cấu phân bổ trọng số điểm đánh giá]:\n` + assessments.map(a => 
+          `- Đầu điểm: ${a.category}, Hình thức: ${a.type || "N/A"}, Trọng số: ${a.weight}%, Điều kiện hoàn thành: ${a.completionCriteria || "N/A"}, Thời gian: ${a.duration || "N/A"}, Chuẩn đầu ra (CLO): ${a.clo || "N/A"}, Hướng dẫn chấm: ${a.gradingGuide || "N/A"}, Ghi chú: ${a.note || "N/A"}`
+        ).join("\n");
+      } else if (queryLower.match(/(tien quyet|hoc truoc|prereq)/g)) {
+        isSyllabusQuery = true;
+        queryTypeLabel = "Prerequisites";
+        structuredContext = `[Prerequisites - Môn học tiên quyết]: ${activeSyllabus.prerequisites || "Không có môn tiên quyết."}\n[Credits - Số tín chỉ]: ${activeSyllabus.credits} tín chỉ.`;
+      } else if (queryLower.match(/(tin chi|credit)/g)) {
+        isSyllabusQuery = true;
+        queryTypeLabel = "Credits";
+        structuredContext = `[Credits - Số tín chỉ môn học]: ${activeSyllabus.credits} tín chỉ.`;
+      } else if (queryLower.match(/(clo|lo|dau ra|chuan dau ra)/g)) {
+        isSyllabusQuery = true;
+        queryTypeLabel = "Course Learning Outcomes (CLOs)";
+        const clos = await prisma.syllabusClo.findMany({
+          where: { syllabusId: activeSyllabus.id }
+        });
+        structuredContext = `[CLOs - Các chuẩn đầu ra môn học]:\n` + clos.map(c => 
+          `- Mã CLO: ${c.cloName}\n  Mô tả chi tiết: ${c.cloDetails}\n  Ánh xạ chuẩn đầu ra chương trình (LO): ${c.loDetails || "N/A"}`
+        ).join("\n");
+      } else if (queryLower.match(/(buoi|session|lich trinh|weekly schedule|topic)/g)) {
+        isSyllabusQuery = true;
+        queryTypeLabel = "Weekly Schedule";
+        const schedules = await prisma.syllabusSchedule.findMany({
+          where: { syllabusId: activeSyllabus.id },
+          orderBy: { session: "asc" }
+        });
+        structuredContext = `[Weekly Schedule - Lịch trình giảng dạy chi tiết buổi học]:\n` + schedules.map(s => 
+          `- Buổi thứ ${s.session}: Chủ đề: ${s.topic}, Hình thức học: ${s.learningMethod || "N/A"}, Đáp ứng CLO: ${s.lo || "N/A"}, Nhiệm vụ sinh viên: ${s.studentTasks || "N/A"}`
+        ).join("\n");
+      } else if (queryLower.match(/(tool|cong cu|phan mem)/g)) {
+        isSyllabusQuery = true;
+        queryTypeLabel = "Tools";
+        structuredContext = `[Tools - Công cụ và phần mềm thực hành cần thiết]: ${activeSyllabus.tools || "Không yêu cầu tool đặc thù."}`;
+      } else if (queryLower.match(/(sach|giao trinh|material|tai lieu tham khao)/g)) {
+        isSyllabusQuery = true;
+        queryTypeLabel = "Materials & References";
+        const materials = await prisma.syllabusMaterial.findMany({
+          where: { syllabusId: activeSyllabus.id }
+        });
+        const references = await prisma.syllabusReference.findMany({
+          where: { syllabusId: activeSyllabus.id }
+        });
+        structuredContext = `[Materials - Học liệu chính/phụ (Giáo trình)]:\n` + materials.map(m => 
+          `- Tên sách: ${m.description}, Tác giả: ${m.author || "N/A"}, Nhà xuất bản: ${m.publisher || "N/A"}, Phân loại: ${m.isMainMaterial || "N/A"}`
+        ).join("\n") + `\n\n[References - Tài liệu tham khảo chính quy bổ sung]:\n` + references.map(r => 
+          `- Trích dẫn: ${r.citation}`
+        ).join("\n");
+      }
+    }
+
+    // 3. Nếu là câu hỏi cấu trúc Syllabus -> Query PostgreSQL trực tiếp và trả lời qua Gemini
+    if (isSyllabusQuery && activeSyllabus) {
+      await writeLog(`[RAG] Intent Router detected: Answering structure query "${queryTypeLabel}" from PostgreSQL directly.`);
+      
+      const systemPrompt = `Bạn là Trợ lý học tập FLM chuyên nghiệp của Trường Đại học FPT. 
+Nhiệm vụ của bạn là trả lời thắc mắc của sinh viên dựa trên dữ liệu đề cương chi tiết (Syllabus) có cấu trúc cực kỳ chính xác được cung cấp dưới đây.
+Dữ liệu này được lấy trực tiếp từ hệ thống quản lý FLM chính thức của trường.
+
+QUY TẮC CỐT LÕI:
+1. Bạn phải bám sát 100% vào dữ liệu có cấu trúc bên dưới để trả lời. Tuyệt đối không tự bịa (hallucination) ra các thông số, trọng số điểm, tín chỉ hoặc buổi học không có trong context.
+2. Nếu câu hỏi không thể trả lời từ dữ liệu cung cấp, hãy lịch sự phản hồi: "Hiện đề cương môn học không có thông tin chi tiết về phần này."
+3. Hãy trả lời bằng tiếng Việt một cách rõ ràng, mạch lạc, có cấu trúc đẹp mắt (dùng markdown, bullet points hoặc bảng biểu nếu cần thiết).
+
+DỮ LIỆU ĐỀ CƯƠNG CHI TIẾT CÓ CẤU TRÚC:
+----------------------------------------
+Môn học: ${scope.scopedCourses.length > 0 ? scope.scopedCourses[0].name : "Không rõ"} (${scope.scopedCourses.length > 0 ? scope.scopedCourses[0].code : "N/A"})
+${structuredContext}
+----------------------------------------`;
+
+      const fullAnswer = await GeminiService.generateChatStream(
+        systemPrompt,
+        chatHistory,
+        query,
+        [], // Không cần PDF base64 chunks cho dữ liệu cấu trúc
+        onChunk
+      );
+
+      return {
+        citations: [{
+          documentId: `postgres-syllabus-${activeSyllabus.id}`,
+          documentName: `FPT FLM Syllabus: ${queryTypeLabel}`,
+          fileUrl: null,
+          page: 1
+        }],
+        fullAnswer
+      };
+    }
+
+    // 4. Nếu là câu hỏi phi cấu trúc -> RAG qua AnythingLLM Workspace cô lập
+    // Workspace slug được cô lập theo dạng: {subject_code}_{syllabus_id}
+    const workspaceSlug = activeSyllabus 
+      ? `${scope.scopedCourses[0].code.toLowerCase()}_${activeSyllabus.id}` 
+      : (scope.scopedCourses.length > 0 ? scope.scopedCourses[0].code.toLowerCase() : "default");
+
+    await writeLog(`[RAG] Proxying chat to AnythingLLM isolated workspace slug: "${workspaceSlug}"`);
 
     if (!ENV.ANYTHING_LLM_API_KEY) {
        const reply = "AnythingLLM API Key chưa được cấu hình. Vui lòng thêm ANYTHING_LLM_API_KEY vào biến môi trường.";
@@ -291,7 +232,6 @@ export class RagService {
         await writeLog("Khởi đầu nhận Stream từ AnythingLLM...");
         
         for await (const chunk of response.body as any) {
-          // Decode the Uint8Array chunk properly to UTF-8 text
           const chunkText = decoder.decode(chunk, { stream: true });
           await writeLog(`RAW CHUNK NHẬN ĐƯỢC:\n${chunkText}`);
           
@@ -340,7 +280,7 @@ export class RagService {
           const title = source.title;
           if (!title) continue;
 
-          // Find the matching document in Postgres
+          // Tìm file tương ứng trong PostgreSQL
           const dbDoc = await prisma.document.findFirst({
             where: {
               name: {
