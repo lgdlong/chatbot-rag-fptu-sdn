@@ -3,6 +3,8 @@ import { ENV } from "../config/env.js";
 import { auth } from "../modules/auth/auth.js";
 import { prisma } from "../modules/auth/services/db.service.js";
 import { writeFile } from "node:fs/promises";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 
 async function main() {
   const accountsToCreate = [
@@ -67,6 +69,29 @@ async function main() {
       }
     }
 
+    // Ensure database hook checks will pass
+    console.log(`Ensuring email ${acc.email} is in whitelist...`);
+    await prisma.emailWhitelist.upsert({
+      where: { email: acc.email },
+      update: {},
+      create: { email: acc.email },
+    });
+
+    if (acc.role !== "STUDENT") {
+      console.log(`Ensuring lecturer/admin request exists for ${acc.email}...`);
+      await prisma.lecturerRequest.upsert({
+        where: { email: acc.email },
+        update: {},
+        create: {
+          name: acc.name,
+          email: acc.email,
+          reason: "Tự động tạo tài khoản thử nghiệm hệ thống",
+          status: "APPROVED",
+        },
+      });
+    }
+
+
     // Call API to Sign Up
     console.log(`Calling Better Auth signUpEmail API for ${acc.email}...`);
     const signupRes = await auth.api.signUpEmail({
@@ -123,7 +148,8 @@ async function main() {
   }
 
   // Write JSON to the root directory
-  const rootPath = "e:\\FPT\\Semester_7\\SWD392\\chatbot-rag-fptu\\credentials.json";
+  const __dirname = path.dirname(fileURLToPath(import.meta.url));
+  const rootPath = path.resolve(__dirname, "../../../credentials.json");
   const jsonContent = JSON.stringify({ accounts: results }, null, 2);
   await writeFile(rootPath, jsonContent, "utf-8");
   console.log(`\n============================================`);
