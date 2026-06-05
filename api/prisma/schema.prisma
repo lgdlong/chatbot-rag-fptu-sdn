@@ -1,41 +1,298 @@
 datasource db {
-  provider   = "postgresql"
-  url        = env("DATABASE_URL")
-  extensions = [vector]
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 generator client {
-  provider        = "prisma-client-js"
-  previewFeatures = ["postgresqlExtensions"]
+  provider = "prisma-client-js"
 }
 
-// Better Auth Models
+// Bảng Whitelist Email sinh viên (chỉ import thủ công qua Admin)
+model EmailWhitelist {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  addedAt   DateTime @default(now()) @map("added_at")
+  
+  @@map("email_whitelist")
+}
+
+// Bảng Ngành học (Major)
+model Major {
+  id          String           @id @default(uuid())
+  code        String           @unique // Ví dụ: SE, AI
+  name        String
+  description String?
+  specializations Specialization[]
+  curriculums Curriculum[]
+
+  @@map("majors")
+}
+
+// Bảng Chuyên ngành hẹp (Specialization)
+model Specialization {
+  id          String       @id @default(uuid())
+  majorId     String       @map("major_id")
+  major       Major        @relation(fields: [majorId], references: [id], onDelete: Cascade)
+  code        String       @unique // Ví dụ: NJS (NodeJS/React), NET (.NET)
+  name        String
+  description String?
+  curriculums Curriculum[]
+
+  @@map("specializations")
+}
+
+// Bảng Khung chương trình đào tạo (Curriculum)
+model Curriculum {
+  id               String              @id @default(uuid())
+  curriculumId     String              @unique // Định dạng: BIT_SE_NJS_19B
+  majorId          String              @map("major_id")
+  major            Major               @relation(fields: [majorId], references: [id], onDelete: Cascade)
+  specializationId String?             @map("specialization_id")
+  specialization   Specialization?     @relation(fields: [specializationId], references: [id], onDelete: Cascade)
+  batchCode        String              @map("batch_code") // Khóa học, ví dụ: 19B
+  subjects         CurriculumSubject[]
+
+  @@map("curriculums")
+}
+
+// Bảng liên kết N:M giữa Khung chương trình và Môn học (Curriculum ↔ Course)
+model CurriculumSubject {
+  id                        String     @id @default(uuid())
+  curriculumId              String     @map("curriculum_id")
+  curriculum                Curriculum @relation(fields: [curriculumId], references: [id], onDelete: Cascade)
+  courseId                  String     @map("course_id")
+  course                    Course     @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  semesterNo                Int        @map("semester_no") // Học kỳ xuất hiện môn (1-9)
+  isSpecializationSpecific  Boolean    @default(false) @map("is_specialization_specific") // Đánh dấu 4 môn đặc thù chuyên ngành hẹp
+
+  @@unique([curriculumId, courseId])
+  @@map("curriculum_subjects")
+}
+
+// Bảng Môn học (đóng vai trò là Subject/Course)
+model Course {
+  id                 String              @id @default(uuid())
+  code               String              @unique // Ví dụ: FER202, SDN302
+  name               String              // Ví dụ: Lập trình Front-End với React
+  syllabuses         Syllabus[]          // Một môn có nhiều phiên bản Syllabus
+  curriculumSubjects CurriculumSubject[]
+  chatSessions       ChatSession[]
+  scopedSessions     ChatSessionCourse[]
+  createdAt          DateTime            @default(now()) @map("created_at")
+
+  @@map("courses")
+}
+
+// Bảng phiên bản Syllabus (1 Môn → N Syllabus, tối đa 1 bản active)
+model Syllabus {
+  id                   Int                    @id // Sử dụng ID Syllabus thực tế của FLM (ví dụ: 12580)
+  courseId             String                 @map("course_id")
+  course               Course                 @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  syllabusName         String                 @map("syllabus_name")
+  syllabusNameEnglish  String?                @map("syllabus_name_english")
+  credits              Int                    @default(3)
+  degreeLevel          String                 @default("Bachelor") @map("degree_level")
+  timeAllocation       String?                @map("time_allocation")
+  prerequisites        String?                // Môn học tiên quyết
+  description          String?                @db.Text
+  studentTasks         String?                @db.Text @map("student_tasks")
+  tools                String?                @db.Text
+  scoringScale         String                 @default("10") @map("scoring_scale")
+  decisionNo           String?                @map("decision_no")
+  approvedDate         DateTime?              @map("approved_date")
+  minAvgMarkToPass     Decimal                @default(5.00) @db.Decimal(4, 2) @map("min_avg_mark_to_pass")
+  isApproved           Boolean                @default(false) @map("is_approved")
+  isActive             Boolean                @default(false) @map("is_active")
+  note                 String?                @db.Text
+  materials            SyllabusMaterial[]
+  clos                 SyllabusClo[]
+  schedules            SyllabusSchedule[]
+  questions            ConstructiveQuestion[]
+  assessments          AssessmentScheme[]
+  references           SyllabusReference[]
+  documents            Document[]             // Tài liệu upload gắn với Syllabus này
+  videoLinks           VideoLink[]
+  createdAt            DateTime               @default(now()) @map("created_at")
+  updatedAt            DateTime               @updatedAt @map("updated_at")
+
+  @@map("syllabuses")
+}
+
+// Bảng học liệu môn học (Materials)
+model SyllabusMaterial {
+  id             String   @id @default(uuid())
+  syllabusId     Int      @map("syllabus_id")
+  syllabus       Syllabus @relation(fields: [syllabusId], references: [id], onDelete: Cascade)
+  description    String   @db.Text
+  author         String?
+  publisher      String?
+  publishedDate  String?  @map("published_date")
+  edition        String?
+  isbn           String?
+  isMainMaterial String?  @map("is_main_material") // Ví dụ: "Main", "Reference"
+  isHardCopy     String?  @map("is_hard_copy")
+  isOnline       String?  @map("is_online")
+  note           String?  @db.Text
+
+  @@map("syllabus_materials")
+}
+
+// Bảng Chuẩn đầu ra (CLOs)
+model SyllabusClo {
+  id         String   @id @default(uuid())
+  syllabusId Int      @map("syllabus_id")
+  syllabus   Syllabus @relation(fields: [syllabusId], references: [id], onDelete: Cascade)
+  cloName    String   @map("clo_name") // CLO1, CLO2...
+  cloDetails String   @db.Text @map("clo_details")
+  loDetails  String?  @db.Text @map("lo_details")
+
+  @@map("syllabus_clos")
+}
+
+// Bảng Lịch trình 60 buổi (Schedule)
+model SyllabusSchedule {
+  id               String   @id @default(uuid())
+  syllabusId       Int      @map("syllabus_id")
+  syllabus         Syllabus @relation(fields: [syllabusId], references: [id], onDelete: Cascade)
+  session          Int      // Buổi học thứ X
+  topic            String   @db.Text
+  learningMethod   String?  @map("learning_method") // Online, Offline
+  lo               String?  // Các chuẩn đầu ra đáp ứng, ví dụ: "CLO1, CLO2"
+  itu              String?  // Mức độ giảng dạy: Introduce, Teach, Utilize
+  studentMaterials String?  @db.Text @map("student_materials")
+  sDownload        String?  @db.Text @map("s_download")
+  studentTasks     String?  @db.Text @map("student_tasks")
+  urls             String?  @db.Text // Link slide/video bài học
+
+  @@map("syllabus_schedules")
+}
+
+// Bảng Câu hỏi kiến tạo Edunext (EXE101...)
+model ConstructiveQuestion {
+  id         String   @id @default(uuid())
+  syllabusId Int      @map("syllabus_id")
+  syllabus   Syllabus @relation(fields: [syllabusId], references: [id], onDelete: Cascade)
+  sessionNo  Int      @map("session_no")
+  name       String   // Mã câu hỏi, ví dụ: HCM1.1
+  details    String   @db.Text
+
+  @@map("constructive_questions")
+}
+
+// Bảng Phân bổ đầu điểm (Assessment Scheme - 12 cột)
+model AssessmentScheme {
+  id                 String   @id @default(uuid())
+  syllabusId         Int      @map("syllabus_id")
+  syllabus           Syllabus @relation(fields: [syllabusId], references: [id], onDelete: Cascade)
+  category           String   // Ví dụ: Progress Assessment, Final Exam
+  type               String?  // Ví dụ: on-going, final exam
+  part               String?
+  weight             Decimal  @db.Decimal(5, 2) // Trọng số %, ví dụ: 15.00 tương ứng 15%
+  completionCriteria String?  @db.Text @map("completion_criteria")
+  duration           String?
+  clo                String?  // CLOs đáp ứng, ví dụ: "CLO1", "all"
+  questionType       String?  @map("question_type")
+  noQuestion         String?  @map("no_question")
+  knowledgeAndSkill  String?  @db.Text @map("knowledge_and_skill")
+  gradingGuide       String?  @db.Text @map("grading_guide")
+  note               String?  @db.Text
+
+  @@map("assessment_schemes")
+}
+
+// Bảng Tài liệu tham khảo chính quy (References)
+model SyllabusReference {
+  id         String   @id @default(uuid())
+  syllabusId Int      @map("syllabus_id")
+  syllabus   Syllabus @relation(fields: [syllabusId], references: [id], onDelete: Cascade)
+  citation   String   @db.Text
+
+  @@map("syllabus_references")
+}
+
+// Bảng Video bài giảng bên ngoài (không chunk/embed)
+model VideoLink {
+  id          String   @id @default(uuid())
+  syllabusId  Int      @map("syllabus_id")
+  syllabus    Syllabus @relation(fields: [syllabusId], references: [id], onDelete: Cascade)
+  url         String
+  title       String
+  description String?  @db.Text
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  @@map("video_links")
+}
+
+// Bảng Quản lý tài liệu (lưu trữ metadata)
+model Document {
+  id             String                @id @default(uuid())
+  name           String                // Tên file gốc
+  fileUrl        String                @map("file_url")
+  fileType       String                @map("file_type") // pdf, docx, pptx, image
+  status         String                // PENDING, PROCESSING, COMPLETED, FAILED
+  syllabusId     Int                   @map("syllabus_id")
+  syllabus       Syllabus              @relation(fields: [syllabusId], references: [id], onDelete: Cascade)
+  scopedDocuments ChatSessionDocument[]
+  createdAt      DateTime              @default(now()) @map("created_at")
+
+  @@map("documents")
+}
+
+// Bảng Audit Log ghi lịch sử thao tác quản trị
+model AuditLog {
+  id         String   @id @default(uuid())
+  userId     String   @map("user_id")
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  action     String   // CREATE_SYLLABUS, APPROVE_SYLLABUS, ACTIVATE_SYLLABUS, UPLOAD_DOCUMENT...
+  entityType String   @map("entity_type") // Syllabus, Document, Curriculum
+  entityId   String   @map("entity_id")
+  details    Json?
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  @@map("audit_logs")
+}
+
+model LecturerRequest {
+  id           String   @id @default(uuid())
+  name         String
+  email        String   @unique
+  reason       String   @db.Text
+  status       String   @default("PENDING")
+  reviewedById String?  @map("reviewed_by_id")
+  reviewedBy   User?    @relation("LecturerRequestReviewedBy", fields: [reviewedById], references: [id], onDelete: SetNull)
+  reviewedAt   DateTime? @map("reviewed_at")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  @@map("lecturer_requests")
+}
+
+// Hệ thống xác thực Better Auth (User, Session, Account, Verification)
 model User {
   id            String        @id
   name          String
-  email         String
+  email         String        @unique
   emailVerified Boolean       @default(false) @map("email_verified")
   image         String?
   createdAt     DateTime      @default(now()) @map("created_at")
   updatedAt     DateTime      @updatedAt @map("updated_at")
-  role          String?
+  role          String?       // ADMIN, LECTURER, STUDENT
   banned        Boolean?      @default(false)
   banReason     String?       @map("ban_reason")
   banExpires    DateTime?     @map("ban_expires")
   sessions      Session[]
   accounts      Account[]
   chatSessions  ChatSession[]
-  subscriptions Subscription[]
-  transactions  Transaction[]
+  auditLogs     AuditLog[]
+  reviewedLecturerRequests LecturerRequest[] @relation("LecturerRequestReviewedBy")
 
-  @@unique([email])
   @@map("users")
 }
 
 model Session {
   id             String   @id
   expiresAt      DateTime @map("expires_at")
-  token          String
+  token          String   @unique
   createdAt      DateTime @default(now()) @map("created_at")
   updatedAt      DateTime @updatedAt @map("updated_at")
   ipAddress      String?  @map("ip_address")
@@ -44,7 +301,6 @@ model Session {
   user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   impersonatedBy String?  @map("impersonated_by")
 
-  @@unique([token])
   @@index([userId])
   @@map("sessions")
 }
@@ -81,65 +337,32 @@ model Verification {
   @@map("verifications")
 }
 
-// Domain Models
-
-// Khóa học / Môn học
-model Course {
-  id             String        @id @default(uuid())
-  code           String        // Ví dụ: SWD392
-  name           String        // Ví dụ: Software Architecture
-  documents      Document[]
-  sessions       ChatSession[]
-  scopedSessions ChatSessionCourse[]
-  createdAt      DateTime      @default(now()) @map("created_at")
-
-  @@map("courses")
-}
-
-// Tài liệu môn học
-model Document {
-  id        String   @id @default(uuid())
-  name      String   // Tên file gốc
-  fileUrl   String   @map("file_url") // Đường dẫn lưu trữ vật lý
-  fileType  String   @map("file_type") // pdf, docx, pptx, mp4
-  status    String   // PENDING, PROCESSING, COMPLETED, FAILED
-  courseId  String   @map("course_id")
-  course    Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
-  chunks    DocumentChunk[]
-  scopedSessions ChatSessionDocument[]
-  createdAt DateTime @default(now()) @map("created_at")
-
-  @@map("documents")
-}
-
-// Phiên chat của Sinh viên
+// Bảng Chat Session
 model ChatSession {
-  id            String              @id @default(uuid())
-  title         String              @default("Cuộc hội thoại mới")
-  userId        String              @map("user_id")
-  user          User                @relation(fields: [userId], references: [id], onDelete: Cascade)
-  courseId      String?             @map("course_id")
-  course        Course?             @relation(fields: [courseId], references: [id], onDelete: Cascade)
-  scopeMode     ChatSessionScopeMode @default(ALL_COURSES) @map("scope_mode")
-  scopedCourses ChatSessionCourse[]
+  id              String                @id @default(uuid())
+  title           String                @default("Cuộc hội thoại mới")
+  userId          String                @map("user_id")
+  user            User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  courseId        String?               @map("course_id")
+  course          Course?               @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  scopeMode       ChatSessionScopeMode  @default(ALL_COURSES) @map("scope_mode")
+  scopedCourses   ChatSessionCourse[]
   scopedDocuments ChatSessionDocument[]
-  messages      ChatMessage[]
-  createdAt     DateTime            @default(now()) @map("created_at")
+  messages        ChatMessage[]
+  createdAt       DateTime              @default(now()) @map("created_at")
 
   @@map("chat_sessions")
 }
 
 model ChatSessionCourse {
-  id        String     @id @default(uuid())
-  sessionId String     @map("session_id")
+  id        String      @id @default(uuid())
+  sessionId String      @map("session_id")
   session   ChatSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
-  courseId  String     @map("course_id")
-  course    Course     @relation(fields: [courseId], references: [id], onDelete: Cascade)
-  createdAt DateTime   @default(now()) @map("created_at")
+  courseId  String      @map("course_id")
+  course    Course      @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  createdAt DateTime    @default(now()) @map("created_at")
 
   @@unique([sessionId, courseId])
-  @@index([sessionId])
-  @@index([courseId])
   @@map("chat_session_courses")
 }
 
@@ -152,19 +375,16 @@ model ChatSessionDocument {
   createdAt  DateTime    @default(now()) @map("created_at")
 
   @@unique([sessionId, documentId])
-  @@index([sessionId])
-  @@index([documentId])
   @@map("chat_session_documents")
 }
 
-// Tin nhắn chi tiết
 model ChatMessage {
   id        String      @id @default(uuid())
   sessionId String      @map("session_id")
   session   ChatSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
-  sender    SenderType  // USER, ASSISTANT
+  sender    SenderType
   content   String      @db.Text
-  citations Json?       // Lưu trữ mảng citation dạng JSON
+  citations Json?
   createdAt DateTime    @default(now()) @map("created_at")
 
   @@map("chat_messages")
@@ -179,58 +399,4 @@ enum ChatSessionScopeMode {
   ALL_COURSES
   SELECTED_COURSES
   SELECTED_DOCUMENTS
-}
-
-// Subscription & Transaction
-model Subscription {
-  id            String   @id @default(uuid())
-  userId        String   @unique @map("user_id")
-  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  tier          String   // BASIC, SILVER, GOLD
-  startDate     DateTime @default(now()) @map("start_date")
-  endDate       DateTime @map("end_date")
-  messageCount  Int      @default(0) @map("message_count")
-  maxMessages   Int      @map("max_messages") // 10, 50, 200
-  sessionCount  Int      @default(0) @map("session_count")
-  lastReset     DateTime @default(now()) @map("last_reset")
-
-  @@map("subscriptions")
-}
-
-model Transaction {
-  id             String   @id @default(uuid())
-  userId         String   @map("user_id")
-  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  amount         Int
-  status         String   // PENDING, PAID, CANCELLED
-  sepayReference String?  @map("sepay_reference")
-  createdAt      DateTime @default(now()) @map("created_at")
-
-  @@map("transactions")
-}
-
-// Document Chunking & Vector
-model DocumentChunk {
-  id         String   @id @default(uuid())
-  documentId String   @map("document_id")
-  document   Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
-  content    String   @db.Text
-  pageNumber Int      @map("page_number")
-  metadata   Json?    @map("metadata")
-  embedding  Unsupported("vector(3072)")?
-
-  @@map("document_chunks")
-}
-
-// Bảng lưu yêu cầu làm Giảng viên chờ phê duyệt
-model LecturerRequest {
-  id        String   @id @default(uuid())
-  name      String
-  email     String   @unique
-  reason    String   @db.Text
-  status    String   @default("PENDING") // PENDING, APPROVED, REJECTED
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-
-  @@map("lecturer_requests")
 }
