@@ -3,43 +3,56 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
-  --font-sans-stack: var(--font-roboto), Arial, Helvetica, sans-serif;
-  --font-mono-stack: Consolas, "Liberation Mono", Menlo, monospace;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-sans-stack);
-  --font-mono: var(--font-mono-stack);
+  --font-sans: var(--font-roboto);
+  --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  font-size: 14px !important;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-roboto), Arial, Helvetica, sans-serif;
+  background-color: #f9fafb;
+  color: #171717;
+  font-family: var(--font-roboto), sans-serif;
 }
 
-/* Custom scrollbar class */
-.custom-scrollbar::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+.hover-card {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
 }
-.custom-scrollbar::-webkit-scrollbar-track {
-  background: transparent;
+
+.hover-card:hover {
+  transform: translateY(-5px);
+  border-color: #1A3A5C !important;
+  box-shadow: 0 12px 20px -3px rgba(0, 0, 0, 0.08), 0 4px 12px -2px rgba(0, 0, 0, 0.03);
 }
-.custom-scrollbar::-webkit-scrollbar-thumb {
-  background: rgba(63, 63, 70, 0.4);
-  border-radius: 9999px;
-  transition: background 0.2s ease;
+
+.portal-card {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
 }
-.custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: rgba(99, 102, 241, 0.6);
+
+.portal-card:hover {
+  transform: translateY(-5px);
+  border-color: #FFC107 !important;
+  box-shadow: 0 15px 25px -5px rgba(0, 0, 0, 0.15);
+}
+
+.portal-card .portal-link-text {
+  transition: transform 0.2s ease;
+}
+
+.portal-card:hover .portal-link-text {
+  transform: translateX(4px);
+}
+
+/* Custom Active Tab Styling for Mantine Tabs */
+.mantine-Tabs-tab[data-active] {
+  color: #1A3A5C !important;
+  border-color: #E2E8F0 #E2E8F0 transparent #E2E8F0 !important;
+  background-color: #F8FAFC !important;
 }
