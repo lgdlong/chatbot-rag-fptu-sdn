@@ -1,76 +1,128 @@
 # LỘ TRÌNH PHÁT TRIỂN HỆ THỐNG (DEVELOPMENT ROADMAP)
 
-Tài liệu này đóng vai trò là bản thiết kế lộ trình phát triển và kiểm soát tiến độ thực tế của dự án **FPTU Chatbot RAG**. Lộ trình được phân chia làm 6 giai đoạn rõ ràng nhằm hiện thực hóa sản phẩm kỹ thuật và đáp ứng các mục tiêu nghiên cứu khoa học.
+Tài liệu này đóng vai trò là bản thiết kế lộ trình phát triển và kiểm soát tiến độ thực tế của dự án **FPTU Chatbot RAG**. Lộ trình được phân chia thành các giai đoạn rõ ràng để hiện thực hóa sản phẩm kỹ thuật và đáp ứng mục tiêu nghiên cứu.
 
 ---
 
 ## 🗺️ Tóm Tắt Trạng Thái Các Cột Mốc (Milestones Overview)
 
-| Giai đoạn | Mục tiêu chính | Tiến độ | Trạng thái | Dự kiến hoàn thành |
-| :---: | :--- | :---: | :---: | :---: |
-| **Phase 1** | Khởi tạo Monorepo & Cơ sở dữ liệu Đa trường (Multi-tenant DB) | **100%** | **ĐÃ HOÀN THÀNH** | Tuần 1 |
-| **Phase 2** | Tích hợp Better Auth & Phân quyền Organization Plugin | **60%** | **ĐANG TRIỂN KHAI** | Tuần 2 - 3 |
-| **Phase 3** | Xây dựng Pipeline Ingestion & Gemini Multimodal Embedding | **10%** | **ĐANG TRIỂN KHAI** | Tuần 4 - 5 |
-| **Phase 4** | Phát triển Nhân RAG Chatbot, SSE Streaming & Citations | **0%** | **ĐÃ LÊN KẾ HOẠCH** | Tuần 6 - 7 |
-| **Phase 5** | Dashboard Phân Tích & Giám Sát Chi Phí API cho Giảng Viên | **0%** | **ĐÃ LÊN KẾ HOẠCH** | Tuần 8 |
+| Giai đoạn | Mục tiêu chính | Tiến độ | Trạng thái | Ghi chú |
+| :---: | :--- | :---: | :---: | :--- |
+| **Phase 1** | Monorepo Setup, Turborepo, Docker, DB Schema | **100%** | ✅ **HOÀN THÀNH** | — |
+| **Phase 2** | Better Auth, Whitelist, Lecturer Request, Role System | **100%** | ✅ **HOÀN THÀNH** | — |
+| **Phase 3** | Curriculum/Syllabus CRUD, Document Upload, Qdrant Integration | **85%** | 🔄 **ĐANG TRIỂN KHAI** | Còn thiếu: video embedding |
+| **Phase 4** | RAG Chatbot Core, SSE Streaming, Dynamic Scoping | **70%** | 🔄 **ĐANG TRIỂN KHAI** | Chat UI + scope đã hoạt động |
+| **Phase 5** | Frontend Polish (Mantine), Student Portal, Chat UX | **60%** | 🔄 **ĐANG TRIỂN KHAI** | Đang hoàn thiện các trang |
+| **Phase 6** | Dashboard Analytics, API Cost Monitoring | **0%** | 📅 **KẾ HOẠCH** | — |
 
 ---
 
-## 🔍 Chi Tiết Các Giai Đoạn Phát Triển (Detailed Phases)
+## 🔍 Chi Tiết Các Giai Đoạn Phát Triển
 
-### 📌 Giai đoạn 1: Thiết Lập Môi Trường & Cơ Sở Dữ Liệu Đa Trường (Đã hoàn thành)
-* **Mục tiêu:** Khởi tạo dự án Monorepo tiêu chuẩn, cấu hình kết nối database quan hệ và chạy thử nghiệm cấu trúc API gateway.
-* **Chi tiết công việc:**
-  * [x] Tạo cấu trúc Monorepo phân tách rõ ràng: Backend (`api/`) và Frontend (`web/`).
-  * [x] Tạo Docker Compose khởi chạy PostgreSQL cục bộ.
-  * [x] Thiết kế schema cơ sở dữ liệu quan hệ nâng cao hỗ trợ `Tenant`, `User`, `Course`, `Document`, `ChatSession` bằng Prisma ORM.
-  * [x] Viết API Health Check chi tiết để đo đạc độ trễ cơ sở dữ liệu và lượng RAM tiêu thụ.
-* **Tiêu chí hoàn thành:** Server backend khởi chạy mượt mà, kết nối thành công PostgreSQL, build không lỗi.
+### ✅ Phase 1: Thiết Lập Môi Trường & Cơ Sở Dữ Liệu (Hoàn thành)
 
----
+**Mục tiêu:** Khởi tạo dự án Monorepo tiêu chuẩn, cấu hình DB và API gateway.
 
-### 📌 Giai đoạn 2: Tích Hợp Hệ Thống Xác Thực Better Auth & Phân Quyền Multi-tenant (Đang triển khai)
-* **Mục tiêu:** Cài đặt toàn bộ module xác thực bảo mật, xử lý đăng ký, đăng nhập và phân chia không gian tổ chức (Tenant).
-* **Chi tiết công việc:**
-  * [x] Cài đặt `better-auth` phía backend Hono.js và frontend Next.js.
-  * [x] Cấu hình adapter Prisma kết nối các bảng User/Session.
-  * [x] Kích hoạt và cấu hình **Organization Plugin** để quản lý Multi-tenant logic.
-  * [/] Xây dựng Middleware xác thực `requireAuth` và cô lập tri thức `requireTenant` trên Hono.js.
-  * [ ] Thiết kế giao diện Đăng nhập, Đăng ký (Google FPT SSO và Email/Password), Quản trị lời mời tham gia tổ chức.
-  * [ ] Triển khai Plugin OpenAPI tự động sinh Swagger docs cho module Auth.
-* **Tiêu chí hoàn thành:** Đăng nhập thành công, phân biệt chính xác quyền `STUDENT`, `LECTURER`, và `ADMIN`. Header `x-tenant-id` hoạt động đồng bộ.
+- [x] Tạo Monorepo với **Turborepo** — quản lý workspace `api/` và `web/`
+- [x] Cấu hình `turbo.json` với pipeline `dev`, `build`, `lint`, `test`
+- [x] Docker Compose cho **PostgreSQL + Redis + Qdrant**
+- [x] Thiết kế **Prisma schema** đầy đủ 21 models đặc thù FPTU
+- [x] API Health Check (`/api/health`) với DB latency + memory metrics
+- [x] Global logger middleware (`winston`) + file logging vào `logs/api.log`
+- [x] Swagger UI (`/api/docs`) với OpenAPI document tự động sinh
+- [x] CORS configuration + static file serving cho `/uploads/*`
+
+**Tiêu chí hoàn thành:** ✅ Server backend khởi chạy, kết nối PostgreSQL thành công, `/api/health` trả về 200.
 
 ---
 
-### 📌 Giai đoạn 3: Pipeline Tiền Xử Lý & Nhúng Tài Liệu Đa Phương Thức (Đang triển khai)
-* **Mục tiêu:** Hiện thực hóa tính năng tải lên tài liệu học tập, xoá tài liệu đã nạp an toàn, thực hiện trích xuất nội dung và nhúng vector đa phương thức (Văn bản + Video).
-* **Chi tiết công việc:**
-  * [ ] Xây dựng giao diện Drag & Drop File Upload hỗ trợ PDF, DOCX, Slide PPTX, và Video MP4.
-  * [x] Cho phép xoá tài liệu PDF đã nạp, đồng bộ dọn file chunk và vector trong Qdrant.
-  * [ ] Viết bộ phân đoạn (Chunking service): Trích xuất Markdown từ PDF/PPTX, chia phân đoạn slide có overlap.
-  * [ ] Tích hợp API **Gemini Embedding 2** để nhúng video ngắn ($\le 120$ giây) thu về vector 3072 chiều.
-  * [ ] Khởi chạy và kết nối Cơ sở dữ liệu Vector (**Qdrant** hoặc **ChromaDB**).
-  * [ ] Lưu trữ vector kèm payload chi tiết (Text gốc, trang slide, timestamp video).
-* **Tiêu chí hoàn thành:** Giảng viên upload tài liệu lên môn học, hệ thống xử lý tự động và lưu trữ vector thành công vào Vector DB không lỗi.
+### ✅ Phase 2: Xác Thực & Phân Quyền Better Auth (Hoàn thành)
+
+**Mục tiêu:** Toàn bộ module xác thực, phân quyền, quản lý whitelist và lecturer request.
+
+- [x] Cài đặt `better-auth` phía backend Hono.js với Prisma adapter
+- [x] Cấu hình **Admin Plugin** — quản lý users, banning, role management
+- [x] **Email Whitelist** — chỉ email trong `EmailWhitelist` mới được đăng ký
+- [x] **Lecturer Request** — flow gửi yêu cầu → Super Admin review → approve/reject
+- [x] Xây dựng `whitelistRouter` và `lecturerRequestRouter`
+- [x] Frontend: trang `/login` với email/password form (Mantine)
+- [x] `AuthContext.tsx` quản lý session state + role-based routing
+- [x] `ProtectedRoute.tsx` bảo vệ trang yêu cầu xác thực
+
+**Tiêu chí hoàn thành:** ✅ Đăng nhập thành công, phân biệt đúng role `STUDENT`, `LECTURER`, `ADMIN`.
 
 ---
 
-### 📌 Giai đoạn 4: Nhân Hỏi Đáp RAG & Stream Phản Hồi SSE (Đã lên kế hoạch)
-* **Mục tiêu:** Xây dựng phần lõi RAG Chatbot, xử lý chuỗi hội thoại thông minh và hiển thị câu trả lời kèm dẫn nguồn trực quan.
-* **Chi tiết công việc:**
-  * [ ] Xây dựng mô-đun Tái cấu trúc câu hỏi (Query Rewriting) dựa trên lịch sử chat sử dụng LLM.
-  * [ ] Thực hiện tìm kiếm ngữ nghĩa (Cosine Similarity) trên Vector DB để lấy ra 5 phân đoạn khớp nhất.
-  * [ ] Thiết kế Prompt Template chặt chẽ với Guardrails chống ảo tưởng thông tin.
-  * [ ] Viết Hono Streaming Helper gửi câu trả lời dạng **Server-Sent Events (SSE)** về client.
-  * [ ] Thiết kế client UI Next.js nhận luồng text và render thẻ trích dẫn (Citations). Nhấn vào citation sẽ mở popup tài liệu/video tại đúng vị trí trích dẫn.
-* **Tiêu chí hoàn thành:** Sinh viên chat mượt mà, chatbot hiển thị thẻ nguồn trích dẫn chính xác và phản đối trả lời khi câu hỏi nằm ngoài giáo trình.
+### 🔄 Phase 3: Curriculum/Syllabus CRUD & Document Management (85%)
+
+**Mục tiêu:** Hoàn thiện quản lý khung chương trình đào tạo và tài liệu bài giảng.
+
+- [x] CRUD **Major, Specialization, Curriculum, CurriculumSubject** (`curriculumRouter`)
+- [x] CRUD **Syllabus** đầy đủ — CLOs, Schedules, Assessment, Materials, References (`syllabusRouter`)
+- [x] **Phê duyệt / Kích hoạt** Syllabus (`PATCH /approve`, `PATCH /activate`)
+- [x] **Upload Document** vào Syllabus (multipart, lưu `/uploads`, trigger worker)
+- [x] **Xóa Document** đồng bộ Qdrant (xóa vectors theo `document_id`)
+- [x] `DocumentRepository.delete()` — xóa đồng bộ DB + Qdrant
+- [x] **Qdrant integration** — upsert vectors với payload filtering
+- [x] Frontend: trang `/teacher/documents`, `/teacher/syllabus`, `/teacher/curriculum`
+- [ ] Video bài giảng embedding (Gemini Multimodal — kế hoạch)
+- [ ] Chunking service đầy đủ cho PPTX (per-slide extraction)
+
+**Tiêu chí hoàn thành (partial):** Giảng viên upload PDF, hệ thống xử lý async, vector lưu thành công trong Qdrant.
 
 ---
 
-### 📌 Giai đoạn 5: Dashboard Phân Tích & Giám Sát Chi Phí API (Đã lên kế hoạch)
-* **Mục tiêu:** Cung cấp số liệu thống kê cho Giảng viên để cải tiến giáo trình, và giúp Admin giám sát chi phí token API.
-* **Chi tiết công việc:**
-  * [ ] Xây dựng Dashboard quản lý cho Giảng viên: Thống kê các câu hỏi bị sinh viên downvote nhiều nhất, trích xuất các chủ đề (Keywords) sinh viên quan tâm học tập.
-  * [ ] Xây dựng Dashboard quản lý chi phí cho Admin: Đo lường số token tiêu thụ hàng tuần, tính toán chi phí API của từng môn học / từng Tenant.
-  * [ ] Tối ưu hóa caching (Redis/In-memory) các câu hỏi phổ biến để giảm chi phí gọi LLM ngoài.
-* **Tiêu chí hoàn thành:** Hiển thị trực quan biểu đồ tần suất câu hỏi, danh sách downvote và báo cáo chi phí chính xác.
+### 🔄 Phase 4: RAG Chatbot Core & SSE Streaming (70%)
+
+**Mục tiêu:** Xây dựng phần lõi RAG Chatbot với dynamic scoping và streaming response.
+
+- [x] **3 chế độ Chat Scoping:**
+  * `ALL_COURSES` — tìm kiếm toàn bộ tài liệu accessible
+  * `SELECTED_COURSES` — giới hạn trong các môn học được chọn
+  * `SELECTED_DOCUMENTS` — giới hạn trong các tài liệu cụ thể
+- [x] `ChatScopeService` — phân giải scope IDs, build Qdrant filter
+- [x] `ChatSession` CRUD với `scopeMode` và junction tables
+- [x] **SSE Streaming** — Hono streaming helper + Gemini Flash streaming
+- [x] **Citations** — trả về mảng `citations[]` cùng streaming response
+- [x] Lưu lịch sử `ChatMessage` với `citations: Json?`
+- [x] `GET /api/chat/document-catalog` — danh mục tài liệu cho picker UI
+- [ ] **Query Rewriting** — tái cấu trúc câu hỏi dựa trên history context
+- [ ] **Prompt Guardrails** — từ chối trả lời khi câu hỏi ngoài tài liệu
+- [ ] Frontend ChatWidget citation click → mở PDF tại đúng trang
+
+**Tiêu chí hoàn thành (partial):** Student chat được, nhận streaming response kèm citations.
+
+---
+
+### 🔄 Phase 5: Frontend Polish & Student Portal (60%)
+
+**Mục tiêu:** Hoàn thiện giao diện người dùng với Mantine UI, responsive design.
+
+- [x] Trang `/student` — Dashboard với danh sách Syllabus accessible
+- [x] Trang `/student/syllabus/:subjectCode` — Chi tiết Syllabus (CLOs, Schedule, Assessment)
+- [x] Trang `/teacher/documents` — Quản lý tài liệu upload
+- [x] Trang `/superadmin` — Dashboard superadmin
+- [x] Trang `/superadmin/admins` — Quản lý users
+- [x] Trang `/superadmin/whitelist` — Quản lý whitelist email
+- [x] `ChatbotWidget.tsx` — Floating chat widget với SSE streaming
+- [ ] Trang `/teacher/syllabus/create` — Tạo Syllabus đầy đủ (form phức tạp)
+- [ ] Citation click → PDF viewer / Video player tại đúng timestamp
+- [ ] Dark Mode support
+- [ ] Responsive mobile design
+
+---
+
+### 📅 Phase 6: Dashboard Analytics & API Cost Monitoring (Kế hoạch)
+
+**Mục tiêu:** Cung cấp insights cho giảng viên và giám sát chi phí API.
+
+- [ ] Dashboard giảng viên: Thống kê câu hỏi phổ biến, downvoted answers
+- [ ] Topic clustering từ chat history
+- [ ] API token consumption tracking (Gemini API costs)
+- [ ] Redis caching cho câu hỏi phổ biến để giảm API calls
+- [ ] Export báo cáo CSV
+
+---
+
+> **Last Updated:** 2026-06-05
+> **Phiên bản:** 2.0 — Đồng bộ với codebase thực tế

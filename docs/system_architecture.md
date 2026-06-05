@@ -1,53 +1,72 @@
 # TÀI LIỆU THIẾT KẾ KIẾN TRÚC & KỸ THUẬT (TECHNICAL & ARCHITECTURE DESIGN)
 
-Tài liệu này trình bày thiết kế kiến trúc hệ thống, luồng dữ liệu chi tiết, đặc tả các API chính và cấu trúc cơ sở dữ liệu của hệ thống **FPTU Chatbot RAG**.
+Tài liệu này trình bày thiết kế kiến trúc hệ thống, luồng dữ liệu chi tiết, đặc tả API chính và cấu trúc cơ sở dữ liệu của hệ thống **FPTU Chatbot RAG**.
 
 ---
 
 ## 1. Kiến Trúc Tổng Thể (System Architecture)
 
-Hệ thống được xây dựng theo mô hình **Client-Server** hiện đại, phân tách rõ ràng giữa lớp giao diện (Frontend) và lớp nghiệp vụ (Backend API), kết hợp với các cơ sở dữ liệu chuyên dụng để xử lý dữ liệu quan hệ và dữ liệu vector.
+Hệ thống được xây dựng theo mô hình **Monorepo Client-Server**, phân tách rõ ràng giữa lớp giao diện (Frontend) và lớp nghiệp vụ (Backend API), quản lý bởi **Turborepo**.
 
 ```mermaid
 graph TD
-    Client[Next.js Frontend <br> Web App] <-->|HTTPS / SSE Streaming| API[Hono.js Backend <br> Node.js Runtime]
-    
-    subgraph Storage Layer [Tầng Lưu Trữ & Truy Vấn]
-        API <-->|Prisma ORM| RDB[(PostgreSQL / SQLite <br> Metadata & Sessions)]
-        API <-->|Vector API| VDB[(Qdrant / ChromaDB <br> Vector Database)]
+    Client["Next.js 16 App Router
+    Web App (port 3000)"] <-->|HTTPS / SSE Streaming| API["Hono.js Backend
+    Node.js Runtime (port 8000)"]
+
+    subgraph Storage ["Tầng Lưu Trữ & Truy Vấn"]
+        API <-->|Prisma ORM| RDB[("PostgreSQL
+        Metadata & Sessions")]
+        API <-->|ioredis| Cache[("Redis
+        Session Cache")]
+        API <-->|REST API| VDB[("Qdrant
+        Vector Database")]
     end
 
-    subgraph AI Service Providers [Dịch Vụ AI Ngoài]
-        API -->|LLM API / SSE| OpenAI[OpenAI API <br> GPT-4o / Text-3-Small]
-        API -->|LLM & Multimodal| Gemini[Google Gemini API <br> Gemini 2.0 / Embedding 2]
-        API -->|Local Transformers| LocalEmbedding[Local Embedding Node <br> BAAI/bge-vi-base]
+    subgraph AI_Services ["Dịch Vụ AI"]
+        API -->|"Embedding + Chat Streaming"| Gemini["Google Gemini API
+        gemini-embedding-002 / gemini-2.0-flash"]
+        API -->|"Vietnamese Embedding"| LocalEmbedding["Local Embedding
+        BAAI/bge-vi-base"]
+    end
+
+    subgraph Auth ["Xác Thực"]
+        API <-->|Better Auth| AuthDB["User / Session / Account
+        tables in PostgreSQL"]
     end
 ```
 
-### 1.1 Frontend (Ứng dụng Web)
-* **Công nghệ:** **Next.js 15+ (App Router)**, **TypeScript**, **Tailwind CSS**.
-* **Đặc điểm nổi bật:**
-  * Xây dựng giao diện Responsive, chuẩn UI/UX, hỗ trợ Dark Mode.
-  * Tích hợp **Server-Sent Events (SSE)** Client để nhận kết quả dạng stream từ backend giúp hiển thị câu trả lời dạng gõ chữ (typing effect) mượt mà.
-  * Trình xem tài liệu PDF và trình phát Video đồng bộ hóa theo Citation Timestamp.
+### 1.1 Frontend (Next.js 16)
+* **Công nghệ:** **Next.js 16.2 (App Router)**, **TypeScript**, **Mantine UI v9**, **Tailwind CSS v4**.
+* **Đặc điểm:**
+  * Sử dụng Mantine UI thay cho shadcn/ui — component library đầy đủ với form, modals, notifications.
+  * `AuthContext.tsx` quản lý trạng thái đăng nhập và role routing (`/student`, `/teacher`, `/superadmin`).
+  * `ChatbotWidget.tsx` nhận SSE stream từ `/api/chat/stream`.
+  * `ProtectedRoute.tsx` bảo vệ các trang yêu cầu xác thực.
+* **Structure:**
+  * `/login` — trang đăng nhập
+  * `/student` — Student dashboard + Syllabus viewer
+  * `/teacher` — Teacher docs, curriculum, syllabus, users management
+  * `/superadmin` — Superadmin whitelist + user management
 
-### 1.2 Backend (Dịch vụ API)
-* **Công nghệ:** **Hono.js**, **TypeScript**, chạy trên môi trường **Node.js (hoặc Bun)**.
-* **Lý do chọn Hono.js:**
-  * Siêu nhẹ (ultra-lightweight), tốc độ router cực nhanh.
-  * Hỗ trợ native việc streaming phản hồi (SSE) rất đơn giản và tối ưu hiệu năng.
-  * Dễ dàng tích hợp với các thư viện xử lý AI như LangChain, LlamaIndex hoặc gọi trực tiếp API của Google/OpenAI.
+### 1.2 Backend (Hono.js)
+* **Công nghệ:** **Hono.js 4.12**, **TypeScript**, **Node.js** với `tsx watch` cho dev.
+* **Đặc điểm:**
+  * CORS cấu hình để reflect origin (phù hợp dev với nhiều port).
+  * Swagger UI tự động sinh từ `openApiDoc` tại `/api/docs`.
+  * Tất cả routes được mount trong `api/src/index.ts` với mô-đun `Hono` riêng biệt.
+  * File uploads phục vụ static từ `/uploads/*`.
 
-### 1.3 Tầng dữ liệu (Databases)
-* **Cơ sở dữ liệu quan hệ (RDB):** **PostgreSQL** (hoặc SQLite cho môi trường phát triển) kết hợp với **Prisma ORM**. Dùng để lưu trữ dữ liệu người dùng, thông tin khóa học, cấu trúc bài giảng, siêu dữ liệu tài liệu (metadata) và lịch sử các phiên chat.
-* **Cơ sở dữ liệu Vector (Vector DB):** **Qdrant** hoặc **ChromaDB**. Dùng để lưu trữ các vector embedding của các phân đoạn tài liệu (chunks) cùng với nội dung text thô để phục vụ tìm kiếm ngữ nghĩa (Semantic Search).
+### 1.3 Tầng Dữ Liệu
+* **PostgreSQL + Prisma ORM:** Lưu trữ toàn bộ domain data (curriculum, syllabus, users, chat history).
+* **Redis (ioredis):** Cache session data cho Better Auth, tăng tốc auth check.
+* **Qdrant:** Vector DB cho chunks tài liệu — filtering theo `syllabus_id` để cô lập dữ liệu.
 
 ---
 
 ## 2. Luồng Dữ Liệu Chi Tiết (Data Flows)
 
-### 2.1 Luồng Tải lên & Index tài liệu (Document Ingestion & Indexing Pipeline)
-Giảng viên tải tài liệu lên hệ thống, hệ thống thực hiện tiền xử lý và lưu trữ vector.
+### 2.1 Luồng Upload & Index Tài Liệu (Document Ingestion Pipeline)
 
 ```mermaid
 sequenceDiagram
@@ -55,33 +74,31 @@ sequenceDiagram
     actor L as Giảng viên
     participant FE as Next.js Web App
     participant BE as Hono.js API
-    participant S3 as Storage (Local/MinIO)
-    participant E as Embedding Service
-    participant VDB as Vector DB
+    participant FS as File System (/uploads)
+    participant Worker as Ingestion Worker
+    participant E as Gemini Embedding API
+    participant VDB as Qdrant
     participant RDB as PostgreSQL
 
-    L->>FE: Upload File (PDF/Slide/Video)
-    FE->>BE: POST /api/v1/documents (Multipart Form)
-    BE->>S3: Lưu file vật lý
-    BE->>RDB: Khởi tạo Document record (Status: PROCESSING)
-    
-    alt Đối với File Text (PDF/DOCX/Slide)
-        BE->>BE: Trích xuất Text & Markdown
-        BE->>BE: Chunking (Document-based / Semantic)
-    else Đối với File Video
-        BE->>BE: Cắt video thành các đoạn nhỏ (e.g. 30-60s) hoặc gửi trực tiếp
-    end
-    
-    BE->>E: Gọi API tạo Vector (Gemini Embedding 2 / bge-vi-base)
-    E-->>BE: Trả về Vector (e.g. 3072-dim hoặc 768-dim)
-    BE->>VDB: Upsert Vector + Payload (Text thô, DocumentId, Page/Timestamp)
-    BE->>RDB: Cập nhật Document record (Status: COMPLETED)
-    BE-->>FE: Trả về thông báo thành công
-    FE-->>L: Hiển thị trạng thái "Đã chỉ mục xong"
+    L->>FE: Upload File (PDF/PPTX/DOCX)
+    FE->>BE: POST /api/syllabus/:syllabusId/documents (multipart)
+    BE->>FS: Lưu file vật lý vào /uploads
+    BE->>RDB: Tạo Document record (status: PENDING)
+    BE-->>FE: Response { id, status: "PENDING" }
+
+    Note over Worker: Async Ingestion Pipeline
+    Worker->>RDB: Lấy Documents với status PENDING
+    Worker->>FS: Đọc file vật lý
+    Worker->>Worker: Trích xuất text (PDF→Markdown, PPTX→per-slide)
+    Worker->>Worker: Chunking (Document-based + Semantic overlap)
+    Worker->>E: Gọi gemini-embedding-002 cho từng chunk
+    E-->>Worker: Vectors (3072-dim)
+    Worker->>VDB: Upsert vectors + payload (text, page, document_id, syllabus_id)
+    Worker->>RDB: Cập nhật status → COMPLETED
+    Worker->>BE: PATCH /api/internal/documents/:id (status update)
 ```
 
-### 2.2 Luồng Chat & Hỏi đáp (RAG Chat & Q&A Flow)
-Sinh viên gửi câu hỏi, hệ thống truy xuất kiến thức liên quan và sinh câu trả lời.
+### 2.2 Luồng Chat & Hỏi Đáp RAG (Chat Flow)
 
 ```mermaid
 sequenceDiagram
@@ -90,184 +107,105 @@ sequenceDiagram
     participant FE as Next.js Web App
     participant BE as Hono.js API
     participant RDB as PostgreSQL
-    participant E as Embedding Service
-    participant VDB as Vector DB
-    participant LLM as Gemini / OpenAI
+    participant E as Gemini Embedding
+    participant VDB as Qdrant
+    participant LLM as Gemini Flash
 
-    S->>FE: Gõ câu hỏi & Nhấn Gửi
-    FE->>BE: POST /api/v1/chat/send (JSON)
-    BE->>RDB: Đọc lịch sử chat gần nhất để tái cấu trúc câu hỏi (Query Rewriting)
-    BE->>E: Tạo embedding cho câu hỏi tái cấu trúc
-    E-->>BE: Vector của câu hỏi
-    BE->>VDB: Tìm kiếm Similarity (Cosine) với Vector DB (k=5 chunks liên quan nhất)
-    VDB-->>BE: Danh sách Chunks (Text + Metadata: Page, Slide, Video Timestamp)
-    BE->>BE: Xây dựng Prompt (System Prompt + Context + Lịch sử + Câu hỏi)
-    BE->>LLM: Gửi Prompt và yêu cầu Response Streaming
-    
-    loop Streaming Response (SSE)
-        LLM-->>BE: Trả về từng Token
-        BE-->>FE: Stream Token về client (SSE)
+    S->>FE: Gõ câu hỏi & Chọn scope (ALL / SELECTED / DOCUMENTS)
+    FE->>BE: POST /api/chat/stream (JSON: sessionId, message, scopeMode)
+    BE->>RDB: Đọc ChatSession → xác định scopeMode & filter IDs
+    BE->>RDB: Đọc lịch sử chat gần nhất (context window)
+    BE->>E: Tạo embedding cho câu hỏi
+    E-->>BE: Query vector (3072-dim)
+    BE->>VDB: Similarity search (cosine, k=5) với filter syllabus_id / document_id
+    VDB-->>BE: Top-5 chunks (text + metadata: page, document_name)
+    BE->>BE: Xây dựng Prompt (System + Context chunks + History + Question)
+    BE->>LLM: Gửi Prompt → yêu cầu streaming response
+    loop SSE Streaming
+        LLM-->>BE: Token chunks
+        BE-->>FE: SSE data events
     end
-    
-    FE-->>S: Hiển thị câu trả lời thời gian thực kèm Citation
-    BE->>RDB: Lưu câu hỏi và câu trả lời hoàn chỉnh vào DB lịch sử
+    FE-->>S: Hiển thị câu trả lời real-time + Citations
+    BE->>RDB: Lưu ChatMessage (content + citations JSON)
 ```
 
 ---
 
 ## 3. Pipeline Xử Lý Đa Phương Thức (Multimodal Processing)
 
-Một điểm cải tiến vượt trội của dự án là việc ứng dụng **Native Multimodal Embedding** qua mô hình **Gemini Embedding 2**.
-
-* **Xử lý Video:**
-  * Thay vì phải chuyển mã video phức tạp, hệ thống sử dụng API của Google Gemini để trích xuất embedding trực tiếp của các phân đoạn video ngắn (độ dài $\le 120$ giây).
-  * Video được lưu trữ cùng với metadata chứa `video_url`, `start_time` và `end_time` (giây).
-  * Khi sinh viên hỏi một câu liên quan, cosine similarity sẽ khớp vector câu hỏi của sinh viên với vector của phân đoạn video đó. Hệ thống sẽ trích xuất timestamp tương ứng để sinh viên có thể click vào và xem đúng đoạn giảng viên đang giảng về chủ đề đó.
-* **Xử lý Ảnh:**
-  * Ảnh sơ đồ thiết kế hệ thống, biểu đồ môn học được trích xuất bằng OCR hoặc Vision model để sinh mô tả text, kết hợp cùng vector gốc của ảnh được nhúng bởi Gemini Embedding 2.
+* **Video bài giảng:** Hệ thống lưu `VideoLink` kèm `url`, `title`, `description` (không chunk). Kế hoạch tích hợp Gemini multimodal embedding cho video ≤ 120 giây.
+* **PDF/PPTX:** Trích xuất per-page / per-slide thành markdown, áp dụng chunking với overlap 50-100 tokens.
+* **Images:** Dự kiến OCR + Gemini Vision để sinh mô tả text từ ảnh sơ đồ.
 
 ---
 
-## 4. Đặc Tả Hono.js API (Hono.js API Specifications)
+## 4. Thiết Kế Cơ Sở Dữ Liệu (Database Schema Design)
 
-Các Endpoint chính được thiết kế chuẩn RESTful API:
+Schema được thiết kế đặc thù cho cấu trúc học thuật FPT University với **21 models**.
 
-### 4.1 Quản lý tài liệu (Document Management)
-* **`POST /api/v1/courses/:courseId/documents`**
-  * **Mô tả:** Tải tài liệu lên một môn học cụ thể.
-  * **Request:** `Multipart/form-data` chứa file và thông tin `chapterId`.
-  * **Response:**
-    ```json
-    {
-      "success": true,
-      "document": {
-        "id": "doc_abc123",
-        "name": "Slide_Chuong_1_Quicksort.pdf",
-        "status": "PROCESSING",
-        "createdAt": "2026-05-19T07:28:00Z"
-      }
-    }
-    ```
-* **`GET /api/v1/courses/:courseId/documents`**
-  * **Mô tả:** Lấy danh sách tài liệu kèm trạng thái index của môn học.
+### 4.1 Domain Hierarchy (FPTU Academic Structure)
 
-### 4.2 Luồng Chat & Hội thoại (Chat Endpoints)
-* **`POST /api/v1/chat/sessions`**
-  * **Mô tả:** Tạo một phiên trò chuyện mới cho một môn học cụ thể.
-  * **Request Body:** `{ "courseId": "course_123" }`
-* **`POST /api/v1/chat/send`**
-  * **Mô tả:** Gửi tin nhắn và nhận stream câu trả lời kèm nguồn trích dẫn.
-  * **Request Body:**
-    ```json
-    {
-      "sessionId": "session_xyz789",
-      "message": "Thuật toán Quicksort có độ phức tạp thời gian trung bình là bao nhiêu và tìm thấy ở slide nào?"
-    }
-    ```
-  * **Response:** Stream `text/event-stream`. Các gói dữ liệu gửi về dạng JSON chứa:
-    * Chunks text tiếp theo.
-    * Mảng `citations` chứa thông tin nguồn (được gửi ở gói dữ liệu đầu tiên hoặc cuối cùng):
-      ```json
-      {
-        "citations": [
-          {
-            "documentName": "Slide_Chuong_1_Quicksort.pdf",
-            "page": 12,
-            "snippet": "Độ phức tạp trung bình của Quicksort là O(n log n)..."
-          }
-        ]
-      }
-      ```
+```
+Major (SE, AI, BIT...)
+  └── Specialization (NJS, NET, FE...)
+        └── Curriculum (BIT_SE_NJS_19B)
+              └── CurriculumSubject (semesterNo, isSpecializationSpecific)
+                    └── Course (SDN302, FER202)
+                          └── Syllabus (phiên bản 1 môn, isApproved, isActive)
+                                ├── SyllabusClo         (CLO1, CLO2...)
+                                ├── SyllabusSchedule    (60 buổi học)
+                                ├── AssessmentScheme    (phân bổ điểm)
+                                ├── SyllabusMaterial    (học liệu)
+                                ├── ConstructiveQuestion (câu hỏi Edunext)
+                                ├── SyllabusReference   (tài liệu tham khảo)
+                                ├── VideoLink           (video bài giảng)
+                                └── Document            (file upload → Qdrant)
+```
 
----
+### 4.2 Chat Models
 
-## 5. Thiết Kế Cơ Sở Dữ Liệu (Database Schema Design)
+```
+ChatSession (scopeMode: ALL_COURSES | SELECTED_COURSES | SELECTED_DOCUMENTS)
+  ├── ChatSessionCourse    (scoped to specific courses)
+  ├── ChatSessionDocument  (scoped to specific documents)
+  └── ChatMessage          (sender: USER | ASSISTANT, citations: Json?)
+```
 
-Dưới đây là đặc tả cấu trúc cơ sở dữ liệu quan hệ (Prisma Schema syntax):
+### 4.3 Auth & Admin Models (Better Auth)
 
-```prisma
-// Đặc tả mô hình Tenant (Trường Đại Học)
-model Tenant {
-  id        String   @id @default(uuid())
-  name      String   // Ví dụ: FPT University Hanoi
-  domain    String   @unique
-  courses   Course[]
-  users     User[]
-  createdAt DateTime @default(now())
-}
+```
+User (id, email, role: ADMIN|LECTURER|STUDENT, banned)
+  ├── Session (token, expiresAt, ipAddress)
+  ├── Account (providerId, accessToken)
+  └── AuditLog (action, entityType, entityId, details)
 
-// Người dùng hệ thống
-model User {
-  id        String        @id @default(uuid())
-  email     String        @unique
-  name      String
-  role      Role          @default(STUDENT) // STUDENT, LECTURER, ADMIN
-  tenantId  String
-  tenant    Tenant        @relation(fields: [tenantId], references: [id])
-  sessions  ChatSession[]
-  createdAt DateTime      @default(now())
-}
-
-enum Role {
-  STUDENT
-  LECTURER
-  ADMIN
-}
-
-// Khóa học / Môn học
-model Course {
-  id          String        @id @default(uuid())
-  code        String        // Ví dụ: SWD392
-  name        String        // Ví dụ: Software Architecture
-  tenantId    String
-  tenant      Tenant        @relation(fields: [tenantId], references: [id])
-  documents   Document[]
-  sessions    ChatSession[]
-  createdAt   DateTime      @default(now())
-}
-
-// Tài liệu môn học
-model Document {
-  id        String   @id @default(uuid())
-  name      String   // Tên file gốc
-  fileUrl   String   // Đường dẫn lưu trữ vật lý
-  fileType  String   // pdf, docx, pptx, mp4
-  status    String   // PENDING, PROCESSING, COMPLETED, FAILED
-  courseId  String
-  course    Course   @relation(fields: [courseId], references: [id])
-  createdAt DateTime @default(now())
-}
-
-// Phiên chat của Sinh viên
-model ChatSession {
-  id        String        @id @default(uuid())
-  userId    String
-  user      User          @relation(fields: [userId], references: [id])
-  courseId  String
-  course    Course        @relation(fields: [courseId], references: [id])
-  messages  ChatMessage[]
-  createdAt DateTime      @default(now())
-}
-
-// Tin nhắn chi tiết
-model ChatMessage {
-  id        String      @id @default(uuid())
-  sessionId String
-  session   ChatSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
-  sender    SenderType  // USER, ASSISTANT
-  content   String      @db.Text
-  citations Json?       // Lưu trữ mảng citation dạng JSON
-  createdAt DateTime    @default(now())
-}
-
-enum SenderType {
-  USER
-  ASSISTANT
-}
+EmailWhitelist    (email — chỉ email này mới được đăng ký)
+LecturerRequest   (email, reason, status: PENDING|APPROVED|REJECTED)
+Verification      (identifier, value, expiresAt)
 ```
 
 ---
 
+## 5. Bảo Mật & Data Integrity
+
+### 5.1 Authentication Flow
+1. User POST `/api/auth/sign-up/email` → Better Auth kiểm tra `EmailWhitelist`
+2. Login tạo `Session` trong PostgreSQL + cache Redis
+3. Mọi request protected phải có cookie session hợp lệ
+4. Middleware Better Auth validate session và inject `user` vào context
+
+### 5.2 Data Integrity Rules
+- **Cascade Delete:** Xóa `Syllabus` → cascade xóa toàn bộ `Document`, `SyllabusSchedule`, `SyllabusClo`...
+- **Vector Sync:** Xóa `Document` phải đồng bộ xóa vectors trong Qdrant trước
+- **Active Syllabus:** Chỉ có thể có 1 Syllabus `isActive=true` trên 1 Course tại một thời điểm
+- **Role Check:** Mọi mutating operation phải kiểm tra `user.role` trước khi thực thi
+
+---
+
 > [!IMPORTANT]
-> **Tính Bảo Mật Đa Trường (Logical Multi-tenancy Isolation):**
-> Mọi truy vấn từ Next.js Client bắt buộc phải đi kèm một JWT token chứa thông tin `tenantId` và `userId`. Hono.js Backend sử dụng Middleware để kiểm tra và đảm bảo người dùng chỉ được phép truy xuất các khóa học (`Course`) và tài liệu (`Document`) thuộc cùng một `tenantId`.
+> **Lưu ý Cô Lập Dữ Liệu:** Mọi query tìm kiếm vector trên Qdrant bắt buộc phải kèm filter theo `syllabus_id` hoặc `document_id` từ danh sách được phép của user hiện tại. Không được query "toàn bộ collection" mà không có filter.
+
+---
+
+> **Last Updated:** 2026-06-05
+> **Version:** 2.0

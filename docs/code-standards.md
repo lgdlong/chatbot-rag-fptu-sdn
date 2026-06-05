@@ -8,95 +8,143 @@ Tài liệu này quy định bộ tiêu chuẩn kỹ thuật, phong cách lập 
 
 * **Strict Type Safety:**
   * Luôn luôn bật cấu hình `"strict": true` trong `tsconfig.json`.
-  * Tuyệt đối **không sử dụng kiểu `any`** trong bất kỳ trường hợp nào. Nếu một kiểu dữ liệu chưa xác định rõ trong quá trình parse, hãy sử dụng kiểu `unknown` và thực hiện Type Guard.
-  * Mọi hàm, phương thức bắt buộc phải khai báo rõ ràng kiểu dữ liệu của các tham số nhận vào và kiểu dữ liệu trả về (Return type).
+  * Tuyệt đối **không sử dụng kiểu `any`**. Nếu một kiểu dữ liệu chưa xác định rõ trong quá trình parse, hãy sử dụng kiểu `unknown` và thực hiện Type Guard.
+  * Mọi hàm, phương thức bắt buộc phải khai báo rõ ràng kiểu trả về (Return type).
+
 * **Naming Conventions (Quy ước đặt tên):**
-  * **Variables & Functions:** Đặt tên theo dạng `camelCase` (ví dụ: `getUserSession`, `isTenantActive`).
-  * **Classes & Interfaces & Types:** Đặt tên theo dạng `PascalCase` (ví dụ: `ChatSessionService`, `CreateUserDto`).
-  * **Database Models (Prisma):** Đặt tên theo dạng `PascalCase` ở số ít (ví dụ: `Tenant`, `ChatMessage`).
-  * **Constants:** Đặt tên viết hoa cách nhau bằng dấu gạch dưới `UPPER_SNAKE_CASE` (ví dụ: `MAX_VIDEO_DURATION_SECONDS`).
+  * **Variables & Functions:** `camelCase` — ví dụ: `getUserSession`, `isTenantActive`
+  * **Classes, Interfaces, Types:** `PascalCase` — ví dụ: `ChatSessionDto`, `CreateSyllabusInput`
+  * **Database Models (Prisma):** `PascalCase` số ít — ví dụ: `Syllabus`, `ChatMessage`
+  * **Constants:** `UPPER_SNAKE_CASE` — ví dụ: `MAX_VIDEO_DURATION_SECONDS`
+  * **Files (Backend):** `kebab-case` — ví dụ: `chat.controller.ts`, `syllabus.controller.ts`
+  * **Files (Frontend):** `PascalCase` cho components — ví dụ: `ChatbotWidget.tsx`, `AuthContext.tsx`
+
+* **Database Mapping:**
+  * Mọi Prisma model bắt buộc phải có `@@map("snake_case_table_name")`.
+  * Mọi trường phải có `@map("snake_case_column_name")` nếu tên field TypeScript dùng camelCase.
+  * Ví dụ: `syllabusId String @map("syllabus_id")` → bảng DB cột `syllabus_id`.
 
 ---
 
 ## ⚡ 2. Quy Chuẩn Backend Hono.js
 
 * **Tuân thủ Web Standard API:**
-  * Hono.js hoạt động dựa trên các tiêu chuẩn Web API (Request, Response, Headers). Luôn sử dụng context `c` để lấy và trả về dữ liệu.
-  * Tận dụng `c.req.valid('json')` kết hợp với thư viện **Zod** để tự động kiểm tra tính hợp lệ của dữ liệu đầu vào tại middleware trước khi đi vào controller xử lý logic.
+  * Hono.js hoạt động dựa trên Web API tiêu chuẩn (Request, Response). Luôn dùng context `c` để lấy và trả dữ liệu.
+  * Dùng `c.req.valid('json')` kết hợp với **Zod** để validate input tại middleware.
+
+* **Controller Pattern:**
+  * Mỗi module có 1 file controller (`*.controller.ts`) chứa `new Hono()` router riêng.
+  * Mount router vào `app` trong `api/src/index.ts` — không để logic trong file entrypoint.
+  * Ví dụ: `app.route("/api/syllabus", syllabusRouter)`.
+
+* **Repository Pattern:**
+  * Logic DB queries phức tạp tách vào `*.repository.ts` để tái sử dụng.
+  * Ví dụ: `DocumentRepository.delete(id)` — xử lý cả Prisma delete + Qdrant cleanup.
+
 * **Xử lý Lỗi Tập Trung (Global Error Handling):**
-  * Không viết các khối `try-catch` lặp đi lặp lại ở mọi endpoint. 
-  * Sử dụng `app.onError((err, c) => { ... })` để bắt mọi lỗi không mong muốn, ghi log chi tiết (logger) và trả về Client định dạng JSON chuẩn:
+  * Không viết `try-catch` lặp lại ở mọi endpoint.
+  * Sử dụng `app.onError((err, c) => { ... })` để bắt mọi lỗi và trả về JSON chuẩn:
     ```json
     {
       "success": false,
       "error": {
         "code": "INTERNAL_SERVER_ERROR",
-        "message": "Đã có lỗi hệ thống xảy ra. Vui lòng thử lại sau."
+        "message": "Đã có lỗi hệ thống xảy ra."
       }
     }
     ```
 
+* **SSE Streaming:**
+  * Dùng Hono's `streamSSE()` helper cho các endpoint chat streaming.
+  * Đảm bảo gửi `citations` cùng với hoặc sau stream text hoàn chỉnh.
+
+* **Logging:**
+  * Dùng `winston` logger (import từ `utils/logger.ts`) — **không dùng** `console.log` trong production code.
+  * Logger middleware ghi request/response vào `logs/api.log`.
+
 ---
 
-## 🎨 3. Quy Chuẩn Frontend Next.js (Vercel Performance Best Practices)
+## 🎨 3. Quy Chuẩn Frontend Next.js
 
 * **Server Components (RSC) làm Mặc định:**
-  * Mọi Component mặc định phải là Server Component để tối ưu hóa SEO và giảm tải lượng JavaScript tải xuống trình duyệt của người dùng.
-  * Chỉ thêm từ khóa `'use client'` ở dòng đầu tiên của file khi component đó thực sự cần sử dụng các React Hooks (`useState`, `useEffect`, `useContext`) hoặc lắng nghe trực tiếp các sự kiện tương tác (`onClick`, `onChange`).
-* **Tối ưu hóa Data Fetching:**
-  * Sử dụng cơ chế fetch song song (Parallel Fetching) thay vì chuỗi fetch tuần tự (Waterfall fetch) để cải thiện tốc độ tải trang.
-  * Áp dụng `<Suspense>` của React để hiển thị trạng thái Loading Skeleton mượt mà trong khi chờ đợi dữ liệu tải về.
-* **Tối ưu hóa Tài nguyên:**
-  * Luôn sử dụng component `<Image>` của Next.js thay cho thẻ `<img>` thô để tự động nén kích thước, chuyển sang định dạng WebP hiện đại và lazy-load ảnh.
-  * Sử dụng font chữ được tối ưu hóa qua `next/font` để triệt tiêu hiện tượng nhấp nháy font khi tải trang (Layout Shift).
+  * Mọi Component mặc định phải là Server Component.
+  * Chỉ thêm `'use client'` khi component dùng React Hooks (`useState`, `useEffect`) hoặc event handlers.
+
+* **Mantine UI:**
+  * Dùng Mantine components thay vì tự viết CSS phức tạp (Button, Modal, Table, Form, Notifications...).
+  * Dùng `@mantine/notifications` cho toast messages — không dùng alert/confirm native.
+  * Dùng `@mantine/form` cho form validation — không tự viết validation logic.
+  * Dùng `@mantine/dropzone` cho file upload UI.
+
+* **Auth Context:**
+  * Truy cập user info và session qua `useAuth()` hook từ `AuthContext.tsx`.
+  * Bọc pages cần bảo vệ bằng `<ProtectedRoute>` component.
+
+* **Data Fetching:**
+  * Dùng `fetch` với `credentials: 'include'` để gửi cookie session.
+  * Xử lý loading state bằng Mantine `<Skeleton>` hoặc `<Loader>`.
+  * Không tạo global state phức tạp nếu có thể dùng local state + React Query.
+
+* **Tối ưu hóa:**
+  * Dùng `<Image>` của Next.js thay cho `<img>` thô.
+  * Dùng `next/font` cho font tối ưu hóa.
 
 ---
 
-## 🔒 4. Nguyên Tắc Bảo Mật Cô Lập Đa Trường (Multi-tenant Isolation Guardrails)
+## 🔒 4. Quy Tắc Bảo Mật & Data Integrity
 
-Đây là yêu cầu bảo mật quan trọng nhất của dự án để đảm bảo tính cô lập dữ liệu giữa các trường học:
+* **Session Validation:**
+  * Mọi protected endpoint phải validate session qua Better Auth trước khi thực thi logic.
+  * Dùng `auth.api.getSession(c.req.raw)` để lấy thông tin user hiện tại.
 
-* **Không Truy Cập Dữ Liệu Trực Tiếp:**
-  * Tuyệt đối không viết các câu lệnh truy vấn cơ sở dữ liệu `prisma.document.findMany()` hoặc tìm kiếm vector trên Vector DB mà không đi kèm điều kiện lọc `tenantId` lấy từ phiên đăng nhập hiện hành.
-* **Xác Thực Đầu Vào Header:**
-  * Mọi API tương tác với dữ liệu học tập đều phải đi qua Middleware `requireTenant`. Middleware này có nhiệm vụ trích xuất `tenantId` từ JWT/Session của người dùng và ghi nó vào context của Hono (`c.set('tenantId', tenantId)`).
-* **Double-Check Rule:**
-  * Khi truy xuất hoặc cập nhật bất kỳ bản ghi nào, luôn kiểm tra quyền sở hữu kép:
-    ```typescript
-    const course = await prisma.course.findFirst({
-      where: {
-        id: courseId,
-        tenantId: currentTenantId // Bắt buộc phải có điều kiện lọc này!
-      }
-    });
-    if (!course) {
-      throw new HTTPException(403, { message: "Bạn không có quyền truy cập khóa học này." });
-    }
-    ```
+* **Role-Based Access:**
+  * Kiểm tra `user.role` trước mọi mutation operation (create, update, delete).
+  * `STUDENT` chỉ được đọc; `LECTURER` được quản lý tài liệu; `ADMIN` có toàn quyền.
 
----
+* **Vector DB Isolation:**
+  * Mọi query Qdrant bắt buộc phải có `filter` theo `syllabus_id` hoặc danh sách `document_id`.
+  * **Không bao giờ** query toàn bộ collection mà không có payload filter.
 
-## 🧬 5. Quy tắc Toàn vẹn & Đồng bộ Hệ sinh thái RAG
+* **Cascade Delete Integrity:**
+  * Khi xóa `Document`: xóa vectors trong Qdrant trước, sau đó xóa record DB.
+  * Khi xóa `Syllabus`: Prisma cascade xóa tất cả sub-tables tự động.
+  * Không để "orphan" vectors trong Qdrant.
 
-* **Xóa bỏ đồng bộ (Multi-DB Cleanup):** Hành vi `onDelete: Cascade` của Prisma không có hiệu lực với Vector DB. Do đó, logic xóa `Document` ở tầng nghiệp vụ bắt buộc phải gọi API của Vector DB để xóa toàn bộ các vector chunks liên quan theo `document_id` trước khi hoàn tất transaction.
-* **Đảm bảo bộ lọc Tenant trên Vector DB:** Mọi truy vấn tìm kiếm ngữ nghĩa (Semantic Search) trên Qdrant/ChromaDB bắt buộc phải truyền kèm bộ lọc `Filter` theo `organization_id` lấy từ session, khớp 100% với tư duy cô lập dữ liệu của tầng RDB.
-* **Chỉ mục hiệu năng (Performance Indexing):** Tất cả các bảng nghiệp vụ bắt buộc phải khai báo `@@index` cho trường `organizationId` hoặc các cặp `@@index([organizationId, liên_kết_khác])` để tối ưu tốc độ truy vấn Multi-tenant.
+* **Input Validation:**
+  * Tất cả input từ client phải được validate bằng Zod schema trước khi xử lý.
+  * File uploads phải kiểm tra MIME type và giới hạn size.
 
 ---
 
-## 📦 6. Quy Trình Git & Pull Request (PR)
+## 🧬 5. Quy Tắc RAG Ecosystem Integrity
+
+* **Embedding Consistency:**
+  * Tài liệu text/slide dùng `BAAI/bge-vi-base` hoặc `gemini-embedding-002`.
+  * Video/Audio dùng `gemini-embedding-002` (multimodal native).
+  * **Không được trộn embedding models** trong cùng một Qdrant collection.
+
+* **Chunk Metadata:**
+  * Mọi vector upsert phải kèm payload đầy đủ: `document_id`, `syllabus_id`, `page` (hoặc `timestamp` cho video), `text` snippet.
+
+* **Status Tracking:**
+  * `Document.status` phải phản ánh đúng trạng thái xử lý: `PENDING → PROCESSING → COMPLETED | FAILED`.
+  * Worker update status qua `PATCH /api/internal/documents/:id`.
+
+---
+
+## 📦 6. Quy Trình Git & Pull Request
 
 * **Quy tắc đặt tên nhánh (Branch Naming):**
-  * Nhánh tính năng mới: `feature/ten-tinh-nang` (ví dụ: `feature/google-oauth`).
-  * Nhánh sửa lỗi: `bugfix/ten-loi` (ví dụ: `bugfix/fix-sse-close-event`).
-  * Nhánh viết tài liệu: `docs/ten-tai-lieu` (ví dụ: `docs/add-roadmap`).
-* **Quy chuẩn thông điệp Commit (Conventional Commits):**
-  * Mọi thông điệp commit phải tuân thủ cấu trúc chuẩn: `<type>(<scope>): <description>`
-  * **Các type hợp lệ:**
-    * `feat`: Thêm tính năng mới.
-    * `fix`: Sửa lỗi.
-    * `docs`: Thay đổi hoặc thêm mới tài liệu.
-    * `refactor`: Tái cấu trúc code (không sửa lỗi, không thêm tính năng).
-    * `test`: Viết thêm unit test hoặc integration test.
-    * `chore`: Thay đổi cấu hình build, package dependencies.
-  * *Ví dụ:* `feat(auth): integrate google oauth sso provider via better auth`
+  * Feature: `feature/ten-tinh-nang` — ví dụ: `feature/chat-scoping`
+  * Bugfix: `bugfix/ten-loi` — ví dụ: `bugfix/sse-close-event`
+  * Docs: `docs/ten-tai-lieu` — ví dụ: `docs/update-roadmap`
+
+* **Commit Convention (Conventional Commits — Tiếng Việt):**
+  * Format: `<type>(<scope>): <mô tả tiếng Việt>`
+  * Các type hợp lệ: `feat`, `fix`, `docs`, `refactor`, `test`, `chore`
+  * Ví dụ: `feat(chat): thêm dynamic document scoping cho chat session`
+  * Ví dụ: `fix(syllabus): sửa lỗi cascade delete không xóa vectors trong Qdrant`
+
+* **Quy tắc push:**
+  * Không push trực tiếp lên `main`. Luôn tạo PR.
+  * Kiểm tra lint (`make lint-api`, `make lint-web`) trước khi push.

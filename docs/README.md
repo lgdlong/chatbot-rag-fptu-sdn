@@ -1,17 +1,15 @@
 # HỆ THỐNG CHATBOT RAG HỖ TRỢ HỌC TẬP FPTU
-## HỆ THỐNG TRUY XUẤT KIẾN THỨC ĐA PHƯƠNG THỨC HỖ TRỢ HỌC TẬP
+## Tài Liệu Kỹ Thuật — Bản Đồ Tài Liệu Dự Án
 
-Chào mừng bạn đến với thư mục tài liệu kỹ thuật của dự án **Chatbot RAG FPTU**. Dự án này được phát triển nhằm giải quyết nhu cầu tra cứu và hỏi đáp tài liệu môn học của sinh viên FPT University bằng phương pháp tối ưu hóa LLM phổ biến hiện nay: **Retrieval-Augmented Generation (RAG)** trong ngữ cảnh xử lý tiếng Việt.
+Chào mừng bạn đến với thư mục tài liệu kỹ thuật của dự án **FPTU Chatbot RAG**. Dự án này được phát triển nhằm giải quyết nhu cầu tra cứu và hỏi đáp tài liệu môn học của sinh viên FPT University bằng phương pháp **Retrieval-Augmented Generation (RAG)** tối ưu cho tiếng Việt.
 
 ---
 
 ## Tổng Quan Dự Án
 
-### Ý tưởng & Bối cảnh (Context)
-* **Tên dự án:** *Xây dựng chatbot cho phép sinh viên hỏi đáp dựa trên tài liệu môn học (FPTU Chatbot RAG).*
-* **Mục tiêu cốt lõi:**
-  * **Hệ thống thực tế:** Xây dựng một ứng dụng web RAG đa phương thức (hỗ trợ Text, PDF, Slide, Video, Image) cho phép giảng viên/nhà trường tải lên tài liệu học tập (Syllabus, Slide bài giảng, Video bài giảng) và cho phép sinh viên trò chuyện, hỏi đáp dựa trên chính nguồn tài liệu đó.
-* **Đối tượng phục vụ:** Sinh viên, giảng viên và các trường đại học (hỗ trợ mô hình đa trường học - multi-tenant).
+* **Tên dự án:** FPTU Chatbot RAG — Hệ thống truy xuất kiến thức đa phương thức
+* **Mục tiêu:** Web app cho phép Giảng viên tải lên tài liệu (Syllabus, Slide, PDF) và Sinh viên hỏi đáp thông minh theo phương pháp RAG
+* **Đối tượng:** Sinh viên, Giảng viên và Quản trị viên FPT University
 
 ---
 
@@ -23,15 +21,17 @@ Chào mừng bạn đến với thư mục tài liệu kỹ thuật của dự �
 | Language | TypeScript | 5.8.3 |
 | ORM | Prisma | 5.18.0 |
 | Auth | Better Auth | 1.6.11 |
-| Frontend | Next.js | 16.2.6 |
+| Frontend | Next.js | 16.2.7 |
 | UI Library | React | 19.2.4 |
+| UI Components | Mantine UI | 9.3.0 |
 | Styling | Tailwind CSS | 4 |
-| State | TanStack Query | latest |
+| Build | Turborepo | latest |
 | Vector DB | Qdrant | latest |
-| Embedding | Gemini 2.0 (embedding-002) | 3072-dim |
-| LLM | Gemini 2.0 (streaming) | latest |
+| Embedding | Gemini embedding-002 | 3072-dim |
+| LLM | Gemini Flash (streaming) | latest |
 | Database | PostgreSQL | latest |
 | Cache | Redis | latest |
+| Logging | Winston | 3.19.0 |
 
 ---
 
@@ -39,11 +39,17 @@ Chào mừng bạn đến với thư mục tài liệu kỹ thuật của dự �
 
 ```mermaid
 graph TD
-    A[docs/README.md <br> Tổng quan & Bản đồ tài liệu] --> B(docs/project-overview-pdr.md <br> Yêu cầu phát triển PDR)
-    A --> C(docs/system_architecture.md <br> Thiết kế Kiến trúc & Kỹ thuật)
-    A --> D(docs/code-standards.md <br> Tiêu chuẩn lập trình)
-    A --> E(docs/development_roadmap.md <br> Lộ trình phát triển)
-    A --> F(docs/codebase_summary.md <br> Tổng quan codebase)
+    A["docs/README.md
+    Tổng quan & Bản đồ tài liệu"] --> B("docs/project-overview-pdr.md
+    Yêu cầu phát triển PDR")
+    A --> C("docs/system_architecture.md
+    Thiết kế Kiến trúc & Kỹ thuật")
+    A --> D("docs/code-standards.md
+    Tiêu chuẩn lập trình")
+    A --> E("docs/development-roadmap.md
+    Lộ trình phát triển")
+    A --> F("docs/codebase-summary.md
+    Tổng quan codebase")
 
     style A fill:#4F46E5,stroke:#312E82,stroke-width:2px,color:#fff
     style B fill:#0EA5E9,stroke:#0369A1,stroke-width:1px,color:#fff
@@ -53,38 +59,65 @@ graph TD
     style F fill:#6366F1,stroke:#3730A3,stroke-width:1px,color:#fff
 ```
 
-### Chuyên đề phát triển hệ thống
+---
+
+## Chuyên Đề Phát Triển Hệ Thống
+
 1. **[Tài liệu Yêu cầu Phát triển (PDR)](./project-overview-pdr.md)**
-   * Định nghĩa các tác nhân (Actors) và mô hình phân quyền (Student, Lecturer, Admin).
-   * Chi tiết các tính năng chính: Quản lý tài liệu đa phương thức, Chat & Hỏi đáp thông minh, Dẫn nguồn trích dẫn.
-   * Yêu cầu phi chức năng: Tính mở rộng (Scalability), Bảo mật, Hiệu năng truy vấn.
+   * Mô hình Actor: Student, Lecturer, Super Admin
+   * Các tính năng chính: Curriculum/Syllabus CRUD, Document Upload, RAG Chat
+   * API endpoints specification đầy đủ
+   * Database schema thực tế (21 models, FPTU academic domain)
+
 2. **[Thiết kế Kiến trúc & Kỹ thuật](./system_architecture.md)**
-   * Sơ đồ luồng dữ liệu (Data Flow) tổng thể từ khi tải tài liệu đến khi trả lời.
-   * Chi tiết Tech-stack và API Endpoints.
-   * Pipeline xử lý Multimodal.
+   * Sơ đồ kiến trúc Turborepo Monorepo (Next.js 16 + Hono.js)
+   * Data Flow: Document Ingestion Pipeline & RAG Chat Flow
+   * FPTU domain hierarchy: Major → Specialization → Curriculum → Course → Syllabus → Document
+   * Bảo mật: session-based auth + Qdrant data isolation
+
 3. **[Tiêu chuẩn lập trình](./code-standards.md)**
-   * Quy chuẩn TypeScript & Clean Code.
-   * Quy chuẩn Backend Hono.js.
-   * Quy chuẩn Frontend Next.js.
-   * Nguyên tắc bảo mật Multi-tenant Isolation Guardrails.
+   * TypeScript strict mode + naming conventions
+   * Hono.js controller & repository pattern
+   * Mantine UI conventions
+   * Quy tắc bảo mật RAG (Qdrant vector isolation)
+   * Commit conventions (tiếng Việt, conventional commits)
+
 4. **[Lộ trình phát triển](./development-roadmap.md)**
-   * Các giai đoạn phát triển và tiến độ hiện tại.
-   * Milestones và success criteria.
+   * 6 giai đoạn phát triển với tiến độ thực tế
+   * Các tính năng đã hoàn thành vs. kế hoạch
+
 5. **[Tổng quan codebase](./codebase-summary.md)**
-   * Thống kê source files và LOC.
-   * Module breakdown chi tiết.
+   * Thống kê LOC (~15k API, ~7k Web)
+   * Module breakdown + API routes mapping
+   * Development commands (Makefile shortcuts)
+
+---
+
+## Tài Liệu Bổ Sung
+
+| File | Mô tả |
+|------|-------|
+| [running_guide.md](./running_guide.md) | Hướng dẫn cài đặt và chạy hệ thống chi tiết |
+| [better_auth_guide.md](./better_auth_guide.md) | Hướng dẫn tích hợp và cấu hình Better Auth |
+| [hono_guide.md](./hono_guide.md) | Hướng dẫn phát triển Hono.js API |
+| [db-query-guild.md](./db-query-guild.md) | Hướng dẫn viết Prisma queries tối ưu |
+| [docker-build-push.md](./docker-build-push.md) | Hướng dẫn build & push Docker images |
+| [api/](./api/) | API documentation (OpenAPI format) |
+| [srs/](./srs/) | Software Requirements Specification chi tiết |
 
 ---
 
 ## Sản Phẩm Bàn Giao (Deliverables)
 
-| STT | Sản phẩm bàn giao | Mô tả chi tiết | Trạng thái |
+| STT | Sản phẩm bàn giao | Mô tả | Trạng thái |
 |:---:|---|---|:---:|
-| **1** | **Web App Chatbot** | Hệ thống web hoàn chỉnh với giao diện đẹp mắt, Responsive, hỗ trợ chế độ Sáng/Tối. Tích hợp RAG đa phương thức và trang quản trị quản lý tài liệu học tập theo khóa học/chương học. | *Đang phát triển* |
-| **2** | **Source Code GitHub** | Mã nguồn sạch, cấu trúc rõ ràng: thư mục `web/` (Next.js) và `api/` (Hono.js). Đi kèm file `README.md` hướng dẫn deploy chi tiết. | *Đã khởi tạo* |
-| **3** | **Tài liệu Kỹ thuật** | Tập tài liệu đặc tả PDR, Thiết kế Kiến trúc và Hướng dẫn vận hành hệ thống RAG Chatbot hoàn chỉnh. | *Đang biên soạn* |
+| **1** | **Web App Chatbot** | Hệ thống web với giao diện Mantine UI, RAG chat scoping 3 mode, Teacher/Student/Admin portals | *Đang phát triển* |
+| **2** | **Source Code GitHub** | Monorepo `web/` (Next.js) + `api/` (Hono.js), quản lý bởi Turborepo | *Đã triển khai* |
+| **3** | **Tài liệu Kỹ thuật** | PDR, Kiến trúc, Code Standards, Roadmap — trong thư mục `docs/` | *Đang cập nhật* |
 
 ---
 
 > [!NOTE]
-> Hệ thống được thiết kế hướng tới khả năng **Scale đa trường** (Multi-tenant) và hỗ trợ **Multimodal Embedding Native** thông qua Gemini Embedding 2, cho phép nhúng trực tiếp Video/Audio vào cùng không gian vector với văn bản mà không cần chia nhỏ thủ công thành ảnh.
+> Hệ thống sử dụng **Gemini Embedding 002** (3072-dim) cho Multimodal Embedding và **BAAI/bge-vi-base** cho Vietnamese text retrieval tối ưu. Chat sessions hỗ trợ 3 chế độ scoping: `ALL_COURSES`, `SELECTED_COURSES`, và `SELECTED_DOCUMENTS`.
+
+> **Last Updated:** 2026-06-05
