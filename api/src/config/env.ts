@@ -1,11 +1,27 @@
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-// Programmatically load the root .env file at startup (always 3 levels up from this file's folder)
+import fs from "node:fs";
+
+// Programmatically load the root .env file at startup by walking up the directory tree
 try {
   const __dirname = path.dirname(fileURLToPath(import.meta.url));
-  const envPath = path.resolve(__dirname, "../../../.env");
-  process.loadEnvFile(envPath);
+  let dir = __dirname;
+  let envPath = "";
+  // Duyệt ngược lên tối đa 5 cấp thư mục để tìm file .env ở thư mục gốc
+  for (let i = 0; i < 5; i++) {
+    const checkPath = path.resolve(dir, ".env");
+    if (fs.existsSync(checkPath)) {
+      envPath = checkPath;
+      break;
+    }
+    const parent = path.dirname(dir);
+    if (parent === dir) break;
+    dir = parent;
+  }
+  if (envPath) {
+    process.loadEnvFile(envPath);
+  }
 } catch (e) {
   // Ignore error in environments where env variables are pre-loaded (e.g. Docker, Vercel)
 }
@@ -16,13 +32,8 @@ export const ENV = {
   DATABASE_URL: process.env.DATABASE_URL || "",
   BETTER_AUTH_SECRET: process.env.BETTER_AUTH_SECRET || "",
   BETTER_AUTH_URL: process.env.BETTER_AUTH_URL || "http://localhost:8000",
-  QDRANT_URL: process.env.QDRANT_URL || "http://localhost:6333",
-  QDRANT_API_KEY: process.env.QDRANT_API_KEY || "",
   GEMINI_API_KEY: process.env.GEMINI_API_KEY || "",
   GEMINI_TEXT_MODEL: process.env.GEMINI_TEXT_MODEL || "gemini-3.1-flash-lite",
-  RAG_MAX_DISTANCE: process.env.RAG_MAX_DISTANCE
-    ? Number.parseFloat(process.env.RAG_MAX_DISTANCE)
-    : 0.35,
   GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID || "",
   GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET || "",
   REDIS_HOST: process.env.REDIS_HOST || "localhost",

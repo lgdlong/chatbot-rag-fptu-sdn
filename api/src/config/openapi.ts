@@ -102,7 +102,7 @@ export const openApiDoc = {
           title: { type: "string", example: "Hỏi về SOLID principles" },
           userId: { type: "string", example: "user-123" },
           courseId: { type: "string", example: "course-123" },
-          scopeMode: { type: "string", example: "ALL_COURSES", enum: ["ALL_COURSES", "SELECTED_COURSES"] },
+          scopeMode: { type: "string", example: "ALL_COURSES", enum: ["ALL_COURSES", "SELECTED_COURSES", "SELECTED_DOCUMENTS"] },
           scopedCourses: {
             type: "array",
             items: {
@@ -149,19 +149,6 @@ export const openApiDoc = {
           reason: { type: "string", example: "Tôi giảng dạy bộ môn Kỹ thuật phần mềm tại FPTU Cần Thơ." },
           status: { type: "string", example: "PENDING", enum: ["PENDING", "APPROVED", "REJECTED"] },
           createdAt: { type: "string", example: "2026-05-27T16:38:00.000Z" }
-        }
-      },
-      Subscription: {
-        type: "object",
-        properties: {
-          id: { type: "string", example: "sub-222" },
-          userId: { type: "string", example: "user-123" },
-          tier: { type: "string", example: "BASIC", enum: ["BASIC", "SILVER", "GOLD"] },
-          startDate: { type: "string", example: "2026-05-27T16:38:00.000Z" },
-          endDate: { type: "string", example: "2126-05-27T16:38:00.000Z" },
-          maxMessages: { type: "integer", example: 10 },
-          messageCount: { type: "integer", example: 3 },
-          lastReset: { type: "string", example: "2026-05-27T16:38:00.000Z" }
         }
       }
     }
@@ -557,14 +544,20 @@ export const openApiDoc = {
               schema: {
                 type: "object",
                 properties: {
-                  scopeMode: { type: "string", enum: ["ALL_COURSES", "SELECTED_COURSES"], example: "ALL_COURSES" },
+                  scopeMode: { type: "string", enum: ["ALL_COURSES", "SELECTED_COURSES", "SELECTED_DOCUMENTS"], example: "ALL_COURSES" },
                   courseIds: {
                     type: "array",
                     items: { type: "string" },
                     example: ["course-123", "course-456"],
                     description: "Danh sách môn học được chọn khi scopeMode là SELECTED_COURSES."
                   },
-                  courseId: { type: "string", example: "course-123", description: "Payload legacy để tương thích ngược." }
+                  courseId: { type: "string", example: "course-123", description: "Payload legacy để tương thích ngược." },
+                  documentIds: {
+                    type: "array",
+                    items: { type: "string" },
+                    example: ["doc-123", "doc-456"],
+                    description: "Danh sách tài liệu được chọn khi scopeMode là SELECTED_DOCUMENTS."
+                  }
                 }
               }
             }
@@ -795,7 +788,7 @@ export const openApiDoc = {
     "/api/chat/send": {
       post: {
         summary: "Gửi tin nhắn và truyền luồng câu trả lời (SSE Stream)",
-        description: "Gửi câu hỏi của sinh viên. Hệ thống tự động kiểm tra hạn ngạch của sinh viên theo cửa sổ 5 giờ (Basic tối đa 10 câu/5 giờ). Nếu hợp lệ, hệ thống sẽ thực hiện truy vấn RAG (từ Vector DB Qdrant), gọi mô hình LLM Gemini sinh phản hồi và truyền luồng Server-Sent Events (SSE) từng từ về client để tạo hiệu ứng gõ phím mượt mà. Kết quả trả về chứa mảng trích dẫn nguồn (citations). Cuộc hội thoại đầu tiên sẽ được tự động tóm tắt qua AI để đặt tiêu đề.",
+        description: "Gửi câu hỏi của sinh viên. Hệ thống tự động kiểm tra hạn ngạch theo cửa sổ 5 giờ (Basic tối đa 10 câu/5 giờ). Nếu hợp lệ, backend sẽ định tuyến sang truy vấn syllabus có cấu trúc hoặc workspace AnythingLLM tương ứng, gọi Gemini để sinh phản hồi và truyền luồng Server-Sent Events (SSE) từng phần về client. Kết quả trả về chứa mảng trích dẫn nguồn (citations). Cuộc hội thoại đầu tiên sẽ được tự động tóm tắt qua AI để đặt tiêu đề.",
         security: [{ cookieAuth: [] }],
         requestBody: {
           required: true,
@@ -1070,151 +1063,5 @@ export const openApiDoc = {
         }
       }
     },
-    "/api/subscriptions/me": {
-      get: {
-        summary: "Lấy thông tin gói dịch vụ cá nhân",
-        description: "Kiểm tra gói dịch vụ hiện tại (BASIC, SILVER, GOLD), số câu hỏi đã gửi trong cửa sổ 5 giờ hiện tại, hạn ngạch tối đa và tự động reset sau mỗi 5 giờ.",
-        security: [{ cookieAuth: [] }],
-        responses: {
-          "200": {
-            description: "Thông tin gói dịch vụ và hạn mức câu hỏi.",
-            content: {
-              "application/json": {
-                schema: {
-                  type: "object",
-                  properties: {
-                    subscription: { $ref: "#/components/schemas/Subscription" }
-                  }
-                }
-              }
-            }
-          },
-          "401": {
-            description: "Chưa đăng nhập.",
-            content: {
-              "application/json": {
-                schema: { $ref: "#/components/schemas/ErrorResponse" }
-              }
-            }
-          },
-          "500": {
-            description: "Lỗi kết nối database.",
-            content: {
-              "application/json": {
-                schema: { $ref: "#/components/schemas/ErrorResponse" }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/subscriptions/upgrade": {
-      post: {
-        summary: "Nâng cấp gói dịch vụ (Tạo link thanh toán)",
-        description: "Tạo link thanh toán để nâng cấp lên SILVER (10.000 VNĐ, 50 tin nhắn/5 giờ) hoặc GOLD (20.000 VNĐ, 200 tin nhắn/5 giờ). Giao dịch được lưu ở trạng thái PENDING. Hỗ trợ SDK PayOS chính thức hoặc mock checkout nếu cấu hình chưa được kích hoạt.",
-        security: [{ cookieAuth: [] }],
-        requestBody: {
-          required: true,
-          content: {
-            "application/json": {
-              schema: {
-                type: "object",
-                properties: {
-                  tier: { type: "string", example: "SILVER", enum: ["SILVER", "GOLD"] },
-                  returnUrl: { type: "string", example: "http://localhost:3000/success" },
-                  cancelUrl: { type: "string", example: "http://localhost:3000/cancel" }
-                },
-                required: ["tier", "returnUrl", "cancelUrl"]
-              }
-            }
-          }
-        },
-        responses: {
-          "200": {
-            description: "Tạo link thanh toán thành công.",
-            content: {
-              "application/json": {
-                schema: {
-                  type: "object",
-                  properties: {
-                    success: { type: "boolean", example: true },
-                    checkoutUrl: { type: "string", example: "https://pay.payos.vn/web/123456" },
-                    transactionId: { type: "string", example: "trans-abc" },
-                    orderCode: { type: "integer", example: 852194 }
-                  }
-                }
-              }
-            }
-          },
-          "400": {
-            description: "Gói dịch vụ chọn nâng cấp không hợp lệ.",
-            content: {
-              "application/json": {
-                schema: { $ref: "#/components/schemas/ErrorResponse" }
-              }
-            }
-          },
-          "401": {
-            description: "Chưa đăng nhập.",
-            content: {
-              "application/json": {
-                schema: { $ref: "#/components/schemas/ErrorResponse" }
-              }
-            }
-          },
-          "500": {
-            description: "Lỗi kết nối PayOS hoặc lỗi khởi tạo transaction trong database.",
-            content: {
-              "application/json": {
-                schema: { $ref: "#/components/schemas/ErrorResponse" }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/subscriptions/webhook": {
-      post: {
-        summary: "Webhook nhận xác nhận thanh toán từ PayOS",
-        description: "Bắn tự động từ cổng PayOS để báo cáo kết quả thanh toán. Hệ thống xác thực chữ ký bảo mật signature từ PayOS, nếu thành công sẽ tự động cập nhật Transaction sang PAID và nâng cấp gói dịch vụ (SILVER/GOLD) trong 30 ngày cho User tương ứng.",
-        requestBody: {
-          required: true,
-          content: {
-            "application/json": {
-              schema: {
-                type: "object",
-                properties: {
-                  success: { type: "boolean", example: true },
-                  data: {
-                    type: "object",
-                    properties: {
-                      orderCode: { type: "integer", example: 852194 },
-                      amount: { type: "integer", example: 10000 },
-                      code: { type: "string", example: "00" }
-                    }
-                  },
-                  signature: { type: "string", example: "abc_secure_signature" }
-                }
-              }
-            }
-          }
-        },
-        responses: {
-          "200": {
-            description: "Luôn trả về success true để phản hồi cho cổng thanh toán.",
-            content: {
-              "application/json": {
-                schema: {
-                  type: "object",
-                  properties: {
-                    success: { type: "boolean", example: true }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
   }
 };

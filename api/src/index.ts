@@ -9,17 +9,24 @@ import { swaggerUI } from "@hono/swagger-ui";
 import { openApiDoc } from "./config/openapi.js";
 
 import { prisma } from "./modules/auth/services/db.service.js";
+import { checkDatabaseConnection } from "./utils/db-health.js";
+import { logger } from "./utils/logger.js";
+import { loggerMiddleware } from "./middlewares/logger.middleware.js";
 
 import {
-  deleteDocumentHandler,
   ragRouter,
 } from "./modules/rag/rag.controller.js";
 import { internalRouter } from "./modules/documents/document.internal.controller.js";
 import { chatRouter } from "./modules/chat/chat.controller.js";
-import { lecturerAdminRouter } from "./modules/auth/lecturer.controller.js";
-import { subscriptionRouter } from "./modules/subscriptions/subscription.controller.js";
+import { curriculumRouter } from "./modules/curriculum/curriculum.controller.js";
+import { syllabusRouter } from "./modules/syllabus/syllabus.controller.js";
+import { whitelistRouter } from "./modules/auth/whitelist.controller.js";
+import { lecturerRequestRouter } from "./modules/auth/lecturer-request.controller.js";
 
 export const app = new Hono();
+
+// Apply global request/response logger middleware first
+app.use("*", loggerMiddleware);
 
 // Basic CORS setup for local development
 app.use(
@@ -40,13 +47,12 @@ app.use("/uploads/*", serveStatic({ root: "./" }));
 app.route("/api/courses", ragRouter);
 app.route("/api/internal", internalRouter);
 app.route("/api/chat", chatRouter);
-app.route("/api/auth-admin", lecturerAdminRouter);
-app.route("/api/subscriptions", subscriptionRouter);
+app.route("/api/curriculum", curriculumRouter);
+app.route("/api/syllabus", syllabusRouter);
+app.route("/api/whitelist", whitelistRouter);
+app.route("/api/auth-admin", lecturerRequestRouter);
 
-app.delete(
-  "/api/courses/:courseId/documents/:documentId",
-  deleteDocumentHandler,
-);
+
 
 // Serve OpenAPI document & Swagger UI
 app.get("/api/doc", (c) => c.json(openApiDoc));
@@ -111,12 +117,22 @@ app.on(["POST", "GET"], "/api/auth/*", (c) => {
   return auth.handler(c.req.raw);
 });
 
-serve(
-  {
-    fetch: app.fetch,
-    port: ENV.PORT,
-  },
-  (info) => {
-    console.log(`Server is running on http://localhost:${info.port}`);
-  },
-);
+// Khởi chạy server sau khi kiểm tra sức khỏe cơ sở dữ liệu thành công
+async function startServer() {
+  await checkDatabaseConnection();
+
+  serve(
+    {
+      fetch: app.fetch,
+      port: ENV.PORT,
+    },
+    (info) => {
+      logger.info(`Server is running on http://localhost:${info.port}`);
+    },
+  );
+}
+
+startServer().catch((err) => {
+  logger.error("Lỗi nghiêm trọng khi khởi chạy server: %O", err);
+  process.exit(1);
+});

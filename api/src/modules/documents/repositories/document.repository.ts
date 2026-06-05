@@ -9,13 +9,13 @@ export class DocumentRepository {
   static async findById(id: string) {
     return prisma.document.findUnique({
       where: { id },
-      include: { course: true },
+      include: { syllabus: true },
     })
   }
 
-  static async findManyByCourse(courseId: string) {
+  static async findManyBySyllabus(syllabusId: number) {
     return prisma.document.findMany({
-      where: { courseId },
+      where: { syllabusId },
     })
   }
 
@@ -33,7 +33,6 @@ export class DocumentRepository {
   }
 
   static async updateStatus(id: string, status: string, error?: string) {
-    // If there is an error, we can log it here.
     if (error) {
       console.error(`[DocumentRepository] Ingestion error for document ${id}: ${error}`)
     }
