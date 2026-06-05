@@ -2,8 +2,7 @@
 
 # Install Dependencies
 install:
-	npm --prefix api install
-	npm --prefix web install
+	npm install
 
 # Database Commands
 db-up:
@@ -24,25 +23,24 @@ db-reset:
 
 # Prisma Database & Migration Commands
 migrate:
-	npx --prefix api prisma db push --schema=api/prisma/schema.prisma
+	npx --no-install --prefix api prisma db push --schema=api/prisma/schema.prisma
 
 prisma-generate:
-	npx --prefix api prisma generate --schema=api/prisma/schema.prisma
+	npx --no-install --prefix api prisma generate --schema=api/prisma/schema.prisma
 
 prisma-studio:
-	npx --prefix api prisma studio --schema=api/prisma/schema.prisma
+	npx --no-install --prefix api prisma studio --schema=api/prisma/schema.prisma
 
 # Development Commands
 dev-api:
-	npm --prefix api run dev
+	npx turbo run dev --filter=chatbot-rag-fptu-api
 
 dev-web:
-	npm --prefix web run dev
+	npx turbo run dev --filter=chatbot-rag-fptu-web
 
 dev-all:
 	@echo "Starting API, Web, and Worker..."
-	@npm --prefix api run dev & \
-	npm --prefix web run dev & \
+	@npx turbo run dev & \
 	powershell -NoProfile -ExecutionPolicy Bypass -File services/ingestion-worker/run.ps1
 
 # Ingestion Worker
@@ -51,26 +49,28 @@ worker:
 
 # Build Commands
 build-api:
-	npm --prefix api run build
+	npx turbo run build --filter=chatbot-rag-fptu-api
 
 build-web:
-	npm --prefix web run build
+	npx turbo run build --filter=chatbot-rag-fptu-web
 
-build-all: build-api build-web
+build-all:
+	npx turbo run build
 
 # Lint Commands
 lint-api:
-	npm --prefix api run lint
+	npx turbo run lint --filter=chatbot-rag-fptu-api
 
 lint-web:
-	npm --prefix web run lint
+	npx turbo run lint --filter=chatbot-rag-fptu-web
 
 # Test Commands
 test:
-	npm --prefix api run test
+	npx turbo run test --filter=chatbot-rag-fptu-api
 
 # Clean Commands
 clean:
+	npx turbo clean
 	rm -rf api/dist web/.next
 	rm -rf api/node_modules/.cache
 

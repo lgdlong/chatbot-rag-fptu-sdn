@@ -1,9 +1,9 @@
-name: chatbot-rag-fptu
+name: chatbot-rag-fptu-sdn
 
 services:
   db:
     image: pgvector/pgvector:pg17
-    container_name: chatbot-rag-postgres
+    container_name: chatbot-rag-postgres-sdn
     restart: always
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
@@ -16,19 +16,19 @@ services:
 
   redis:
     image: redis:7-alpine
-    container_name: chatbot-rag-redis
+    container_name: chatbot-rag-redis-sdn
     restart: always
     ports:
-      - "6379:6379"
+      - "6380:6379"
     volumes:
       - redis_data:/data
 
   anythingllm:
     image: mintplexlabs/anythingllm
-    container_name: anythingllm
+    container_name: anythingllm-sdn
     restart: always
     ports:
-      - "3003:3001"
+      - "3004:3001"
     environment:
       - STORAGE_DIR=/app/server/storage
     volumes:

@@ -2,7 +2,7 @@
 ## Đề Tài Nghiên Cứu Khoa Học & Ứng Dụng Thực Tiễn: So Sánh RAG và Fine-tuning trong Bối Cảnh Tiếng Việt
 
 [![Hono](https://img.shields.io/badge/Backend-Hono.js-orange.svg?style=flat-square)](https://hono.dev)
-[![Next.js](https://img.shields.io/badge/Frontend-Next.js%2015-black.svg?style=flat-square)](https://nextjs.org)
+[![Next.js](https://img.shields.io/badge/Frontend-Next.js%2016-black.svg?style=flat-square)](https://nextjs.org)
 [![Prisma](https://img.shields.io/badge/ORM-Prisma-blue.svg?style=flat-square)](https://prisma.io)
 [![Better Auth](https://img.shields.io/badge/Auth-Better%20Auth-purple.svg?style=flat-square)](https://better-auth.com)
 
@@ -82,23 +82,20 @@ graph TD
 
 ```
 chatbot-rag-fptu/
-├── api/                        # Mã nguồn Backend API (Hono.js + TypeScript)
-│   ├── prisma/                 # Định nghĩa Schema dữ liệu quan hệ (Prisma)
-│   └── src/                    # Logic xử lý API Gateway & RAG engine
-├── database/                   # Cấu hình container PostgreSQL chạy Docker
-├── docs/                       # Thư mục chứa tài liệu đặc tả & nghiên cứu chuyên sâu
-│   ├── README.md               # Bản đồ tài liệu kỹ thuật
-│   ├── system_requirements.md  # Đặc tả yêu cầu phần mềm (SRS)
-│   ├── system_architecture.md  # Tài liệu thiết kế kiến trúc chi tiết
-│   ├── folder_structure.md     # Định nghĩa cấu trúc thư mục toàn hệ thống
-│   ├── development-roadmap.md  # Kế hoạch phát triển và lộ trình chi tiết
-│   ├── code-standards.md       # Chuẩn viết code và quy ước phát triển
-│   ├── hono_guide.md           # Hướng dẫn chi tiết phát triển Backend Hono.js
-│   └── better_auth_guide.md    # Hẩm nang bảo mật xác thực Better Auth
-├── web/                        # Giao diện người dùng Frontend (Next.js 15)
-│   ├── app/                    # Các route giao diện chính (App Router)
-│   └── components/             # Thư viện UI components tái sử dụng
-└── Makefile                    # File cấu hình lệnh chạy nhanh của monorepo
+├── api/                        # Backend Workspace (Hono.js + TypeScript, cổng 8000)
+│   ├── prisma/
+│   │   └── schema.prisma       # 21 Prisma models — FPTU academic domain
+│   └── src/                    # Controllers, modules, utils
+├── web/                        # Frontend Workspace (Next.js 16 + Mantine UI, cổng 3000)
+│   ├── app/                    # App Router pages (student, teacher, superadmin, login)
+│   └── components/             # Reusable components (ChatbotWidget, ProtectedRoute)
+├── docs/                       # Tài liệu kỹ thuật & nghiên cứu
+├── plans/                      # Implementation plans (archived)
+├── logs/                       # Runtime logs (api.log)
+├── docker-compose.yml          # PostgreSQL + Redis + Qdrant containers
+├── turbo.json                  # Turborepo pipeline config
+├── Makefile                    # Monorepo task runner shortcuts
+└── package.json                # Root workspace config
 ```
 
 ---
@@ -145,11 +142,13 @@ Thực hiện tuần tự các lệnh sau tại thư mục gốc:
    make health-check
    ```
 
-Để biết thêm chi tiết về tất cả lệnh CLI khả dụng, vui lòng tham khảo [CLAUDE.md](file:///E:/FPT/Semester_7/SWD392/chatbot-rag-fptu/CLAUDE.md).
+Để biết thêm chi tiết về tất cả lệnh CLI khả dụng, vui lòng tham khảo [CLAUDE.md](./CLAUDE.md).
 
 ---
 
 ## 📄 Tài Liệu Tham Khảo Dành Cho Nhà Phát Triển
-* **Lộ trình chi tiết:** Xem [Lộ trình phát triển hệ thống (development-roadmap.md)](file:///e:/FPT/Semester_7/SWD392/chatbot-rag-fptu/docs/development-roadmap.md).
-* **Quy chuẩn lập trình:** Xem [Bộ quy chuẩn code tiêu chuẩn (code-standards.md)](file:///e:/FPT/Semester_7/SWD392/chatbot-rag-fptu/docs/code-standards.md).
-* **Chi tiết Kiến trúc:** Xem [Đặc tả kỹ thuật (system_architecture.md)](file:///e:/FPT/Semester_7/SWD392/chatbot-rag-fptu/docs/system_architecture.md).
+* **Lộ trình chi tiết:** Xem [Lộ trình phát triển hệ thống](./docs/development-roadmap.md).
+* **Quy chuẩn lập trình:** Xem [Bộ quy chuẩn code tiêu chuẩn](./docs/code-standards.md).
+* **Chi tiết Kiến trúc:** Xem [Đặc tả kỹ thuật kiến trúc](./docs/system_architecture.md).
+* **Tổng quan codebase:** Xem [Codebase Summary](./docs/codebase-summary.md).
+* **Bản đồ tài liệu đầy đủ:** Xem [docs/README.md](./docs/README.md).
