@@ -12,8 +12,11 @@ export type ScopedDocument = {
   name: string;
   fileType: string;
   status: string;
-  courseId: string;
-  course: ScopedCourse;
+  syllabusId: number;
+  syllabus: {
+    courseId: string;
+    course: ScopedCourse;
+  };
   createdAt: Date;
 };
 
@@ -66,9 +69,13 @@ export async function resolveAccessibleChatCourseIds(userId: string) {
 
   const courses = await prisma.course.findMany({
     where: {
-      documents: {
+      syllabuses: {
         some: {
-          status: "COMPLETED",
+          documents: {
+            some: {
+              status: "COMPLETED",
+            },
+          },
         },
       },
     },
@@ -83,18 +90,20 @@ export async function resolveAccessibleChatCourseIds(userId: string) {
   return courses.map((course) => course.id);
 }
 
-export async function resolveAccessibleChatDocuments(userId: string) {
+export async function resolveAccessibleChatDocuments(userId: string): Promise<ScopedDocument[]> {
   const accessibleCourseIds = await resolveAccessibleChatCourseIds(userId);
 
   if (accessibleCourseIds.length === 0) {
     return [];
   }
 
-  return prisma.document.findMany({
+  const documents = await prisma.document.findMany({
     where: {
       status: "COMPLETED",
-      courseId: {
-        in: accessibleCourseIds,
+      syllabus: {
+        courseId: {
+          in: accessibleCourseIds,
+        },
       },
     },
     select: {
@@ -102,20 +111,38 @@ export async function resolveAccessibleChatDocuments(userId: string) {
       name: true,
       fileType: true,
       status: true,
-      courseId: true,
-      createdAt: true,
-      course: {
+      syllabusId: true,
+      syllabus: {
         select: {
-          id: true,
-          code: true,
-          name: true,
+          courseId: true,
+          course: {
+            select: {
+              id: true,
+              code: true,
+              name: true,
+            },
+          },
         },
       },
+      createdAt: true,
     },
     orderBy: {
       createdAt: "desc",
     },
   });
+
+  return documents.map((doc) => ({
+    id: doc.id,
+    name: doc.name,
+    fileType: doc.fileType,
+    status: doc.status,
+    syllabusId: doc.syllabusId,
+    syllabus: {
+      courseId: doc.syllabus.courseId,
+      course: doc.syllabus.course,
+    },
+    createdAt: doc.createdAt,
+  }));
 }
 
 export async function resolveAccessibleChatDocumentIds(userId: string) {
@@ -158,7 +185,7 @@ export async function resolveChatScope(
 
   if (hasDocumentScope) {
     const scopedDocuments = orderedScopedDocuments(selectedDocumentIds, accessibleDocuments);
-    const scopeCourseIds = unique(scopedDocuments.map((document) => document.courseId)).filter((courseId) =>
+    const scopeCourseIds = unique(scopedDocuments.map((document) => document.syllabus.courseId)).filter((courseId) =>
       accessibleCourseIdSet.has(courseId),
     );
 
@@ -203,7 +230,7 @@ export async function resolveChatScope(
 }
 
 function formatScopedDocument(document: ScopedDocument) {
-  return `${document.name} - ${document.course.code}`;
+  return `${document.name} - ${document.syllabus.course.code}`;
 }
 
 export function describeChatScope(scope: ResolvedChatScope) {

@@ -7,9 +7,6 @@ import { RagService } from "../rag/services/rag.service.js";
 import { ENV } from "../../config/env.js";
 import { GoogleGenAI } from "@google/genai";
 import { Prisma } from "@prisma/client";
-import {
-  getOrInitializeSubscription,
-} from "../subscriptions/subscription.service.js";
 import { ChatRepository } from "./repositories/chat.repository.js";
 import {
   buildChatScopeLabel,
@@ -67,11 +64,14 @@ type ChatSessionDocumentRelation = {
     name: string;
     fileType: string;
     status: string;
-    courseId: string;
-    course: {
-      id: string;
-      code: string;
-      name: string;
+    syllabusId: number;
+    syllabus: {
+      courseId: string;
+      course: {
+        id: string;
+        code: string;
+        name: string;
+      };
     };
   } | null;
 };
@@ -136,8 +136,10 @@ async function resolveActiveDocumentIds(scope: Awaited<ReturnType<typeof resolve
 
   const activeDocs = await prisma.document.findMany({
     where: {
-      courseId: {
-        in: scope.courseIds,
+      syllabus: {
+        courseId: {
+          in: scope.courseIds,
+        },
       },
     },
     select: {
@@ -214,13 +216,7 @@ async function persistAssistantMessage(
   });
 }
 
-async function incrementQuota(userId: string) {
-  const subscription = await getOrInitializeSubscription(userId);
-  await prisma.subscription.update({
-    where: { id: subscription.id },
-    data: { messageCount: { increment: 1 } },
-  });
-}
+
 
 chatRouter.post("/dev-login", async (c) => {
   try {
@@ -345,7 +341,11 @@ chatRouter.get("/courses/:courseId/documents", async (c) => {
   const courseId = c.req.param("courseId");
   try {
     const documents = await prisma.document.findMany({
-      where: { courseId },
+      where: {
+        syllabus: {
+          courseId
+        }
+      },
       orderBy: { createdAt: "desc" },
     });
     return c.json({ documents });
@@ -366,7 +366,7 @@ chatRouter.get("/document-catalog", async (c) => {
     const grouped = new Map<string, DocumentCatalogGroup>();
 
     for (const document of documents) {
-      const courseId = document.course.id;
+      const courseId = document.syllabus.course.id;
       const existingGroup = grouped.get(courseId);
       const catalogDocument: DocumentCatalogDocument = {
         id: document.id,
@@ -380,9 +380,9 @@ chatRouter.get("/document-catalog", async (c) => {
       if (!existingGroup) {
         grouped.set(courseId, {
           course: {
-            id: document.course.id,
-            code: document.course.code,
-            name: document.course.name,
+            id: document.syllabus.course.id,
+            code: document.syllabus.course.code,
+            name: document.syllabus.course.name,
           },
           documents: [catalogDocument],
         });
@@ -620,10 +620,10 @@ chatRouter.post("/send", async (c) => {
     return c.json({ error: "Unauthorized to send message to this session" }, 403);
   }
 
-  const subscription = await getOrInitializeSubscription(session.user.id);
-  if (subscription.messageCount >= subscription.maxMessages) {
+  const messageCount = chatSession.messages.length;
+  if (messageCount >= 100) {
     const quotaMessage =
-      "Bạn đã hết quota chat của gói hiện tại. Hãy chờ đến khi quota được đặt lại hoặc nâng cấp gói cao hơn để tiếp tục.";
+      "Phiên hội thoại này đã đạt giới hạn tối đa 100 tin nhắn (theo giới hạn quy định của SRS). Vui lòng tạo một phiên hội thoại mới để tiếp tục hỏi đáp.";
 
     return streamSSE(c, async (stream) => {
       await stream.writeSSE({
@@ -696,7 +696,6 @@ chatRouter.post("/send", async (c) => {
       });
 
       await persistAssistantMessage(sessionId, accumulatedAnswer || ragResult.fullAnswer, ragResult.citations as unknown[]);
-      await incrementQuota(session.user.id);
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : "Lỗi xử lý AI RAG";
       console.error("[Chat Stream Error]:", err);

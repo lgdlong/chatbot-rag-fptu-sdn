@@ -22,7 +22,11 @@ export class ChatRepository {
           include: {
             document: {
               include: {
-                course: true,
+                syllabus: {
+                  include: {
+                    course: true,
+                  },
+                },
               },
             },
           },
@@ -52,7 +56,11 @@ export class ChatRepository {
           include: {
             document: {
               include: {
-                course: true,
+                syllabus: {
+                  include: {
+                    course: true,
+                  },
+                },
               },
             },
           },
