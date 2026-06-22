@@ -176,3 +176,4 @@ services/ingestion-worker/*.exe
 .claude
 mantine-docs.txt
 web-figma/
+docs/srs/temp

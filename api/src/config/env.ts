@@ -42,7 +42,4 @@ export const ENV = {
   INTERNAL_API_URL: process.env.INTERNAL_API_URL || "http://localhost:8000",
   ANYTHING_LLM_URL: process.env.ANYTHING_LLM_URL || "http://localhost:3003",
   ANYTHING_LLM_API_KEY: process.env.ANYTHING_LLM_API_KEY || "",
-  SEPAY_API_KEY: process.env.SEPAY_API_KEY || "",
-  SEPAY_BANK_CODE: process.env.SEPAY_BANK_CODE || "",
-  SEPAY_ACCOUNT_NO: process.env.SEPAY_ACCOUNT_NO || "",
 } as const;

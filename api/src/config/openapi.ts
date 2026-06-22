@@ -3,7 +3,7 @@ export const openApiDoc = {
   info: {
     title: "FPTU Chatbot RAG API Documentation",
     version: "1.0.0",
-    description: "Tài liệu API chi tiết cho hệ thống Chatbot RAG hỗ trợ học tập tại Đại học FPT. Hỗ trợ đầy đủ các module RAG slide/video ingestion, chat streaming (SSE), phân quyền admin, và thanh toán nâng cấp gói dịch vụ qua PayOS.",
+    description: "Tài liệu API chi tiết cho hệ thống Chatbot RAG hỗ trợ học tập tại Đại học FPT. Hỗ trợ các module quản lý syllabus, document ingestion, chat streaming (SSE) và phân quyền quản trị.",
     contact: {
       name: "FPTU RAG Team",
       email: "support@fpt.edu.vn"
@@ -788,7 +788,7 @@ export const openApiDoc = {
     "/api/chat/send": {
       post: {
         summary: "Gửi tin nhắn và truyền luồng câu trả lời (SSE Stream)",
-        description: "Gửi câu hỏi của sinh viên. Hệ thống tự động kiểm tra hạn ngạch theo cửa sổ 5 giờ (Basic tối đa 10 câu/5 giờ). Nếu hợp lệ, backend sẽ định tuyến sang truy vấn syllabus có cấu trúc hoặc workspace AnythingLLM tương ứng, gọi Gemini để sinh phản hồi và truyền luồng Server-Sent Events (SSE) từng phần về client. Kết quả trả về chứa mảng trích dẫn nguồn (citations). Cuộc hội thoại đầu tiên sẽ được tự động tóm tắt qua AI để đặt tiêu đề.",
+        description: "Gửi câu hỏi của sinh viên trong một phiên chat theo môn học. Backend sẽ định tuyến sang truy vấn syllabus có cấu trúc hoặc workspace AnythingLLM tương ứng, gọi Gemini để sinh phản hồi và truyền luồng Server-Sent Events (SSE) từng phần về client. Kết quả trả về chứa mảng trích dẫn nguồn (citations). Cuộc hội thoại đầu tiên sẽ được tự động tóm tắt qua AI để đặt tiêu đề.",
         security: [{ cookieAuth: [] }],
         requestBody: {
           required: true,
@@ -826,14 +826,14 @@ export const openApiDoc = {
             }
           },
           "403": {
-            description: "Vượt quá hạn ngạch tin nhắn trong cửa sổ 5 giờ hiện tại (cần nâng cấp gói dịch vụ).",
+            description: "Không có quyền gửi tin nhắn vào phiên chat này.",
             content: {
               "application/json": {
                 schema: {
                   type: "object",
                   properties: {
-                    error: { type: "string", example: "LIMIT_EXCEEDED" },
-                    message: { type: "string", example: "Bạn đã dùng hết giới hạn câu hỏi trong 5 giờ hiện tại. Hãy nâng cấp gói dịch vụ..." }
+                    error: { type: "string", example: "Unauthorized to send message to this session" },
+                    message: { type: "string", example: "Bạn không có quyền gửi tin nhắn vào phiên chat này." }
                   }
                 }
               }

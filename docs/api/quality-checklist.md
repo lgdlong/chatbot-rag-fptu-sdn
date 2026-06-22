@@ -30,7 +30,7 @@ Bảng tiêu chuẩn kiểm soát chất lượng nhằm đảm bảo tài liệ
 ### 2. Định Dạng & Trình Bày (Structure & Formatting)
 
 - [ ] **Phân tách tệp tin khoa học**
-  - Tài liệu chi tiết được tổ chức thành 6 tệp theo module: `00_auth.md`, `00_system.md`, `00_documents.md`, `00_chat.md`, `00_auth_admin.md`, `00_subscriptions.md`.
+  - Tài liệu chi tiết được tổ chức theo các module còn nằm trong scope chính thức: `00_auth.md`, `00_system.md`, `00_documents.md`, `00_chat.md`.
 
 - [ ] **Liên kết hoạt động tốt (No Broken Links)**
   - Tất cả các liên kết nội bộ sử dụng relative path đều hoạt động chính xác.
@@ -65,7 +65,7 @@ Bảng tiêu chuẩn kiểm soát chất lượng nhằm đảm bảo tài liệ
 
 ### 2. Bỏ qua các trường hợp lỗi
 * **❌ Sai:** Chỉ cung cấp ví dụ khi gọi API thành công `200 OK`.
-* **✅ Đúng:** Cung cấp đầy đủ cấu trúc JSON lỗi `400 Validation`, `401 Unauthorized`, `403 Quota Limit Exceeded`.
+* **✅ Đúng:** Cung cấp đầy đủ cấu trúc JSON lỗi `400 Validation`, `401 Unauthorized`, `403 Forbidden`.
 
 ### 3. Ví dụ cURL thiếu headers cần thiết
 * **❌ Sai:** `curl -X POST /api/chat/send`
@@ -90,7 +90,7 @@ Bảng tiêu chuẩn kiểm soát chất lượng nhằm đảm bảo tài liệ
 
 ### 0. Phân hệ Xác thực & Tổ chức (`00_auth.md`)
 - Phải đặc tả luồng SignUp, SignIn bằng Email/Mật khẩu và domain được phép (`@fpt.edu.vn`, `@gmail.com`).
-- Phải làm rõ luồng Switch Active Organization (Multi-tenant) phục vụ phân quyền dữ liệu.
+- Phải làm rõ luồng phân quyền theo vai trò người dùng trong bối cảnh đơn trường.
 
 ### 1. Module Tài Liệu & Ingestion (`00_documents.md`)
 - Phải ghi nhận giới hạn dung lượng tải file PDF **dưới 50MB**.
@@ -100,11 +100,7 @@ Bảng tiêu chuẩn kiểm soát chất lượng nhằm đảm bảo tài liệ
 ### 2. Phân Hệ Trò Chuyện (`00_chat.md`)
 - Phải ghi nhận định dạng truyền luồng SSE `text/event-stream`.
 - Phải đặc tả cấu trúc `citations` nguồn bài giảng gồm slide ảnh trích dẫn, trang slide số mấy và trạng thái xóa slide.
-- Phải làm rõ hạn mức tin nhắn theo cửa sổ 5 giờ của gói Basic (10 câu hỏi/5 giờ).
+- Phải làm rõ phạm vi chat theo môn học và các lỗi quyền truy cập phiên chat.
 
-### 3. Phân Hệ Admin & Giảng Viên (`00_auth_admin.md`)
-- Phải chỉ ra logic phê duyệt của Admin: tạo mật khẩu tạm PBKDF2 khớp Better Auth và hiển thị duy nhất **1 lần**.
-
-### 4. Gói Dịch Vụ & PayOS (`00_subscriptions.md`)
-- Phải đặc tả luồng Transaction (`PENDING` -> `PAID`).
-- Phải ghi nhận webhook bảo mật chữ ký số của PayOS.
+### 3. Scope Alignment
+- Không viết hoặc khôi phục tài liệu cho `lecturer request` hoặc `subscription/payment` nếu chưa có quyết định scope mới.

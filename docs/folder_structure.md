@@ -13,10 +13,9 @@ chatbot-rag-fptu/
 ├── .agents/                    # Cấu hình Agent (Quy tắc & Kỹ năng)
 ├── docs/                       # Tài liệu thiết kế hệ thống và nghiên cứu
 │   ├── README.md
-│   ├── system_requirements.md
+│   ├── srs/
 │   ├── system_architecture.md
-│   ├── research_methodology.md
-│   ├── experimental_design.md
+│   ├── code-standards.md
 │   └── folder_structure.md      <-- Tài liệu này
 │
 ├── api/                        # BACKEND API (Hono.js + TypeScript)

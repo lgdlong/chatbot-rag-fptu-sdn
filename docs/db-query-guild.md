@@ -119,12 +119,6 @@ docker exec -it chatbot-rag-postgres-sdn psql -U guest -d chatbot_rag_sdn -c "SE
 docker exec -it chatbot-rag-postgres-sdn psql -U guest -d chatbot_rag_sdn -c "SELECT id, session_id, sender, left(content, 120) AS preview, created_at FROM chat_messages ORDER BY created_at DESC LIMIT 10;"
 ```
 
-### List lecturer requests
-
-```bash
-docker exec -it chatbot-rag-postgres-sdn psql -U guest -d chatbot_rag_sdn -c "SELECT id, name, email, status, created_at FROM lecturer_requests ORDER BY created_at DESC LIMIT 10;"
-```
-
 ### Count records in key tables
 
 ```bash
@@ -135,7 +129,6 @@ UNION ALL SELECT 'syllabuses', COUNT(*) FROM syllabuses
 UNION ALL SELECT 'documents', COUNT(*) FROM documents
 UNION ALL SELECT 'chat_sessions', COUNT(*) FROM chat_sessions
 UNION ALL SELECT 'chat_messages', COUNT(*) FROM chat_messages
-UNION ALL SELECT 'lecturer_requests', COUNT(*) FROM lecturer_requests
 UNION ALL SELECT 'email_whitelist', COUNT(*) FROM email_whitelist;
 "
 ```

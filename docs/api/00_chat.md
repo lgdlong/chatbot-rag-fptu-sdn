@@ -249,9 +249,9 @@ Xóa vĩnh viễn phiên chat và toàn bộ lịch sử tin nhắn liên quan k
 
 #### Mô tả
 Điểm cuối cốt lõi của cuộc hội thoại:
-1. **Kiểm tra hạn mức:** Server tự động kiểm tra số lượng tin nhắn đã gửi trong cửa sổ 5 giờ hiện tại của sinh viên. Nếu vượt quá giới hạn gói dịch vụ (Basic tối đa 10 câu/5 giờ), server lập tức chặn và trả về lỗi `403 Forbidden` mã `"LIMIT_EXCEEDED"`.
-2. **Truy vấn RAG:** Thực hiện tìm kiếm ngữ nghĩa thô trên Qdrant Vector DB để trích xuất các phân đoạn slide bài giảng PDF phù hợp nhất làm tài liệu tham khảo.
-3. **Gọi AI Gemini & Streaming:** Gửi prompt kết hợp ngữ cảnh slide cùng lịch sử trò chuyện lên Gemini LLM, mở luồng kết nối **Server-Sent Events (SSE)** truyền luồng câu trả lời từng từ về phía Client thời gian thực để tạo hiệu ứng gõ chữ mượt mà.
+1. **Kiểm tra quyền truy cập:** Server xác minh sinh viên có quyền truy cập vào phiên chat và phạm vi môn học tương ứng.
+2. **Truy vấn RAG:** Thực hiện truy vấn dữ liệu syllabus có cấu trúc hoặc gọi workspace `AnythingLLM` tương ứng với môn học để lấy ngữ cảnh trả lời.
+3. **Gọi AI Gemini & Streaming:** Gửi prompt kết hợp ngữ cảnh cùng lịch sử trò chuyện lên Gemini LLM, mở luồng kết nối **Server-Sent Events (SSE)** truyền luồng câu trả lời từng phần về phía Client.
 4. **Tự động tóm tắt:** Nếu là câu hỏi đầu tiên của phòng chat, hệ thống tự động gọi Gemini phụ để tóm tắt câu hỏi thành một tiêu đề ngắn dưới 5 từ làm tên phòng chat.
 5. **Lưu trữ:** Ghi nhận tin nhắn của sinh viên và câu trả lời kèm nguồn trích dẫn (`citations`) của AI vào database PostgreSQL.
 
@@ -297,11 +297,10 @@ Server sẽ mở kết nối luồng truyền trực tiếp và gửi các sự 
    data: "Lỗi kết nối API Gemini"
    ```
 
-**Thất bại - 403 Forbidden (Vượt hạn ngạch tin nhắn):**
+**Thất bại - 403 Forbidden (Không có quyền truy cập phiên chat):**
 ```json
 {
-  "error": "LIMIT_EXCEEDED",
-  "message": "Bạn đã dùng hết giới hạn câu hỏi trong 5 giờ hiện tại. Hãy nâng cấp gói dịch vụ (Silver/Gold) để tiếp tục hỏi chatbot!"
+  "error": "Unauthorized to send message to this session"
 }
 ```
 

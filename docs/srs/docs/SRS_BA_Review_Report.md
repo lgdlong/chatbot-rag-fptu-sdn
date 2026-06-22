@@ -1,5 +1,10 @@
 # Báo Cáo Đánh Giá SRS — Business Analyst Review
 
+> [!WARNING]
+> Đây là tài liệu review lịch sử, phản ánh các vòng phân tích trước đó.
+> File này không phải source of truth hiện hành.
+> Nếu có mâu thuẫn với `SRS_Detailed.md`, `SRS_Summary.md` hoặc các file BA hiện tại trong `docs/srs/docs/`, ưu tiên các tài liệu hiện hành đó.
+
 > **Tài liệu được review:**
 > - [SRS_Summary.md](file:///e:/FPT/Semester_7/SDN302/srs/SRS_Summary.md) — Bản tóm tắt
 > - [SRS_Detailed.md](file:///e:/FPT/Semester_7/SDN302/srs/SRS_Detailed.md) — Bản chi tiết
@@ -585,4 +590,3 @@ EC-24→27 được chèn giữa EC-20 và EC-21 do được bổ sung sau.
 ---
 
 *Tài liệu review này được tạo ngày 22/05/2026. Cập nhật: 23/05/2026 — Tất cả GAP đã được fix.*
-

@@ -58,7 +58,7 @@ Tài liệu này tổng hợp thống kê và phân tích cấu trúc mã nguồ
 
 | Module | Files | Mô tả |
 |--------|-------|-------|
-| **auth** | 5+ | Better Auth integration, whitelist, lecturer request endpoints |
+| **auth** | 5+ | Better Auth integration, whitelist, role-based access |
 | **rag** (courses) | 2 | Course CRUD (`/api/courses`), RAG pipeline entrypoint |
 | **chat** | 3 | SSE Streaming chat, session scoping, document catalog |
 | **curriculum** | 1 | Majors, Specializations, Curriculum CRUD |
@@ -80,7 +80,7 @@ chatbot-rag-fptu/
 │       ├── constants/              # App-wide constants
 │       ├── middlewares/            # logger.middleware.ts
 │       ├── modules/
-│       │   ├── auth/               # Better Auth, whitelist.controller, lecturer-request.controller
+│       │   ├── auth/               # Better Auth, whitelist.controller, auth flows
 │       │   ├── chat/               # chat.controller.ts, chat.repository.ts, chat-scope.service.ts
 │       │   ├── courses/            # course.repository.ts (via ragRouter)
 │       │   ├── curriculum/         # curriculum.controller.ts

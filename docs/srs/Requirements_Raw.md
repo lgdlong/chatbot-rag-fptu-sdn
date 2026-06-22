@@ -37,7 +37,3 @@ Câu hỏi cần làm rõ:
 - Có cần thêm xoá sửa một môn học (syllabus) không? --> có curd.
 
 - Quản lý version các tài liệu là quản lý các version của việc edit sysllabus nhỏ như là chỉnh một note trong đó hay là version kiểu như có 2 môn FER cùng lúc là FER202 và FER201m. --> sửa nhỏ thì coi là curd, sửa lớn thì tạo một subject code mới là xong.
-
-- Nếu như lưu hết các thông tin có cấu trúc vào Postgres thì rag thế nào? --> có 
-
-<>đây là requirement project này của thầy yêu cầuphần cuối tôi có hỏi thêm vài thông tin, hãy bổ sung vào tài liệu requirement. cho tôi 2 bản tài liệu, 1 bản chi tiết, 1 bản ngắn. ở `a.md` và `b.md` đã viết một chút, tôi cần viết làm sao đó để rõ ràng và chuẩn nhất có thể. thầy không chốt scope với tôi cho đề tài này, thầy bảo là để thả cho nhóm tự vẽ requirement, tự review và fix các error case và bổ sung hoàn thiện các happy case, thầy muốn thấy khả năng nhóm có thể đi xa đến đâu<>

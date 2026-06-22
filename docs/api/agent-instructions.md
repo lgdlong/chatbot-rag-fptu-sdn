@@ -24,10 +24,10 @@ Detailed instructions for AI agents to write comprehensive, accurate, and high-q
    - Read the environment config: `api/src/config/env.ts`
 
 2. **Understand the Module**
-   - What is the module's business logic (RAG ingestion, Chat streaming, Admin approvals, or PayOS payments)?
-   - What are the main Prisma models involved (Course, Document, ChatSession, ChatMessage, LecturerRequest, Subscription, Transaction)?
+   - What is the module's business logic (RAG ingestion, Chat streaming, auth, hoặc syllabus management)?
+   - What are the main Prisma models involved (Course, Document, ChatSession, ChatMessage, Syllabus)?
    - What is the exact authorization flow? (Better Auth session cookie, or Worker Bearer token)?
-   - What specific errors can occur (e.g. `LIMIT_EXCEEDED` on chat, payload size exceeded, bad PDF format)?
+   - What specific errors can occur (e.g. unauthorized session access, payload size exceeded, bad PDF format)?
 
 3. **Test the API**
    - Start the local API server using `make dev-api` or `npm run dev` in `api/` directory (running on port `8000`).
@@ -49,24 +49,20 @@ For ease of management and searchability, the API documentation is organized int
 docs/api/
 ├── README.md               # Overview, Auth mechanisms, Base URL, error format
 ├── api_reference.md        # Table of Contents and navigation index
-├── 00_auth.md              # Better Auth SignUp, SignIn, and multi-tenant Org management
+├── 00_auth.md              # Better Auth SignUp, SignIn, and role-based account management
 ├── 00_system.md            # System & Health Check APIs (/api/health)
-├── 00_documents.md         # Slide document Ingestion & RAG indexing APIs
-├── 00_chat.md              # Chat sessions management & SSE Chat Streaming APIs
-├── 00_auth_admin.md        # Lecturer account requests & Admin approvals
-└── 00_subscriptions.md     # Plan quotas & PayOS payment integration APIs
+├── 00_documents.md         # PDF document ingestion and indexing APIs
+└── 00_chat.md              # Chat sessions management & SSE Chat streaming APIs
 ```
 
 ### Module File Mapping
 
 | Prefix / Module | Purpose | Key Content Requirements |
 |:---|:---|:---|
-| `00_auth.md` | Better Auth | Session checks, credentials signup/signin, Google OAuth, switches Org |
+| `00_auth.md` | Better Auth | Session checks, credentials signup/signin, Google OAuth, role-based access |
 | `00_system.md` | Health Check | PostgreSQL connections latencyMs, Node.js memory usage, Uptime |
-| `00_documents.md` | Ingestion RAG | Uploading PDF, parsing chunks, vector db status webhook |
-| `00_chat.md` | Chatbot AI | Chat sessions management, message histories, SSE Stream data, citations |
-| `00_auth_admin.md` | Auth & Admin | Lecturer registrations, Admin request listing, approvals with temp passwords |
-| `00_subscriptions.md`| Plans & Payments| Daily limit tracking, PayOS checkout URLs, transaction status Webhooks |
+| `00_documents.md` | Ingestion RAG | Uploading PDF, processing status, internal callback |
+| `00_chat.md` | Chatbot AI | Chat sessions management, message histories, SSE stream data, citations |
 
 ---
 
