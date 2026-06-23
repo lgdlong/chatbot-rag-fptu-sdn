@@ -15,8 +15,8 @@ Chào mừng bạn đến với repository chính thức của dự án **FPTU C
 Hệ thống được thiết kế theo các tiêu chuẩn kỹ thuật hiện đại của năm 2026, cung cấp các tính năng vượt trội:
 
 1. **Quản Lý Tài Liệu Đa Phương Thức (Multimodal Ingestion Pipeline):**
-   * Hỗ trợ tải lên và trích xuất tài liệu từ nhiều định dạng: `.pdf`, `.docx`, `.txt`, `.pptx` (Slide bài giảng).
-   * Hỗ trợ nhúng trực tiếp Video bài giảng (`.mp4`, `.mov`) và File âm thanh thông qua mô hình **Gemini Embedding 2** với khả năng tìm kiếm ngữ nghĩa đồng bộ.
+   * Hỗ trợ tải lên và trích xuất tài liệu `PDF` cho Release A.
+   * Các định dạng khác được xem là phạm vi mở rộng, không phải baseline hiện tại.
 2. **Chiến Lược Phân Đoạn Nâng Cao (Advanced Chunking Strategy):**
    * Sử dụng cơ chế kết hợp giữa **Document-based chunking** (chia theo Slide/trang bài học thực tế) và **Semantic chunking** để giữ trọn vẹn ngữ cảnh học thuật và cấu trúc logic của giáo trình.
 3. **Giao Diện Trực Quan & Trích Dẫn Minh Bạch (Citation UI):**
@@ -67,7 +67,7 @@ graph TD
     
     subgraph Storage [Tầng Lưu Trữ & Truy Vấn]
         API <-->|Prisma ORM| RDB[(PostgreSQL / SQLite <br> Metadata & Sessions)]
-        API <-->|Vector API| VDB[(Qdrant / ChromaDB <br> Vector Database)]
+        API <-->|Retrieval API| VDB[(AnythingLLM Workspace <br> Retrieval Layer)]
     end
 
     subgraph AI_Services [Dịch Vụ AI Phân Tích]
@@ -89,10 +89,16 @@ chatbot-rag-fptu/
 ├── web/                        # Frontend Workspace (Next.js 16 + Mantine UI, cổng 3000)
 │   ├── app/                    # App Router pages (student, teacher, superadmin, login)
 │   └── components/             # Reusable components (ChatbotWidget, ProtectedRoute)
-├── docs/                       # Tài liệu kỹ thuật & nghiên cứu
+├── docs/                       # Tài liệu theo audience/ownership
+│   ├── srs/                    # Business source of truth
+│   ├── technical/              # Architecture / backend / standards / rag
+│   ├── operations/             # Runbooks & deployment guides
+│   ├── planning/               # Roadmaps & non-canonical plans
+│   ├── research/               # Evidence & reference material
+│   └── archive/                # Historical / superseded docs
 ├── plans/                      # Implementation plans (archived)
 ├── logs/                       # Runtime logs (api.log)
-├── docker-compose.yml          # PostgreSQL + Redis + Qdrant containers
+├── docker-compose.yml          # PostgreSQL + Redis + retrieval containers
 ├── turbo.json                  # Turborepo pipeline config
 ├── Makefile                    # Monorepo task runner shortcuts
 └── package.json                # Root workspace config
@@ -147,8 +153,10 @@ Thực hiện tuần tự các lệnh sau tại thư mục gốc:
 ---
 
 ## 📄 Tài Liệu Tham Khảo Dành Cho Nhà Phát Triển
-* **Lộ trình chi tiết:** Xem [Lộ trình phát triển hệ thống](./docs/development-roadmap.md).
-* **Quy chuẩn lập trình:** Xem [Bộ quy chuẩn code tiêu chuẩn](./docs/code-standards.md).
-* **Chi tiết Kiến trúc:** Xem [Đặc tả kỹ thuật kiến trúc](./docs/system_architecture.md).
-* **Tổng quan codebase:** Xem [Codebase Summary](./docs/codebase-summary.md).
 * **Bản đồ tài liệu đầy đủ:** Xem [docs/README.md](./docs/README.md).
+* **SRS / scope chính thức:** Xem [docs/srs/README.md](./docs/srs/README.md).
+* **Kiến trúc kỹ thuật:** Xem [docs/technical/README.md](./docs/technical/README.md).
+* **Vận hành / runbook:** Xem [docs/operations/README.md](./docs/operations/README.md).
+* **Planning / roadmap:** Xem [docs/planning/README.md](./docs/planning/README.md).
+* **Research / evidence:** Xem [docs/research/README.md](./docs/research/README.md).
+* **Archive / lịch sử:** Xem [docs/archive/README.md](./docs/archive/README.md).

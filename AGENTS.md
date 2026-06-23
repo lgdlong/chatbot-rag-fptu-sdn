@@ -6,11 +6,17 @@ Tài liệu này cung cấp các hướng dẫn chi tiết, quy tắc phát tri�
 
 ## 1. Cấu Trúc Monorepo & Không Gian Làm Việc
 
-Dự án được cấu trúc theo mô hình Monorepo chứa cả Backend, Frontend và tài liệu nghiên cứu:
+Dự án được cấu trúc theo mô hình Monorepo chứa cả Backend, Frontend và tài liệu theo tầng:
 
 *   **`api/`** (Backend): API Gateway và các dịch vụ xử lý viết bằng **Hono.js** + **TypeScript** chạy trên Node.js/Bun.
 *   **`web/`** (Frontend): Giao diện người dùng Next.js 15+ (App Router) + **Tailwind CSS**.
-*   **`docs/`** (Tài liệu): Chứa toàn bộ tài liệu đặc tả SRS, kiến trúc hệ thống, phương pháp nghiên cứu RAG và thiết kế thực nghiệm.
+*   **`docs/`** (Tài liệu): Tách theo audience/ownership:
+    *   `docs/srs/` — business source of truth
+    *   `docs/technical/` — kiến trúc, backend, standards, rag
+    *   `docs/operations/` — runbooks và hướng dẫn vận hành
+    *   `docs/planning/` — roadmap và plan không-canonical
+    *   `docs/research/` — evidence, reference URLs, data hỗ trợ
+    *   `docs/archive/` — tài liệu lịch sử / superseded / audit-only
 
 ---
 
@@ -74,7 +80,7 @@ Hệ thống RAG phục vụ kho tài liệu học tiếng Việt tại Đại h
 
 ## 5. Tài Liệu Tham Khảo Dành Cho Agent (Developer & Agent Reference Documents)
 
-Để hỗ trợ quá trình phát triển và tích hợp các thư viện hiệu quả, các tài nguyên và đường dẫn hướng dẫn sau được nạp từ `docs/document-url.txt`:
+Để hỗ trợ quá trình phát triển và tích hợp các thư viện hiệu quả, các tài nguyên và đường dẫn hướng dẫn sau được nạp từ `docs/research/document-url.txt`:
 
 *   **Hono.js Core & Guides:**
     *   Tài liệu tích hợp LLM: https://hono.dev/llms.txt
