@@ -177,3 +177,4 @@ services/ingestion-worker/*.exe
 mantine-docs.txt
 web-figma/
 docs/srs/temp
+.omo
