@@ -20,7 +20,9 @@ flowchart TD
     A["Login"] --> B["Lecturer Syllabus List"]
     B --> C["Create Syllabus"]
     B --> D["Edit Syllabus"]
-    D --> E["Document Manager"]
+    B --> E["Lecturer Syllabus Detail"]
+    D --> F["Document Manager"]
+    E --> G["Course Chat Panel"]
 ```
 
 ## Super Admin
@@ -33,6 +35,7 @@ flowchart TD
 
 ## Notes
 
-- Chat chỉ đi từ `Student Subject Detail`
-- `Document Manager` chỉ cho `PDF`
+- `STUDENT` chỉ chat từ syllabus public `approved + active`
+- `LECTURER` chat từ `Lecturer Syllabus Detail` của syllabus đang chọn
+- `Document Manager` chỉ cho `PDF`; snapshot syllabus do hệ thống tự sinh
 - Không có flow `lecturer request`

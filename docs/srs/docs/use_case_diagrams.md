@@ -11,7 +11,7 @@ graph TB
     SYS["SYSTEM"]
 
     ST --> A["Login bằng Google"]
-    ST --> B["Search subject"]
+    ST --> B["Search subject theo code hoặc tên"]
     ST --> C["View subject detail"]
     ST --> D["Open course chat"]
     ST --> E["Ask question"]
@@ -22,16 +22,19 @@ graph TB
     LE --> I["Edit syllabus"]
     LE --> J["Approve syllabus"]
     LE --> K["Activate syllabus"]
-    LE --> L["Upload PDF"]
-    LE --> M["Delete PDF"]
+    LE --> L["View syllabus detail"]
+    LE --> M["Open syllabus chat"]
+    LE --> N["Upload PDF"]
+    LE --> O["Delete PDF"]
 
-    SA --> N["Create lecturer"]
-    SA --> O["Disable lecturer"]
-    SA --> P["Manage whitelist"]
+    SA --> P["Create lecturer"]
+    SA --> Q["Disable lecturer"]
+    SA --> R["Manage whitelist"]
 
-    SYS --> Q["Sync PDF to AnythingLLM"]
-    SYS --> R["Course-scoped retrieval"]
-    SYS --> S["Return answer/refusal"]
+    SYS --> S["Generate syllabus snapshot"]
+    SYS --> T["Sync docs to AnythingLLM"]
+    SYS --> U["Syllabus-scoped retrieval"]
+    SYS --> V["Return answer/refusal"]
 ```
 
 ## Danh sách use case
@@ -47,14 +50,17 @@ graph TB
 - UC-09: Edit syllabus
 - UC-10: Approve syllabus
 - UC-11: Activate syllabus
-- UC-12: Upload PDF
-- UC-13: Delete PDF
-- UC-14: Create lecturer
-- UC-15: Disable lecturer
-- UC-16: Manage whitelist
-- UC-17: Sync PDF to AnythingLLM
-- UC-18: Course-scoped retrieval
-- UC-19: Return answer or refusal
+- UC-12: View syllabus detail
+- UC-13: Open syllabus chat
+- UC-14: Upload PDF
+- UC-15: Delete PDF
+- UC-16: Create lecturer
+- UC-17: Disable lecturer
+- UC-18: Manage whitelist
+- UC-19: Generate syllabus snapshot
+- UC-20: Sync docs to AnythingLLM
+- UC-21: Syllabus-scoped retrieval
+- UC-22: Return answer or refusal
 
 ## Ghi chú chốt scope
 

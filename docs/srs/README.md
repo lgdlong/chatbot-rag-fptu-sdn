@@ -8,10 +8,11 @@ Thư mục `docs/srs/` là bộ SRS chính thức hiện hành cho dự án. Tea
 
 - `AnythingLLM` là RAG engine chính thức
 - `PDF-only` trong `Release A`
-- chat chỉ theo `1 môn học`
+- chat chỉ theo `1 selected syllabus/workspace`
 - role business chuẩn là `SUPER_ADMIN / LECTURER / STUDENT`
 - không còn flow `lecturer request`
 - payment/subscription bị loại khỏi SDN scope
+- syllabus được sync sang AnythingLLM bằng `snapshot markdown` sinh từ DB
 
 ---
 

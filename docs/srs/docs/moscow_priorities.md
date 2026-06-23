@@ -9,9 +9,12 @@
 - Whitelist gate cho student
 - Search subject
 - Subject detail page
-- Course-scoped chat
+- Syllabus/workspace-scoped chat
 - Create/edit/approve/activate syllabus
+- Lecturer view syllabus detail
+- Lecturer chat trên syllabus được chọn
 - PDF upload
+- Syllabus snapshot sync vào AnythingLLM
 - Lecturer management thủ công
 - Student whitelist management
 - AnythingLLM integration

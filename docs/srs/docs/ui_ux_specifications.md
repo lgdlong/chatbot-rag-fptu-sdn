@@ -22,7 +22,7 @@
 
 ### Mục tiêu
 
-Search theo `subject code`
+Search theo `subject code` hoặc tên môn
 
 ### Thành phần
 
@@ -49,15 +49,20 @@ Search theo `subject code`
 
 ### Mục tiêu
 
-Hỏi đáp trong đúng một môn
+Hỏi đáp trong đúng một syllabus/workspace đang chọn
 
 ### Thành phần
 
-- Header có `subject code`
+- Header có `subject code` + trạng thái syllabus
 - Session list/history
 - Message list
 - Citation block
 - Input/send
+
+### Ghi chú role
+
+- `STUDENT` chỉ mở panel này từ syllabus public `approved + active`
+- `LECTURER` mở panel này từ syllabus đang chọn để tra cứu/chỉnh sửa
 
 ### States
 
@@ -112,11 +117,26 @@ Chỉnh sửa nội dung và lifecycle
 - Có action activate/deactivate
 - Có link sang document manager
 
-## 8. Document Manager
+## 8. Lecturer Syllabus Detail
 
 ### Mục tiêu
 
-Quản lý tài liệu `PDF`
+Cho `LECTURER` xem syllabus theo dạng đọc và mở chat trên đúng syllabus đang làm việc
+
+### Thành phần
+
+- Metadata
+- CLOs
+- Schedule
+- Assessment
+- Materials
+- Nút mở chat
+
+## 9. Document Manager
+
+### Mục tiêu
+
+Quản lý tài liệu `PDF` của đúng syllabus đang chọn
 
 ### Thành phần
 
@@ -133,7 +153,11 @@ Quản lý tài liệu `PDF`
 - COMPLETED
 - FAILED
 
-## 9. Lecturer Management
+### Ghi chú
+
+- `Syllabus snapshot markdown` là tài liệu hệ thống sinh tự động, không phải file user upload
+
+## 10. Lecturer Management
 
 ### Role
 
@@ -157,7 +181,7 @@ Thay thế hoàn toàn flow lecturer request
 - Temporary password
 - Notes
 
-## 10. Student Whitelist Management
+## 11. Student Whitelist Management
 
 ### Role
 

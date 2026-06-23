@@ -43,18 +43,35 @@ sequenceDiagram
 
 ```mermaid
 sequenceDiagram
-    actor ST as STUDENT
+    actor US as USER
+    participant FE as Frontend
+    participant BE as Backend
+    participant AL as AnythingLLM
+
+    US->>FE: Ask question
+    FE->>BE: sessionId + syllabusId + question
+    BE->>AL: chat in syllabus workspace
+    AL-->>BE: context + citations
+    BE-->>FE: answer or refusal
+```
+
+## Sync Syllabus Snapshot
+
+```mermaid
+sequenceDiagram
+    actor LE as LECTURER
     participant FE as Frontend
     participant BE as Backend
     participant DB as DB
     participant AL as AnythingLLM
 
-    ST->>FE: Ask question
-    FE->>BE: sessionId + syllabusId + question
-    BE->>DB: get structured syllabus data
-    BE->>AL: retrieve in course scope
-    AL-->>BE: context + citations
-    BE-->>FE: answer or refusal
+    LE->>FE: Save syllabus
+    FE->>BE: create/update syllabus
+    BE->>DB: persist syllabus
+    BE->>BE: generate syllabus snapshot markdown
+    BE->>AL: replace snapshot in syllabus workspace
+    AL-->>BE: success/fail
+    BE-->>FE: save result + sync status
 ```
 
 ## Create Lecturer
