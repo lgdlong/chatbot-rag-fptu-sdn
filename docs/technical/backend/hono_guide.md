@@ -42,8 +42,8 @@ const app = new Hono();
 app.use(
   "/api/*",
   cors({
-    origin: "http://localhost:3001", // URL của Next.js Client
-    allowHeaders: ["Content-Type", "Authorization", "x-tenant-id"],
+    origin: "http://localhost:3000", // URL của Next.js Client
+    allowHeaders: ["Content-Type", "Authorization"],
     allowMethods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     exposeHeaders: ["Content-Length"],
     maxAge: 600,
@@ -59,53 +59,36 @@ app.on(["POST", "GET"], "/api/auth/*", (c) => {
 
 ---
 
-## 3. Thiết Kế Middleware & Phân Quyền Tổ Chức (Multi-Tenant Isolation)
+## 3. Thiết Kế Middleware & Session Guard Hiện Tại
 
-Để chống rò rỉ dữ liệu chéo giữa các cơ sở trường học (Tenant), chúng ta thiết lập 2 tầng Middleware bảo vệ nghiêm ngặt:
+Dự án này phục vụ cho một trường học duy nhất, nên không dùng `tenant.middleware.ts` hay header `x-tenant-id`. Backend hiện giữ mô hình đơn giản hơn: đọc Better Auth session trực tiếp trong handler/service, sau đó kiểm tra role và quyền truy cập theo tài nguyên.
 
 ```mermaid
 sequenceDiagram
-    Client->>Middleware: GET /api/v1/courses (x-tenant-id: org_123)
+    Client->>Middleware: GET /api/courses
     rect rgb(230, 245, 255)
-        note right of Middleware: 1. requireAuth Middleware
+        note right of Middleware: 1. Session check
         Middleware->>BetterAuth: getSession(headers)
-        BetterAuth-->>Middleware: Session (activeOrganizationId: org_123)
+        BetterAuth-->>Middleware: Session (user.role, user.id)
     end
     rect rgb(240, 255, 240)
-        note right of Middleware: 2. requireTenant Middleware
-        Middleware->>Middleware: So sánh x-tenant-id với activeOrganizationId
-        note right of Middleware: Trùng khớp! Cho phép đi tiếp
+        note right of Middleware: 2. Role/resource check
+        Middleware->>Middleware: Xác nhận user có quyền với tài nguyên hiện tại
+        note right of Middleware: Hợp lệ! Cho phép đi tiếp
     end
     Middleware->>Handler: Xử lý nghiệp vụ an toàn
-    Handler-->>Client: Trả về khóa học (chỉ của org_123)
+    Handler-->>Client: Trả về dữ liệu hợp lệ
 ```
 
-### 3.1 Khai Báo Kiểu Dữ Liệu Biến Context (TypeScript Bindings)
-Đảm bảo các biến được lưu trữ trong `c` được kiểm soát kiểu chặt chẽ thông qua việc khai báo generic Env:
+### 3.1 Mẫu Session Check Tối Giản
+
+Ví dụ dưới đây phản ánh đúng hướng hiện tại của codebase: đọc session Better Auth ngay trong handler trước khi xử lý nghiệp vụ.
 
 ```typescript
-// api/src/types/hono.types.ts
-import { Session, User } from "better-auth";
-
-export type HonoEnv = {
-  Variables: {
-    user: User;
-    session: Session;
-    tenantId: string;
-  };
-};
-```
-
-### 3.2 Middleware Xác Thực Người Dùng (`requireAuth`)
-Middleware này chặn các request không có session hợp lệ và gắn thực thể `user` và `session` vào Hono Context:
-
-```typescript
-// api/src/middlewares/auth.middleware.ts
-import { createMiddleware } from "hono/factory";
+// api/src/modules/example/example.controller.ts
 import { auth } from "../modules/auth/auth.js";
-import { HonoEnv } from "../types/hono.types.js";
 
-export const requireAuth = createMiddleware<HonoEnv>(async (c, next) => {
+app.get("/api/example", async (c) => {
   const session = await auth.api.getSession({
     headers: c.req.raw.headers,
   });
@@ -114,40 +97,11 @@ export const requireAuth = createMiddleware<HonoEnv>(async (c, next) => {
     return c.json({ error: "Unauthorized: Vui lòng đăng nhập" }, 401);
   }
 
-  // Tiêm thông tin đã giải mã vào context
-  c.set("user", session.user);
-  c.set("session", session.session);
-
-  await next();
-});
-```
-
-### 3.3 Middleware Cô Lập Dữ Liệu Đa Trường (`requireTenant`)
-Bảo vệ tuyệt đối ranh giới dữ liệu. Request bắt buộc phải gửi kèm header `x-tenant-id` và header này phải trùng khớp với cơ sở (organization) hoạt động được lưu trữ trong phiên đăng nhập:
-
-```typescript
-// api/src/middlewares/tenant.middleware.ts
-import { createMiddleware } from "hono/factory";
-import { HonoEnv } from "../types/hono.types.js";
-
-export const requireTenant = createMiddleware<HonoEnv>(async (c, next) => {
-  const session = c.get("session");
-  const tenantIdHeader = c.req.header("x-tenant-id");
-
-  if (!tenantIdHeader) {
-    return c.json({ error: "Yêu cầu cung cấp header x-tenant-id" }, 400);
+  if (session.user.role !== "ADMIN") {
+    return c.json({ error: "Forbidden" }, 403);
   }
 
-  // Kiểm tra tính nhất quán giữa Tenant yêu cầu và Tenant hoạt động trong session
-  if (session.activeOrganizationId !== tenantIdHeader) {
-    return c.json(
-      { error: "Forbidden: Ngữ cảnh Tenant không hợp lệ hoặc bị cấm truy cập chéo" }, 
-      403
-    );
-  }
-
-  c.set("tenantId", tenantIdHeader);
-  await next();
+  return c.json({ success: true, user: session.user });
 });
 ```
 
@@ -162,11 +116,7 @@ Hono.js tích hợp cực kỳ tối ưu với **Zod** để xác thực dữ li
 import { Hono } from "hono";
 import { z } from "zod";
 import { zValidator } from "@hono/zod-validator";
-import { requireAuth } from "../../middlewares/auth.middleware.js";
-import { requireTenant } from "../../middlewares/tenant.middleware.js";
-import { HonoEnv } from "../../types/hono.types.js";
-
-const coursesRouter = new Hono<HonoEnv>();
+const coursesRouter = new Hono();
 
 // Schema Zod cho việc tạo Khóa học mới
 const createCourseSchema = z.model({
@@ -176,15 +126,17 @@ const createCourseSchema = z.model({
 
 coursesRouter.post(
   "/",
-  requireAuth,
-  requireTenant,
   zValidator("json", createCourseSchema),
   async (c) => {
+    const session = await auth.api.getSession({ headers: c.req.raw.headers });
+    if (!session) {
+      return c.json({ error: "Unauthorized" }, 401);
+    }
+
     const validatedData = c.req.valid("json"); // Nhận data đã được validate hoàn tất
-    const tenantId = c.get("tenantId");
     
     // Gọi Service xử lý DB an toàn
-    const newCourse = await CourseService.create(validatedData, tenantId);
+    const newCourse = await CourseService.create(validatedData, session.user.id);
     
     return c.json({ success: true, course: newCourse }, 201);
   }
@@ -201,13 +153,17 @@ Trong các ứng dụng hỏi đáp AI (RAG Chatbot), việc stream câu trả l
 // api/src/modules/chat/chat.router.ts
 import { Hono } from "hono";
 import { streamText } from "hono/streaming";
-import { requireAuth } from "../../middlewares/auth.middleware.js";
-import { requireTenant } from "../../middlewares/tenant.middleware.js";
+import { auth } from "../../modules/auth/auth.js";
 import { GeminiService } from "../../services/gemini.service.js";
 
 const chatRouter = new Hono();
 
-chatRouter.post("/send", requireAuth, requireTenant, async (c) => {
+chatRouter.post("/send", async (c) => {
+  const session = await auth.api.getSession({ headers: c.req.raw.headers });
+  if (!session) {
+    return c.json({ error: "Unauthorized" }, 401);
+  }
+
   const { sessionId, message } = await c.req.json();
 
   // Đặt cấu hình Header chuẩn cho luồng dữ liệu SSE
@@ -217,7 +173,7 @@ chatRouter.post("/send", requireAuth, requireTenant, async (c) => {
 
   return streamText(c, async (stream) => {
     // 1. Lấy dữ liệu ngữ cảnh RAG (Context) từ retrieval store
-    const ragContext = await VectorService.searchContext(message, c.get("tenantId"));
+    const ragContext = await VectorService.searchContext(message, sessionId);
 
     // 2. Khởi tạo cuộc gọi Stream đến mô hình Gemini
     const geminiStream = await GeminiService.callStream(message, ragContext);

@@ -32,15 +32,15 @@
 | US-LE-09 | Là `LECTURER`, tôi muốn hệ thống validate assessment total = 100% |
 | US-LE-10 | Là `LECTURER`, tôi muốn chat với syllabus được chọn để tra cứu và hỗ trợ chỉnh sửa syllabus |
 
-## Super Admin
+## Admin
 
 | ID | Story |
 |---|---|
-| US-SA-01 | Là `SUPER_ADMIN`, tôi muốn tạo lecturer thủ công |
-| US-SA-02 | Là `SUPER_ADMIN`, tôi muốn disable lecturer |
-| US-SA-03 | Là `SUPER_ADMIN`, tôi muốn xem danh sách lecturer |
-| US-SA-04 | Là `SUPER_ADMIN`, tôi muốn thêm email student vào whitelist |
-| US-SA-05 | Là `SUPER_ADMIN`, tôi muốn xóa email khỏi whitelist |
+| US-SA-01 | Là `ADMIN`, tôi muốn tạo lecturer thủ công |
+| US-SA-02 | Là `ADMIN`, tôi muốn disable lecturer |
+| US-SA-03 | Là `ADMIN`, tôi muốn xem danh sách lecturer |
+| US-SA-04 | Là `ADMIN`, tôi muốn thêm email student vào whitelist |
+| US-SA-05 | Là `ADMIN`, tôi muốn xóa email khỏi whitelist |
 
 ## System
 

@@ -61,7 +61,7 @@ Các tài liệu API tương ứng đã được gỡ khỏi `docs/api/` để t
 
 ### Better Auth session
 
-- dùng cho `STUDENT`, `LECTURER`, `SUPER_ADMIN`
+- dùng cho `STUDENT`, `LECTURER`, `ADMIN`
 - trình duyệt gửi cookie `better-auth.session_token`
 
 ### Internal bearer token

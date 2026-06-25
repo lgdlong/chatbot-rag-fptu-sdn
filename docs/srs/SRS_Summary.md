@@ -13,7 +13,7 @@ Web app cho phép:
 - `LECTURER` tạo, sửa, duyệt, kích hoạt syllabus
 - `LECTURER` xem syllabus và chat với syllabus đang chọn để phục vụ tra cứu/chỉnh sửa
 - `LECTURER` upload tài liệu `PDF`
-- `SUPER_ADMIN` quản lecturer và whitelist student
+- `ADMIN` quản lecturer và whitelist student
 
 ## 2. Source of truth
 
@@ -26,14 +26,14 @@ Web app cho phép:
 | Syllabus trong RAG | `Snapshot markdown` sinh từ DB và sync vào workspace |
 | Video | Không thuộc core |
 | Document versioning | Không có version riêng trong Release A |
-| Lecturer onboarding | `SUPER_ADMIN` tạo thủ công |
+| Lecturer onboarding | `ADMIN` tạo thủ công |
 | Payment | Loại khỏi scope |
 
 ## 3. Role model
 
 | Role | Trách nhiệm |
 |---|---|
-| `SUPER_ADMIN` | Tạo/disable lecturer, quản whitelist student |
+| `ADMIN` | Tạo/disable lecturer, quản whitelist student |
 | `LECTURER` | Quản syllabus, xem syllabus, chat theo syllabus đã chọn, quản document |
 | `STUDENT` | Search, xem syllabus, chat |
 | `SYSTEM` | Đồng bộ snapshot syllabus + PDF vào AnythingLLM và xử lý chat |
@@ -55,7 +55,7 @@ Web app cho phép:
 - `Edit Syllabus`
 - `Document Manager`
 
-### Super Admin
+### Admin
 
 - `Lecturer Management`
 - `Student Whitelist Management`

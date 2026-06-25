@@ -28,7 +28,7 @@ chatbot-rag-fptu/
 │   │   ├── index.ts            # Entry point chính
 │   │   ├── config/             # Cấu hình hệ thống (DB, LLM, ENV)
 │   │   ├── constants/          # Hằng số hệ thống
-│   │   ├── middlewares/        # Hono Middlewares (Auth, Tenant, Errors)
+│   │   ├── middlewares/        # Hono Middlewares (Logging, Errors)
 │   │   ├── modules/            # Thư mục chứa các phân hệ Nghiệp vụ (DDD)
 │   │   │   ├── auth/           # Module Xác thực
 │   │   │   ├── courses/        # Module Khóa học & Syllabus
@@ -81,8 +81,7 @@ Chứa các Class/Object chuyên dụng phục vụ hạ tầng, được gọi 
 *   `storage.service.ts`: Xử lý lưu trữ file vật lý (Local disk hoặc S3/MinIO).
 
 ### 3. Thư mục `api/src/middlewares/` (Bộ lọc yêu cầu)
-*   `auth.middleware.ts`: Giải mã JWT và xác thực người dùng.
-*   `tenant.middleware.ts`: Kiểm tra và đảm bảo người dùng chỉ được phép truy vấn tài nguyên thuộc trường học (`tenantId`) của họ.
+*   `logger.middleware.ts`: Ghi log request/response tập trung.
 *   `error.middleware.ts`: Middleware xử lý ngoại lệ tập trung, đảm bảo API luôn trả về JSON chuẩn khi xảy ra crash hệ thống.
 
 ---
@@ -119,4 +118,4 @@ Tách biệt toàn bộ logic xử lý sự kiện, gọi API và quản lý sta
 ## 🔒 Lợi Ích Của Bản Thiết Kế Cấu Trúc
 1.  **Dễ bảo trì:** Khi cần sửa đổi logic hỏi đáp, nhà phát triển chỉ cần làm việc trong `api/src/modules/chat/` và `web/components/features/chat/`, không lo ảnh hưởng đến phân hệ Quản lý tài liệu.
 2.  **Khả năng mở rộng:** Dễ dàng bổ sung các Module mới (ví dụ: Module chấm điểm tự động `grading/`) bằng cách tạo thêm một thư mục tương tự trong `modules/`.
-3.  **Tương thích Đa trường (Multi-tenant):** Việc tách biệt Metadata Database và Vector DB kết hợp Middleware bảo vệ tenant ở backend giúp việc nâng cấp quy mô lên hàng trăm trường đại học diễn ra dễ dàng và an toàn tuyệt đối.
+3.  **Tập trung cho một trường học:** Kiến trúc hiện tại ưu tiên đơn giản hóa phạm vi cho một cơ sở đào tạo duy nhất, giảm chi phí vận hành và tránh complexity không cần thiết.

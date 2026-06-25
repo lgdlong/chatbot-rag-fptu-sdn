@@ -1,6 +1,6 @@
 # Hướng dẫn Khởi chạy Hệ thống FPTU Chatbot RAG
 
-Tài liệu này cung cấp hướng dẫn từng bước để thiết lập môi trường, khởi tạo cơ sở dữ liệu và chạy toàn bộ hệ thống FPTU Chatbot RAG (bao gồm Backend API, Frontend Web, và các dịch vụ cơ sở hạ tầng như PostgreSQL, retrieval store, Redis).
+Tài liệu này cung cấp hướng dẫn từng bước để thiết lập môi trường, khởi tạo cơ sở dữ liệu và chạy toàn bộ hệ thống FPTU Chatbot RAG (bao gồm Backend API, Frontend Web, và các dịch vụ cơ sở hạ tầng như PostgreSQL và retrieval store).
 
 ---
 
@@ -8,9 +8,8 @@ Tài liệu này cung cấp hướng dẫn từng bước để thiết lập m�
 
 Trước khi bắt đầu, hãy đảm bảo máy tính của bạn đã cài đặt các công cụ sau:
 1. **Node.js** (Phiên bản v20 trở lên) hoặc **Bun**.
-2. **Docker & Docker Compose** (để khởi chạy PostgreSQL, retrieval store và Redis).
-3. **Go** (Phiên bản 1.21 trở lên) - để chạy Ingestion Worker.
-4. **Make** (tùy chọn - hữu ích để chạy các lệnh tắt nhanh, đặc biệt trên macOS/Linux hoặc Windows Git Bash).
+2. **Docker & Docker Compose** (để khởi chạy PostgreSQL và retrieval store).
+3. **Make** (tùy chọn - hữu ích để chạy các lệnh tắt nhanh, đặc biệt trên macOS/Linux hoặc Windows Git Bash).
 
 ---
 
@@ -24,7 +23,7 @@ Hệ thống sử dụng một file `.env` duy nhất đặt tại **thư mục 
    ```
 2. Mở file `.env` mới tạo và điền đầy đủ các thông tin:
    * **Cơ sở dữ liệu**: Điền thông tin kết nối PostgreSQL (mặc định đã được cấu hình trùng với file `docker-compose.yml`).
-   * **Better Auth**: Cấu hình `BETTER_AUTH_SECRET` (khóa bí mật phiên đăng nhập) và `BETTER_AUTH_URL` (URL của backend, mặc định là `http://localhost:3000`).
+    * **Better Auth**: Cấu hình `BETTER_AUTH_SECRET` (khóa bí mật phiên đăng nhập), `BETTER_AUTH_URL` (URL backend, mặc định `http://localhost:8000`) và `NEXT_PUBLIC_API_BASE_URL` cho frontend local.
     * **Retrieval**: Cấu hình các biến môi trường của lớp retrieval nếu hệ thống yêu cầu.
    * **Gemini API Key**: Điền `GEMINI_API_KEY` của bạn. Đây là khóa **bắt buộc** để thực hiện sinh nhúng Vector (Embedding 2) và gọi LLM trả lời câu hỏi.
 
@@ -32,7 +31,7 @@ Hệ thống sử dụng một file `.env` duy nhất đặt tại **thư mục 
 
 ## 🐳 Khởi động các dịch vụ hạ tầng (Docker Compose)
 
-Hệ thống yêu cầu PostgreSQL, retrieval store và Redis (Caching/Session). Cách khởi chạy nhanh nhất là sử dụng Docker Compose.
+Hệ thống yêu cầu PostgreSQL và retrieval store. Cách khởi chạy nhanh nhất là sử dụng Docker Compose.
 
 * **Sử dụng Makefile:**
   ```bash
@@ -97,11 +96,11 @@ Sau khi cơ sở dữ liệu PostgreSQL đã khởi chạy thành công trong Do
 
 ## 🚀 Khởi chạy ứng dụng (Running the Application)
 
-Hệ thống gồm ba thành phần cần chạy song song để hoạt động đầy đủ: Backend API (cổng `3000`), Frontend Web Next.js (cổng `3001`), và Go Ingestion Worker (xử lý tài liệu và Vector ở background).
+Hệ thống gồm hai thành phần cần chạy song song để hoạt động đầy đủ: Backend API (cổng `8000`) và Frontend Web Next.js (cổng `3000`).
 
 ### Cách 1: Sử dụng Makefile & Scripts (Khuyến nghị)
 
-Mở ba cửa sổ Terminal riêng biệt tại thư mục gốc và chạy các lệnh tương ứng:
+Mở hai cửa sổ Terminal riêng biệt tại thư mục gốc và chạy các lệnh tương ứng:
 
 * **Terminal 1 - Chạy Backend API:**
   ```bash
@@ -111,23 +110,9 @@ Mở ba cửa sổ Terminal riêng biệt tại thư mục gốc và chạy các
   ```bash
   make dev-web
   ```
-* **Terminal 3 - Chạy Go Ingestion Worker (Xử lý tài liệu):**
-  * *Trên Windows (PowerShell)*:
-    ```powershell
-    ./services/ingestion-worker/run.ps1
-    ```
-  * *Trên macOS/Linux (Bash)*:
-    ```bash
-    cd services/ingestion-worker
-    export $(grep -v '^#' ../../.env | xargs)
-    go run main.go
-    ```
-
----
-
 ### Cách 2: Sử dụng lệnh CLI trực tiếp
 
-Mở ba cửa sổ Terminal riêng biệt và thực hiện:
+Mở hai cửa sổ Terminal riêng biệt và thực hiện:
 
 * **Terminal 1 - Chạy Backend API:**
   Chuyển vào thư mục `api/` và chạy:
@@ -141,22 +126,6 @@ Mở ba cửa sổ Terminal riêng biệt và thực hiện:
   cd web
   npm run dev
   ```
-* **Terminal 3 - Chạy Go Ingestion Worker:**
-  Chuyển vào thư mục `services/ingestion-worker/` và chạy:
-  * *Windows (PowerShell)*:
-    ```powershell
-    cd services/ingestion-worker
-    ./run.ps1
-    ```
-  * *macOS/Linux/Bash*:
-    ```bash
-    cd services/ingestion-worker
-    export $(grep -v '^#' ../../.env | xargs)
-    go run main.go
-    ```
-
----
-
 ## 🏗️ Lệnh Build & Lint (Build & Lint Commands)
 
 ### Build Commands
@@ -229,7 +198,7 @@ Nếu muốn cài đặt + khởi db + migrate + chạy dev:
   make prisma-generate
   make dev-api     # Terminal 1: API
   make dev-web     # Terminal 2: Web
-  make worker     # Terminal 3: Worker
+  # Không cần worker riêng trong scope hiện tại
   ```
 
 ---
@@ -238,21 +207,21 @@ Nếu muốn cài đặt + khởi db + migrate + chạy dev:
 
 1. **Kiểm tra Backend API**:
    * Chạy lệnh kiểm tra nhanh: `make health-check`
-   * Hoặc truy cập đường dẫn: `http://localhost:3000/api/health` trên trình duyệt. Bạn sẽ nhận được phản hồi JSON:
+   * Hoặc truy cập đường dẫn: `http://localhost:8000/api/health` trên trình duyệt. Bạn sẽ nhận được phản hồi JSON:
      ```json
      {
-       "status": "ok",
-       "services": {
-         "database": "connected",
-         "qdrant": "connected",
-         "redis": "connected"
-       }
-     }
-     ```
+        "status": "UP",
+        "services": {
+          "database": {
+            "status": "UP"
+          }
+        }
+      }
+      ```
 
 2. **Truy cập ứng dụng Web**:
-   * Truy cập: `http://localhost:3001/chat`
-   * Nếu chưa có tài khoản, hãy nhấn nút **Dev Auto Login** ở góc dưới thanh Sidebar trái để đăng nhập tự động bằng tài khoản thử nghiệm của nhà phát triển (Dev Mode).
+    * Truy cập: `http://localhost:3000/login`
+    * Đăng nhập bằng email/password qua Better Auth hoặc dùng Google sign-in nếu đã cấu hình OAuth.
    * Tạo phiên chat mới bằng nút **"+"**, chọn môn học và bắt đầu trải nghiệm hỏi đáp chatbot tích hợp RAG.
 
 ---

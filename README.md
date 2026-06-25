@@ -22,8 +22,8 @@ Hệ thống được thiết kế theo các tiêu chuẩn kỹ thuật hiện �
 3. **Giao Diện Trực Quan & Trích Dẫn Minh Bạch (Citation UI):**
    * Phản hồi dạng **Streaming (SSE)** thời gian thực với hiệu ứng gõ chữ mượt mà.
    * Hiển thị nguồn trích dẫn cụ thể (Slide số mấy, trang nào, giây thứ bao nhiêu trong video). Người dùng click vào nguồn sẽ được chuyển hướng trực tiếp đến trang PDF hoặc tua chính xác đến giây video tương ứng.
-4. **Bảo Mật Cô Lập Đa Trường (Logical Multi-tenant Isolation):**
-   * Kiến trúc Multi-tenant cho phép phân tách không gian tài liệu giữa các cơ sở đào tạo/trường học. Sinh viên trường A tuyệt đối không bị rò rỉ dữ liệu hoặc tìm chéo sang tài liệu trường B.
+4. **Bảo Mật Phiên & Phân Quyền Theo Vai Trò:**
+   * Hệ thống phục vụ cho một trường đại học duy nhất. Truy cập được kiểm soát bằng Better Auth session cookie, whitelist email và role `ADMIN` / `LECTURER` / `STUDENT`.
 5. **Cơ Chế Kiểm Soát LLM (Knowledge Guardrails):**
    * Ngăn chặn hoàn toàn hiện tượng ảo tưởng (hallucination) của LLM bằng hệ thống Prompt chặt chẽ. Nếu câu hỏi nằm ngoài phạm vi tài liệu đã chỉ mục, chatbot sẽ lịch sự từ chối trả lời thay vì tự sáng tạo thông tin.
 
@@ -98,7 +98,7 @@ chatbot-rag-fptu/
 │   └── archive/                # Historical / superseded docs
 ├── plans/                      # Implementation plans (archived)
 ├── logs/                       # Runtime logs (api.log)
-├── docker-compose.yml          # PostgreSQL + Redis + retrieval containers
+├── docker-compose.yml          # PostgreSQL + retrieval containers
 ├── turbo.json                  # Turborepo pipeline config
 ├── Makefile                    # Monorepo task runner shortcuts
 └── package.json                # Root workspace config

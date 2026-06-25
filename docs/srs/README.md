@@ -11,8 +11,8 @@
 - `AnythingLLM` là RAG engine chính thức.
 - `PDF-only` trong `Release A`.
 - Chat chỉ theo `1 selected syllabus/workspace`.
-- Role business chuẩn là `SUPER_ADMIN / LECTURER / STUDENT`.
-- Không còn flow `lecturer request`.
+- Role business chuẩn là `ADMIN / LECTURER / STUDENT`.
+- `lecturer request` là legacy route bị khóa, không còn là flow chính thức.
 - Payment/subscription bị loại khỏi SDN scope.
 - Syllabus được sync sang AnythingLLM bằng snapshot sinh từ DB.
 

@@ -18,7 +18,7 @@ graph TD
 ### Nguyên Tắc Tích Hợp Cốt Lõi:
 *   **Tách biệt Authentication khỏi Logic Nghiệp Vụ**: Toàn bộ luồng Auth được tách thành một module riêng biệt (`auth` module). Các module nghiệp vụ khác như `courses`, `documents`, `chat` **không** được truy cập trực tiếp vào DB của Better Auth hoặc gọi trực tiếp các repo nội bộ của auth.
 *   **Quản Lý Phiên Bằng Cơ Sở Dữ Liệu (Database-backed Sessions)**: Các session được lưu trữ vật lý trong cơ sở dữ liệu PostgreSQL 17 để dễ dàng thu hồi (revoke), quản lý thiết bị và bảo mật tuyệt đối.
-*   **Multi-tenant Cô Lập Quy Mô Lớn**: Sử dụng plugin `organization` để phân hoạch mỗi trường đại học (Tenant) thành một Tổ chức độc lập.
+*   **Single-school scope**: Dự án hiện không dùng plugin `organization`; quyền truy cập được kiểm soát bằng session, role và email whitelist.
 
 ---
 
@@ -31,7 +31,7 @@ Các biến môi trường thiết yếu của Better Auth:
 ```bash
 # Lõi Better Auth
 BETTER_AUTH_SECRET="your-super-secure-32-char-random-string" # Mã hóa session
-BETTER_AUTH_URL="http://localhost:3000"                      # Base URL của Backend API
+BETTER_AUTH_URL="http://localhost:8000"                      # Base URL của Backend API
 
 # Kết nối database dùng cho adapter
 DATABASE_URL="postgresql://postgres:admin123@localhost:5433/rag_chatbot?schema=public"
@@ -85,7 +85,6 @@ erDiagram
         string userId FK
         string ipAddress
         string userAgent
-        string activeOrganizationId "Org Plugin"
         string impersonatedBy "Admin Plugin"
     }
     account {
@@ -128,8 +127,6 @@ model User {
 
   sessions      Session[]
   accounts      Account[]
-  members       Member[]
-  invitations   Invitation[]
   chatSessions  ChatSession[] // Quan hệ nghiệp vụ RAG Chat
 
   @@map("user")
@@ -146,8 +143,7 @@ model Session {
   userId               String
   user                 User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   
-  // Plugin Organization & Admin mở rộng
-  activeOrganizationId String?
+  // Plugin Admin mở rộng
   impersonatedBy       String?
 
   @@index([userId])
@@ -197,7 +193,7 @@ Server core được khởi tạo tại `api/src/modules/auth/auth.ts`:
 ```typescript
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
-import { organization, admin, openAPI, twoFactor } from "better-auth/plugins";
+import { admin, openAPI, twoFactor } from "better-auth/plugins";
 import { prisma } from "../database/prisma.service.js"; // DB Service dùng chung
 
 export const auth = betterAuth({
@@ -217,21 +213,11 @@ export const auth = betterAuth({
     }
   },
   plugins: [
-    // 1. Plugin Phân Quyền Tổ Chức Multi-Tenant
-    organization({
-      allowUserToCreateOrganization: async (user) => {
-        // Chỉ những user có email đã verified mới được tạo tổ chức (Tenant mới)
-        return user.emailVerified === true;
-      },
-      organizationLimit: 5,        // Giới hạn tối đa 5 Tenants/User sở hữu
-      membershipLimit: 1000,      // Giới hạn 1000 thành viên/Tenant
-      invitationExpiresIn: 60 * 60 * 24 * 7, // Link mời hết hạn sau 7 ngày
-    }),
-    // 2. Plugin Admin: Phục vụ vận hành & hỗ trợ
+    // 1. Plugin Admin: Phục vụ vận hành & hỗ trợ
     admin(),
-    // 3. Plugin Tự Động Tạo OpenAPI Spec cho các router auth
+    // 2. Plugin Tự Động Tạo OpenAPI Spec cho các router auth
     openAPI(),
-    // 4. Plugin Bảo Mật 2 Lớp (2FA / TOTP)
+    // 3. Plugin Bảo Mật 2 Lớp (2FA / TOTP)
     twoFactor({
       otpLength: 6,
       issuer: "FPTU Chatbot RAG",
@@ -247,79 +233,8 @@ export const auth = betterAuth({
 
 ## 5. Các Plugin Nâng Cao & Luồng Nghiệp Vụ
 
-### 5.1 Plugin Tổ Chức (Organization & Multi-Tenancy)
-Mỗi **Organization** đại diện cho một **Tenant** (ví dụ: *FPT University Hanoi*, *FPT University Can Tho*). 
-
-#### Bảng bổ sung trong Schema Prisma:
-```prisma
-model Organization {
-  id          String       @id
-  name        String
-  slug        String       @unique
-  logo        String?
-  metadata    String?      // Lưu trữ cấu hình đặc thù của Tenant (JSON string)
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
-  members     Member[]
-  invitations Invitation[]
-
-  @@map("organization")
-}
-
-model Member {
-  id             String       @id
-  organizationId String
-  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  userId         String
-  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
-  role           String       // 'owner', 'admin', 'member'
-  createdAt      DateTime     @default(now())
-  updatedAt      DateTime     @updatedAt
-
-  @@map("member")
-}
-
-model Invitation {
-  id             String       @id
-  organizationId String
-  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  email          String
-  role           String       // Role sẽ nhận khi tham gia
-  status         String       // 'pending', 'accepted', 'rejected', 'canceled'
-  expiresAt      DateTime
-  inviterId      String
-  user           User         @relation(fields: [inviterId], references: [id], onDelete: Cascade)
-  createdAt      DateTime     @default(now())
-  updatedAt      DateTime     @updatedAt
-
-  @@map("invitation")
-}
-```
-
-#### Quản Lý Access Control và Safeguard của Tổ Chức:
-1.  **Chính Sách Bảo Vệ Chủ Sở Hữu (Owner Protection)**:
-    *   Thành viên là Chủ sở hữu cuối cùng (`owner`) **không được phép** rời khỏi tổ chức hoặc bị xóa vai trò trừ khi chuyển quyền sở hữu (`owner`) sang cho thành viên khác trước.
-    *   Sử dụng API chuyển giao quyền:
-        ```typescript
-        await authClient.organization.updateMemberRole({
-          memberId: "new-owner-id",
-          role: "owner",
-        });
-        ```
-2.  **Cơ Chế Dynamic Access Control**:
-    Đăng ký vai trò động (custom roles) dành riêng cho Giảng viên/Sinh viên của từng cơ sở:
-    ```typescript
-    await authClient.organization.createRole({
-      role: "lecturer",
-      permission: {
-        document: ["create", "read", "update", "delete"],
-        chat: ["read"],
-      }
-    });
-    ```
-
-### 5.2 Plugin Bảo Mật 2 Lớp (2FA/MFA)
-Cung cấp bảo mật bổ sung cho tài khoản Quản trị viên (Lecturer, Tenant Admin).
+### 5.1 Plugin Bảo Mật 2 Lớp (2FA/MFA)
+Cung cấp bảo mật bổ sung cho tài khoản Quản trị viên và Giảng viên khi cần.
 *   **Kích hoạt**: User quét mã QR bằng Google Authenticator hoặc Authy, sau đó verify mã TOTP đầu tiên.
 *   **Sign-In Flow**:
     ```typescript
@@ -372,28 +287,6 @@ export class AuthPublicService {
   }
 
   /**
-   * Lấy thông tin Tenant theo ID
-   */
-  static async getOrganizationById(orgId: string): Promise<OrganizationDTO | null> {
-    const org = await prisma.organization.findUnique({
-      where: { id: orgId },
-      select: { id: true, name: true, slug: true, logo: true }
-    });
-    return org;
-  }
-
-  /**
-   * Kiểm tra quyền thành viên của một User trong Tenant
-   */
-  static async verifyTenantMembership(userId: string, orgId: string): Promise<boolean> {
-    const membership = await prisma.member.findFirst({
-      where: {
-        userId,
-        organizationId: orgId,
-      }
-    });
-    return !!membership;
-  }
 }
 ```
 
@@ -406,12 +299,11 @@ Tạo SDK client chuyên dụng ở Frontend để giao tiếp mượt mà với
 ```typescript
 // web/lib/auth-client.ts
 import { createAuthClient } from "better-auth/react";
-import { organizationClient, twoFactorClient } from "better-auth/client/plugins";
+import { twoFactorClient } from "better-auth/client/plugins";
 
 export const authClient = createAuthClient({
-  baseURL: process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000",
+  baseURL: process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8000",
   plugins: [
-    organizationClient(),
     twoFactorClient()
   ]
 });
@@ -419,15 +311,12 @@ export const authClient = createAuthClient({
 // React Hook sử dụng trong Component
 export function UserProfile() {
   const { data: session, isPending } = authClient.useSession();
-  const { data: activeOrg } = authClient.organization.useActiveOrganization();
-
   if (isPending) return <div>Đang tải...</div>;
   if (!session) return <div>Chưa đăng nhập</div>;
 
   return (
     <div>
       <p>Xin chào, {session.user.name}!</p>
-      {activeOrg && <p>Cơ sở hiện tại: {activeOrg.name}</p>}
     </div>
   );
 }
@@ -438,11 +327,11 @@ export function UserProfile() {
 ## 8. Lỗi Thường Gặp & Cách Khắc Phục (Troubleshooting & Gotchas)
 
 ### 1. Lỗi Cookie Không Gửi Được Qua CORS (Cross-Origin Credentials)
-*   **Triệu chứng**: Client Next.js (port 3001) gọi Backend Hono.js (port 3000) thành công nhưng không nạp được Session (trả về 401).
+*   **Triệu chứng**: Client Next.js (port 3000) gọi Backend Hono.js (port 8000) thành công nhưng không nạp được Session (trả về 401).
 *   **Nguyên nhân**: Thiếu cơ chế truyền credentials qua cookie CORS.
 *   **Khắc phục**:
     1. Trình duyệt bắt buộc phải cấu hình `credentials: 'include'` khi fetch/axios.
-    2. Backend CORS middleware phải whitelist cụ thể domain nguồn (`origin: 'http://localhost:3001'`) và bật `allowHeaders` kèm `allowCredentials: true`. Không được sử dụng ký tự đại diện `*` cho origin khi truyền cookie.
+    2. Backend CORS middleware phải whitelist cụ thể domain nguồn (`origin: 'http://localhost:3000'`) và bật `allowCredentials: true`. Không được sử dụng ký tự đại diện `*` cho origin khi truyền cookie.
 
 ### 2. Quên Đồng Bộ Schema Khai Báo Model Bổ Sung
 *   **Triệu chứng**: API Better Auth trả lỗi "Table ... does not exist" hoặc lỗi kiểu dữ liệu Prisma Client.

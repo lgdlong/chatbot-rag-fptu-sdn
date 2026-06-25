@@ -6,7 +6,7 @@ Phân hệ này dành riêng cho Giảng viên (Lecturer) và Quản trị viên
 
 ## 🔐 Cơ Chế Xác Thực (Authentication)
 - **Tải lên & Xóa tài liệu:** Yêu cầu đăng nhập tài khoản Giảng viên (`LECTURER`) hoặc Quản trị viên (`ADMIN`) thông qua Session Cookie từ Better Auth (`better-auth.session_token`).
-- **Webhook nội bộ (Go worker):** Yêu cầu đính kèm Bearer Token chứa giá trị bí mật `INTERNAL_API_KEY` trong request header.
+- **Webhook nội bộ:** Yêu cầu đính kèm Bearer Token chứa giá trị bí mật `INTERNAL_API_KEY` trong request header.
 
 ---
 
@@ -20,8 +20,8 @@ Tải một tệp tin bài giảng PDF (dung lượng tối đa 50MB theo yêu c
 **Quy trình xử lý (Workflow):**
 1. Server ghi tệp PDF vào thư mục `./uploads/` trên đĩa cục bộ.
 2. Tạo bản ghi `Document` trong database PostgreSQL ở trạng thái `PENDING`.
-3. Đóng gói Payload và đẩy Job vào hàng đợi Redis `rag:ingestion:queue` bằng lệnh `LPUSH`.
-4. Go Ingestion Worker tiếp nhận Job, phân tách slide, trích xuất hình ảnh, tính toán vector embedding (model `BAAI/bge-vi-base`) và nạp dữ liệu vào Qdrant Vector DB.
+3. Kích hoạt pipeline ingestion nội bộ để đồng bộ tài liệu với lớp retrieval đang sử dụng.
+4. Hệ thống cập nhật trạng thái tài liệu khi hoàn tất hoặc thất bại.
 
 #### Yêu cầu
 - **Authentication:** ✅ Có yêu cầu (Session Cookie Better Auth).
@@ -43,7 +43,7 @@ Tải một tệp tin bài giảng PDF (dung lượng tối đa 50MB theo yêu c
 #### Response Schema
 
 **Thành công - 200 OK:**
-*Trả về khi lưu file thành công và đã đưa vào hàng đợi Redis thành công.*
+*Trả về khi lưu file thành công và tài liệu đã được đưa vào tiến trình ingestion.*
 
 ```json
 {
@@ -85,11 +85,11 @@ Tải một tệp tin bài giảng PDF (dung lượng tối đa 50MB theo yêu c
 ```
 
 **Thất bại - 500 Internal Server Error:**
-*Trả về khi xảy ra lỗi ghi file lên đĩa hoặc lỗi kết nối hàng đợi Redis.*
+*Trả về khi xảy ra lỗi ghi file lên đĩa hoặc lỗi khởi tạo tiến trình ingestion.*
 
 ```json
 {
-  "error": "Failed to queue ingestion job"
+  "error": "Failed to start ingestion process"
 }
 ```
 
@@ -200,7 +200,7 @@ curl -X DELETE http://localhost:8000/api/courses/course-123/documents/doc-456 \
 `PATCH /api/internal/documents/{id}`
 
 #### Mô tả
-Endpoint nội bộ bảo mật dành riêng cho Go Ingestion Worker cập nhật tình trạng xử lý slide (Thành công/Thất bại) về cho API Server sau khi hoàn tất chia chunk, trích xuất ảnh phân trang và nạp chỉ mục thành công vào Qdrant.
+Endpoint nội bộ bảo mật dùng để cập nhật tình trạng xử lý tài liệu (Thành công/Thất bại) về cho API Server sau khi pipeline ingestion hoàn tất.
 
 #### Yêu cầu
 - **Authentication:** ✅ Có yêu cầu (Bearer Token chứa `INTERNAL_API_KEY`).

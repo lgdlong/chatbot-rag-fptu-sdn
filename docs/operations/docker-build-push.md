@@ -20,9 +20,8 @@ Tài liệu này hướng dẫn chi tiết quy trình đóng gói ứng dụng (
 make docker-all
 ```
 
-*Lưu ý: Các tập lệnh trên sẽ build cả 2 Image dưới nhãn hiệu (tag) `latest` và đẩy lên Docker Hub cá nhân:*
+*Lưu ý: Các tập lệnh trên hiện build image API chính dưới nhãn hiệu (tag) `latest` và đẩy lên Docker Hub cá nhân:*
 *   API Image: `lgdlong/chatbot-swd-api:latest`
-*   Worker Image: `lgdlong/chatbot-swd-worker:latest`
 
 ---
 
@@ -39,10 +38,7 @@ make docker-all
 
 # Cách 2: Chạy thủ công từng lệnh
 docker build -t lgdlong/chatbot-swd-api:latest ./api
-docker build -t lgdlong/chatbot-swd-worker:latest ./services/ingestion-worker
-
 docker push lgdlong/chatbot-swd-api:latest
-docker push lgdlong/chatbot-swd-worker:latest
 ```
 
 ---
@@ -50,23 +46,16 @@ docker push lgdlong/chatbot-swd-worker:latest
 ### **Bước 2: Trên VPS Production — Pull & Deploy**
 Tải 3 tệp tin lên VPS cùng một thư mục: `docker-compose.prod.yml`, `.env`, và `Makefile.prod`. Sau đó sử dụng các tiện ích sau để cập nhật dịch vụ:
 
-#### 🔹 Trường hợp 1: Cập nhật toàn bộ stack dịch vụ (Hono API, Go Worker, Redis, DB)
+#### 🔹 Trường hợp 1: Cập nhật toàn bộ stack dịch vụ (Hono API, retrieval stack, DB)
 ```bash
 # Tự động pull các image mới nhất và khởi động lại stack
 make -f Makefile.prod restart
 ```
 
-#### 🔹 Trường hợp 2: Chỉ cập nhật riêng Hono API (Không ảnh hưởng DB/Redis/Worker)
+#### 🔹 Trường hợp 2: Chỉ cập nhật riêng Hono API (Không ảnh hưởng DB/retrieval)
 ```bash
 make -f Makefile.prod deploy-api
 ```
-
-#### 🔹 Trường hợp 3: Chỉ cập nhật riêng Golang Ingestion Worker
-```bash
-make -f Makefile.prod deploy-worker
-```
-
----
 
 ## 🛠️ Xử Lý Sự Cố Thường Gặp (Troubleshooting)
 

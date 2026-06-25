@@ -7,6 +7,7 @@
 - Developer / API surface: [`api/README.md`](./api/README.md)
 - Developer / architecture: [`technical/README.md`](./technical/README.md)
 - Operations / runbooks: [`operations/README.md`](./operations/README.md)
+- New frontend teammate: [`operations/frontend-onboarding.md`](./operations/frontend-onboarding.md)
 - Planning: [`planning/README.md`](./planning/README.md)
 - Research: [`research/README.md`](./research/README.md)
 - Historical: [`archive/README.md`](./archive/README.md)

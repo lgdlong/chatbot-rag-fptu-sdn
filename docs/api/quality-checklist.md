@@ -15,7 +15,7 @@ Bảng tiêu chuẩn kiểm soát chất lượng nhằm đảm bảo tài liệ
 - [ ] **Mô tả chi tiết các trường dữ liệu**
   - Ghi rõ kiểu dữ liệu, bắt buộc hay tùy chọn.
   - Các tham số Query Parameters được mô tả rõ ràng.
-  - Ghi nhận đầy đủ Request Headers đặc thù (như `Authorization: Bearer <token>`, `x-tenant-id`).
+  - Ghi nhận đầy đủ Request Headers đặc thù (như `Authorization: Bearer <token>`).
 
 - [ ] **Xác nhận cấu trúc Response rõ ràng**
   - Response thành công kèm định dạng dữ liệu đầy đủ.

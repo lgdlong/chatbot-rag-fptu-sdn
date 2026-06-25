@@ -25,8 +25,6 @@ graph TD
     subgraph Storage ["Tầng Lưu Trữ & Truy Vấn"]
         API <-->|Prisma ORM| RDB[("PostgreSQL
         Metadata & Sessions")]
-        API <-->|ioredis| Cache[("Redis
-        Session Cache")]
         API <-->|REST API| VDB[("AnythingLLM
         Workspace Retrieval")]
     end
@@ -67,7 +65,6 @@ graph TD
 
 ### 1.3 Tầng Dữ Liệu
 * **PostgreSQL + Prisma ORM:** Lưu trữ domain data (curriculum, syllabus, users, chat history).
-* **Redis (ioredis):** Cache session data cho Better Auth.
 * **AnythingLLM:** Workspace retrieval cho syllabus-scoped chat.
 
 ---
@@ -83,7 +80,6 @@ sequenceDiagram
     participant FE as Next.js Web App
     participant BE as Hono.js API
     participant FS as File System (/uploads)
-    participant Worker as Ingestion Worker
     participant E as Gemini Embedding API
     participant VDB as AnythingLLM Workspace
     participant RDB as PostgreSQL
@@ -94,16 +90,14 @@ sequenceDiagram
     BE->>RDB: Tạo Document record (status: PENDING)
     BE-->>FE: Response { id, status: "PENDING" }
 
-    Note over Worker: Async Ingestion Pipeline
-    Worker->>RDB: Lấy Documents với status PENDING
-    Worker->>FS: Đọc file vật lý
-    Worker->>Worker: Trích xuất text từ PDF
-    Worker->>Worker: Chunking theo syllabus/doc
-    Worker->>E: Gọi embedding cho từng chunk
-    E-->>Worker: Vectors
-    Worker->>VDB: Upsert vectors + payload (text, page, document_id, syllabus_id)
-    Worker->>RDB: Cập nhật status → COMPLETED
-    Worker->>BE: PATCH /api/internal/documents/:id (status update)
+    Note over BE: Async ingestion được API điều phối nội bộ
+    BE->>FS: Đọc file vật lý khi xử lý ingestion
+    BE->>BE: Trích xuất text / chunking theo tài liệu
+    BE->>E: Gọi embedding cho từng chunk khi cần
+    E-->>BE: Vectors
+    BE->>VDB: Đồng bộ retrieval payload hiện hành
+    BE->>RDB: Cập nhật status → COMPLETED
+    BE->>BE: PATCH /api/internal/documents/:id (status update nội bộ)
 ```
 
 ### 2.2 Luồng Chat & Hỏi Đáp RAG (Chat Flow)
@@ -179,13 +173,12 @@ ChatSession (scopeMode: SELECTED_SYLLABUS)
 ### 4.3 Auth & Admin Models (Better Auth)
 
 ```
-User (id, email, role: SUPER_ADMIN|LECTURER|STUDENT, banned)
+User (id, email, role: ADMIN|LECTURER|STUDENT, banned)
   ├── Session (token, expiresAt, ipAddress)
   ├── Account (providerId, accessToken)
   └── AuditLog (action, entityType, entityId, details)
 
 EmailWhitelist    (email — chỉ email này mới được đăng ký)
-LecturerRequest   (email, reason, status: PENDING|APPROVED|REJECTED)
 Verification      (identifier, value, expiresAt)
 ```
 
@@ -195,7 +188,7 @@ Verification      (identifier, value, expiresAt)
 
 ### 5.1 Authentication Flow
 1. User POST `/api/auth/sign-up/email` → Better Auth kiểm tra `EmailWhitelist`
-2. Login tạo `Session` trong PostgreSQL + cache Redis
+2. Login tạo `Session` trong PostgreSQL
 3. Mọi request protected phải có cookie session hợp lệ
 4. Middleware Better Auth validate session và inject `user` vào context
 

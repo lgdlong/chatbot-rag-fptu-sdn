@@ -8,7 +8,7 @@
 ### Mục tiêu
 
 - Cho `STUDENT` login Google
-- Cho `LECTURER` và `SUPER_ADMIN` login email/password
+- Cho `LECTURER` và `ADMIN` login email/password
 
 ### Thành phần
 
@@ -161,11 +161,11 @@ Quản lý tài liệu `PDF` của đúng syllabus đang chọn
 
 ### Role
 
-`SUPER_ADMIN only`
+`ADMIN only`
 
 ### Mục tiêu
 
-Thay thế hoàn toàn flow lecturer request
+Thay thế hoàn toàn flow lecturer request; route cũ chỉ còn ở trạng thái legacy bị khóa
 
 ### Thành phần
 
@@ -185,7 +185,7 @@ Thay thế hoàn toàn flow lecturer request
 
 ### Role
 
-`SUPER_ADMIN only`
+`ADMIN only`
 
 ### Mục tiêu
 

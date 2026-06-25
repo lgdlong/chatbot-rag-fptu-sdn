@@ -32,7 +32,6 @@ Tài liệu này tổng hợp thống kê và phân tích cấu trúc mã nguồ
 | TypeScript | 5.8.3 |
 | Prisma | 5.18.0 |
 | better-auth | 1.6.11 |
-| ioredis | 5.10.1 |
 | @google/genai | 2.4.0 |
 | winston | 3.19.0 |
 | @hono/swagger-ui | 0.6.1 |
@@ -51,7 +50,7 @@ Tài liệu này tổng hợp thống kê và phân tích cấu trúc mã nguồ
 | Service | Technology |
 |---------|------------|
 | Relational DB | PostgreSQL (Docker) |
-| Cache/Session | Redis (ioredis) |
+| Session | Better Auth + PostgreSQL |
 | Retrieval Store | AnythingLLM workspace |
 | AI Embedding | Gemini 2.0 (gemini-embedding-002, 3072-dim) |
 | AI Chat | Gemini 2.0 Flash (streaming SSE) |
@@ -110,7 +109,7 @@ chatbot-rag-fptu/
 │       └── ProtectedRoute.tsx
 ├── docs/                           # Technical documentation
 ├── plans/                          # Implementation plans (archived)
-├── docker-compose.yml              # PostgreSQL + Redis + retrieval containers
+├── docker-compose.yml              # PostgreSQL + retrieval containers
 ├── Makefile                        # Monorepo task runner shortcuts
 ├── turbo.json                      # Turborepo pipeline config
 └── package.json                    # Root workspace config
@@ -122,14 +121,13 @@ chatbot-rag-fptu/
 
 | Mount Path | Module | Mô tả |
 |-----------|--------|-------|
-| `GET/POST /api/auth/*` | Better Auth | Auth handler (sign-in, register, session, org) |
+| `GET/POST /api/auth/*` | Better Auth | Auth handler (sign-in, register, session) |
 | `GET/POST/PATCH/DELETE /api/courses` | ragRouter | Course CRUD + RAG pipeline |
 | `GET/POST/PATCH/DELETE /api/chat/*` | chatRouter | Chat sessions, SSE stream, document catalog |
 | `GET/POST/PUT/DELETE /api/curriculum/*` | curriculumRouter | Majors, Specializations, Curriculums |
 | `GET/POST/PUT/PATCH/DELETE /api/syllabus/*` | syllabusRouter | Full Syllabus + Documents management |
 | `PATCH /api/internal/documents/:id` | internalRouter | Internal document status update |
 | `GET/POST /api/whitelist` | whitelistRouter | Email whitelist admin management |
-| `GET/POST/PATCH /api/auth-admin/*` | lecturerRequestRouter | Lecturer registration request management |
 | `GET /api/health` | inline | Health check (DB + memory) |
 | `GET /api/doc` | inline | OpenAPI JSON document |
 | `GET /api/docs` | Swagger UI | Swagger interactive docs |
@@ -151,7 +149,7 @@ chatbot-rag-fptu/
 ### Better Auth
 - **Plugins:** Admin plugin (role management, user banning)
 - **Adapter:** Prisma
-- **Session:** Database sessions + Redis cache
+- **Session:** Database-backed sessions via Better Auth
 
 ### Turborepo
 - Manages parallel build/dev tasks across `api/` and `web/` workspaces
@@ -175,7 +173,7 @@ chatbot-rag-fptu/
 
 ```bash
 # Database
-make db-up            # Khởi chạy Docker containers (PostgreSQL + Redis + retrieval)
+make db-up            # Khởi chạy Docker containers (PostgreSQL + retrieval)
 make db-down          # Dừng containers
 make migrate          # Push Prisma schema → DB (prisma db push)
 make prisma-generate  # Generate Prisma Client

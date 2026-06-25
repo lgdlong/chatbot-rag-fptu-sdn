@@ -25,7 +25,7 @@ flowchart TD
     E --> G["Course Chat Panel"]
 ```
 
-## Super Admin
+## Admin
 
 ```mermaid
 flowchart TD
@@ -38,4 +38,4 @@ flowchart TD
 - `STUDENT` chỉ chat từ syllabus public `approved + active`
 - `LECTURER` chat từ `Lecturer Syllabus Detail` của syllabus đang chọn
 - `Document Manager` chỉ cho `PDF`; snapshot syllabus do hệ thống tự sinh
-- Không có flow `lecturer request`
+- `lecturer request` không còn là flow chính thức; chỉ còn legacy route bị khóa

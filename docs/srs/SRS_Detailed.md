@@ -21,11 +21,11 @@ Xây dựng một trợ lý học tập cho sinh viên FPT, kết hợp:
 - chat theo `1 selected syllabus/workspace`
 - upload `PDF`
 - lecturer quản trị nội dung, xem syllabus và chat theo syllabus được chọn
-- super admin quản trị tài khoản lecturer và whitelist student
+- admin quản trị tài khoản lecturer và whitelist student
 
 ### Out of scope
 
-- lecturer request / self-registration
+- lecturer request / self-registration như một legacy route bị khóa, không còn flow chính thức
 - video RAG
 - DOCX/PPTX/Image trong release A
 - quản lý tài liệu theo chương
@@ -37,7 +37,7 @@ Xây dựng một trợ lý học tập cho sinh viên FPT, kết hợp:
 
 | Role | Login | Quyền |
 |---|---|---|
-| `SUPER_ADMIN` | Email/password | Tạo lecturer, disable lecturer, quản whitelist |
+| `ADMIN` | Email/password | Tạo lecturer, disable lecturer, quản whitelist |
 | `LECTURER` | Email/password | CRUD syllabus, view syllabus detail, open chat theo syllabus được chọn, upload/delete PDF |
 | `STUDENT` | Google OAuth + whitelist | Search, xem syllabus, chat, xem history |
 | `SYSTEM` | Nội bộ | Tạo snapshot syllabus từ DB, sync AnythingLLM, retrieval, answer/refusal |
@@ -76,7 +76,7 @@ Xây dựng một trợ lý học tập cho sinh viên FPT, kết hợp:
 | FR-01.1 | Student login bằng Google |
 | FR-01.2 | Chặn student nếu email chưa whitelist |
 | FR-01.3 | Lecturer login bằng email/password |
-| FR-01.4 | Super admin login bằng email/password |
+| FR-01.4 | Admin login bằng email/password |
 | FR-01.5 | Logout |
 
 ### FR-02. Student learning flow
@@ -127,7 +127,7 @@ Xây dựng một trợ lý học tập cho sinh viên FPT, kết hợp:
 | FR-05.8 | Trả lời đúng thông tin assessment | Nếu câu hỏi hỏi về assessment, hệ thống trả lời đúng theo dữ liệu assessment đang lưu trong snapshot syllabus hiện hành của workspace |
 | FR-05.9 | Lecturer có thể open chat cho syllabus được chọn để phục vụ tra cứu/biên soạn/chỉnh sửa |
 
-### FR-06. Super admin governance
+### FR-06. Admin governance
 
 | ID | Requirement |
 |---|---|
@@ -158,8 +158,8 @@ Xây dựng một trợ lý học tập cho sinh viên FPT, kết hợp:
 | BR-02 | Student chỉ thấy syllabus `approved + active` |
 | BR-03 | Mỗi subject chỉ có tối đa `1 syllabus active` |
 | BR-04 | Activate mới phải auto deactivate bản cũ |
-| BR-05 | Không có lecturer request |
-| BR-06 | Chỉ `SUPER_ADMIN` được quản whitelist |
+| BR-05 | `lecturer request` chỉ còn là legacy route bị khóa, không phải flow nghiệp vụ chính thức |
+| BR-06 | Chỉ `ADMIN` được quản whitelist |
 | BR-07 | Release A chỉ cho user upload `PDF`; `syllabus snapshot` do hệ thống tự sinh từ DB |
 | BR-08 | Không có video trong core |
 | BR-09 | Delete document thì chatbot không được dùng lại nội dung đó |

@@ -61,15 +61,15 @@ sequenceDiagram
 ```mermaid
 stateDiagram-v2
     [*] --> Pending: Giảng viên upload slide PDF
-    Pending --> Processing: Đẩy Job vào Redis, Go worker tiếp nhận
+    Pending --> Processing: API kích hoạt pipeline ingestion nội bộ
     Processing --> Success: Trích xuất chunk & tạo vector thành công
     Processing --> Failed: Lỗi trích xuất (file hỏng, phân trang lỗi)
     Success --> [*]
     Failed --> [*]
 
     note right of Processing
-        Go worker xử lý phân trang bằng pdfcpu
-        Tính toán embedding qua model BAAI/bge-vi-base
+        Tài liệu được đồng bộ sang retrieval layer hiện hành
+        Trạng thái được cập nhật lại qua internal callback
     end note
 ```
 

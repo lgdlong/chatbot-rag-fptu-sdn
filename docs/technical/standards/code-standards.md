@@ -133,7 +133,7 @@ Tài liệu này quy định bộ tiêu chuẩn kỹ thuật, phong cách lập 
 
 * **Status Tracking:**
   * `Document.status` phải phản ánh đúng trạng thái xử lý: `PENDING → PROCESSING → COMPLETED | FAILED`.
-  * Worker update status qua `PATCH /api/internal/documents/:id`.
+  * Tiến trình ingestion nội bộ cập nhật status qua `PATCH /api/internal/documents/:id`.
 
 ---
 

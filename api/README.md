@@ -24,9 +24,8 @@ api/
 │   ├── config/                # Cấu hình & Validate biến môi trường (Zod validation)
 │   │   └── env.ts
 │   ├── constants/             # Các hằng số dùng chung toàn hệ thống
-│   ├── middlewares/           # Bộ lọc trung gian (Auth, CORS, Multi-tenant guard)
-│   │   ├── auth.middleware.ts
-│   │   └── tenant.middleware.ts
+│   ├── middlewares/           # Bộ lọc trung gian hiện có
+│   │   └── logger.middleware.ts
 │   ├── modules/               # Các module chức năng theo kiến trúc Module-based
 │   │   └── auth/              # Module Xác thực (Better Auth setup & routes)
 │   │       ├── auth.ts        # File cấu hình chính Better Auth
@@ -68,7 +67,7 @@ make prisma-generate
 ```
 
 ### 3. Chạy server ở chế độ Development (Watch mode)
-Server sẽ tự động khởi chạy tại cổng **`3000`** và tự động reload mỗi khi bạn thay đổi code:
+Server sẽ tự động khởi chạy tại cổng **`8000`** và tự động reload mỗi khi bạn thay đổi code:
 ```bash
 make dev-api
 
@@ -120,17 +119,20 @@ Backend cung cấp các API RESTful chính, đáp ứng tiêu chuẩn an toàn v
 ```
 
 ### 2. API Xác thực người dùng (`GET /POST /api/auth/*`)
-* **Mô tả:** Các endpoint xử lý đăng ký, đăng nhập, phân quyền, quản lý tổ chức (Tenant/School), do thư viện Better Auth quản lý.
+* **Mô tả:** Các endpoint xử lý đăng ký, đăng nhập, phân quyền theo vai trò và quản lý session, do thư viện Better Auth quản lý.
 * **Các route chính:**
-  * `POST /api/auth/sign-up`: Đăng ký tài khoản mới bằng Email/Password.
-  * `POST /api/auth/sign-in`: Đăng nhập hệ thống.
+  * `POST /api/auth/sign-up/email`: Đăng ký tài khoản mới bằng Email/Password.
+  * `POST /api/auth/sign-in/email`: Đăng nhập hệ thống.
   * `POST /api/auth/sign-out`: Đăng xuất và xóa session.
   * `GET /api/auth/get-session`: Lấy thông tin phiên làm việc hiện tại của người dùng.
 
 ---
 
-## 🔒 Quy Tắc Bảo Mật & Multi-tenant
+## 🔒 Quy Tắc Bảo Mật Hiện Tại
 
-Mọi API xử lý dữ liệu học tập đều được bảo vệ bởi hai Middleware cốt lõi:
-1. **Xác thực phiên (`requireAuth`):** Đảm bảo request đi kèm cookie/token hợp lệ.
-2. **Cô lập dữ liệu (`requireTenant`):** Đọc header `x-tenant-id` từ Client và lọc dữ liệu tương ứng trong database, ngăn ngừa triệt để các lỗ hổng rò rỉ dữ liệu xuyên Tenant.
+Hệ thống hiện phục vụ cho một trường học duy nhất, nên không có lớp `tenant.middleware.ts` hay cơ chế `x-tenant-id`.
+
+Các nguyên tắc bảo mật đang áp dụng:
+1. **Xác thực phiên bằng Better Auth:** Request protected phải đi kèm session cookie hợp lệ.
+2. **Phân quyền theo role:** Backend giữ nguyên role `ADMIN`, `LECTURER`, `STUDENT` và kiểm tra quyền ngay trong từng handler/service.
+3. **Whitelist email:** Người dùng không nằm trong danh sách được cấp quyền sẽ bị từ chối tạo user/session.

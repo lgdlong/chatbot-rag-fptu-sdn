@@ -30,7 +30,7 @@ Tài liệu này đóng vai trò là bản thiết kế lộ trình phát triể
 
 - [x] Tạo Monorepo với **Turborepo** — quản lý workspace `api/` và `web/`
 - [x] Cấu hình `turbo.json` với pipeline `dev`, `build`, `lint`, `test`
-- [x] Docker Compose cho **PostgreSQL + Redis + Qdrant**
+- [x] Docker Compose cho **PostgreSQL + retrieval store**
 - [x] Thiết kế **Prisma schema** đầy đủ 21 models đặc thù FPTU
 - [x] API Health Check (`/api/health`) với DB latency + memory metrics
 - [x] Global logger middleware (`winston`) + file logging vào `logs/api.log`
@@ -54,7 +54,7 @@ Tài liệu này đóng vai trò là bản thiết kế lộ trình phát triể
 - [x] `AuthContext.tsx` quản lý session state + role-based routing
 - [x] `ProtectedRoute.tsx` bảo vệ trang yêu cầu xác thực
 
-**Tiêu chí hoàn thành:** ✅ Đăng nhập thành công, phân biệt đúng role `STUDENT`, `LECTURER`, `SUPER_ADMIN`.
+**Tiêu chí hoàn thành:** ✅ Đăng nhập thành công, phân biệt đúng role `STUDENT`, `LECTURER`, `ADMIN`.
 
 ---
 
@@ -65,15 +65,15 @@ Tài liệu này đóng vai trò là bản thiết kế lộ trình phát triể
 - [x] CRUD **Major, Specialization, Curriculum, CurriculumSubject** (`curriculumRouter`)
 - [x] CRUD **Syllabus** đầy đủ — CLOs, Schedules, Assessment, Materials, References (`syllabusRouter`)
 - [x] **Phê duyệt / Kích hoạt** Syllabus (`PATCH /approve`, `PATCH /activate`)
-- [x] **Upload Document** vào Syllabus (multipart, lưu `/uploads`, trigger worker)
-- [x] **Xóa Document** đồng bộ Qdrant (xóa vectors theo `document_id`)
-- [x] `DocumentRepository.delete()` — xóa đồng bộ DB + Qdrant
-- [x] **Qdrant integration** — upsert vectors với payload filtering
+- [x] **Upload Document** vào Syllabus (multipart, lưu `/uploads`, kích hoạt ingestion nội bộ)
+- [x] **Xóa Document** đồng bộ retrieval store theo `document_id`
+- [x] `DocumentRepository.delete()` — xóa đồng bộ DB + retrieval store
+- [x] **Retrieval integration** — đồng bộ payload cho lớp truy xuất hiện hành
 - [x] Frontend: trang `/teacher/documents`, `/teacher/syllabus`, `/teacher/curriculum`
 - [ ] Đồng bộ technical design với `AnythingLLM` là narrative chính
 - [ ] Dọn legacy manual-RAG/Qdrant docs còn sót
 
-**Tiêu chí hoàn thành (partial):** Giảng viên upload PDF, hệ thống xử lý async, vector lưu thành công trong Qdrant.
+**Tiêu chí hoàn thành (partial):** Giảng viên upload PDF, hệ thống xử lý async, tài liệu đồng bộ thành công với retrieval layer hiện hành.
 
 ---
 
@@ -120,7 +120,7 @@ Tài liệu này đóng vai trò là bản thiết kế lộ trình phát triể
 - [ ] Dashboard giảng viên: Thống kê câu hỏi phổ biến, downvoted answers
 - [ ] Topic clustering từ chat history
 - [ ] API token consumption tracking (Gemini API costs)
-- [ ] Redis caching cho câu hỏi phổ biến để giảm API calls
+- [ ] Tối ưu cache hỏi đáp phổ biến nếu có nhu cầu thực tế
 - [ ] Export báo cáo CSV
 
 ---

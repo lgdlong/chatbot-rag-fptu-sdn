@@ -5,7 +5,7 @@
 
 ```mermaid
 graph TB
-    SA["SUPER_ADMIN"]
+    SA["ADMIN"]
     LE["LECTURER"]
     ST["STUDENT"]
     SYS["SYSTEM"]
@@ -64,6 +64,6 @@ graph TB
 
 ## Ghi chú chốt scope
 
-- Không có use case `lecturer request`
+- `lecturer request` không còn là use case chính thức; chỉ còn legacy route bị khóa
 - Không có use case `video URL`
 - Không có use case `cross-subject chat`
