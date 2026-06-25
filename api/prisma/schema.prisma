@@ -104,6 +104,7 @@ model Syllabus {
   isApproved           Boolean                @default(false) @map("is_approved")
   isActive             Boolean                @default(false) @map("is_active")
   note                 String?                @db.Text
+  ragWorkspace         RagWorkspace?
   materials            SyllabusMaterial[]
   clos                 SyllabusClo[]
   schedules            SyllabusSchedule[]
@@ -229,13 +230,69 @@ model Document {
   name           String                // Tên file gốc
   fileUrl        String                @map("file_url")
   fileType       String                @map("file_type") // pdf, docx, pptx, image
-  status         String                // PENDING, PROCESSING, COMPLETED, FAILED
+  status         DocumentStatus        @default(PENDING)
   syllabusId     Int                   @map("syllabus_id")
   syllabus       Syllabus              @relation(fields: [syllabusId], references: [id], onDelete: Cascade)
   scopedDocuments ChatSessionDocument[]
+  ingestionJob   IngestionJob?
+  callbackEvents CallbackEvent[]
   createdAt      DateTime              @default(now()) @map("created_at")
 
   @@map("documents")
+}
+
+// Bảng mapping workspace RAG theo từng phiên bản Syllabus
+model RagWorkspace {
+  id            String   @id @default(uuid())
+  syllabusId    Int      @unique @map("syllabus_id")
+  syllabus      Syllabus @relation(fields: [syllabusId], references: [id], onDelete: Cascade)
+  workspaceSlug String   @unique @map("workspace_slug")
+  workspaceName String   @map("workspace_name")
+  anythingLlmId String?  @map("anything_llm_id")
+  ingestionJobs IngestionJob[]
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  @@map("rag_workspaces")
+}
+
+// Bảng job ingest tài liệu
+model IngestionJob {
+  id             String             @id @default(uuid())
+  documentId     String             @unique @map("document_id")
+  document       Document           @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  workspaceId    String?            @map("workspace_id")
+  workspace      RagWorkspace?      @relation(fields: [workspaceId], references: [id], onDelete: SetNull)
+  status         IngestionJobStatus @default(PENDING)
+  sourceLocation String?            @map("source_location")
+  callbackPayload Json?              @map("callback_payload")
+  errorMessage   String?            @db.Text @map("error_message")
+  attempts       Int                @default(0)
+  completedAt    DateTime?          @map("completed_at")
+  callbackEvents CallbackEvent[]
+  createdAt      DateTime           @default(now()) @map("created_at")
+  updatedAt      DateTime           @updatedAt @map("updated_at")
+
+  @@map("ingestion_jobs")
+}
+
+// Bảng log callback nội bộ từ AnythingLLM
+model CallbackEvent {
+  id           String              @id @default(uuid())
+  jobId        String?             @map("job_id")
+  job          IngestionJob?       @relation(fields: [jobId], references: [id], onDelete: SetNull)
+  documentId   String?             @map("document_id")
+  document     Document?           @relation(fields: [documentId], references: [id], onDelete: SetNull)
+  eventName    String              @map("event_name")
+  status       CallbackEventStatus @default(RECEIVED)
+  payload      Json
+  errorMessage String?             @db.Text @map("error_message")
+  processedAt  DateTime?           @map("processed_at")
+  createdAt    DateTime            @default(now()) @map("created_at")
+
+  @@index([jobId])
+  @@index([documentId])
+  @@map("callback_events")
 }
 
 // Bảng Audit Log ghi lịch sử thao tác quản trị
@@ -393,6 +450,26 @@ model ChatMessage {
 enum SenderType {
   USER
   ASSISTANT
+}
+
+enum DocumentStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+}
+
+enum IngestionJobStatus {
+  PENDING
+  PROCESSING
+  SUCCESS
+  FAILED
+}
+
+enum CallbackEventStatus {
+  RECEIVED
+  PROCESSED
+  FAILED
 }
 
 enum ChatSessionScopeMode {
