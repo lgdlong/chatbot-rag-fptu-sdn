@@ -21,6 +21,7 @@
     "@mantine/nprogress": "^9.3.0",
     "@mantine/spotlight": "^9.3.0",
     "@tabler/icons-react": "^3.44.0",
+    "better-auth": "^1.6.14",
     "dayjs": "^1.11.21",
     "embla-carousel-react": "^8.6.0",
     "next": "16.2.7",
