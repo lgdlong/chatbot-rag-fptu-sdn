@@ -54,6 +54,13 @@ export const openApiDoc = {
                   status: { type: "string", example: "UP" },
                   latencyMs: { type: "integer", example: 5 }
                 }
+              },
+              anythingllm: {
+                type: "object",
+                properties: {
+                  status: { type: "string", example: "UP" },
+                  latencyMs: { type: "integer", example: 8 }
+                }
               }
             }
           },
@@ -90,7 +97,7 @@ export const openApiDoc = {
           name: { type: "string", example: "Chapter_1_Introduction.pdf" },
           fileUrl: { type: "string", example: "/uploads/1716382025_Chapter_1.pdf" },
           fileType: { type: "string", example: "pdf" },
-          status: { type: "string", example: "SUCCESS", enum: ["PENDING", "PROCESSING", "SUCCESS", "FAILED"] },
+          status: { type: "string", example: "COMPLETED", enum: ["PENDING", "PROCESSING", "COMPLETED", "FAILED"] },
           courseId: { type: "string", example: "course-123" },
           createdAt: { type: "string", example: "2026-05-27T16:38:00.000Z" }
         }
@@ -337,7 +344,10 @@ export const openApiDoc = {
               schema: {
                 type: "object",
                 properties: {
-                  status: { type: "string", example: "SUCCESS", enum: ["SUCCESS", "FAILED"] },
+                  status: { type: "string", example: "COMPLETED", enum: ["SUCCESS", "COMPLETED", "FAILED"] },
+                  jobId: { type: "string", example: "job-123" },
+                  sourceLocation: { type: "string", example: "custom-documents/Chapter_1.pdf" },
+                  payload: { type: "object" },
                   error: { type: "string", example: "Failed to extract text from page 5" }
                 },
                 required: ["status"]
