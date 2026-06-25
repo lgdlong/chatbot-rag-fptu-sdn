@@ -125,57 +125,11 @@ function resolveCreateSessionPayload(body: CreateChatSessionPayload) {
   } as const;
 }
 
-async function resolveActiveDocumentIds(scope: Awaited<ReturnType<typeof resolveChatScope>>) {
-  if (scope.documentIds.length > 0) {
-    return new Set(scope.documentIds);
-  }
-
-  if (scope.courseIds.length === 0) {
-    return new Set<string>();
-  }
-
-  const activeDocs = await prisma.document.findMany({
-    where: {
-      syllabus: {
-        courseId: {
-          in: scope.courseIds,
-        },
-      },
-    },
-    select: {
-      id: true,
-    },
-  });
-
-  return new Set(activeDocs.map((document) => document.id));
-}
-
-function mapMessagesForClient(
-  messages: Array<ChatHistoryItem & { id: string; sessionId: string }>,
-  activeDocumentIds: Set<string>,
-) {
-  return messages.map((message) => {
-    let citations = message.citations as unknown;
-    if (Array.isArray(citations)) {
-      citations = citations.map((citation) => {
-        if (
-          citation &&
-          typeof citation === "object" &&
-          "documentId" in citation &&
-          typeof (citation as { documentId?: unknown }).documentId === "string" &&
-          !activeDocumentIds.has((citation as { documentId: string }).documentId)
-        ) {
-          return { ...(citation as Record<string, unknown>), isDeleted: true };
-        }
-        return citation;
-      });
-    }
-
-    return {
-      ...message,
-      citations,
-    };
-  });
+function mapMessagesForClient(messages: Array<ChatHistoryItem & { id: string; sessionId: string }>) {
+  return messages.map((message) => ({
+    ...message,
+    citations: message.citations,
+  }));
 }
 
 function mapScopedCoursesForClient(scopedCourses: ChatSessionCourseRelation[]) {
@@ -509,8 +463,7 @@ chatRouter.get("/sessions/:sessionId", async (c) => {
     }
 
     const scope = await resolveChatScope(chatSession, session.user.id);
-    const activeDocumentIds = await resolveActiveDocumentIds(scope);
-    const parsedMessages = mapMessagesForClient(chatSession.messages, activeDocumentIds);
+    const parsedMessages = mapMessagesForClient(chatSession.messages);
     const scopeLabel = buildChatScopeLabel(scope);
 
     return c.json({

@@ -12,6 +12,7 @@ import { prisma } from "./modules/auth/services/db.service.js";
 import { checkDatabaseConnection } from "./utils/db-health.js";
 import { logger } from "./utils/logger.js";
 import { loggerMiddleware } from "./middlewares/logger.middleware.js";
+import { AnythingLlmAdapter } from "./modules/rag/services/anythingllm.adapter.js";
 
 import {
   ragRouter,
@@ -68,6 +69,9 @@ app.get("/api/health", async (c) => {
   let dbStatus = "UP";
   let dbLatency = 0;
   let dbError: string | null = null;
+  let anythingLlmStatus = "UP";
+  let anythingLlmLatency = 0;
+  let anythingLlmError: string | null = null;
 
   try {
     // Run simple SELECT 1 query to check DB availability and measure latency
@@ -79,9 +83,18 @@ app.get("/api/health", async (c) => {
     dbError = err.message || String(err);
   }
 
+  try {
+    const llmStart = performance.now();
+    await AnythingLlmAdapter.listWorkspaceSlugs();
+    anythingLlmLatency = Math.round(performance.now() - llmStart);
+  } catch (err: any) {
+    anythingLlmStatus = "DOWN";
+    anythingLlmError = err.message || String(err);
+  }
+
   const uptime = process.uptime();
   const memory = process.memoryUsage();
-  const status = dbStatus === "UP" ? "UP" : "DOWN";
+  const status = dbStatus === "UP" && anythingLlmStatus === "UP" ? "UP" : "DOWN";
   const statusCode = status === "UP" ? 200 : 503;
 
   return c.json(
@@ -94,6 +107,11 @@ app.get("/api/health", async (c) => {
           status: dbStatus,
           latencyMs: dbStatus === "UP" ? dbLatency : undefined,
           error: dbError || undefined,
+        },
+        anythingllm: {
+          status: anythingLlmStatus,
+          latencyMs: anythingLlmStatus === "UP" ? anythingLlmLatency : undefined,
+          error: anythingLlmError || undefined,
         },
       },
       system: {

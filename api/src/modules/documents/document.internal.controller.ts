@@ -1,6 +1,6 @@
 import { Hono } from 'hono'
-import { DocumentRepository } from './repositories/document.repository.js'
 import { ENV } from '../../config/env.js'
+import { applyIngestionCallback } from './services/ingestion-callback.service.js'
 
 export const internalRouter = new Hono()
 
@@ -13,10 +13,22 @@ internalRouter.patch('/documents/:id', async (c) => {
   }
 
   const docId = c.req.param('id')
-  const { status, error } = await c.req.json()
+  const { status, error, jobId, payload, sourceLocation } = await c.req.json()
+
+  const normalizedStatus = status === 'SUCCESS' ? 'COMPLETED' : status
+  if (normalizedStatus !== 'COMPLETED' && normalizedStatus !== 'FAILED') {
+    return c.json({ error: 'Invalid ingestion status' }, 400)
+  }
 
   try {
-    await DocumentRepository.updateStatus(docId, status, error)
+    await applyIngestionCallback({
+      documentId: docId,
+      jobId: typeof jobId === 'string' ? jobId : null,
+      status: normalizedStatus,
+      error: typeof error === 'string' ? error : null,
+      payload: payload ?? undefined,
+      sourceLocation: typeof sourceLocation === 'string' ? sourceLocation : null,
+    })
     return c.json({ success: true })
   } catch (err: any) {
     console.error(`[InternalWebhook] Failed to update document status:`, err)
