@@ -34,7 +34,7 @@ app.use(
   cors({
     origin: (origin) => origin, // Reflect origin
     allowMethods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-    allowHeaders: ["Content-Type", "Authorization", "x-tenant-id"],
+    allowHeaders: ["Content-Type", "Authorization"],
     exposeHeaders: ["Content-Length", "X-Kuma-Revision"],
     credentials: true,
   }),

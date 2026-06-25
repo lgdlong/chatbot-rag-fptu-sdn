@@ -14,7 +14,6 @@
     "@prisma/client": "^5.18.0",
     "better-auth": "^1.6.11",
     "hono": "^4.12.19",
-    "ioredis": "^5.10.1",
     "winston": "^3.19.0"
   },
   "devDependencies": {

@@ -22,7 +22,7 @@ export async function checkDatabaseConnection() {
       "",
       "NGUYÊN NHÂN PHỔ BIẾN:",
       "  1. Docker Desktop chưa được khởi động trên máy tính của bạn.",
-      "  2. Các container Docker (PostgreSQL, Redis, v.v.) chưa được bật.",
+      "  2. Các container Docker cần thiết (PostgreSQL, AnythingLLM, v.v.) chưa được bật.",
       "  3. Biến môi trường DATABASE_URL trong tệp .env ở thư mục gốc không chính xác.",
       "",
       "HƯỚNG DẪN KHẮC PHỤC:",

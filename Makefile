@@ -1,4 +1,4 @@
-.PHONY: db-up db-down db-logs db-status db-reset migrate prisma-generate prisma-studio install dev-api dev-web dev-all worker build-api build-web build-all lint-api lint-web test clean health-check
+.PHONY: db-up db-down db-logs db-status db-reset migrate prisma-generate prisma-studio install dev-api dev-web dev-all build-api build-web build-all lint-api lint-web test clean health-check docker-build docker-push docker-all
 
 # Install Dependencies
 install:
@@ -39,13 +39,8 @@ dev-web:
 	npx turbo run dev --filter=chatbot-rag-fptu-web
 
 dev-all:
-	@echo "Starting API, Web, and Worker..."
-	@npx turbo run dev & \
-	powershell -NoProfile -ExecutionPolicy Bypass -File services/ingestion-worker/run.ps1
-
-# Ingestion Worker
-worker:
-	powershell -NoProfile -ExecutionPolicy Bypass -File services/ingestion-worker/run.ps1
+	@echo "Starting API and Web..."
+	@npx turbo run dev
 
 # Build Commands
 build-api:
@@ -81,10 +76,8 @@ health-check:
 # Docker Build & Push Targets (Production)
 docker-build:
 	docker build -t lgdlong/chatbot-swd-api:latest ./api
-	docker build -t lgdlong/chatbot-swd-worker:latest ./services/ingestion-worker
 
 docker-push:
 	docker push lgdlong/chatbot-swd-api:latest
-	docker push lgdlong/chatbot-swd-worker:latest
 
 docker-all: docker-build docker-push

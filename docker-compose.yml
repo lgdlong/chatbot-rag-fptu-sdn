@@ -14,15 +14,6 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
-  redis:
-    image: redis:7-alpine
-    container_name: chatbot-rag-redis-sdn
-    restart: always
-    ports:
-      - "6380:6379"
-    volumes:
-      - redis_data:/data
-
   anythingllm:
     image: mintplexlabs/anythingllm
     container_name: anythingllm-sdn
@@ -36,5 +27,4 @@ services:
 
 volumes:
   postgres_data:
-  redis_data:
   anythingllm_storage:

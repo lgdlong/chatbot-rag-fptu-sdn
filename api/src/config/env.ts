@@ -36,7 +36,6 @@ export const ENV = {
   GEMINI_TEXT_MODEL: process.env.GEMINI_TEXT_MODEL || "gemini-3.1-flash-lite",
   GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID || "",
   GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET || "",
-  REDIS_HOST: process.env.REDIS_HOST || "localhost",
   INTERNAL_API_KEY:
     process.env.INTERNAL_API_KEY || "super_secret_internal_key_fptu_rag",
   INTERNAL_API_URL: process.env.INTERNAL_API_URL || "http://localhost:8000",

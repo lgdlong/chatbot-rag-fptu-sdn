@@ -26,7 +26,7 @@ export const openApiDoc = {
       bearerAuth: {
         type: "http",
         scheme: "bearer",
-        description: "Bearer Token sử dụng INTERNAL_API_KEY để xác thực các request nội bộ giữa Ingestion Worker và Backend API."
+        description: "Bearer Token sử dụng INTERNAL_API_KEY để xác thực các request callback nội bộ tới Backend API."
       }
     },
     schemas: {
@@ -139,17 +139,6 @@ export const openApiDoc = {
           },
           createdAt: { type: "string", example: "2026-05-27T16:38:05.000Z" }
         }
-      },
-      LecturerRequest: {
-        type: "object",
-        properties: {
-          id: { type: "string", example: "req-111" },
-          name: { type: "string", example: "Nguyễn Văn A" },
-          email: { type: "string", example: "anv@fpt.edu.vn" },
-          reason: { type: "string", example: "Tôi giảng dạy bộ môn Kỹ thuật phần mềm tại FPTU Cần Thơ." },
-          status: { type: "string", example: "PENDING", enum: ["PENDING", "APPROVED", "REJECTED"] },
-          createdAt: { type: "string", example: "2026-05-27T16:38:00.000Z" }
-        }
       }
     }
   },
@@ -181,7 +170,7 @@ export const openApiDoc = {
     "/api/courses/{courseId}/documents": {
       post: {
         summary: "Tải lên và lập chỉ mục slide/tài liệu (PDF)",
-        description: "Yêu cầu quyền LECTURER/ADMIN. Cho phép tải lên file PDF (dung lượng tối đa 50MB theo SRS) cho một môn học cụ thể. Hệ thống sẽ lưu trữ và đẩy Job xử lý RAG Ingestion vào Redis Queue để Go worker tiến hành trích xuất slide, chia chunk, tạo embedding và lưu Vector DB.",
+        description: "Yêu cầu quyền LECTURER/ADMIN. Cho phép tải lên file PDF (dung lượng tối đa 50MB theo SRS) cho một môn học cụ thể. Hệ thống sẽ lưu file, tạo bản ghi Document và kích hoạt pipeline ingestion nội bộ để đồng bộ tài liệu với lớp retrieval hiện tại.",
         security: [{ cookieAuth: [] }],
         parameters: [
           {
@@ -212,7 +201,7 @@ export const openApiDoc = {
         },
         responses: {
           "200": {
-            description: "Tải file thành công và đang đưa vào hàng đợi xử lý RAG.",
+            description: "Tải file thành công và đang được xử lý ingestion.",
             content: {
               "application/json": {
                 schema: {
@@ -249,7 +238,7 @@ export const openApiDoc = {
             }
           },
           "500": {
-            description: "Lỗi kết nối Redis Queue hoặc lỗi ghi file.",
+            description: "Lỗi ghi file hoặc lỗi khởi tạo tiến trình ingestion.",
             content: {
               "application/json": {
                 schema: { $ref: "#/components/schemas/ErrorResponse" }
@@ -329,8 +318,8 @@ export const openApiDoc = {
     },
     "/api/internal/documents/{id}": {
       patch: {
-        summary: "Webhook nội bộ: Cập nhật trạng thái Ingestion",
-        description: "Được gọi bởi Go Ingestion Worker khi hoàn tất hoặc thất bại việc trích xuất chunk, tính toán embeddings của tài liệu. Cần truyền chính xác INTERNAL_API_KEY dạng Bearer Token.",
+        summary: "Webhook nội bộ: Cập nhật trạng thái ingestion",
+        description: "Được gọi bởi tiến trình nội bộ khi hoàn tất hoặc thất bại việc xử lý tài liệu. Cần truyền chính xác INTERNAL_API_KEY dạng Bearer Token.",
         security: [{ bearerAuth: [] }],
         parameters: [
           {
@@ -841,219 +830,6 @@ export const openApiDoc = {
           },
           "404": {
             description: "Không tìm thấy cuộc hội thoại.",
-            content: {
-              "application/json": {
-                schema: { $ref: "#/components/schemas/ErrorResponse" }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/auth-admin/lecturer-request": {
-      post: {
-        summary: "Đăng ký cấp tài khoản giảng viên",
-        description: "Dành cho giảng viên FPT. Đăng ký thông tin yêu cầu tạo tài khoản để giảng dạy và quản lý tài liệu môn học. Không yêu cầu đăng nhập.",
-        requestBody: {
-          required: true,
-          content: {
-            "application/json": {
-              schema: {
-                type: "object",
-                properties: {
-                  name: { type: "string", example: "Nguyễn Văn A" },
-                  email: { type: "string", example: "anv@fpt.edu.vn" },
-                  reason: { type: "string", example: "Tôi cần tải lên các slide bài giảng SWD392 và PRN231." }
-                },
-                required: ["name", "email", "reason"]
-              }
-            }
-          }
-        },
-        responses: {
-          "200": {
-            description: "Gửi yêu cầu thành công, đang chờ Admin duyệt.",
-            content: {
-              "application/json": {
-                schema: {
-                  type: "object",
-                  properties: {
-                    success: { type: "boolean", example: true },
-                    request: { $ref: "#/components/schemas/LecturerRequest" }
-                  }
-                }
-              }
-            }
-          },
-          "400": {
-            description: "Thiếu thông tin bắt buộc.",
-            content: {
-              "application/json": {
-                schema: { $ref: "#/components/schemas/ErrorResponse" }
-              }
-            }
-          },
-          "409": {
-            description: "Email đã tồn tại trên hệ thống hoặc đã gửi yêu cầu trước đó.",
-            content: {
-              "application/json": {
-                schema: { $ref: "#/components/schemas/ErrorResponse" }
-              }
-            }
-          },
-          "500": {
-            description: "Lỗi kết nối database.",
-            content: {
-              "application/json": {
-                schema: { $ref: "#/components/schemas/ErrorResponse" }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/auth-admin/admin/lecturer-requests": {
-      get: {
-        summary: "Admin: Lấy danh sách yêu cầu đăng ký của giảng viên",
-        description: "Yêu cầu quyền ADMIN. Lấy danh sách toàn bộ các yêu cầu đăng ký tài khoản giảng viên.",
-        security: [{ cookieAuth: [] }],
-        responses: {
-          "200": {
-            description: "Danh sách các yêu cầu.",
-            content: {
-              "application/json": {
-                schema: {
-                  type: "object",
-                  properties: {
-                    requests: {
-                      type: "array",
-                      items: { $ref: "#/components/schemas/LecturerRequest" }
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "403": {
-            description: "Quyền ADMIN bị từ chối.",
-            content: {
-              "application/json": {
-                schema: { $ref: "#/components/schemas/ErrorResponse" }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/auth-admin/admin/lecturer-requests/{requestId}/approve": {
-      post: {
-        summary: "Admin: Phê duyệt cấp tài khoản giảng viên",
-        description: "Yêu cầu quyền ADMIN. Duyệt yêu cầu, tạo tài khoản User với vai trò LECTURER, đồng thời tạo mật khẩu ngẫu nhiên tạm thời (được hash bảo mật PBKDF2 khớp Better Auth) hiển thị một lần cho Admin gửi lại cho giảng viên.",
-        security: [{ cookieAuth: [] }],
-        parameters: [
-          {
-            name: "requestId",
-            in: "path",
-            required: true,
-            schema: { type: "string" },
-            description: "ID yêu cầu cần phê duyệt."
-          }
-        ],
-        responses: {
-          "200": {
-            description: "Phê duyệt thành công và cấp mật khẩu tạm thời.",
-            content: {
-              "application/json": {
-                schema: {
-                  type: "object",
-                  properties: {
-                    success: { type: "boolean", example: true },
-                    message: { type: "string", example: "Lecturer account created successfully" },
-                    credentials: {
-                      type: "object",
-                      properties: {
-                        email: { type: "string", example: "anv@fpt.edu.vn" },
-                        temporaryPassword: { type: "string", example: "Lecturer@582194" }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "400": {
-            description: "Yêu cầu đã được duyệt hoặc từ chối trước đó.",
-            content: {
-              "application/json": {
-                schema: { $ref: "#/components/schemas/ErrorResponse" }
-              }
-            }
-          },
-          "403": {
-            description: "Quyền ADMIN bị từ chối.",
-            content: {
-              "application/json": {
-                schema: { $ref: "#/components/schemas/ErrorResponse" }
-              }
-            }
-          },
-          "404": {
-            description: "Không tìm thấy yêu cầu.",
-            content: {
-              "application/json": {
-                schema: { $ref: "#/components/schemas/ErrorResponse" }
-              }
-            }
-          },
-          "500": {
-            description: "Lỗi lưu giao dịch hoặc lỗi hash mật khẩu.",
-            content: {
-              "application/json": {
-                schema: { $ref: "#/components/schemas/ErrorResponse" }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/auth-admin/admin/lecturer-requests/{requestId}/reject": {
-      post: {
-        summary: "Admin: Từ chối cấp tài khoản giảng viên",
-        description: "Yêu cầu quyền ADMIN. Đánh dấu yêu cầu là REJECTED.",
-        security: [{ cookieAuth: [] }],
-        parameters: [
-          {
-            name: "requestId",
-            in: "path",
-            required: true,
-            schema: { type: "string" },
-            description: "ID yêu cầu cần từ chối."
-          }
-        ],
-        responses: {
-          "200": {
-            description: "Từ chối yêu cầu thành công.",
-            content: {
-              "application/json": {
-                schema: {
-                  type: "object",
-                  properties: {
-                    success: { type: "boolean", example: true }
-                  }
-                }
-              }
-            }
-          },
-          "403": {
-            description: "Quyền ADMIN bị từ chối.",
-            content: {
-              "application/json": {
-                schema: { $ref: "#/components/schemas/ErrorResponse" }
-              }
-            }
-          },
-          "500": {
-            description: "Lỗi cập nhật database.",
             content: {
               "application/json": {
                 schema: { $ref: "#/components/schemas/ErrorResponse" }
