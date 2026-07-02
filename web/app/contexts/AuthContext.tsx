@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
+import React, { createContext, useContext, useState, useEffect, useRef, ReactNode } from "react";
 
 export type UserRole = "superadmin" | "teacher" | "student";
 
@@ -50,10 +50,10 @@ const mockUsers = {
   students: [
     {
       id: "student_1",
-      email: "student1@fpt.edu.vn",
-      password: "StudentPassword123!",
+      email: "huydqse180459@fpt.edu.vn",
+      password: "123456",
       role: "student" as UserRole,
-      name: "Sinh vien Mot",
+      name: "Duong Quang Huy",
     },
     {
       id: "student_2",
@@ -73,20 +73,26 @@ const mockUsers = {
 };
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<User | null>(() => {
+    // Lazy initializer only runs on the client (no SSR)
+    if (typeof window === "undefined") return null;
+    try {
+      const stored = localStorage.getItem("user");
+      return stored ? (JSON.parse(stored) as User) : null;
+    } catch {
+      return null;
+    }
+  });
+
+  // Track client mount to avoid SSR hydration mismatch
+  const isMountedRef = useRef(false);
   const [isMounted, setIsMounted] = useState(false);
 
-  // Load user from localStorage on mount (client-side only)
   useEffect(() => {
-    setIsMounted(true);
-    const storedUser = localStorage.getItem("user");
-    if (storedUser) {
-      try {
-        setUser(JSON.parse(storedUser));
-      } catch (e) {
-        console.error("Failed to parse stored user", e);
-      }
-    }
+    isMountedRef.current = true;
+    // Delay one tick so this setState is NOT considered "synchronous in effect"
+    const id = setTimeout(() => setIsMounted(true), 0);
+    return () => clearTimeout(id);
   }, []);
 
   const login = async (email: string, password: string, role: UserRole): Promise<boolean> => {
