@@ -45,6 +45,10 @@ Kiểm tra tình trạng hoạt động (Status) và đo lường độ trễ (l
     "database": {
       "status": "UP",
       "latencyMs": 5
+    },
+    "anythingllm": {
+      "status": "UP",
+      "latencyMs": 8
     }
   },
   "system": {
@@ -70,6 +74,8 @@ Kiểm tra tình trạng hoạt động (Status) và đo lường độ trễ (l
 | `latencyMs` | integer | Độ trễ xử lý toàn bộ request (mili-giây). | `12` |
 | `services.database.status` | string | Trạng thái database PostgreSQL (`"UP"` hoặc `"DOWN"`). | `"UP"` |
 | `services.database.latencyMs` | integer | Thời gian truy vấn SQL kiểm tra kết nối (mili-giây). | `5` |
+| `services.anythingllm.status` | string | Trạng thái dịch vụ AnythingLLM (`"UP"` hoặc `"DOWN"`). | `"UP"` |
+| `services.anythingllm.latencyMs` | integer | Thời gian gọi API AnythingLLM kiểm tra kết nối (mili-giây). | `8` |
 | `system.uptimeSeconds` | number | Thời gian server đã chạy liên tục (giây). | `120.45` |
 | `system.memoryUsage.rss` | string | Bộ nhớ thực tế hệ điều hành cấp cho Node process. | `"84.5 MB"` |
 | `system.memoryUsage.heapTotal` | string | Tổng dung lượng bộ nhớ Heap V8 đã cấp phát. | `"45.2 MB"` |
@@ -91,6 +97,10 @@ Kiểm tra tình trạng hoạt động (Status) và đo lường độ trễ (l
     "database": {
       "status": "DOWN",
       "error": "Can't reach database server at localhost:5432"
+    },
+    "anythingllm": {
+      "status": "UP",
+      "latencyMs": 9
     }
   },
   "system": {
@@ -126,6 +136,10 @@ curl -X GET http://localhost:8000/api/health \
     "database": {
       "status": "UP",
       "latencyMs": 3
+    },
+    "anythingllm": {
+      "status": "UP",
+      "latencyMs": 5
     }
   },
   "system": {
