@@ -105,6 +105,30 @@ export class AnythingLlmAdapter {
     return location;
   }
 
+  public static async uploadMarkdown(fileName: string, content: string) {
+    const formData = new FormData();
+    const fileBlob = new Blob([content], { type: "text/markdown" });
+    formData.append("file", fileBlob, fileName);
+
+    const response = await fetch(`${baseUrl()}/api/v1/document/upload`, {
+      method: "POST",
+      headers: authHeaders(),
+      body: formData,
+    });
+
+    await assertOk(response, `AnythingLLM file upload failed for ${fileName}`);
+
+    const payload = (await response.json()) as {
+      documents?: Array<{ location?: string }>;
+    };
+    const location = payload.documents?.[0]?.location;
+    if (!location) {
+      throw new Error("AnythingLLM upload did not return a valid document location");
+    }
+
+    return location;
+  }
+
   public static async updateWorkspaceEmbeddings(
     workspaceSlug: string,
     payload: { adds?: string[]; deletes?: string[] },

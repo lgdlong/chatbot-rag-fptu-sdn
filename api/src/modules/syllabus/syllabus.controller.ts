@@ -10,6 +10,7 @@ import { ENV } from "../../config/env.js";
 import { AnythingLlmAdapter } from "../rag/services/anythingllm.adapter.js";
 import { DocumentStatus, IngestionJobStatus } from "@prisma/client";
 import { setTimeout as sleep } from "node:timers/promises";
+import { SyllabusSyncService } from "./services/syllabus-sync.service.js";
 
 export const syllabusRouter = new Hono();
 
@@ -257,6 +258,15 @@ syllabusRouter.post("/", async (c) => {
       }
     });
 
+    // Sync to AnythingLLM in background
+    Promise.resolve().then(async () => {
+      try {
+        await SyllabusSyncService.syncSyllabusToAnythingLlm(syllabus.id);
+      } catch (syncErr) {
+        console.error(`[Syllabus Sync Error] Failed to sync syllabus ${syllabus.id} to AnythingLLM:`, syncErr);
+      }
+    });
+
     return c.json({ syllabus }, 201);
   } catch (err: any) {
     return c.json({ error: err.message }, 500);
@@ -461,6 +471,15 @@ syllabusRouter.put("/:id", async (c) => {
       return updatedSyl;
     });
 
+    // Sync to AnythingLLM in background
+    Promise.resolve().then(async () => {
+      try {
+        await SyllabusSyncService.syncSyllabusToAnythingLlm(id);
+      } catch (syncErr) {
+        console.error(`[Syllabus Sync Error] Failed to sync syllabus ${id} to AnythingLLM:`, syncErr);
+      }
+    });
+
     return c.json({ success: true, syllabus: result });
   } catch (err: any) {
     return c.json({ error: err.message }, 500);
@@ -485,6 +504,15 @@ syllabusRouter.patch("/:id/approve", async (c) => {
     const syllabus = await prisma.syllabus.update({
       where: { id },
       data: { isApproved: true }
+    });
+
+    // Sync to AnythingLLM in background
+    Promise.resolve().then(async () => {
+      try {
+        await SyllabusSyncService.syncSyllabusToAnythingLlm(id);
+      } catch (syncErr) {
+        console.error(`[Syllabus Sync Error] Failed to sync syllabus ${id} to AnythingLLM:`, syncErr);
+      }
     });
 
     return c.json({ success: true, syllabus });
@@ -535,6 +563,15 @@ syllabusRouter.patch("/:id/activate", async (c) => {
       });
 
       return activatedSyl;
+    });
+
+    // Sync to AnythingLLM in background
+    Promise.resolve().then(async () => {
+      try {
+        await SyllabusSyncService.syncSyllabusToAnythingLlm(id);
+      } catch (syncErr) {
+        console.error(`[Syllabus Sync Error] Failed to sync syllabus ${id} to AnythingLLM:`, syncErr);
+      }
     });
 
     return c.json({ success: true, syllabus: result });
