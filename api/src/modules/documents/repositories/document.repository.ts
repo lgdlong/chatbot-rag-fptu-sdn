@@ -1,5 +1,5 @@
 import { prisma } from '../../auth/services/db.service.js'
-import { Prisma } from '@prisma/client'
+import { DocumentStatus, Prisma } from '@prisma/client'
 
 export class DocumentRepository {
   static async create(data: Prisma.DocumentCreateInput) {
@@ -32,7 +32,7 @@ export class DocumentRepository {
     })
   }
 
-  static async updateStatus(id: string, status: string, error?: string) {
+  static async updateStatus(id: string, status: DocumentStatus, error?: string) {
     if (error) {
       console.error(`[DocumentRepository] Ingestion error for document ${id}: ${error}`)
     }

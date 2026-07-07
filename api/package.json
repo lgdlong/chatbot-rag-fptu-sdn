@@ -5,7 +5,10 @@
     "dev": "tsx watch src/index.ts",
     "build": "tsc",
     "start": "node dist/index.js",
-    "lint": "echo 'No linting configured for api'"
+    "lint": "echo 'No linting configured for api'",
+    "test:smoke": "tsx src/scripts/phase-05-smoke.ts",
+    "test:sse-contract": "tsx src/scripts/phase-05-sse-contract.ts",
+    "cleanup:orphans": "tsx src/scripts/cleanup-orphan-ingestion-jobs.ts"
   },
   "dependencies": {
     "@google/genai": "^2.4.0",

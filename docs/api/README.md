@@ -16,26 +16,44 @@ Tài liệu trong `docs/api/` là lớp tham chiếu kỹ thuật cho backend hi
 
 ### [00_auth.md](./00_auth.md)
 
-- Better Auth
-- sign up / sign in / sign out
-- session handling
+- Xác thực tài khoản qua Better Auth (đăng ký, đăng nhập email/mật khẩu, OAuth)
+- Quản lý phiên hoạt động & tài khoản
+- Phân hệ quản lý Whitelist Email (ADMIN)
 
 ### [00_system.md](./00_system.md)
 
-- health check
-- system diagnostics
+- Sức khỏe hệ thống & kết nối DB / AnythingLLM
+- Thống kê Uptime, RAM và CPU Platform
+
+### [00_courses.md](./00_courses.md)
+
+- Danh mục quản lý Môn học (Courses)
+- Đồng bộ đổi tên/xóa workspace AnythingLLM
+
+### [00_curriculum.md](./00_curriculum.md)
+
+- Quản lý Ngành học (Major) & Chuyên ngành hẹp (Specialization)
+- Khung chương trình đào tạo (Curriculum) & gán môn học
+
+### [00_syllabus.md](./00_syllabus.md)
+
+- Quản lý Đề cương môn học (Syllabus)
+- Cấu trúc 8 bảng dữ liệu con chi tiết
+- Ràng buộc tổng trọng số đánh giá bằng 100%
+- Vòng đời kích hoạt và tự động ngưng bản ghi cũ
 
 ### [00_documents.md](./00_documents.md)
 
-- upload PDF
-- document processing status
-- internal processing callback
+- Upload slide PDF theo Syllabus (hạn mức 50MB, tối đa 10 tệp/môn học)
+- Gọi tiến trình lập chỉ mục Vector DB AnythingLLM
+- Webhook nhận callback đồng bộ trong nền
 
 ### [00_chat.md](./00_chat.md)
 
-- chat session lifecycle
-- SSE response
-- course-scoped chat behavior
+- Khởi tạo session chat với cấu hình Scope đa dạng
+- Gửi tin nhắn và streaming SSE kết hợp trích dẫn RAG
+- Quản lý hạn mức tin nhắn tối đa 100 tin/phòng
+- Edge case ẩn trích dẫn slide đã bị xóa khỏi DB
 
 ---
 

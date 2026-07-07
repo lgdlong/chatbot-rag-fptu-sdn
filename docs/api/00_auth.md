@@ -472,3 +472,102 @@ Better Auth cung cấp plugin Admin tích hợp các API dành riêng cho quản
 *   **Request Body (JSON):**
     *   `userId` (string, bắt buộc)
     *   `newPassword` (string, bắt buộc)
+
+---
+
+## 📋 4. Phân Hệ Danh Sách Trắng Email Whitelist (Whitelist Endpoints)
+Quản lý danh sách các email được phép đăng ký và sử dụng hệ thống (chỉ dành cho vai trò `ADMIN`). Cấu hình trong `whitelist.controller.ts`.
+
+### 4.1 Lấy danh sách email whitelist (Phân trang & Tìm kiếm)
+`GET /api/whitelist`
+
+*   **Mô tả:** Lấy danh sách các email nằm trong danh sách trắng, hỗ trợ tìm kiếm và phân trang.
+*   **Xác thực:** ✅ Có yêu cầu (ADMIN Session Cookie).
+*   **Query Parameters:**
+    *   `page` (string, tùy chọn): Số trang cần lấy (mặc định `1`).
+    *   `limit` (string, tùy chọn): Số dòng trên mỗi trang (mặc định `10`).
+    *   `q` (string, tùy chọn): Từ khóa tìm kiếm email.
+*   **Ví dụ Response (200 OK):**
+    ```json
+    {
+      "emails": [
+        {
+          "id": "whitelist-uuid-1",
+          "email": "student-test@fpt.edu.vn",
+          "addedAt": "2026-05-27T17:30:00.000Z"
+        }
+      ],
+      "pagination": {
+        "page": 1,
+        "limit": 10,
+        "total": 1,
+        "totalPages": 1
+      }
+    }
+    ```
+
+### 4.2 Thêm một email mới vào whitelist
+`POST /api/whitelist`
+
+*   **Mô tả:** Thêm đơn lẻ một địa chỉ email vào danh sách trắng để cho phép đăng ký.
+*   **Xác thực:** ✅ Có yêu cầu (ADMIN Session Cookie).
+*   **Request Body (JSON):**
+    *   `email` (string, bắt buộc): Địa chỉ email cần thêm vào whitelist.
+*   **Ví dụ JSON Request Body:**
+    ```json
+    {
+      "email": "new-student@fpt.edu.vn"
+    }
+    ```
+*   **Ví dụ Response (201 Created):**
+    ```json
+    {
+      "success": true,
+      "email": {
+        "id": "whitelist-uuid-2",
+        "email": "new-student@fpt.edu.vn",
+        "addedAt": "2026-07-03T15:00:00.000Z"
+      }
+    }
+    ```
+
+### 4.3 Nhập danh sách nhiều email vào whitelist (Bulk Import)
+`POST /api/whitelist/import`
+
+*   **Mô tả:** Nhập hàng loạt địa chỉ email vào danh sách trắng cùng lúc, tự động loại bỏ các email không hợp lệ hoặc đã tồn tại.
+*   **Xác thực:** ✅ Có yêu cầu (ADMIN Session Cookie).
+*   **Request Body (JSON):**
+    *   `emails` (array of strings, bắt buộc): Mảng các địa chỉ email cần thêm.
+*   **Ví dụ JSON Request Body:**
+    ```json
+    {
+      "emails": [
+        "student-a@fpt.edu.vn",
+        "student-b@fpt.edu.vn",
+        "invalid-email-format"
+      ]
+    }
+    ```
+*   **Ví dụ Response (200 OK):**
+    ```json
+    {
+      "success": true,
+      "importedCount": 2,
+      "skippedCount": 1
+    }
+    ```
+
+### 4.4 Xóa email khỏi whitelist
+`DELETE /api/whitelist/{id}`
+
+*   **Mô tả:** Xóa một email ra khỏi danh sách whitelist theo ID bản ghi.
+*   **Xác thực:** ✅ Có yêu cầu (ADMIN Session Cookie).
+*   **Path Parameters:**
+    *   `id` (string, bắt buộc): ID duy nhất của bản ghi email whitelist cần xóa.
+*   **Ví dụ Response (200 OK):**
+    ```json
+    {
+      "success": true
+    }
+    ```
+

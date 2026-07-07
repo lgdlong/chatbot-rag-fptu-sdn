@@ -5,7 +5,12 @@ import { Prisma } from "@prisma/client";
 import { writeFile, mkdir, readdir, unlink } from "node:fs/promises";
 import { join } from "node:path";
 import { DocumentRepository } from "../documents/repositories/document.repository.js";
+import { applyIngestionCallback } from "../documents/services/ingestion-callback.service.js";
 import { ENV } from "../../config/env.js";
+import { AnythingLlmAdapter } from "../rag/services/anythingllm.adapter.js";
+import { DocumentStatus, IngestionJobStatus } from "@prisma/client";
+import { setTimeout as sleep } from "node:timers/promises";
+import { SyllabusSyncService } from "./services/syllabus-sync.service.js";
 
 export const syllabusRouter = new Hono();
 
@@ -16,6 +21,57 @@ async function removeFileIfExists(filePath: string) {
   } catch (error) {
     if ((error as NodeJS.ErrnoException).code !== "ENOENT") {
       throw error;
+    }
+  }
+}
+
+type IngestionCallbackBody = {
+  status: DocumentStatus;
+  jobId?: string | null;
+  error?: string | null;
+  payload?: Prisma.InputJsonValue;
+  sourceLocation?: string | null;
+};
+
+async function notifyIngestionCallback(documentId: string, body: IngestionCallbackBody) {
+  const callbackUrl = `${ENV.INTERNAL_API_URL}/api/internal/documents/${documentId}`;
+
+  for (let attempt = 0; attempt < 3; attempt += 1) {
+    try {
+      const response = await fetch(callbackUrl, {
+        method: "PATCH",
+        headers: {
+          Authorization: `Bearer ${ENV.INTERNAL_API_KEY}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          status: body.status,
+          jobId: body.jobId,
+          error: body.error,
+          payload: body.payload,
+          sourceLocation: body.sourceLocation,
+        }),
+      });
+
+      if (response.ok) {
+        return;
+      }
+
+      throw new Error(`Internal callback failed with status ${response.status}`);
+    } catch (error) {
+      if (attempt === 2) {
+        await applyIngestionCallback({
+          documentId,
+          jobId: body.jobId ?? null,
+          status: body.status,
+          error: body.error ?? null,
+          payload: body.payload,
+          sourceLocation: body.sourceLocation ?? null,
+        });
+        return;
+      }
+
+      await sleep(250 * 2 ** attempt);
     }
   }
 }
@@ -199,6 +255,15 @@ syllabusRouter.post("/", async (c) => {
         note,
         isApproved: false, // Mặc định Draft
         isActive: false     // Mặc định Draft
+      }
+    });
+
+    // Sync to AnythingLLM in background
+    Promise.resolve().then(async () => {
+      try {
+        await SyllabusSyncService.syncSyllabusToAnythingLlm(syllabus.id);
+      } catch (syncErr) {
+        console.error(`[Syllabus Sync Error] Failed to sync syllabus ${syllabus.id} to AnythingLLM:`, syncErr);
       }
     });
 
@@ -406,6 +471,15 @@ syllabusRouter.put("/:id", async (c) => {
       return updatedSyl;
     });
 
+    // Sync to AnythingLLM in background
+    Promise.resolve().then(async () => {
+      try {
+        await SyllabusSyncService.syncSyllabusToAnythingLlm(id);
+      } catch (syncErr) {
+        console.error(`[Syllabus Sync Error] Failed to sync syllabus ${id} to AnythingLLM:`, syncErr);
+      }
+    });
+
     return c.json({ success: true, syllabus: result });
   } catch (err: any) {
     return c.json({ error: err.message }, 500);
@@ -430,6 +504,15 @@ syllabusRouter.patch("/:id/approve", async (c) => {
     const syllabus = await prisma.syllabus.update({
       where: { id },
       data: { isApproved: true }
+    });
+
+    // Sync to AnythingLLM in background
+    Promise.resolve().then(async () => {
+      try {
+        await SyllabusSyncService.syncSyllabusToAnythingLlm(id);
+      } catch (syncErr) {
+        console.error(`[Syllabus Sync Error] Failed to sync syllabus ${id} to AnythingLLM:`, syncErr);
+      }
     });
 
     return c.json({ success: true, syllabus });
@@ -480,6 +563,15 @@ syllabusRouter.patch("/:id/activate", async (c) => {
       });
 
       return activatedSyl;
+    });
+
+    // Sync to AnythingLLM in background
+    Promise.resolve().then(async () => {
+      try {
+        await SyllabusSyncService.syncSyllabusToAnythingLlm(id);
+      } catch (syncErr) {
+        console.error(`[Syllabus Sync Error] Failed to sync syllabus ${id} to AnythingLLM:`, syncErr);
+      }
     });
 
     return c.json({ success: true, syllabus: result });
@@ -582,6 +674,7 @@ syllabusRouter.post("/:syllabusId/documents", async (c) => {
 
   const arrayBuffer = await file.arrayBuffer();
   const buffer = Buffer.from(arrayBuffer);
+  const workspaceSlug = `${syllabus.course.code.toLowerCase()}_${syllabusId}`;
 
   // Lưu file vào disk
   const fileName = `${Date.now()}_${file.name}`;
@@ -591,111 +684,87 @@ syllabusRouter.post("/:syllabusId/documents", async (c) => {
   const filePath = `/uploads/${fileName}`;
   await writeFile(`.${filePath}`, buffer);
 
-  const doc = await DocumentRepository.create({
-    name: file.name,
-    fileUrl: filePath,
-    fileType: "pdf",
-    status: "PENDING",
-    syllabus: { connect: { id: syllabusId } },
+  const doc = await prisma.$transaction(async (tx) => {
+    const createdDocument = await tx.document.create({
+      data: {
+        name: file.name,
+        fileUrl: filePath,
+        fileType: "pdf",
+        status: DocumentStatus.PENDING,
+        syllabus: { connect: { id: syllabusId } },
+      },
+    });
+
+    const workspace = await tx.ragWorkspace.upsert({
+      where: { syllabusId },
+      update: {
+        workspaceSlug,
+        workspaceName: workspaceSlug,
+      },
+      create: {
+        syllabus: { connect: { id: syllabusId } },
+        workspaceSlug,
+        workspaceName: workspaceSlug,
+      },
+    });
+
+    const job = await tx.ingestionJob.create({
+      data: {
+        document: { connect: { id: createdDocument.id } },
+        workspace: { connect: { id: workspace.id } },
+        status: IngestionJobStatus.PENDING,
+      },
+    });
+
+    await tx.document.update({
+      where: { id: createdDocument.id },
+      data: { status: DocumentStatus.PROCESSING },
+    });
+
+    await tx.ingestionJob.update({
+      where: { id: job.id },
+      data: { status: IngestionJobStatus.PROCESSING },
+    });
+
+    return { ...createdDocument, status: DocumentStatus.PROCESSING, ingestionJob: job };
   });
 
   // Start background non-blocking ingestion task calling AnythingLLM API
   Promise.resolve().then(async () => {
     try {
-      // Workspace slug isolated per syllabus version
-      const workspaceSlug = `${syllabus.course.code.toLowerCase()}_${syllabusId}`;
-
       // 1. Auto-create workspace in AnythingLLM (check if exists first)
       console.log(`[Ingestion] Ensuring AnythingLLM workspace exists for: "${workspaceSlug}"`);
-      try {
-        const listResponse = await fetch(`${ENV.ANYTHING_LLM_URL}/api/v1/workspaces`, {
-          headers: {
-            "Authorization": `Bearer ${ENV.ANYTHING_LLM_API_KEY}`
-          }
-        });
-        let exists = false;
-        if (listResponse.ok) {
-          const listResult = await listResponse.json();
-          const workspaces = listResult.workspaces || [];
-          exists = workspaces.some((ws: any) => ws.slug === workspaceSlug);
-        }
-
-        if (!exists) {
-          console.log(`[Ingestion] Workspace "${workspaceSlug}" not found. Creating workspace...`);
-          const createResponse = await fetch(`${ENV.ANYTHING_LLM_URL}/api/v1/workspace/new`, {
-            method: "POST",
-            headers: {
-              "Authorization": `Bearer ${ENV.ANYTHING_LLM_API_KEY}`,
-              "Content-Type": "application/json"
-            },
-            body: JSON.stringify({ name: workspaceSlug })
-          });
-          if (!createResponse.ok) {
-            const errorText = await createResponse.text().catch(() => "N/A");
-            console.warn(`[Ingestion] Workspace creation failed: ${createResponse.status}. Detail: ${errorText}`);
-          } else {
-            console.log(`[Ingestion] Successfully created AnythingLLM workspace "${workspaceSlug}"`);
-          }
-        } else {
-          console.log(`[Ingestion] Workspace "${workspaceSlug}" already exists. Skipping creation.`);
-        }
-      } catch (wsError) {
-        console.warn("[Ingestion] Failed to verify/create workspace in AnythingLLM:", wsError);
-      }
+      await AnythingLlmAdapter.ensureWorkspace(workspaceSlug);
 
       // 2. Upload document file to AnythingLLM
       console.log(`[Ingestion] Uploading file "${file.name}" to AnythingLLM...`);
-      const formData = new FormData();
-      const fileBlob = new Blob([buffer], { type: "application/pdf" });
-      formData.append("file", fileBlob, file.name);
-
-      const uploadResponse = await fetch(`${ENV.ANYTHING_LLM_URL}/api/v1/document/upload`, {
-        method: "POST",
-        headers: {
-          "Authorization": `Bearer ${ENV.ANYTHING_LLM_API_KEY}`
-        },
-        body: formData
-      });
-
-      if (!uploadResponse.ok) {
-        throw new Error(`AnythingLLM file upload failed with status ${uploadResponse.status}`);
-      }
-
-      const uploadResult = await uploadResponse.json();
-      const docLocation = uploadResult.documents?.[0]?.location;
-      if (!docLocation) {
-        throw new Error("AnythingLLM upload did not return a valid document location");
-      }
+      const docLocation = await AnythingLlmAdapter.uploadPdf(file.name, buffer);
 
       // 3. Embed document into workspace
       console.log(`[Ingestion] Embedding document into AnythingLLM workspace "${workspaceSlug}"...`);
-      const updateResponse = await fetch(`${ENV.ANYTHING_LLM_URL}/api/v1/workspace/${workspaceSlug}/update-embeddings`, {
-        method: "POST",
-        headers: {
-          "Authorization": `Bearer ${ENV.ANYTHING_LLM_API_KEY}`,
-          "Content-Type": "application/json"
+      await AnythingLlmAdapter.updateWorkspaceEmbeddings(workspaceSlug, { adds: [docLocation] });
+
+      // 4. Final status flip through internal callback contract
+      await notifyIngestionCallback(doc.id, {
+        jobId: doc.ingestionJob?.id,
+        status: DocumentStatus.COMPLETED,
+        payload: {
+          workspaceSlug,
+          sourceLocation: docLocation,
         },
-        body: JSON.stringify({
-          adds: [docLocation]
-        })
-      });
-
-      if (!updateResponse.ok) {
-        throw new Error(`AnythingLLM workspace update failed with status ${updateResponse.status}`);
-      }
-
-      // 4. Update database status to COMPLETED
-      await prisma.document.update({
-        where: { id: doc.id },
-        data: { status: "COMPLETED" }
+        sourceLocation: docLocation,
       });
       console.log(`[Ingestion] Document "${doc.name}" successfully embedded and marked COMPLETED!`);
     } catch (error) {
       console.error(`[Ingestion] Failed to ingest document "${doc.name}":`, error);
-      // Update database status to FAILED
-      await prisma.document.update({
-        where: { id: doc.id },
-        data: { status: "FAILED" }
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      await notifyIngestionCallback(doc.id, {
+        jobId: doc.ingestionJob?.id,
+        status: DocumentStatus.FAILED,
+        error: errorMessage,
+        payload: {
+          workspaceSlug,
+        },
       }).catch((dbErr) => {
         console.error("[Ingestion] Failed to mark document status as FAILED in DB:", dbErr);
       });
@@ -759,29 +828,11 @@ syllabusRouter.delete("/:syllabusId/documents/:documentId", async (c) => {
 
       // 1. Remove from workspace
       console.log(`[Deletion] Syncing Document Deletion: Removing "${anythingLLMLocation}" from AnythingLLM workspace "${workspaceSlug}"...`);
-      await fetch(`${ENV.ANYTHING_LLM_URL}/api/v1/workspace/${workspaceSlug}/update-embeddings`, {
-        method: "POST",
-        headers: {
-          "Authorization": `Bearer ${ENV.ANYTHING_LLM_API_KEY}`,
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          deletes: [anythingLLMLocation]
-        })
-      });
+      await AnythingLlmAdapter.updateWorkspaceEmbeddings(workspaceSlug, { deletes: [anythingLLMLocation] });
 
       // 2. Remove from system completely
       console.log(`[Deletion] Syncing Document Deletion: Purging "${anythingLLMLocation}" from AnythingLLM system...`);
-      await fetch(`${ENV.ANYTHING_LLM_URL}/api/v1/system/remove-documents`, {
-        method: "DELETE",
-        headers: {
-          "Authorization": `Bearer ${ENV.ANYTHING_LLM_API_KEY}`,
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          names: [anythingLLMLocation]
-        })
-      });
+      await AnythingLlmAdapter.purgeDocuments([anythingLLMLocation]);
     } catch (llmError) {
       console.error("[Deletion] Failed to sync document deletion with AnythingLLM:", llmError);
     }

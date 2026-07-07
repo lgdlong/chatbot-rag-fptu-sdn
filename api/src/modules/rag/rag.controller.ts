@@ -4,7 +4,7 @@ import { join } from "node:path";
 import { DocumentRepository } from "../documents/repositories/document.repository.js";
 import { auth } from "../auth/auth.js";
 import { prisma } from "../auth/services/db.service.js";
-import { ENV } from "../../config/env.js";
+import { AnythingLlmAdapter } from "./services/anythingllm.adapter.js";
 
 export const ragRouter = new Hono();
 
@@ -232,24 +232,17 @@ ragRouter.patch("/:courseId", async (c) => {
 
         try {
           console.log(`[Update] Syncing Course Code Change: Renaming AnythingLLM workspace "${oldSlug}" to slug "${newSlug}"...`);
-          const response = await fetch(`${ENV.ANYTHING_LLM_URL}/api/v1/workspace/${oldSlug}/update`, {
-            method: "POST",
-            headers: {
-              "Authorization": `Bearer ${ENV.ANYTHING_LLM_API_KEY}`,
-              "Content-Type": "application/json"
+          await AnythingLlmAdapter.renameWorkspace(oldSlug, newSlug, newName);
+          await prisma.ragWorkspace.updateMany({
+            where: {
+              syllabusId: syllabus.id,
             },
-            body: JSON.stringify({
-              name: newName,
-              slug: newSlug
-            })
+            data: {
+              workspaceSlug: newSlug,
+              workspaceName: newName,
+            },
           });
-
-          if (!response.ok) {
-            const errorBody = await response.text().catch(() => "N/A");
-            console.warn(`[Update] Failed to rename workspace ${oldSlug}: ${response.status} ${response.statusText}. Detail: ${errorBody}`);
-          } else {
-            console.log(`[Update] Successfully renamed AnythingLLM workspace to slug "${newSlug}"`);
-          }
+          console.log(`[Update] Successfully renamed AnythingLLM workspace to slug "${newSlug}"`);
         } catch (wsError) {
           console.error(`[Update] Failed to sync workspace renaming for syllabus ${syllabus.id}:`, wsError);
         }
@@ -318,11 +311,9 @@ ragRouter.delete("/:courseId", async (c) => {
       const workspaceSlug = `${course.code.toLowerCase()}_${syllabus.id}`;
       try {
         console.log(`[Deletion] Syncing Course Deletion: Purging AnythingLLM workspace "${workspaceSlug}"...`);
-        await fetch(`${ENV.ANYTHING_LLM_URL}/api/v1/workspace/${workspaceSlug}`, {
-          method: "DELETE",
-          headers: {
-            "Authorization": `Bearer ${ENV.ANYTHING_LLM_API_KEY}`
-          }
+        await AnythingLlmAdapter.deleteWorkspace(workspaceSlug);
+        await prisma.ragWorkspace.deleteMany({
+          where: { syllabusId: syllabus.id },
         });
       } catch (wsError) {
         console.error(`[Deletion] Failed to delete AnythingLLM workspace "${workspaceSlug}":`, wsError);
