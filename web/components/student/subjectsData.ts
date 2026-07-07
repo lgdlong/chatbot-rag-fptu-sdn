@@ -1,3 +1,5 @@
+import { ApiSyllabusSummary } from "@/lib/api";
+
 export interface Subject {
   code: string;
   name: string;
@@ -11,6 +13,31 @@ export interface Subject {
   color: string;
 }
 
+// Color palette for dynamic assignment
+const SUBJECT_COLORS = [
+  "#3b82f6", "#8b5cf6", "#10b981", "#f59e0b", "#ef4444",
+  "#06b6d4", "#ec4899", "#14b8a6", "#f97316", "#6366f1",
+];
+
+/**
+ * Convert API syllabus summary to frontend Subject shape.
+ */
+export function mapSyllabusToSubject(syllabus: ApiSyllabusSummary, index: number = 0): Subject {
+  return {
+    code: syllabus.course.code,
+    name: syllabus.course.name,
+    credits: syllabus.credits,
+    decision: syllabus.decisionNo || "",
+    isActive: syllabus.isActive,
+    isApproved: syllabus.isApproved,
+    syllabusId: String(syllabus.id),
+    syllabusName: syllabus.syllabusNameEnglish || syllabus.syllabusName,
+    department: "FPT University",
+    color: SUBJECT_COLORS[index % SUBJECT_COLORS.length],
+  };
+}
+
+// Keep static fallback for when API is unavailable
 export const ALL_SUBJECTS: Subject[] = [
   {
     code: "FER202",
@@ -25,18 +52,6 @@ export const ALL_SUBJECTS: Subject[] = [
     color: "#3b82f6",
   },
   {
-    code: "PRN232",
-    name: "Building Cross-Platform Back-End Application With .NET",
-    credits: 3,
-    decision: "202/QĐ-ĐHFPT dated 10/12/2025",
-    isActive: false,
-    isApproved: false,
-    syllabusId: "12581",
-    syllabusName: "Building Cross-Platform Back-End Application With .NET_Xây dựng ứng dụng Back-End với .NET",
-    department: "Software Engineering",
-    color: "#8b5cf6",
-  },
-  {
     code: "SDN302",
     name: "Server-Side development with NodeJS",
     credits: 3,
@@ -49,30 +64,6 @@ export const ALL_SUBJECTS: Subject[] = [
     color: "#10b981",
   },
   {
-    code: "PRN212",
-    name: "Basic Cross-Platform App Programming With .NET",
-    credits: 3,
-    decision: "321/QĐ-ĐHFPT dated 12/03/2025",
-    isActive: true,
-    isApproved: true,
-    syllabusId: "12583",
-    syllabusName: "Basic Cross-Platform App Programming With .NET_Lập trình ứng dụng đa nền tảng cơ bản với .NET",
-    department: "Software Engineering",
-    color: "#8b5cf6",
-  },
-  {
-    code: "SWE201c",
-    name: "Introduction to Software Engineering",
-    credits: 3,
-    decision: "155/QĐ-ĐHFPT dated 22/01/2025",
-    isActive: true,
-    isApproved: true,
-    syllabusId: "12584",
-    syllabusName: "Introduction to Software Engineering_Nhập môn Kỹ nghệ phần mềm",
-    department: "Software Engineering",
-    color: "#f59e0b",
-  },
-  {
     code: "SWD392",
     name: "Software Architecture and Design",
     credits: 3,
@@ -83,17 +74,5 @@ export const ALL_SUBJECTS: Subject[] = [
     syllabusName: "Software Architecture and Design_Thiết kế và Kiến trúc phần mềm",
     department: "Software Engineering",
     color: "#ef4444",
-  },
-  {
-    code: "MAD101",
-    name: "Discrete Mathematics",
-    credits: 3,
-    decision: "112/QĐ-ĐHFPT dated 14/01/2025",
-    isActive: true,
-    isApproved: true,
-    syllabusId: "12586",
-    syllabusName: "Discrete Mathematics_Toán học rời rạc",
-    department: "Basic Sciences",
-    color: "#10b981",
   },
 ];

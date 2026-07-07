@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
 import { Paper, Button, ActionIcon, Text, Group, Box } from "@mantine/core";
 import { IconMessageChatbot, IconX, IconHistory } from "@tabler/icons-react";
 
@@ -8,25 +8,29 @@ import { Message } from "./subcomponents/types";
 import { ChatHistorySidebar } from "./subcomponents/ChatHistorySidebar";
 import { ChatMessageList } from "./subcomponents/ChatMessageList";
 import { ChatInputArea } from "./subcomponents/ChatInputArea";
+import * as api from "@/lib/api";
 
 interface ChatbotWidgetProps {
   subjectCode: string;
+  courseId?: string | null;
 }
 
-export function ChatbotWidget({ subjectCode }: ChatbotWidgetProps) {
+export function ChatbotWidget({ subjectCode, courseId }: ChatbotWidgetProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [isHistoryOpen, setIsHistoryOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
     {
       id: "1",
       role: "bot",
-      content: `Xin chào! Tôi là trợ lý của môn học ${subjectCode}. Bạn muốn tìm hiểu gì về đề chương (Syllabus) hay tài liệu của môn học này?`,
+      content: `Xin chào! Tôi là trợ lý AI của môn học ${subjectCode}. Bạn muốn tìm hiểu gì về đề cương (Syllabus) hay tài liệu của môn học này?`,
       timestamp: new Date(),
     },
   ]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [sessionId, setSessionId] = useState<string | null>(null);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
+  const abortRef = useRef<AbortController | null>(null);
 
   const scrollToBottom = () => {
     if (scrollAreaRef.current) {
@@ -41,7 +45,30 @@ export function ChatbotWidget({ subjectCode }: ChatbotWidgetProps) {
     }
   }, [messages, isOpen]);
 
-  const handleSend = () => {
+  // Create a chat session when the widget opens (if not already created)
+  const ensureSession = useCallback(async () => {
+    if (sessionId) return sessionId;
+
+    try {
+      const options: Parameters<typeof api.createChatSession>[0] = {};
+
+      if (courseId) {
+        options.scopeMode = "SELECTED_COURSES";
+        options.courseIds = [courseId];
+      } else {
+        options.scopeMode = "ALL_COURSES";
+      }
+
+      const { session } = await api.createChatSession(options);
+      setSessionId(session.id);
+      return session.id;
+    } catch (err) {
+      console.error("Failed to create chat session:", err);
+      return null;
+    }
+  }, [courseId, sessionId]);
+
+  const handleSend = async () => {
     if (!input.trim() || isLoading || input.length > 5000) return;
 
     const userMsg: Message = {
@@ -55,43 +82,99 @@ export function ChatbotWidget({ subjectCode }: ChatbotWidgetProps) {
     setInput("");
     setIsLoading(true);
 
-    // Mock API answer based on subject keywords
-    setTimeout(() => {
-      const contentLower = userMsg.content.toLowerCase();
-      const isAssessment = contentLower.includes("thi") || contentLower.includes("điểm") || contentLower.includes("đánh giá");
-      const isCredits = contentLower.includes("tín chỉ") || contentLower.includes("credit");
-
-      let reply = "";
-      let citation = undefined;
-
-      if (isAssessment) {
-        reply = `Trong môn học ${subjectCode}, cấu trúc đánh giá (Assessment Scheme) bao gồm các thành phần quan trọng. Thông thường Final Exam chiếm 30% tổng điểm và yêu cầu điểm số trung bình tối thiểu để qua môn là 5.0.`;
-        citation = {
-          source: "Cơ cấu đánh giá (Assessment Scheme)",
-          excerpt: "Final Exam: 30%, Passing mark: 5.0"
-        };
-      } else if (isCredits) {
-        reply = `Môn học ${subjectCode} có thời lượng phân bổ là 3 tín chỉ (Credits), tương ứng với khoảng 30 session học trên lớp kết hợp tự học.`;
-        citation = {
-          source: "Thông tin chung (General Information)",
-          excerpt: "Credits: 3, Time Allocation: 30 sessions"
-        };
-      } else {
-        reply = `Tôi đã nhận được câu hỏi về ${subjectCode}. Dựa trên tài liệu Syllabus, nội dung này tập trung vào các kiến thức cốt lõi và chuẩn đầu ra (CLOs) của môn học. Bạn có muốn xem cụ thể về chuẩn đầu ra CLO hay kế hoạch giảng dạy từng session không?`;
-      }
-
+    // Ensure we have a session
+    const sid = await ensureSession();
+    if (!sid) {
+      // Fallback: mock response if session creation fails
       const botMsg: Message = {
         id: (Date.now() + 1).toString(),
         role: "bot",
-        content: reply,
-        citation,
+        content: "⚠️ Không thể kết nối đến server RAG. Vui lòng kiểm tra backend đã chạy chưa.",
         timestamp: new Date(),
       };
-
       setMessages((prev) => [...prev, botMsg]);
       setIsLoading(false);
-    }, 1000);
+      return;
+    }
+
+    // Add an empty bot message that we'll stream into
+    const botMsgId = (Date.now() + 1).toString();
+    const botMsg: Message = {
+      id: botMsgId,
+      role: "bot",
+      content: "",
+      timestamp: new Date(),
+    };
+    setMessages((prev) => [...prev, botMsg]);
+
+    // Stream response via SSE
+    abortRef.current = api.sendChatMessageStream(sid, userMsg.content, {
+      onChunk: (chunk) => {
+        setMessages((prev) =>
+          prev.map((m) =>
+            m.id === botMsgId ? { ...m, content: m.content + chunk } : m
+          )
+        );
+      },
+      onCitations: (citations) => {
+        if (citations && citations.length > 0) {
+          // Append citation info to the bot message
+          const citationText = (citations as Array<{ source?: string; excerpt?: string }>)
+            .map((c, i) => `[${i + 1}] ${c.source || "Nguồn tài liệu"}`)
+            .join("\n");
+
+          setMessages((prev) =>
+            prev.map((m) =>
+              m.id === botMsgId
+                ? {
+                    ...m,
+                    citation: {
+                      source: "Trích dẫn từ tài liệu",
+                      excerpt: citationText,
+                    },
+                  }
+                : m
+            )
+          );
+        }
+      },
+      onError: (error) => {
+        setMessages((prev) =>
+          prev.map((m) =>
+            m.id === botMsgId
+              ? {
+                  ...m,
+                  content: m.content || `⚠️ Lỗi: ${error}`,
+                }
+              : m
+          )
+        );
+      },
+      onDone: () => {
+        setIsLoading(false);
+      },
+    });
   };
+
+  // Create a new session
+  const handleNewChat = useCallback(() => {
+    // Cancel any in-flight request
+    if (abortRef.current) {
+      abortRef.current.abort();
+      abortRef.current = null;
+    }
+    setSessionId(null);
+    setMessages([
+      {
+        id: Date.now().toString(),
+        role: "bot",
+        content: `Cuộc trò chuyện mới về ${subjectCode}. Bạn cần hỗ trợ gì?`,
+        timestamp: new Date(),
+      },
+    ]);
+    setIsHistoryOpen(false);
+    setIsLoading(false);
+  }, [subjectCode]);
 
   return (
     <>
@@ -173,6 +256,8 @@ export function ChatbotWidget({ subjectCode }: ChatbotWidgetProps) {
               setIsHistoryOpen={setIsHistoryOpen}
               subjectCode={subjectCode}
               setMessages={setMessages}
+              onNewChat={handleNewChat}
+              setSessionId={setSessionId}
             />
 
             {/* Chat Messages Log */}

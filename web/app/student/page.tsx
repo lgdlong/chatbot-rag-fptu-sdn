@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   Title,
   Text,
@@ -14,44 +14,77 @@ import {
   Container,
   ThemeIcon,
   Skeleton,
+  Alert,
 } from "@mantine/core";
 import {
   IconSearch,
   IconAlertCircle,
   IconSparkles,
+  IconWifiOff,
 } from "@tabler/icons-react";
 
-import { ALL_SUBJECTS } from "@/components/student/subjectsData";
+import { Subject, ALL_SUBJECTS, mapSyllabusToSubject } from "@/components/student/subjectsData";
 import { SubjectCard } from "@/components/student/SubjectCard";
 import { SearchResultRow } from "@/components/student/SearchResultRow";
-
-// Featured quick-access subjects
-const FEATURED_SUBJECTS = ["FER202", "SDN302", "SWD392"];
+import * as api from "@/lib/api";
 
 export default function StudentDashboard() {
   const [searchTerm, setSearchTerm] = useState("");
-  const [results, setResults] = useState<typeof ALL_SUBJECTS>([]);
+  const [results, setResults] = useState<Subject[]>([]);
   const [hasSearched, setHasSearched] = useState(false);
   const [isSearching, setIsSearching] = useState(false);
 
-  const featuredSubjects = ALL_SUBJECTS.filter((s) =>
-    FEATURED_SUBJECTS.includes(s.code)
-  );
+  // API-loaded subjects
+  const [allSubjects, setAllSubjects] = useState<Subject[]>([]);
+  const [isLoadingSubjects, setIsLoadingSubjects] = useState(true);
+  const [apiError, setApiError] = useState<string | null>(null);
 
-  const handleSearch = () => {
-    if (searchTerm.trim().length >= 2) {
-      setIsSearching(true);
-      // Simulate loading effect
-      setTimeout(() => {
-        setHasSearched(true);
-        const filtered = ALL_SUBJECTS.filter(
-          (s) =>
-            s.code.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            s.name.toLowerCase().includes(searchTerm.toLowerCase())
-        );
-        setResults(filtered);
-        setIsSearching(false);
-      }, 400);
+  // Load all syllabuses from API on mount
+  const loadSubjects = useCallback(async () => {
+    setIsLoadingSubjects(true);
+    setApiError(null);
+    try {
+      const { syllabuses } = await api.searchSyllabus();
+      const mapped = syllabuses.map((s, i) => mapSyllabusToSubject(s, i));
+      setAllSubjects(mapped);
+    } catch (err) {
+      console.error("Failed to load subjects from API:", err);
+      setApiError("Không thể kết nối đến server. Đang hiển thị dữ liệu mẫu.");
+      setAllSubjects(ALL_SUBJECTS); // fallback
+    } finally {
+      setIsLoadingSubjects(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    loadSubjects();
+  }, [loadSubjects]);
+
+  // Featured: first 3 active+approved subjects
+  const featuredSubjects = allSubjects
+    .filter((s) => s.isActive && s.isApproved)
+    .slice(0, 3);
+
+  const handleSearch = async () => {
+    if (searchTerm.trim().length < 2) return;
+
+    setIsSearching(true);
+    setHasSearched(true);
+
+    try {
+      const { syllabuses } = await api.searchSyllabus(searchTerm.trim());
+      const mapped = syllabuses.map((s, i) => mapSyllabusToSubject(s, i));
+      setResults(mapped);
+    } catch {
+      // Fallback to local filter if API fails
+      const filtered = allSubjects.filter(
+        (s) =>
+          s.code.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          s.name.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+      setResults(filtered);
+    } finally {
+      setIsSearching(false);
     }
   };
 
@@ -211,6 +244,21 @@ export default function StudentDashboard() {
 
       {/* ─── Content Area ─── */}
       <Container size="xl" py="xl">
+        {/* API Error Banner */}
+        {apiError && (
+          <Alert
+            icon={<IconWifiOff size={16} />}
+            title="Chế độ Offline"
+            color="yellow"
+            radius="md"
+            mb="lg"
+            withCloseButton
+            onClose={() => setApiError(null)}
+          >
+            {apiError}
+          </Alert>
+        )}
+
         {/* ─── Search Results ─── */}
         {hasSearched && (
           <Stack gap="md" mb="xl">
@@ -273,7 +321,7 @@ export default function StudentDashboard() {
             ) : (
               <Stack gap="xs">
                 {results.map((subject) => (
-                  <SearchResultRow key={subject.code} subject={subject} />
+                  <SearchResultRow key={`${subject.code}-${subject.syllabusId}`} subject={subject} />
                 ))}
               </Stack>
             )}
@@ -284,38 +332,40 @@ export default function StudentDashboard() {
         {!hasSearched && (
           <Stack gap="xl">
             {/* Featured */}
-            <Stack gap="md">
-              <Group justify="space-between" align="center">
-                <Box>
-                  <Text size="xs" fw={700} c="dimmed" style={{ textTransform: "uppercase", letterSpacing: "1px" }}>
-                    Môn học nổi bật
-                  </Text>
-                  <Text fw={800} style={{ color: "#1A3A5C", fontSize: "18px" }}>
-                    Truy cập nhanh Syllabus
-                  </Text>
-                </Box>
-                <Badge
-                  size="sm"
-                  radius="xl"
-                  style={{ background: "#F37021", color: "white" }}
-                  leftSection={<IconSparkles size={10} />}
-                >
-                  Phổ biến
-                </Badge>
-              </Group>
+            {featuredSubjects.length > 0 && (
+              <Stack gap="md">
+                <Group justify="space-between" align="center">
+                  <Box>
+                    <Text size="xs" fw={700} c="dimmed" style={{ textTransform: "uppercase", letterSpacing: "1px" }}>
+                      Môn học nổi bật
+                    </Text>
+                    <Text fw={800} style={{ color: "#1A3A5C", fontSize: "18px" }}>
+                      Truy cập nhanh Syllabus
+                    </Text>
+                  </Box>
+                  <Badge
+                    size="sm"
+                    radius="xl"
+                    style={{ background: "#F37021", color: "white" }}
+                    leftSection={<IconSparkles size={10} />}
+                  >
+                    Phổ biến
+                  </Badge>
+                </Group>
 
-              <Box
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))",
-                  gap: "16px",
-                }}
-              >
-                {featuredSubjects.map((subject) => (
-                  <SubjectCard key={subject.code} subject={subject} />
-                ))}
-              </Box>
-            </Stack>
+                <Box
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))",
+                    gap: "16px",
+                  }}
+                >
+                  {featuredSubjects.map((subject) => (
+                    <SubjectCard key={`${subject.code}-${subject.syllabusId}`} subject={subject} />
+                  ))}
+                </Box>
+              </Stack>
+            )}
 
             {/* All subjects grid */}
             <Stack gap="md">
@@ -325,16 +375,24 @@ export default function StudentDashboard() {
                     Tất cả môn học
                   </Text>
                   <Text fw={800} style={{ color: "#1A3A5C", fontSize: "18px" }}>
-                    Danh sách Syllabus ({ALL_SUBJECTS.length} môn)
+                    Danh sách Syllabus ({allSubjects.length} môn)
                   </Text>
                 </Box>
               </Group>
 
-              <Stack gap="xs">
-                {ALL_SUBJECTS.map((subject) => (
-                  <SearchResultRow key={subject.code} subject={subject} />
-                ))}
-              </Stack>
+              {isLoadingSubjects ? (
+                <Stack gap="xs">
+                  {[1, 2, 3, 4, 5].map((i) => (
+                    <Skeleton key={i} height={70} radius="md" />
+                  ))}
+                </Stack>
+              ) : (
+                <Stack gap="xs">
+                  {allSubjects.map((subject) => (
+                    <SearchResultRow key={`${subject.code}-${subject.syllabusId}`} subject={subject} />
+                  ))}
+                </Stack>
+              )}
             </Stack>
           </Stack>
         )}

@@ -11,10 +11,13 @@ interface ProtectedRouteProps {
 }
 
 export function ProtectedRoute({ children, allowedRoles }: ProtectedRouteProps) {
-  const { user, isAuthenticated } = useAuth();
+  const { user, isAuthenticated, isLoading } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
+    // Don't redirect while session check is still loading
+    if (isLoading) return;
+
     if (!isAuthenticated) {
       router.push("/login");
       return;
@@ -31,9 +34,10 @@ export function ProtectedRoute({ children, allowedRoles }: ProtectedRouteProps) 
         router.push("/login");
       }
     }
-  }, [user, isAuthenticated, allowedRoles, router]);
+  }, [user, isAuthenticated, isLoading, allowedRoles, router]);
 
-  if (!isAuthenticated || !user || !allowedRoles.includes(user.role)) {
+  // Show loader while checking session or while auth is not ready
+  if (isLoading || !isAuthenticated || !user || !allowedRoles.includes(user.role)) {
     return (
       <Center style={{ width: "100vw", height: "100vh" }}>
         <Loader color="#1A3A5C" size="xl" type="bars" />
