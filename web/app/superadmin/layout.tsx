@@ -27,8 +27,8 @@ export default function SuperAdminLayout({ children }: { children: React.ReactNo
   const router = useRouter();
   const { user, logout } = useAuth();
 
-  const handleLogout = () => {
-    logout();
+  const handleLogout = async () => {
+    await logout();
     router.push("/login");
   };
 
@@ -48,7 +48,7 @@ export default function SuperAdminLayout({ children }: { children: React.ReactNo
   const userInitial = user?.email?.charAt(0).toUpperCase() || "A";
 
   return (
-    <ProtectedRoute allowedRoles={["superadmin"]}>
+    <ProtectedRoute allowedRoles={["ADMIN"]}>
       <AppShell
         navbar={{ width: 260, breakpoint: "sm" }}
         styles={{
