@@ -234,6 +234,23 @@ export default function LoginPage() {
             >
               ĐĂNG NHẬP BẰNG GOOGLE
             </Button>
+
+            <Box mt="md" style={{ textAlign: "center" }}>
+              <Text size="xs" fw={700} style={{ color: "#9CA3AF" }}>
+                Bạn là giảng viên?{" "}
+                <Button
+                  component={Link}
+                  href="/register-teacher"
+                  variant="subtle"
+                  p={0}
+                  h="auto"
+                  fw={700}
+                  style={{ color: "#1A3A5C", textDecoration: "underline" }}
+                >
+                  Đăng ký tại đây
+                </Button>
+              </Text>
+            </Box>
           </Stack>
 
           <Box mt="xl" style={{ textAlign: "center" }}>

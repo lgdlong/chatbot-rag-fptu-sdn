@@ -18,6 +18,7 @@ import {
   IconUserCheck,
   IconLogout,
   IconCrown,
+  IconUserCog,
 } from "@tabler/icons-react";
 import { useAuth } from "../contexts/AuthContext";
 import { ProtectedRoute } from "../../components/ProtectedRoute";
@@ -36,6 +37,7 @@ export default function SuperAdminLayout({ children }: { children: React.ReactNo
     { name: "Dashboard", href: "/superadmin", icon: IconLayoutDashboard },
     { name: "Admin Accounts", href: "/superadmin/admins", icon: IconShield },
     { name: "Student Whitelist", href: "/superadmin/whitelist", icon: IconUserCheck },
+    { name: "Lecturer Requests", href: "/superadmin/lecturer-requests", icon: IconUserCog },
   ];
 
   const isActive = (href: string) => {

@@ -34,14 +34,19 @@ export async function apiFetch<T>(
   path: string,
   init?: RequestInit,
 ): Promise<T> {
-  const res = await fetch(`${apiBaseUrl}${path}`, {
-    credentials: "include",
-    headers: {
-      "Content-Type": "application/json",
-      ...init?.headers,
-    },
-    ...init,
-  });
+  let res: Response;
+  try {
+    res = await fetch(`${apiBaseUrl}${path}`, {
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+        ...init?.headers,
+      },
+      ...init,
+    });
+  } catch {
+    throw new ApiError("Không thể kết nối tới server. Vui lòng kiểm tra mạng.", 0);
+  }
 
   const body = await res.json().catch(() => ({}));
 
@@ -54,4 +59,42 @@ export async function apiFetch<T>(
   }
 
   return body as T;
+}
+
+// ─── Lecturer Request APIs ───
+
+export interface LecturerRequest {
+  id: string;
+  name: string;
+  email: string;
+  reason: string;
+  status: "PENDING" | "APPROVED" | "REJECTED";
+  reviewedById: string | null;
+  reviewedAt: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface LecturerRequestListResponse {
+  requests: LecturerRequest[];
+}
+
+export interface ApproveRequestResponse {
+  success: boolean;
+  message: string;
+  credentials: {
+    email: string;
+    temporaryPassword: string;
+  };
+}
+
+export interface SubmitLecturerRequestPayload {
+  name: string;
+  email: string;
+  reason: string;
+}
+
+export interface SubmitLecturerRequestResponse {
+  success: boolean;
+  request: LecturerRequest;
 }
