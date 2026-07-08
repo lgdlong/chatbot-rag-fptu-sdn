@@ -13,34 +13,40 @@ import {
   Stack,
   Group,
   ThemeIcon,
-  Modal,
-  Divider,
   Box,
   Alert,
 } from "@mantine/core";
 import {
-  IconShieldCheck,
   IconLock,
   IconMail,
   IconArrowLeft,
-  IconUserCheck,
-  IconUserCog,
   IconBrandGoogle,
   IconAlertCircle,
 } from "@tabler/icons-react";
-import { useAuth, UserRole } from "../contexts/AuthContext";
+import { useAuth, portalPathForRole, UserRole } from "../contexts/AuthContext";
+import { authClient } from "../../lib/auth-client";
+
+function toUserRole(role: string | null | undefined): UserRole {
+  if (role === "ADMIN" || role === "LECTURER" || role === "STUDENT") {
+    return role;
+  }
+  return "STUDENT";
+}
 
 export default function LoginPage() {
   const router = useRouter();
-  const { login, loginAsRole, loginWithGoogle } = useAuth();
-  
+  const { login } = useAuth();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [selectedRole, setSelectedRole] = useState<UserRole>("student");
-  
   const [isLoading, setIsLoading] = useState(false);
-  const [showRoleModal, setShowRoleModal] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
+
+  const redirectAfterAuth = async () => {
+    const session = await authClient.getSession();
+    const role = toUserRole(session.data?.user?.role);
+    router.push(portalPathForRole(role));
+  };
 
   const handleCredentialsLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -51,64 +57,31 @@ export default function LoginPage() {
     setErrorMsg("");
     setIsLoading(true);
 
-    // Auto-detect role based on email context for demo convenience
-    let role: UserRole = "student";
-    if (email.startsWith("admin")) {
-      role = "superadmin";
-    } else if (email.startsWith("lecturer")) {
-      role = "teacher";
-    }
-
     try {
-      const success = await login(email, password, role);
-      if (success) {
-        if (role === "superadmin") router.push("/superadmin");
-        else if (role === "teacher") router.push("/teacher");
-        else router.push("/student");
+      const result = await login(email, password);
+      if (result.success) {
+        await redirectAfterAuth();
       } else {
-        setErrorMsg("Email hoặc mật khẩu không chính xác hoặc sai định dạng @fpt.edu.vn.");
+        setErrorMsg(result.error ?? "Email hoặc mật khẩu không chính xác.");
       }
-    } catch (err) {
+    } catch {
       setErrorMsg("Đã xảy ra lỗi đăng nhập. Vui lòng thử lại.");
     } finally {
       setIsLoading(false);
     }
   };
 
-  const handleDemoLogin = async (role: UserRole) => {
+  const handleGoogleLogin = async () => {
     setIsLoading(true);
     setErrorMsg("");
     try {
-      const success = await loginAsRole(role);
-      if (success) {
-        if (role === "superadmin") router.push("/superadmin");
-        else if (role === "teacher") router.push("/teacher");
-        else router.push("/student");
-      }
-    } catch (err) {
-      setErrorMsg("Đã xảy ra lỗi. Vui lòng thử lại.");
-    } finally {
+      await authClient.signIn.social({
+        provider: "google",
+        callbackURL: `${window.location.origin}/login`,
+      });
+    } catch {
+      setErrorMsg("Đã xảy ra lỗi khi đăng nhập Google.");
       setIsLoading(false);
-      setShowRoleModal(false);
-    }
-  };
-
-  const handleGoogleLogin = async (role: UserRole) => {
-    setIsLoading(true);
-    setErrorMsg("");
-    try {
-      // Demo login using a default email
-      const demoEmail = role === "teacher" ? "lecturer1@fpt.edu.vn" : "student1@fpt.edu.vn";
-      const success = await loginWithGoogle(demoEmail, role);
-      if (success) {
-        if (role === "teacher") router.push("/teacher");
-        else router.push("/student");
-      }
-    } catch (err) {
-      setErrorMsg("Đã xảy ra lỗi. Vui lòng thử lại.");
-    } finally {
-      setIsLoading(false);
-      setShowRoleModal(false);
     }
   };
 
@@ -126,7 +99,6 @@ export default function LoginPage() {
         overflow: "hidden",
       }}
     >
-      {/* Decorative background elements */}
       <Box
         style={{
           position: "absolute",
@@ -153,7 +125,6 @@ export default function LoginPage() {
       />
 
       <Box style={{ width: "100%", maxWidth: "440px", zIndex: 10 }}>
-        {/* Quay lại link */}
         <Group mb="lg">
           <Button
             component={Link}
@@ -203,7 +174,7 @@ export default function LoginPage() {
                 Đăng nhập hệ thống
               </Title>
               <Text size="xs" fw={700} c="dimmed" style={{ textAlign: "center", textTransform: "uppercase", letterSpacing: "0.5px", marginTop: "4px" }}>
-                Nhập tài khoản FPT hoặc chọn đăng nhập nhanh
+                Tài khoản @fpt.edu.vn
               </Text>
             </div>
 
@@ -249,10 +220,8 @@ export default function LoginPage() {
               </Stack>
             </form>
 
-            <Divider label="Hoặc chọn phương thức khác" labelPosition="center" />
-
             <Button
-              onClick={() => setShowRoleModal(true)}
+              onClick={handleGoogleLogin}
               variant="outline"
               disabled={isLoading}
               fullWidth
@@ -260,33 +229,10 @@ export default function LoginPage() {
               radius={0}
               color="gray"
               leftSection={<IconBrandGoogle size={20} color="#EA4335" />}
-              style={{
-                borderColor: "#E2E8F0",
-                transition: "all 0.2s ease",
-                fontSize: "12px",
-              }}
+              style={{ borderColor: "#E2E8F0", fontSize: "12px" }}
               fw={700}
             >
               ĐĂNG NHẬP BẰNG GOOGLE
-            </Button>
-
-            <Button
-              onClick={() => handleDemoLogin("superadmin")}
-              variant="light"
-              disabled={isLoading}
-              fullWidth
-              size="md"
-              radius={0}
-              color="blue"
-              leftSection={<IconShieldCheck size={20} />}
-              style={{
-                backgroundColor: "#F1F5F9",
-                color: "#1A3A5C",
-                fontSize: "12px",
-              }}
-              fw={700}
-            >
-              VÀO THẲNG ADMIN
             </Button>
           </Stack>
 
@@ -297,71 +243,6 @@ export default function LoginPage() {
           </Box>
         </Card>
       </Box>
-
-      {/* Role Selection Modal */}
-      <Modal
-        opened={showRoleModal}
-        onClose={() => setShowRoleModal(false)}
-        title="Xác nhận vai trò truy cập"
-        centered
-        radius={0}
-        styles={{
-          title: { fontWeight: 900, color: "#1A3A5C", textTransform: "uppercase", fontSize: "16px" },
-          header: { borderBottom: "1px solid #E2E8F0", paddingBottom: "12px" },
-        }}
-      >
-        <Stack gap="md" py="md">
-          <Text size="sm" c="dimmed" style={{ textAlign: "center" }}>
-            Vui lòng chọn vai trò để tiếp tục đăng nhập Google Portal (Demo)
-          </Text>
-
-          <Group grow gap="md">
-            <Button
-              variant="outline"
-              radius={0}
-              size="xl"
-              style={{
-                height: "140px",
-                display: "flex",
-                flexDirection: "column",
-                borderColor: "#E2E8F0",
-              }}
-              color="orange"
-              onClick={() => handleGoogleLogin("teacher")}
-            >
-              <Stack align="center" gap="xs">
-                <ThemeIcon size={48} radius={0} color="orange.1">
-                  <IconUserCog size={28} color="#F37021" />
-                </ThemeIcon>
-                <Text fw={800} size="sm" style={{ color: "#1A3A5C" }}>GIẢNG VIÊN</Text>
-                <Text size="10px" c="dimmed">Teacher Portal</Text>
-              </Stack>
-            </Button>
-
-            <Button
-              variant="outline"
-              radius={0}
-              size="xl"
-              style={{
-                height: "140px",
-                display: "flex",
-                flexDirection: "column",
-                borderColor: "#E2E8F0",
-              }}
-              color="blue"
-              onClick={() => handleGoogleLogin("student")}
-            >
-              <Stack align="center" gap="xs">
-                <ThemeIcon size={48} radius={0} color="blue.1">
-                  <IconUserCheck size={28} color="#1A3A5C" />
-                </ThemeIcon>
-                <Text fw={800} size="sm" style={{ color: "#1A3A5C" }}>SINH VIÊN</Text>
-                <Text size="10px" c="dimmed">Student Portal</Text>
-              </Stack>
-            </Button>
-          </Group>
-        </Stack>
-      </Modal>
     </Box>
   );
 }

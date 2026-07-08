@@ -22,8 +22,8 @@ export default function StudentLayout({ children }: { children: React.ReactNode 
   const { user, logout } = useAuth();
   const router = useRouter();
 
-  const handleLogout = () => {
-    logout();
+  const handleLogout = async () => {
+    await logout();
     router.push("/login");
   };
 
@@ -31,7 +31,7 @@ export default function StudentLayout({ children }: { children: React.ReactNode 
   const userName = user?.email?.split("@")[0] || "student";
 
   return (
-    <ProtectedRoute allowedRoles={["student"]}>
+    <ProtectedRoute allowedRoles={["STUDENT"]}>
       <AppShell
         header={{ height: 64 }}
         styles={{

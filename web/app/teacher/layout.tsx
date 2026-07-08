@@ -28,8 +28,8 @@ export default function TeacherLayout({ children }: { children: React.ReactNode 
   const router = useRouter();
   const { user, logout } = useAuth();
 
-  const handleLogout = () => {
-    logout();
+  const handleLogout = async () => {
+    await logout();
     router.push("/login");
   };
 
@@ -50,7 +50,7 @@ export default function TeacherLayout({ children }: { children: React.ReactNode 
   const userInitial = user?.email?.charAt(0).toUpperCase() || "T";
 
   return (
-    <ProtectedRoute allowedRoles={["teacher"]}>
+    <ProtectedRoute allowedRoles={["LECTURER"]}>
       <AppShell
         navbar={{ width: 260, breakpoint: "sm" }}
         styles={{
