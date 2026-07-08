@@ -54,12 +54,9 @@ export default function LoginPage() {
     setIsLoading(true);
 
     try {
-      const success = await login(email, password);
-      if (success) {
-        // Auto-detect role based on email for routing
-        if (email.startsWith("admin")) router.push("/superadmin");
-        else if (email.startsWith("lecturer")) router.push("/teacher");
-        else router.push("/student");
+      const role = await login(email, password);
+      if (role) {
+        navigateByRole(role);
       } else {
         setErrorMsg("Email hoặc mật khẩu không chính xác. Vui lòng thử lại.");
       }
@@ -225,6 +222,19 @@ export default function LoginPage() {
             </form>
 
             <Divider label="Đăng nhập nhanh (Dev Mode)" labelPosition="center" />
+
+            <Button
+              component={Link}
+              href="/register-teacher"
+              variant="subtle"
+              color="#1A3A5C"
+              radius={0}
+              fw={700}
+              fullWidth
+              size="sm"
+            >
+              Đăng ký làm giảng viên
+            </Button>
 
             <Group grow gap="xs">
               <Button

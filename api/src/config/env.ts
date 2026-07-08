@@ -29,6 +29,8 @@ try {
 // Export parsed env variables for usage (with defaults)
 export const ENV = {
   PORT: process.env.PORT ? parseInt(process.env.PORT, 10) : 8000,
+  NODE_ENV: process.env.NODE_ENV || "development",
+  ALLOW_DEV_LOGIN: process.env.ALLOW_DEV_LOGIN === "true",
   DATABASE_URL: process.env.DATABASE_URL || "",
   BETTER_AUTH_SECRET: process.env.BETTER_AUTH_SECRET || "",
   BETTER_AUTH_URL: process.env.BETTER_AUTH_URL || "http://localhost:8000",

@@ -25,14 +25,19 @@ async function fetchApi<T>(
   options: RequestInit = {}
 ): Promise<T> {
   const url = `${API_BASE_URL}${path}`;
-  const res = await fetch(url, {
-    ...options,
-    credentials: "include",
-    headers: {
-      "Content-Type": "application/json",
-      ...options.headers,
-    },
-  });
+  let res: Response;
+  try {
+    res = await fetch(url, {
+      ...options,
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+        ...options.headers,
+      },
+    });
+  } catch {
+    throw new ApiError("Không thể kết nối tới server. Vui lòng kiểm tra mạng.", 0);
+  }
 
   if (!res.ok) {
     let errorMessage = `API Error: ${res.status}`;
@@ -369,4 +374,108 @@ export function sendChatMessageStream(
     });
 
   return controller;
+}
+
+// ─── Whitelist APIs ───
+
+export interface ApiWhitelistEntry {
+  id: string;
+  email: string;
+  addedAt: string;
+}
+
+export interface ApiWhitelistListResult {
+  emails: ApiWhitelistEntry[];
+  pagination: { page: number; limit: number; total: number; totalPages: number };
+}
+
+export async function getWhitelist(params: {
+  page?: number;
+  limit?: number;
+  q?: string;
+}): Promise<ApiWhitelistListResult> {
+  const query = new URLSearchParams();
+  if (params.page) query.set("page", String(params.page));
+  if (params.limit) query.set("limit", String(params.limit));
+  if (params.q) query.set("q", params.q);
+  return fetchApi(`/api/whitelist?${query.toString()}`);
+}
+
+export async function addWhitelistEmail(
+  email: string
+): Promise<{ success: boolean; email: ApiWhitelistEntry }> {
+  return fetchApi("/api/whitelist", {
+    method: "POST",
+    body: JSON.stringify({ email }),
+  });
+}
+
+export async function importWhitelistEmails(
+  emails: string[]
+): Promise<{ success: boolean; importedCount: number; skippedCount: number }> {
+  return fetchApi("/api/whitelist/import", {
+    method: "POST",
+    body: JSON.stringify({ emails }),
+  });
+}
+
+export async function deleteWhitelistEmail(id: string): Promise<{ success: boolean }> {
+  return fetchApi(`/api/whitelist/${id}`, { method: "DELETE" });
+}
+
+// ─── Lecturer Request APIs ───
+
+export interface ApiLecturerRequest {
+  id: string;
+  name: string;
+  email: string;
+  reason: string;
+  status: "PENDING" | "APPROVED" | "REJECTED";
+  reviewedById: string | null;
+  reviewedAt: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface SubmitLecturerRequestPayload {
+  name: string;
+  email: string;
+  reason: string;
+}
+
+export async function submitLecturerRequest(
+  payload: SubmitLecturerRequestPayload
+): Promise<{ success: boolean; request: ApiLecturerRequest }> {
+  return fetchApi("/api/auth-admin/lecturer-request", {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+}
+
+export async function getLecturerRequests(): Promise<{
+  requests: ApiLecturerRequest[];
+}> {
+  return fetchApi("/api/auth-admin/admin/lecturer-requests");
+}
+
+export interface ApproveLecturerRequestResult {
+  success: boolean;
+  message: string;
+  credentials: { email: string; temporaryPassword: string };
+}
+
+export async function approveLecturerRequest(
+  requestId: string
+): Promise<ApproveLecturerRequestResult> {
+  return fetchApi(`/api/auth-admin/admin/lecturer-requests/${requestId}/approve`, {
+    method: "POST",
+  });
+}
+
+export async function rejectLecturerRequest(
+  requestId: string
+): Promise<{ success: boolean }> {
+  return fetchApi(`/api/auth-admin/admin/lecturer-requests/${requestId}/reject`, {
+    method: "POST",
+  });
 }

@@ -173,6 +173,10 @@ async function persistAssistantMessage(
 
 
 chatRouter.post("/dev-login", async (c) => {
+  if (ENV.NODE_ENV === "production" || !ENV.ALLOW_DEV_LOGIN) {
+    return c.json({ error: "Not found" }, 404);
+  }
+
   try {
     const { role } = await c.req.json().catch(() => ({ role: "student" }));
 

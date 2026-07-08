@@ -14,9 +14,9 @@ export interface User {
 
 interface AuthContextType {
   user: User | null;
-  login: (email: string, password: string) => Promise<boolean>;
+  login: (email: string, password: string) => Promise<UserRole | false>;
   loginAsRole: (role: UserRole) => Promise<boolean>;
-  logout: () => void;
+  logout: () => Promise<void>;
   isAuthenticated: boolean;
   isLoading: boolean;
 }
@@ -73,18 +73,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   /**
    * Login using email/password via Better Auth sign-in endpoint.
    */
-  const login = async (email: string, password: string): Promise<boolean> => {
+  const login = async (email: string, password: string): Promise<UserRole | false> => {
     try {
       const result = await api.signInEmail(email, password);
       if (result.user) {
+        const role = mapRole(result.user.role);
         const userData: User = {
           id: result.user.id,
           email: result.user.email,
-          role: mapRole(result.user.role),
+          role,
           name: result.user.name || email.split("@")[0],
         };
         setUser(userData);
-        return true;
+        return role;
       }
       return false;
     } catch {
