@@ -12,11 +12,17 @@ import {
   UnstyledButton,
   Avatar,
   Box,
-  Button,
+  Badge,
+  Divider,
 } from "@mantine/core";
-import { IconLogout, IconUser, IconChevronDown } from "@tabler/icons-react";
+import {
+  IconLogout,
+  IconChevronDown,
+  IconBook2,
+  IconSchool,
+} from "@tabler/icons-react";
 import { useAuth } from "../contexts/AuthContext";
-import { ProtectedRoute } from "../../components/ProtectedRoute";
+import { ProtectedRoute } from "@/components/ProtectedRoute";
 
 export default function StudentLayout({ children }: { children: React.ReactNode }) {
   const { user, logout } = useAuth();
@@ -27,101 +33,232 @@ export default function StudentLayout({ children }: { children: React.ReactNode 
     router.push("/login");
   };
 
-  const userInitial = user?.email?.charAt(0).toUpperCase() || "S";
-  const userName = user?.email?.split("@")[0] || "student";
+  const userInitial = user?.name?.charAt(0).toUpperCase() || user?.email?.charAt(0).toUpperCase() || "S";
+  const userName = user?.name || user?.email?.split("@")[0] || "Student";
+  const userEmail = user?.email || "student@fpt.edu.vn";
 
   return (
     <ProtectedRoute allowedRoles={["STUDENT"]}>
       <AppShell
         header={{ height: 64 }}
         styles={{
-          main: { backgroundColor: "#F8FAFC", minHeight: "100vh" },
+          main: {
+            backgroundColor: "#F0F4F8",
+            minHeight: "100vh",
+            paddingTop: "64px",
+            paddingLeft: 0,
+            paddingRight: 0,
+            paddingBottom: 0,
+          },
         }}
       >
+        {/* ─── HEADER ─── */}
         <AppShell.Header
           style={{
-            borderBottom: "1px solid #E2E8F0",
-            backgroundColor: "white",
-            boxShadow: "0 1px 2px 0 rgba(0, 0, 0, 0.05)",
+            borderBottom: "1px solid rgba(255,255,255,0.08)",
+            background: "linear-gradient(135deg, #1A3A5C 0%, #0f2848 60%, #0a1e3d 100%)",
+            boxShadow: "0 2px 16px rgba(10, 30, 61, 0.45)",
           }}
         >
-          <Container size="90%" style={{ height: "100%" }}>
+          <Container size="xl" style={{ height: "100%" }}>
             <Group justify="space-between" align="center" style={{ height: "100%" }}>
+
+              {/* ─── Logo + Brand ─── */}
               <Link href="/student" style={{ textDecoration: "none" }}>
-                <Group gap="xs">
+                <Group gap="sm" align="center">
+                  {/* FPT Hexagon mark */}
                   <Box
                     style={{
-                      backgroundColor: "#1A3A5C",
+                      background: "linear-gradient(135deg, #F37021 0%, #ff8c42 100%)",
                       color: "white",
-                      width: "32px",
-                      height: "32px",
+                      width: "38px",
+                      height: "38px",
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
-                      fontWeight: "bold",
-                      fontSize: "14px",
+                      fontWeight: 900,
+                      fontSize: "12px",
+                      letterSpacing: "0.5px",
+                      clipPath: "polygon(0 0, 88% 0, 100% 12%, 100% 100%, 12% 100%, 0 88%)",
+                      flexShrink: 0,
                     }}
                   >
                     FPT
                   </Box>
-                  <Text
-                    fw={900}
-                    size="md"
-                    style={{
-                      color: "#1A3A5C",
-                      textTransform: "uppercase",
-                      letterSpacing: "0.5px",
-                    }}
-                  >
-                    RAG Chatbot & Mini FLM
-                  </Text>
+                  <Box>
+                    <Text
+                      fw={900}
+                      size="sm"
+                      style={{
+                        color: "white",
+                        textTransform: "uppercase",
+                        letterSpacing: "1.5px",
+                        lineHeight: 1.1,
+                      }}
+                    >
+                      RAG Chatbot
+                    </Text>
+                    <Text
+                      size="10px"
+                      style={{
+                        color: "rgba(255,255,255,0.45)",
+                        textTransform: "uppercase",
+                        letterSpacing: "1px",
+                        lineHeight: 1,
+                      }}
+                    >
+                      Mini FLM · FPT University
+                    </Text>
+                  </Box>
                 </Group>
               </Link>
 
-              <Group>
-                <Menu shadow="md" width={200} position="bottom-end" radius={0}>
+              {/* ─── Right: Role badge + User menu ─── */}
+              <Group gap="sm" align="center">
+                {/* Role pill */}
+                <Badge
+                  size="sm"
+                  radius="sm"
+                  leftSection={<IconSchool size={10} />}
+                  visibleFrom="sm"
+                  style={{
+                    background: "rgba(35, 172, 104, 0.15)",
+                    border: "1px solid rgba(35, 172, 104, 0.35)",
+                    color: "#4ade80",
+                    fontWeight: 700,
+                    letterSpacing: "0.5px",
+                    textTransform: "uppercase",
+                  }}
+                >
+                  Sinh viên
+                </Badge>
+
+                {/* Thin divider */}
+                <Box
+                  visibleFrom="sm"
+                  style={{
+                    width: "1px",
+                    height: "28px",
+                    background: "rgba(255,255,255,0.12)",
+                  }}
+                />
+
+                {/* User dropdown */}
+                <Menu
+                  shadow="xl"
+                  width={248}
+                  position="bottom-end"
+                  radius="md"
+                  transitionProps={{ transition: "pop-top-right", duration: 150 }}
+                >
                   <Menu.Target>
                     <UnstyledButton
                       style={{
-                        padding: "6px 12px",
+                        padding: "5px 10px 5px 6px",
                         display: "flex",
                         alignItems: "center",
                         gap: "8px",
-                        borderRadius: "4px",
-                        transition: "background-color 0.2s ease",
+                        borderRadius: "10px",
+                        background: "rgba(255,255,255,0.07)",
+                        border: "1px solid rgba(255,255,255,0.12)",
+                        transition: "all 0.2s ease",
+                        cursor: "pointer",
                       }}
-                      className="hover-bg-gray"
+                      className="user-btn-hover"
                     >
-                      <Avatar color="#1A3A5C" radius={0} size="sm" fw={700}>
+                      <Avatar
+                        size={28}
+                        radius="xl"
+                        style={{
+                          background: "linear-gradient(135deg, #F37021, #ff8c42)",
+                          color: "white",
+                          fontWeight: 800,
+                          fontSize: "12px",
+                          flexShrink: 0,
+                        }}
+                      >
                         {userInitial}
                       </Avatar>
-                      <Group gap={4}>
-                        <Text size="sm" fw={700} style={{ textTransform: "uppercase", color: "#4A5568" }}>
+                      <Box visibleFrom="xs" style={{ lineHeight: 1 }}>
+                        <Text size="xs" fw={700} style={{ color: "white", lineHeight: 1.25 }}>
                           {userName}
                         </Text>
-                        <IconChevronDown size={14} color="#718096" />
-                      </Group>
+                        <Text size="10px" style={{ color: "rgba(255,255,255,0.45)", lineHeight: 1 }}>
+                          {userEmail}
+                        </Text>
+                      </Box>
+                      <IconChevronDown size={13} color="rgba(255,255,255,0.4)" style={{ flexShrink: 0 }} />
                     </UnstyledButton>
                   </Menu.Target>
 
-                  <Menu.Dropdown>
-                    <Box px="md" py="xs" style={{ borderBottom: "1px solid #F1F5F9" }}>
-                      <Text size="10px" fw={700} c="dimmed" style={{ textTransform: "uppercase", letterSpacing: "1px" }}>
-                        Tài khoản sinh viên
-                      </Text>
-                      <Text size="xs" fw={700} style={{ color: "#1A3A5C", wordBreak: "break-all" }}>
-                        {user?.email}
-                      </Text>
+                  <Menu.Dropdown p={0} style={{ overflow: "hidden" }}>
+                    {/* Dropdown header */}
+                    <Box
+                      px="md"
+                      py="sm"
+                      style={{
+                        background: "linear-gradient(135deg, #1A3A5C 0%, #0f2848 100%)",
+                      }}
+                    >
+                      <Group gap="sm">
+                        <Avatar
+                          size={38}
+                          radius="xl"
+                          style={{
+                            background: "linear-gradient(135deg, #F37021, #ff8c42)",
+                            color: "white",
+                            fontWeight: 800,
+                            flexShrink: 0,
+                          }}
+                        >
+                          {userInitial}
+                        </Avatar>
+                        <Box style={{ minWidth: 0 }}>
+                          <Text size="sm" fw={700} style={{ color: "white", lineHeight: 1.2 }} truncate>
+                            {userName}
+                          </Text>
+                          <Text size="xs" style={{ color: "rgba(255,255,255,0.55)", wordBreak: "break-all" }}>
+                            {userEmail}
+                          </Text>
+                        </Box>
+                      </Group>
+                      <Badge
+                        size="xs"
+                        mt="sm"
+                        leftSection={<IconSchool size={8} />}
+                        style={{
+                          background: "rgba(35, 172, 104, 0.2)",
+                          border: "1px solid rgba(35, 172, 104, 0.4)",
+                          color: "#4ade80",
+                        }}
+                      >
+                        Sinh viên · FPT University
+                      </Badge>
                     </Box>
 
-                    <Menu.Item
-                      color="red"
-                      leftSection={<IconLogout size={14} />}
-                      onClick={handleLogout}
-                      style={{ fontWeight: 700, fontSize: "12px", textTransform: "uppercase", letterSpacing: "0.5px" }}
-                    >
-                      Đăng xuất
-                    </Menu.Item>
+                    <Box py={4}>
+                      <Menu.Item
+                        leftSection={<IconBook2 size={14} color="#1A3A5C" />}
+                        component={Link}
+                        href="/student"
+                        style={{ fontWeight: 600, fontSize: "13px", margin: "2px 4px", borderRadius: "6px" }}
+                      >
+                        Tra cứu môn học
+                      </Menu.Item>
+                    </Box>
+
+                    <Divider />
+
+                    <Box py={4}>
+                      <Menu.Item
+                        color="red"
+                        leftSection={<IconLogout size={14} />}
+                        onClick={handleLogout}
+                        style={{ fontWeight: 700, fontSize: "13px", margin: "2px 4px", borderRadius: "6px" }}
+                      >
+                        Đăng xuất
+                      </Menu.Item>
+                    </Box>
                   </Menu.Dropdown>
                 </Menu>
               </Group>
@@ -129,12 +266,20 @@ export default function StudentLayout({ children }: { children: React.ReactNode 
           </Container>
         </AppShell.Header>
 
+        {/* ─── Main Content ─── */}
         <AppShell.Main>
-          <Container size="90%" py="xl">
+          <Box style={{ minHeight: "calc(100vh - 64px)" }}>
             {children}
-          </Container>
+          </Box>
         </AppShell.Main>
       </AppShell>
+
+      <style>{`
+        .user-btn-hover:hover {
+          background: rgba(255,255,255,0.13) !important;
+          border-color: rgba(255,255,255,0.2) !important;
+        }
+      `}</style>
     </ProtectedRoute>
   );
 }

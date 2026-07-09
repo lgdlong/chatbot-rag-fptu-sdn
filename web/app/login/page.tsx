@@ -13,6 +13,7 @@ import {
   Stack,
   Group,
   ThemeIcon,
+  Divider,
   Box,
   Alert,
 } from "@mantine/core";
@@ -21,6 +22,9 @@ import {
   IconMail,
   IconArrowLeft,
   IconBrandGoogle,
+  IconUserCheck,
+  IconUserCog,
+  IconShieldCheck,
   IconAlertCircle,
 } from "@tabler/icons-react";
 import { useAuth, portalPathForRole, UserRole } from "../contexts/AuthContext";
@@ -35,7 +39,7 @@ function toUserRole(role: string | null | undefined): UserRole {
 
 export default function LoginPage() {
   const router = useRouter();
-  const { login } = useAuth();
+  const { login, loginAsRole, isLoading: authLoading } = useAuth();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -81,6 +85,23 @@ export default function LoginPage() {
       });
     } catch {
       setErrorMsg("Đã xảy ra lỗi khi đăng nhập Google.");
+      setIsLoading(false);
+    }
+  };
+
+  const handleDemoLogin = async (role: UserRole) => {
+    setIsLoading(true);
+    setErrorMsg("");
+    try {
+      const success = await loginAsRole(role);
+      if (success) {
+        router.push(portalPathForRole(role));
+      } else {
+        setErrorMsg("Đăng nhập nhanh thất bại. Backend có thể chưa chạy.");
+      }
+    } catch {
+      setErrorMsg("Không thể kết nối đến server backend (port 8000). Vui lòng khởi động backend.");
+    } finally {
       setIsLoading(false);
     }
   };
@@ -209,7 +230,7 @@ export default function LoginPage() {
                 <Button
                   type="submit"
                   fullWidth
-                  loading={isLoading}
+                  loading={isLoading || authLoading}
                   radius={0}
                   style={{ backgroundColor: "#1A3A5C" }}
                   size="md"
@@ -251,6 +272,64 @@ export default function LoginPage() {
                 </Button>
               </Text>
             </Box>
+
+            <Divider label="Đăng nhập nhanh (Dev Mode)" labelPosition="center" />
+
+            <Group grow gap="xs">
+              <Button
+                onClick={() => handleDemoLogin("STUDENT")}
+                variant="light"
+                disabled={isLoading}
+                size="md"
+                radius={0}
+                color="blue"
+                leftSection={<IconUserCheck size={18} />}
+                style={{
+                  backgroundColor: "#F1F5F9",
+                  color: "#1A3A5C",
+                  fontSize: "11px",
+                }}
+                fw={700}
+              >
+                SINH VIÊN
+              </Button>
+
+              <Button
+                onClick={() => handleDemoLogin("LECTURER")}
+                variant="light"
+                disabled={isLoading}
+                size="md"
+                radius={0}
+                color="orange"
+                leftSection={<IconUserCog size={18} />}
+                style={{
+                  backgroundColor: "#FFF7ED",
+                  color: "#C2410C",
+                  fontSize: "11px",
+                }}
+                fw={700}
+              >
+                GIẢNG VIÊN
+              </Button>
+
+              <Button
+                onClick={() => handleDemoLogin("ADMIN")}
+                variant="light"
+                disabled={isLoading}
+                size="md"
+                radius={0}
+                color="blue"
+                leftSection={<IconShieldCheck size={18} />}
+                style={{
+                  backgroundColor: "#F1F5F9",
+                  color: "#1A3A5C",
+                  fontSize: "11px",
+                }}
+                fw={700}
+              >
+                ADMIN
+              </Button>
+            </Group>
           </Stack>
 
           <Box mt="xl" style={{ textAlign: "center" }}>

@@ -160,10 +160,38 @@ ${structuredContext}
       });
 
       return result;
-    } catch {
-      const reply = "Rất tiếc, không thể kết nối tới AnythingLLM.";
-      onChunk(reply);
-      return { citations: [], fullAnswer: reply };
+    } catch (anythingLlmError) {
+      // AnythingLLM không khả dụng → fallback sang Gemini trực tiếp
+      console.warn("[RagService] AnythingLLM unavailable, falling back to Gemini:", anythingLlmError);
+
+      const courseName = scope.scopedCourses.length > 0
+        ? `${scope.scopedCourses[0].name} (${scope.scopedCourses[0].code})`
+        : "các môn học tại FPT University";
+
+      const fallbackSystemPrompt = `Bạn là Trợ lý học tập AI thông minh của Trường Đại học FPT (FPT University).
+Bạn hỗ trợ sinh viên giải đáp thắc mắc về môn học ${courseName}.
+
+QUY TẮC:
+1. Trả lời bằng tiếng Việt, rõ ràng và thân thiện.
+2. Nếu câu hỏi liên quan đến nội dung tài liệu cụ thể mà bạn không có, hãy gợi ý sinh viên xem tài liệu môn học trên hệ thống.
+3. Có thể trả lời các câu hỏi chung về học thuật, lập trình, và các chủ đề liên quan đến ngành học.`;
+
+      try {
+        const fullAnswer = await GeminiService.generateChatStream(
+          fallbackSystemPrompt,
+          chatHistory,
+          query,
+          [],
+          onChunk,
+        );
+        return { citations: [], fullAnswer };
+      } catch (geminiError) {
+        console.error("[RagService] Gemini fallback also failed:", geminiError);
+        const errMsg = geminiError instanceof Error ? geminiError.message : String(geminiError);
+        const errorReply = `⚠️ Xin lỗi, hiện tại AI trợ lý đang gặp sự cố kỹ thuật. Vui lòng thử lại sau.\n\nChi tiết lỗi: ${errMsg}`;
+        onChunk(errorReply);
+        return { citations: [], fullAnswer: errorReply };
+      }
     }
   }
 }

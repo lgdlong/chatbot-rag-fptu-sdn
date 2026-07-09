@@ -7,6 +7,7 @@ import React, {
   ReactNode,
 } from "react";
 import { authClient } from "../../lib/auth-client";
+import * as api from "@/lib/api";
 
 /** Matches backend roles per docs/api/00_auth.md */
 export type UserRole = "ADMIN" | "LECTURER" | "STUDENT";
@@ -24,6 +25,7 @@ interface AuthContextType {
   user: User | null;
   isLoading: boolean;
   login: (email: string, password: string) => Promise<{ success: boolean; error?: string }>;
+  loginAsRole: (role: UserRole) => Promise<boolean>;
   logout: () => Promise<void>;
   isAuthenticated: boolean;
   refetchSession: () => void;
@@ -75,6 +77,25 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return { success: true };
   }, [refetch]);
 
+  /**
+   * Dev-login: Quick login for development/testing.
+   * Creates user + session via POST /api/chat/dev-login
+   */
+  const loginAsRole = useCallback(async (role: UserRole): Promise<boolean> => {
+    try {
+      const backendRole =
+        role === "ADMIN" ? "admin" : role === "LECTURER" ? "lecturer" : "student";
+      const result = await api.devLogin(backendRole);
+      if (result.success && result.user) {
+        await refetch();
+        return true;
+      }
+      return false;
+    } catch {
+      return false;
+    }
+  }, [refetch]);
+
   const logout = useCallback(async () => {
     await authClient.signOut();
     await refetch();
@@ -86,6 +107,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         user,
         isLoading: isPending,
         login,
+        loginAsRole,
         logout,
         isAuthenticated: !!user,
         refetchSession: () => {

@@ -19,6 +19,7 @@ export function ProtectedRoute({ children, allowedRoles }: ProtectedRouteProps) 
   const router = useRouter();
 
   useEffect(() => {
+    // Don't redirect while session check is still loading
     if (isLoading) return;
 
     if (!isAuthenticated) {
@@ -31,6 +32,7 @@ export function ProtectedRoute({ children, allowedRoles }: ProtectedRouteProps) 
     }
   }, [user, isAuthenticated, isLoading, allowedRoles, router]);
 
+  // Show loader while checking session or while auth is not ready
   if (isLoading || !isAuthenticated || !user || !allowedRoles.includes(user.role)) {
     return (
       <Center style={{ width: "100vw", height: "100vh" }}>
