@@ -41,6 +41,7 @@
 | US-SA-03 | Là `ADMIN`, tôi muốn xem danh sách lecturer |
 | US-SA-04 | Là `ADMIN`, tôi muốn thêm email student vào whitelist |
 | US-SA-05 | Là `ADMIN`, tôi muốn xóa email khỏi whitelist |
+| US-SA-06 | Là `ADMIN`, tôi muốn kích hoạt lại lecturer đã bị disable |
 
 ## System
 

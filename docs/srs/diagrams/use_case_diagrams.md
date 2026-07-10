@@ -29,6 +29,7 @@ graph TB
 
     SA --> P["Create lecturer"]
     SA --> Q["Disable lecturer"]
+    SA --> QA["Enable lecturer"]
     SA --> R["Manage whitelist"]
 
     SYS --> S["Generate syllabus snapshot"]

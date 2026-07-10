@@ -134,6 +134,7 @@ Xây dựng một trợ lý học tập cho sinh viên FPT, kết hợp:
 | FR-06.1 | Xem danh sách lecturer |
 | FR-06.2 | Tạo lecturer thủ công |
 | FR-06.3 | Disable lecturer |
+| FR-06.3b | Enable lecturer (UNDO disable) | Kích hoạt lại tài khoản lecturer đã bị disable |
 | FR-06.4 | Xem whitelist |
 | FR-06.5 | Thêm email whitelist |
 | FR-06.6 | Xóa email whitelist |
