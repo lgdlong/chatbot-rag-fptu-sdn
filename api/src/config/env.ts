@@ -45,9 +45,7 @@ export const ENV = {
   NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL || "",
   NEXT_PUBLIC_SUPABASE_ANON_KEY: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "",
   SUPABASE_SERVICE_ROLE_KEY: process.env.SUPABASE_SERVICE_ROLE_KEY || "",
-  SMTP_HOST: process.env.SMTP_HOST || "smtp.gmail.com",
-  SMTP_PORT: process.env.SMTP_PORT ? parseInt(process.env.SMTP_PORT, 10) : 587,
-  SMTP_USER: process.env.SMTP_USER || "",
-  SMTP_PASS: process.env.SMTP_PASS || "",
-  SMTP_FROM: process.env.SMTP_FROM || '"FPTU RAG Chatbot" <noreply@fpt.edu.vn>',
+  RESEND_API_KEY: process.env.RESEND_API_KEY || "",
+  // Dev uses Resend test domain; for production, set EMAIL_FROM env to a verified domain
+  EMAIL_FROM: process.env.EMAIL_FROM || "FPTU RAG Chatbot <onboarding@resend.dev>",
 } as const;

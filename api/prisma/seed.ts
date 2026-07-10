@@ -26,7 +26,6 @@ async function main() {
   await prisma.specialization.deleteMany()
   await prisma.major.deleteMany()
   await prisma.emailWhitelist.deleteMany()
-  await prisma.lecturerRequest.deleteMany()
   await prisma.account.deleteMany()
   await prisma.user.deleteMany()
 
@@ -317,25 +316,6 @@ async function main() {
   console.log('👨‍🏫 Đã tạo tài khoản giảng viên mặc định:');
   console.log('   - Email: teacher@fpt.edu.vn');
   console.log('   - Mật khẩu mặc định: dùng chung giá trị hash cấu hình sẵn trong seed');
-
-  // 10. Seed yêu cầu đăng ký giảng viên mẫu
-  await prisma.lecturerRequest.createMany({
-    data: [
-      {
-        name: 'Nguyễn Văn A',
-        email: 'lecturer-request-1@fpt.edu.vn',
-        reason: 'Bộ môn SE cần quyền quản lý syllabus FER202.',
-        status: 'PENDING',
-      },
-      {
-        name: 'Trần Thị B',
-        email: 'lecturer-request-2@fpt.edu.vn',
-        reason: 'Cần quyền upload học liệu SDN302 cho học kỳ mới.',
-        status: 'PENDING',
-      },
-    ],
-  })
-  console.log('📝 Đã tạo 2 yêu cầu đăng ký giảng viên mẫu.');
 
   console.log('🎉 Quá trình Seeding hoàn tất thành công!');
 }

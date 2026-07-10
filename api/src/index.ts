@@ -22,7 +22,7 @@ import { chatRouter } from "./modules/chat/chat.controller.js";
 import { curriculumRouter } from "./modules/curriculum/curriculum.controller.js";
 import { syllabusRouter } from "./modules/syllabus/syllabus.controller.js";
 import { whitelistRouter } from "./modules/auth/whitelist.controller.js";
-import { lecturerRequestRouter } from "./modules/auth/lecturer-request.controller.js";
+import { lecturerAdminRouter } from "./modules/auth/lecturer-admin.controller.js";
 
 export const app = new Hono();
 
@@ -51,7 +51,7 @@ app.route("/api/chat", chatRouter);
 app.route("/api/curriculum", curriculumRouter);
 app.route("/api/syllabus", syllabusRouter);
 app.route("/api/whitelist", whitelistRouter);
-app.route("/api/auth-admin", lecturerRequestRouter);
+app.route("/api/admin", lecturerAdminRouter);
 
 
 

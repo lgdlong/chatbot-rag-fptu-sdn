@@ -19,6 +19,11 @@
 - **[MANDATORY]** Mọi AI Agent BẮT BUỘC phải sử dụng kỹ năng `sequential-thinking` (sequential thinking) trong **mọi prompt** để suy luận tuần tự, phân tích sâu, lập kế hoạch chi tiết và tự sửa lỗi trước khi viết code hoặc trả lời.
 - Use `debugging` skill for systematic debugging, analyzing code, debugging, etc. if needed
 - **[IMPORTANT]** Follow the codebase structure and code standards in `./docs` during implementation.
+- **[CodeGraph]** Dự án có `.codegraph/` index. **Luôn ưu tiên dùng `codegraph_explore` trước `grep`/`read`** khi cần:
+  - Tra cứu symbol, file, flow (một call trả về source + call path + blast radius)
+  - Hiểu luồng code (gọi 2 tên symbol đầu-cuối, codegraph trả về đường đi giữa chúng)
+  - Xác định phạm vi ảnh hưởng trước khi sửa — codegraph hiểu dynamic dispatch, callback, JSX children mà grep không theo được.
+  - Sau khi edit, kiểm tra staleness banner: file nào pending re-index thì đọc trực tiếp để lấy nội dung mới nhất.
 - **[IMPORTANT]** Do not just simulate the implementation or mocking them, always implement the real code.
 
 ## Code Quality Guidelines

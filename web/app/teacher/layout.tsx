@@ -19,6 +19,7 @@ import {
   IconUpload,
   IconLogout,
   IconSchool,
+  IconSettings,
 } from "@tabler/icons-react";
 import { useAuth } from "../contexts/AuthContext";
 import { ProtectedRoute } from "../../components/ProtectedRoute";
@@ -38,6 +39,7 @@ export default function TeacherLayout({ children }: { children: React.ReactNode 
     { name: "Chương trình đào tạo", href: "/teacher/curriculum", icon: IconSchool },
     { name: "Quản lý Syllabus", href: "/teacher/syllabus", icon: IconFileText },
     { name: "Tài liệu môn học", href: "/teacher/documents", icon: IconUpload },
+    { name: "Cài đặt", href: "/teacher/settings", icon: IconSettings },
   ];
 
   const isActive = (href: string) => {

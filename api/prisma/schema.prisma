@@ -309,22 +309,6 @@ model AuditLog {
   @@map("audit_logs")
 }
 
-model LecturerRequest {
-  id           String   @id @default(uuid())
-  name         String
-  email        String   @unique
-  reason       String   @db.Text
-  status       String   @default("PENDING")
-  password     String?
-  reviewedById String?  @map("reviewed_by_id")
-  reviewedBy   User?    @relation("LecturerRequestReviewedBy", fields: [reviewedById], references: [id], onDelete: SetNull)
-  reviewedAt   DateTime? @map("reviewed_at")
-  createdAt    DateTime @default(now()) @map("created_at")
-  updatedAt    DateTime @updatedAt @map("updated_at")
-
-  @@map("lecturer_requests")
-}
-
 // Hệ thống xác thực Better Auth (User, Session, Account, Verification)
 model User {
   id            String        @id
@@ -343,7 +327,6 @@ model User {
   accounts      Account[]
   chatSessions  ChatSession[]
   auditLogs     AuditLog[]
-  reviewedLecturerRequests LecturerRequest[] @relation("LecturerRequestReviewedBy")
 
   @@map("users")
 }

@@ -1,5 +1,5 @@
 import { createAuthClient } from "better-auth/react";
-import { adminClient, inferAdditionalFields } from "better-auth/client/plugins";
+import { adminClient } from "better-auth/client/plugins";
 import { adminAc, userAc } from "better-auth/plugins/admin/access";
 
 export const apiBaseUrl =
@@ -16,14 +16,6 @@ export const authClient = createAuthClient({
         STUDENT: userAc,
       },
     }),
-    inferAdditionalFields({
-      user: {
-        plainPassword: {
-          type: "string",
-          required: false,
-        },
-      },
-    }),
   ],
 });
 
@@ -37,7 +29,7 @@ export class ApiError extends Error {
   }
 }
 
-/** REST fetch for non–Better Auth routes (whitelist, lecturer-requests). */
+/** REST fetch for non–Better Auth routes (whitelist, etc.). */
 export async function apiFetch<T>(
   path: string,
   init?: RequestInit,
@@ -67,42 +59,4 @@ export async function apiFetch<T>(
   }
 
   return body as T;
-}
-
-// ─── Lecturer Request APIs ───
-
-export interface LecturerRequest {
-  id: string;
-  name: string;
-  email: string;
-  reason: string;
-  status: "PENDING" | "APPROVED" | "REJECTED";
-  reviewedById: string | null;
-  reviewedAt: string | null;
-  createdAt: string;
-  updatedAt: string;
-}
-
-export interface LecturerRequestListResponse {
-  requests: LecturerRequest[];
-}
-
-export interface ApproveRequestResponse {
-  success: boolean;
-  message: string;
-  credentials: {
-    email: string;
-    temporaryPassword: string;
-  };
-}
-
-export interface SubmitLecturerRequestPayload {
-  name: string;
-  email: string;
-  reason: string;
-}
-
-export interface SubmitLecturerRequestResponse {
-  success: boolean;
-  request: LecturerRequest;
 }

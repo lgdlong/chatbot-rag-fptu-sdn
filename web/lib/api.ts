@@ -526,3 +526,24 @@ export async function deleteCurriculum(id: string): Promise<{ success: boolean }
   });
 }
 
+// ─── Admin: Create Lecturer ───
+
+export interface CreateLecturerResponse {
+  success: boolean;
+  credentials: {
+    email: string;
+    temporaryPassword: string;
+  };
+  resetLink: string;
+}
+
+export async function createLecturer(payload: {
+  name: string;
+  email: string;
+}): Promise<CreateLecturerResponse> {
+  return fetchApi("/api/admin/create-lecturer", {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+}
+
