@@ -4,10 +4,15 @@ import { auth } from "./auth.js";
 import { prisma } from "./services/db.service.js";
 import { sendEmail, templateLecturerApproved } from "./services/email.service.js";
 import { ENV } from "../../config/env.js";
+import { createAuditLog } from "./services/audit.service.js";
 
 export const lecturerAdminRouter = new Hono();
 
-async function requireAdmin(c: Context) {
+type AdminAuthResult = 
+  | { error: Response; session: null }
+  | { error: null; session: typeof auth.$Infer.Session };
+
+async function requireAdmin(c: Context): Promise<AdminAuthResult> {
   const session = await auth.api.getSession({ headers: c.req.raw.headers });
   if (!session?.user) {
     return { error: c.json({ error: "Unauthorized" }, 401) as Response, session: null };
@@ -95,6 +100,21 @@ lecturerAdminRouter.post("/create-lecturer", async (c) => {
       console.error(`[Admin Create Lecturer] sendEmail failed for ${email}:`, error);
     }
 
+    // Audit log
+    Promise.resolve().then(async () => {
+      try {
+        await createAuditLog({
+          userId: authResult.session.user.id,
+          action: "CREATE_LECTURER",
+          entityType: "Lecturer",
+          entityId: signUpRes.user.id,
+          details: { name, email },
+        });
+      } catch (auditErr) {
+        console.error("[AuditLog] Failed to write:", auditErr);
+      }
+    });
+
     // 10. Return credentials + reset link cho admin
     return c.json({
       success: true,
@@ -106,5 +126,81 @@ lecturerAdminRouter.post("/create-lecturer", async (c) => {
     });
   } catch (err: any) {
     return c.json({ error: err.message || "Failed to create lecturer" }, 500);
+  }
+});
+
+// POST /api/admin/disable-lecturer/:userId
+// Admin vô hiệu hoá tài khoản giảng viên (set banned = true)
+lecturerAdminRouter.post("/disable-lecturer/:userId", async (c) => {
+  const authResult = await requireAdmin(c);
+  if (authResult.error) return authResult.error;
+
+  const userId = c.req.param("userId");
+
+  try {
+    const user = await prisma.user.findUnique({ where: { id: userId } });
+    if (!user) return c.json({ error: "User not found" }, 404);
+    if (user.role !== "LECTURER") return c.json({ error: "User is not a lecturer" }, 400);
+
+    await prisma.user.update({
+      where: { id: userId },
+      data: { banned: true, banReason: "Disabled by admin" },
+    });
+
+    Promise.resolve().then(async () => {
+      try {
+        await createAuditLog({
+          userId: authResult.session.user.id,
+          action: "DISABLE_LECTURER",
+          entityType: "Lecturer",
+          entityId: userId,
+          details: { email: user.email },
+        });
+      } catch (auditErr) {
+        console.error("[AuditLog] Failed to write:", auditErr);
+      }
+    });
+
+    return c.json({ success: true });
+  } catch (err: any) {
+    return c.json({ error: err.message || "Failed to disable lecturer" }, 500);
+  }
+});
+
+// POST /api/admin/enable-lecturer/:userId
+// Admin kích hoạt lại tài khoản giảng viên (set banned = false)
+lecturerAdminRouter.post("/enable-lecturer/:userId", async (c) => {
+  const authResult = await requireAdmin(c);
+  if (authResult.error) return authResult.error;
+
+  const userId = c.req.param("userId");
+
+  try {
+    const user = await prisma.user.findUnique({ where: { id: userId } });
+    if (!user) return c.json({ error: "User not found" }, 404);
+    if (user.role !== "LECTURER") return c.json({ error: "User is not a lecturer" }, 400);
+
+    await prisma.user.update({
+      where: { id: userId },
+      data: { banned: false, banReason: null },
+    });
+
+    Promise.resolve().then(async () => {
+      try {
+        await createAuditLog({
+          userId: authResult.session.user.id,
+          action: "ENABLE_LECTURER",
+          entityType: "Lecturer",
+          entityId: userId,
+          details: { email: user.email },
+        });
+      } catch (auditErr) {
+        console.error("[AuditLog] Failed to write:", auditErr);
+      }
+    });
+
+    return c.json({ success: true });
+  } catch (err: any) {
+    return c.json({ error: err.message || "Failed to enable lecturer" }, 500);
   }
 });

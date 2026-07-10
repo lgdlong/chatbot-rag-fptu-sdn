@@ -11,6 +11,7 @@ import { AnythingLlmAdapter } from "../rag/services/anythingllm.adapter.js";
 import { DocumentStatus, IngestionJobStatus } from "@prisma/client";
 import { setTimeout as sleep } from "node:timers/promises";
 import { SyllabusSyncService } from "./services/syllabus-sync.service.js";
+import { createAuditLog } from "../auth/services/audit.service.js";
 
 export const syllabusRouter = new Hono();
 
@@ -98,7 +99,11 @@ async function removeChunkFiles(documentId: string) {
   }
 }
 
-async function requireLecturer(c: Context) {
+type AuthResult = 
+  | { error: Response; session: null }
+  | { error: null; session: typeof auth.$Infer.Session };
+
+async function requireLecturer(c: Context): Promise<AuthResult> {
   const session = await auth.api.getSession({ headers: c.req.raw.headers });
   if (!session?.user) {
     return { error: c.json({ error: "Unauthorized" }, 401) as Response, session: null };
@@ -255,6 +260,21 @@ syllabusRouter.post("/", async (c) => {
         note,
         isApproved: false, // Mặc định Draft
         isActive: false     // Mặc định Draft
+      }
+    });
+
+    // Audit log
+    Promise.resolve().then(async () => {
+      try {
+        await createAuditLog({
+          userId: authResult.session.user.id,
+          action: "CREATE_SYLLABUS",
+          entityType: "Syllabus",
+          entityId: String(syllabus.id),
+          details: { courseId, syllabusName },
+        });
+      } catch (auditErr) {
+        console.error("[AuditLog] Failed to write:", auditErr);
       }
     });
 
@@ -471,6 +491,21 @@ syllabusRouter.put("/:id", async (c) => {
       return updatedSyl;
     });
 
+    // Audit log
+    Promise.resolve().then(async () => {
+      try {
+        await createAuditLog({
+          userId: authResult.session.user.id,
+          action: "UPDATE_SYLLABUS",
+          entityType: "Syllabus",
+          entityId: String(id),
+          details: { courseId: syllabusExists.courseId },
+        });
+      } catch (auditErr) {
+        console.error("[AuditLog] Failed to write:", auditErr);
+      }
+    });
+
     // Sync to AnythingLLM in background
     Promise.resolve().then(async () => {
       try {
@@ -504,6 +539,20 @@ syllabusRouter.patch("/:id/approve", async (c) => {
     const syllabus = await prisma.syllabus.update({
       where: { id },
       data: { isApproved: true }
+    });
+
+    // Audit log
+    Promise.resolve().then(async () => {
+      try {
+        await createAuditLog({
+          userId: authResult.session.user.id,
+          action: "APPROVE_SYLLABUS",
+          entityType: "Syllabus",
+          entityId: String(id),
+        });
+      } catch (auditErr) {
+        console.error("[AuditLog] Failed to write:", auditErr);
+      }
     });
 
     // Sync to AnythingLLM in background
@@ -565,6 +614,21 @@ syllabusRouter.patch("/:id/activate", async (c) => {
       return activatedSyl;
     });
 
+    // Audit log
+    Promise.resolve().then(async () => {
+      try {
+        await createAuditLog({
+          userId: authResult.session.user.id,
+          action: "ACTIVATE_SYLLABUS",
+          entityType: "Syllabus",
+          entityId: String(id),
+          details: { courseId: syllabus.courseId },
+        });
+      } catch (auditErr) {
+        console.error("[AuditLog] Failed to write:", auditErr);
+      }
+    });
+
     // Sync to AnythingLLM in background
     Promise.resolve().then(async () => {
       try {
@@ -581,7 +645,68 @@ syllabusRouter.patch("/:id/activate", async (c) => {
 });
 
 // ==========================================
-// 7. API XÓA SYLLABUS (DELETE)
+// 7. API HUỶ KÍCH HOẠT SYLLABUS (DEACTIVATE)
+// ==========================================
+// FR-03.6: Deactivate syllabus (set isActive = false)
+syllabusRouter.patch("/:id/deactivate", async (c) => {
+  const authResult = await requireLecturer(c);
+  if (authResult.error) return authResult.error;
+
+  const id = parseInt(c.req.param("id"));
+  if (isNaN(id)) return c.json({ error: "Invalid Syllabus ID" }, 400);
+
+  try {
+    const syllabus = await prisma.syllabus.findUnique({
+      where: { id },
+      select: { id: true, isActive: true, courseId: true }
+    });
+
+    if (!syllabus) return c.json({ error: "Syllabus not found" }, 404);
+
+    if (!syllabus.isActive) {
+      return c.json({ error: "Syllabus is not currently active." }, 400);
+    }
+
+    const updated = await prisma.syllabus.update({
+      where: { id },
+      data: { isActive: false },
+      include: { course: { select: { code: true } } }
+    });
+
+    // Audit log
+    Promise.resolve().then(async () => {
+      try {
+        await createAuditLog({
+          userId: authResult.session.user.id,
+          action: "DEACTIVATE_SYLLABUS",
+          entityType: "Syllabus",
+          entityId: String(id),
+          details: { courseId: syllabus.courseId },
+        });
+      } catch (auditErr) {
+        console.error("[AuditLog] Failed to write:", auditErr);
+      }
+    });
+
+    // Cleanup AnythingLLM snapshot on deactivate
+    Promise.resolve().then(async () => {
+      try {
+        const workspaceSlug = `${updated.course?.code?.toLowerCase() ?? ""}_${id}`;
+        const snapshotLocation = `custom-documents/syllabus-${id}-snapshot.md`;
+        await AnythingLlmAdapter.updateWorkspaceEmbeddings(workspaceSlug, { deletes: [snapshotLocation] });
+      } catch (cleanupErr) {
+        console.error(`[Deactivate] Failed to cleanup AnythingLLM for syllabus ${id}:`, cleanupErr);
+      }
+    });
+
+    return c.json({ success: true, syllabus: updated });
+  } catch (err: any) {
+    return c.json({ error: err.message }, 500);
+  }
+});
+
+// ==========================================
+// 8. API XÓA SYLLABUS (DELETE)
 // ==========================================
 // FR-02.6: Xóa vật lý (hard delete) khỏi database
 syllabusRouter.delete("/:id", async (c) => {
@@ -596,6 +721,22 @@ syllabusRouter.delete("/:id", async (c) => {
     if (!exists) return c.json({ error: "Syllabus not found" }, 404);
 
     await prisma.syllabus.delete({ where: { id } });
+
+    // Audit log
+    Promise.resolve().then(async () => {
+      try {
+        await createAuditLog({
+          userId: authResult.session.user.id,
+          action: "DELETE_SYLLABUS",
+          entityType: "Syllabus",
+          entityId: String(id),
+          details: { courseId: exists.courseId, syllabusName: exists.syllabusName },
+        });
+      } catch (auditErr) {
+        console.error("[AuditLog] Failed to write:", auditErr);
+      }
+    });
+
     return c.json({ success: true });
   } catch (err: any) {
     return c.json({ error: err.message }, 500);
@@ -729,6 +870,21 @@ syllabusRouter.post("/:syllabusId/documents", async (c) => {
     return { ...createdDocument, status: DocumentStatus.PROCESSING, ingestionJob: job };
   });
 
+  // Audit log
+  Promise.resolve().then(async () => {
+    try {
+      await createAuditLog({
+        userId: authResult.session.user.id,
+        action: "UPLOAD_DOCUMENT",
+        entityType: "Document",
+        entityId: doc.id,
+        details: { fileName: file.name, syllabusId },
+      });
+    } catch (auditErr) {
+      console.error("[AuditLog] Failed to write:", auditErr);
+    }
+  });
+
   // Start background non-blocking ingestion task calling AnythingLLM API
   Promise.resolve().then(async () => {
     try {
@@ -836,6 +992,21 @@ syllabusRouter.delete("/:syllabusId/documents/:documentId", async (c) => {
     } catch (llmError) {
       console.error("[Deletion] Failed to sync document deletion with AnythingLLM:", llmError);
     }
+
+    // Audit log
+    Promise.resolve().then(async () => {
+      try {
+        await createAuditLog({
+          userId: authResult.session.user.id,
+          action: "DELETE_DOCUMENT",
+          entityType: "Document",
+          entityId: documentId,
+          details: { fileName: document.name, syllabusId },
+        });
+      } catch (auditErr) {
+        console.error("[AuditLog] Failed to write:", auditErr);
+      }
+    });
 
     return c.json({ success: true });
   } catch (error: any) {
