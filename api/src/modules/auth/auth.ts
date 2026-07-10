@@ -5,7 +5,7 @@ import { admin } from 'better-auth/plugins/admin'
 import { adminAc, userAc } from 'better-auth/plugins/admin/access'
 import { openAPI } from 'better-auth/plugins'
 import { ENV } from '../../config/env.js'
-import { sendEmail } from './services/email.service.js'
+import { sendEmail, templatePasswordReset } from './services/email.service.js'
 
 function isStudentEmail(email: string) {
   const parts = email.toLowerCase().split('@');
@@ -19,14 +19,6 @@ export const auth = betterAuth({
   database: prismaAdapter(prisma, {
     provider: 'postgresql',
   }),
-  user: {
-    additionalFields: {
-      plainPassword: {
-        type: 'string',
-        required: false,
-      }
-    }
-  },
   onAPIError: {
     errorURL: `${ENV.BETTER_AUTH_URL.replace("8001", "3000")}/login`,
   },
@@ -35,21 +27,30 @@ export const auth = betterAuth({
     enabled: true,
     allowedDomains: ["@fpt.edu.vn", "@gmail.com"],
     sendResetPassword: async ({ user, url, token }, request) => {
+      const userName = user.name || "bạn";
       await sendEmail({
         to: user.email,
         subject: "Thiết lập mật khẩu tài khoản RAG Chatbot FPTU",
-        text: `Chào ${user.name},\n\nTài khoản của bạn vừa được đăng ký trên hệ thống RAG Chatbot FPTU.\n\nVui lòng truy cập đường dẫn sau để đặt mật khẩu mới cho tài khoản:\n${url}\n\nĐường dẫn này có hiệu lực trong vòng 1 giờ.\n\nTrân trọng,\nĐội ngũ vận hành FPTU RAG Chatbot`,
-        html: `<p>Chào <b>${user.name}</b>,</p>
-               <p>Tài khoản của bạn vừa được đăng ký trên hệ thống RAG Chatbot FPTU.</p>
-               <p>Vui lòng click vào nút bên dưới để tiến hành đặt mật khẩu mới:</p>
-               <p><a href="${url}" style="display:inline-block;padding:10px 20px;color:white;background-color:#F26F21;text-decoration:none;font-weight:bold;">Thiết lập mật khẩu</a></p>
-               <p>Hoặc copy liên kết sau vào trình duyệt:</p>
-               <p>${url}</p>
-               <p>Đường dẫn này có hiệu lực trong vòng 1 giờ.</p>
-               <br/>
-               <p>Trân trọng,<br/>Đội ngũ vận hành FPTU RAG Chatbot</p>`
+        text: `Chào ${userName},\n\nTài khoản của bạn vừa được đăng ký. Vui lòng truy cập đường dẫn sau để đặt mật khẩu:\n${url}\n\nLiên kết có hiệu lực 1 giờ.\n\nTrân trọng,\nĐội ngũ vận hành FPTU RAG Chatbot`,
+        html: templatePasswordReset(userName, url),
       });
     }
+  },
+  rateLimit: {
+    enabled: true,
+    window: 60,
+    max: 100,
+    storage: "memory",
+    customRules: {
+      "/request-password-reset": {
+        window: 900,
+        max: 3,
+      },
+      "/reset-password": {
+        window: 300,
+        max: 5,
+      },
+    },
   },
   socialProviders: {
     google: {
@@ -62,14 +63,6 @@ export const auth = betterAuth({
       create: {
         before: async (user) => {
           if (isStudentEmail(user.email)) {
-            const lecturerRequest = await prisma.lecturerRequest.findUnique({
-              where: { email: user.email }
-            });
-            if (lecturerRequest) {
-              return {
-                data: user
-              };
-            }
             const whitelisted = await prisma.emailWhitelist.findUnique({
               where: { email: user.email }
             });
@@ -85,28 +78,17 @@ export const auth = betterAuth({
         after: async (user) => {
           // Chỉ gửi mail đổi/đặt mật khẩu cho người dùng email/password chưa kích hoạt (bỏ qua social login Google đã verified)
           if (!user.emailVerified) {
-            // Kiểm tra xem tài khoản này có phải là Giảng viên đang trong quá trình được duyệt không
-            const isLecturerApproval = await prisma.lecturerRequest.findFirst({
-              where: {
-                email: user.email,
-                status: "PENDING"
-              }
-            });
-
-            // Nếu không phải là duyệt giảng viên (nghĩa là đăng ký student, admin hoặc gmail thông thường), gửi mail reset password
-            if (!isLecturerApproval) {
-              try {
-                const frontendUrl = ENV.BETTER_AUTH_URL.replace("8001", "3000");
-                await auth.api.requestPasswordReset({
-                  body: {
-                    email: user.email,
-                    redirectTo: `${frontendUrl}/reset-password`,
-                  }
-                });
-                console.log(`[Auth Hook] Sent password setup email to ${user.email}`);
-              } catch (error) {
-                console.error(`[Auth Hook] Failed to request password reset for ${user.email}:`, error);
-              }
+            try {
+              const frontendUrl = ENV.BETTER_AUTH_URL.replace("8001", "3000");
+              await auth.api.requestPasswordReset({
+                body: {
+                  email: user.email,
+                  redirectTo: `${frontendUrl}/reset-password`,
+                }
+              });
+              console.log(`[Auth Hook] Sent password setup email to ${user.email}`);
+            } catch (error) {
+              console.error(`[Auth Hook] Failed to request password reset for ${user.email}:`, error);
             }
           }
         }
