@@ -303,7 +303,7 @@ export default function WhitelistManagementPage() {
       >
         <Stack gap="xs" mt="xs">
           <Text size="sm">• Chỉ email trong whitelist mới được đăng ký/đăng nhập sinh viên.</Text>
-          <Text size="sm">• Thêm đơn lẻ qua POST /api/whitelist hoặc import hàng loạt POST /api/whitelist/import.</Text>
+
         </Stack>
       </Alert>
 

@@ -7,6 +7,7 @@ import {
   Card,
   Button,
   TextInput,
+  PasswordInput,
   Textarea,
   Title,
   Text,
@@ -22,6 +23,7 @@ import {
   IconMail,
   IconUser,
   IconFileText,
+  IconLock,
 } from "@tabler/icons-react";
 import { notifications } from "@mantine/notifications";
 import {
@@ -42,6 +44,7 @@ export default function RegisterTeacherPage() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [reason, setReason] = useState("");
+  const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
   const [successMsg, setSuccessMsg] = useState("");
@@ -68,13 +71,22 @@ export default function RegisterTeacherPage() {
       setErrorMsg("Vui lòng nhập lý do đăng ký");
       return;
     }
+    if (!password) {
+      setErrorMsg("Vui lòng nhập mật khẩu");
+      return;
+    }
+    if (password.length < 8) {
+      setErrorMsg("Mật khẩu phải dài tối thiểu 8 ký tự");
+      return;
+    }
 
     setIsLoading(true);
     try {
-      const payload: SubmitLecturerRequestPayload = {
+      const payload: any = {
         name: name.trim(),
         email: email.trim().toLowerCase(),
         reason: reason.trim(),
+        password: password,
       };
 
       // TODO: thêm rate-limit/CAPTCHA phía backend cho endpoint public này
@@ -90,6 +102,7 @@ export default function RegisterTeacherPage() {
       setName("");
       setEmail("");
       setReason("");
+      setPassword("");
       notifications.show({
         title: "Thành công",
         message: "Yêu cầu giảng viên của bạn đã được gửi. Vui lòng chờ Admin duyệt.",
@@ -286,7 +299,16 @@ export default function RegisterTeacherPage() {
                   rows={5}
                   value={reason}
                   onChange={(e) => setReason(e.target.value)}
-                  leftSection={<IconFileText size={16} color="#9CA3AF" />}
+                />
+
+                <PasswordInput
+                  label="Mật khẩu tài khoản"
+                  placeholder="Tối thiểu 8 ký tự"
+                  required
+                  radius={0}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  leftSection={<IconLock size={16} color="#9CA3AF" />}
                 />
 
                 <Button

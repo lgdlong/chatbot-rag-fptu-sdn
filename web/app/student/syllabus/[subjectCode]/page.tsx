@@ -400,28 +400,14 @@ export default function SyllabusViewerPage() {
           <Tabs
             value={activeTab}
             onChange={setActiveTab}
+            classNames={{
+              tab: "custom-tabs-tab"
+            }}
             styles={{
               list: {
                 border: "none",
                 gap: 0,
-              },
-              tab: {
-                fontSize: "13px",
-                fontWeight: 600,
-                padding: "14px 20px",
-                borderRadius: 0,
-                color: "#64748b",
-                borderBottom: "2px solid transparent",
-                '&[data-active="true"]': {
-                  color: "#1A3A5C",
-                  borderBottomColor: "#F37021",
-                  background: "transparent",
-                },
-                "&:hover": {
-                  background: "#F8FAFC",
-                  color: "#1A3A5C",
-                },
-              },
+              }
             }}
           >
             <Tabs.List>

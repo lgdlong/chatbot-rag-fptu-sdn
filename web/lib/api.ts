@@ -55,6 +55,7 @@ export interface ApiCourse {
   code: string;
   name: string;
   createdAt: string;
+  documentCount?: number;
 }
 
 export interface ApiSyllabusSummary {
@@ -293,6 +294,12 @@ export async function deleteSyllabusDocument(
   });
 }
 
+export async function deleteSyllabus(id: number): Promise<{ success: boolean }> {
+  return fetchApi(`/api/syllabus/${id}`, {
+    method: "DELETE",
+  });
+}
+
 // ─── Course APIs ───
 
 export async function getCourses(): Promise<{ courses: ApiCourse[] }> {
@@ -413,3 +420,109 @@ export function sendChatMessageStream(
 
   return controller;
 }
+
+// ─── Curriculum Management APIs ───
+
+export interface ApiMajor {
+  id: string;
+  code: string;
+  name: string;
+  description: string | null;
+}
+
+export interface ApiSpecialization {
+  id: string;
+  majorId: string;
+  code: string;
+  name: string;
+  description: string | null;
+  major?: {
+    code: string;
+    name: string;
+  };
+}
+
+export interface ApiCurriculum {
+  id: string;
+  curriculumId: string;
+  majorId: string;
+  specializationId: string | null;
+  batchCode: string;
+  major: {
+    code: string;
+    name: string;
+  };
+  specialization: {
+    code: string;
+    name: string;
+  } | null;
+  _count: {
+    subjects: number;
+  };
+}
+
+export async function getMajors(): Promise<{ majors: ApiMajor[] }> {
+  return fetchApi("/api/curriculum/majors");
+}
+
+export async function createMajor(payload: {
+  code: string;
+  name: string;
+  description?: string;
+}): Promise<{ major: ApiMajor }> {
+  return fetchApi("/api/curriculum/majors", {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+}
+
+export async function deleteMajor(id: string): Promise<{ success: boolean }> {
+  return fetchApi(`/api/curriculum/majors/${id}`, {
+    method: "DELETE",
+  });
+}
+
+export async function getSpecializations(): Promise<{ specializations: ApiSpecialization[] }> {
+  return fetchApi("/api/curriculum/specializations");
+}
+
+export async function createSpecialization(payload: {
+  majorId: string;
+  code: string;
+  name: string;
+  description?: string;
+}): Promise<{ specialization: ApiSpecialization }> {
+  return fetchApi("/api/curriculum/specializations", {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+}
+
+export async function deleteSpecialization(id: string): Promise<{ success: boolean }> {
+  return fetchApi(`/api/curriculum/specializations/${id}`, {
+    method: "DELETE",
+  });
+}
+
+export async function getCurriculums(): Promise<{ curriculums: ApiCurriculum[] }> {
+  return fetchApi("/api/curriculum/curriculums");
+}
+
+export async function createCurriculum(payload: {
+  curriculumId: string;
+  majorId: string;
+  specializationId?: string | null;
+  batchCode: string;
+}): Promise<{ curriculum: ApiCurriculum }> {
+  return fetchApi("/api/curriculum/curriculums", {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+}
+
+export async function deleteCurriculum(id: string): Promise<{ success: boolean }> {
+  return fetchApi(`/api/curriculum/curriculums/${id}`, {
+    method: "DELETE",
+  });
+}
+

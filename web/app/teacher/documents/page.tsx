@@ -263,7 +263,7 @@ export default function DocumentManagementPage() {
       </Card>
 
       <Card p={0} radius={0} style={{ border: "1px solid #E2E8F0", backgroundColor: "white" }}>
-        <Group position="apart" align="center" style={{ padding: "20px" }}>
+        <Group justify="space-between" align="center" style={{ padding: "20px" }}>
           <Text size="sm" color="dimmed">
             {documentCountLabel}
           </Text>

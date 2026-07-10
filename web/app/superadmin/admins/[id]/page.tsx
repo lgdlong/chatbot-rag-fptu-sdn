@@ -49,6 +49,7 @@ interface AdminUserDetail {
   banReason?: string | null;
   banExpires?: string | Date | null;
   emailVerified?: boolean;
+  plainPassword?: string | null;
   createdAt?: string | Date;
   updatedAt?: string | Date;
 }
@@ -235,8 +236,19 @@ export default function AdminUserDetailPage() {
     try {
       const res = await authClient.admin.setUserPassword({ userId, newPassword });
       if (res.error) throw new Error(res.error.message);
+      
+      // Đồng thời cập nhật mật khẩu plain text trong CSDL
+      await authClient.admin.updateUser({
+        userId,
+        data: {
+          plainPassword: newPassword,
+        }
+      });
+
       notifications.show({ title: "Thành công", message: "Đã đặt mật khẩu mới", color: "green" });
       setNewPassword("");
+      // Tải lại thông tin để hiển thị mật khẩu mới
+      void loadUser();
     } catch (err) {
       notifications.show({
         title: "Lỗi",
@@ -418,6 +430,14 @@ export default function AdminUserDetailPage() {
                 Cập nhật:
               </Text>{" "}
               {formatDateTime(detail.updatedAt)}
+            </Text>
+            <Text size="sm">
+              <Text span fw={700}>
+                Mật khẩu lưu trữ:
+              </Text>{" "}
+              <code style={{ fontSize: "13px", color: "#F26F21", fontWeight: "bold" }}>
+                {detail.plainPassword || "Chưa có mật khẩu lưu trữ"}
+              </code>
             </Text>
             {detail.banned && detail.banReason && (
               <Text size="sm" c="red">

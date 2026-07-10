@@ -144,28 +144,6 @@ export default function SuperAdminDashboardPage() {
             Quản lý và giám sát tài nguyên RAG Hybrid
           </Text>
         </div>
-        <Group gap="xs">
-          <Button
-            variant="outline"
-            color="gray"
-            radius={0}
-            fw={700}
-            loading={loading}
-            onClick={() => void loadStats()}
-          >
-            Làm mới
-          </Button>
-          <Button
-            component={Link}
-            href="/superadmin/admins"
-            leftSection={<IconPlus size={16} />}
-            style={{ backgroundColor: "#F26F21" }}
-            radius={0}
-            fw={700}
-          >
-            Thêm Quản trị viên
-          </Button>
-        </Group>
       </Group>
 
       {loading && !stats ? (

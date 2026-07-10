@@ -11,8 +11,8 @@ async function requireAdmin(c: Context) {
   }
 
   const role = session.user.role;
-  if (role !== "ADMIN") {
-    return { error: c.json({ error: "Forbidden: Admin role required" }, 403) as Response, session: null };
+  if (role !== "ADMIN" && role !== "LECTURER") {
+    return { error: c.json({ error: "Forbidden: Admin or Lecturer role required" }, 403) as Response, session: null };
   }
 
   return { error: null, session };

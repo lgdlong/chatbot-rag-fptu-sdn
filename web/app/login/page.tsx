@@ -39,12 +39,33 @@ function toUserRole(role: string | null | undefined): UserRole {
 
 export default function LoginPage() {
   const router = useRouter();
-  const { login, loginAsRole, isLoading: authLoading } = useAuth();
+  const { user, isAuthenticated, login, loginAsRole, isLoading: authLoading } = useAuth();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
+
+  React.useEffect(() => {
+    if (isAuthenticated && user) {
+      router.push(portalPathForRole(user.role));
+    }
+  }, [isAuthenticated, user, router]);
+
+  // Hiển thị lỗi thân thiện từ URL callback (ví dụ: lỗi Whitelist khi đăng nhập Google)
+  React.useEffect(() => {
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      const error = params.get("error");
+      if (error) {
+        if (error === "unable_to_create_user") {
+          setErrorMsg("Email của bạn chưa được cấp quyền truy cập hệ thống. Vui lòng liên hệ Admin để thêm vào Whitelist.");
+        } else {
+          setErrorMsg(`Đã xảy ra lỗi đăng nhập: ${error}`);
+        }
+      }
+    }
+  }, []);
 
   const redirectAfterAuth = async () => {
     const session = await authClient.getSession();
@@ -89,22 +110,6 @@ export default function LoginPage() {
     }
   };
 
-  const handleDemoLogin = async (role: UserRole) => {
-    setIsLoading(true);
-    setErrorMsg("");
-    try {
-      const success = await loginAsRole(role);
-      if (success) {
-        router.push(portalPathForRole(role));
-      } else {
-        setErrorMsg("Đăng nhập nhanh thất bại. Backend có thể chưa chạy.");
-      }
-    } catch {
-      setErrorMsg("Không thể kết nối đến server backend (port 8000). Vui lòng khởi động backend.");
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   return (
     <Box
@@ -273,63 +278,6 @@ export default function LoginPage() {
               </Text>
             </Box>
 
-            <Divider label="Đăng nhập nhanh (Dev Mode)" labelPosition="center" />
-
-            <Group grow gap="xs">
-              <Button
-                onClick={() => handleDemoLogin("STUDENT")}
-                variant="light"
-                disabled={isLoading}
-                size="md"
-                radius={0}
-                color="blue"
-                leftSection={<IconUserCheck size={18} />}
-                style={{
-                  backgroundColor: "#F1F5F9",
-                  color: "#1A3A5C",
-                  fontSize: "11px",
-                }}
-                fw={700}
-              >
-                SINH VIÊN
-              </Button>
-
-              <Button
-                onClick={() => handleDemoLogin("LECTURER")}
-                variant="light"
-                disabled={isLoading}
-                size="md"
-                radius={0}
-                color="orange"
-                leftSection={<IconUserCog size={18} />}
-                style={{
-                  backgroundColor: "#FFF7ED",
-                  color: "#C2410C",
-                  fontSize: "11px",
-                }}
-                fw={700}
-              >
-                GIẢNG VIÊN
-              </Button>
-
-              <Button
-                onClick={() => handleDemoLogin("ADMIN")}
-                variant="light"
-                disabled={isLoading}
-                size="md"
-                radius={0}
-                color="blue"
-                leftSection={<IconShieldCheck size={18} />}
-                style={{
-                  backgroundColor: "#F1F5F9",
-                  color: "#1A3A5C",
-                  fontSize: "11px",
-                }}
-                fw={700}
-              >
-                ADMIN
-              </Button>
-            </Group>
           </Stack>
 
           <Box mt="xl" style={{ textAlign: "center" }}>

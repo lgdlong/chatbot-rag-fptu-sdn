@@ -27,6 +27,8 @@ import {
   IconCircleX,
   IconLink,
 } from "@tabler/icons-react";
+import { modals } from "@mantine/modals";
+import { notifications } from "@mantine/notifications";
 import * as api from "@/lib/api";
 import type { ApiSyllabusSummary } from "@/lib/api";
 
@@ -56,13 +58,43 @@ export default function SyllabusManagementPage() {
     void loadSyllabi();
   }, [loadSyllabi]);
 
+  const handleDeleteSyllabus = (syllabus: ApiSyllabusSummary) => {
+    modals.openConfirmModal({
+      title: "Xóa Syllabus",
+      children: (
+        <Text size="sm">
+          Bạn có chắc chắn muốn xóa syllabus <b>#{syllabus.id} - {syllabus.syllabusName}</b>? Hành động này sẽ gỡ bỏ tất cả tài liệu môn học liên kết và không thể hoàn tác.
+        </Text>
+      ),
+      labels: { confirm: "Xóa", cancel: "Hủy" },
+      confirmProps: { color: "red" },
+      onConfirm: async () => {
+        try {
+          await api.deleteSyllabus(syllabus.id);
+          notifications.show({
+            title: "Thành công",
+            message: `Đã xóa syllabus #${syllabus.id}`,
+            color: "green",
+          });
+          void loadSyllabi();
+        } catch (err: any) {
+          notifications.show({
+            title: "Lỗi",
+            message: err.message || "Không thể xóa syllabus.",
+            color: "red",
+          });
+        }
+      },
+    });
+  };
+
   const filteredSyllabi = useMemo(() => {
     const searchLower = searchTerm.trim().toLowerCase();
 
     return syllabi.filter((syllabus) => {
       const matchesSearch =
         searchLower === "" ||
-        syllabus.code.toLowerCase().includes(searchLower) ||
+        syllabus.course.code.toLowerCase().includes(searchLower) ||
         syllabus.course.name.toLowerCase().includes(searchLower) ||
         syllabus.syllabusName.toLowerCase().includes(searchLower);
 
@@ -212,7 +244,7 @@ export default function SyllabusManagementPage() {
                 {filteredSyllabi.map((syllabus) => (
                   <Table.Tr key={syllabus.id}>
                     <Table.Td style={{ fontSize: "13px", color: "#64748B" }}>#{syllabus.id}</Table.Td>
-                    <Table.Td style={{ fontSize: "13px", fontWeight: 700, color: "#1A1A1A" }}>{syllabus.code}</Table.Td>
+                    <Table.Td style={{ fontSize: "13px", fontWeight: 700, color: "#1A1A1A" }}>{syllabus.course.code}</Table.Td>
                     <Table.Td style={{ fontSize: "13px", fontWeight: 600 }}>{syllabus.course.name}</Table.Td>
                     <Table.Td style={{ fontSize: "13px" }}>
                       <Text
@@ -238,7 +270,7 @@ export default function SyllabusManagementPage() {
                         <ActionIcon variant="subtle" color="gray" size="sm" title="Chỉnh sửa">
                           <IconEdit size={16} />
                         </ActionIcon>
-                        <ActionIcon variant="subtle" color="red" size="sm" title="Xóa">
+                        <ActionIcon variant="subtle" color="red" size="sm" title="Xóa" onClick={() => handleDeleteSyllabus(syllabus)}>
                           <IconTrash size={16} />
                         </ActionIcon>
                       </Group>

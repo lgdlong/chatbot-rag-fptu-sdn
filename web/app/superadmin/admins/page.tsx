@@ -33,9 +33,11 @@ import {
   IconLock,
   IconAlertCircle,
   IconUser,
+  IconTrash,
 } from "@tabler/icons-react";
 import { authClient } from "../../../lib/auth-client";
 import type { UserRole } from "../../contexts/AuthContext";
+import { modals } from "@mantine/modals";
 
 const PAGE_SIZE = 10;
 
@@ -47,6 +49,7 @@ interface AdminListUser {
   email: string;
   role?: string | null;
   banned?: boolean | null;
+  plainPassword?: string | null;
   createdAt?: string | Date;
 }
 
@@ -79,6 +82,45 @@ export default function AdminManagementPage() {
   const [newName, setNewName] = useState("");
   const [newRole, setNewRole] = useState<UserRole>("STUDENT");
   const [errorMsg, setErrorMsg] = useState("");
+
+  const { data: sessionData } = authClient.useSession();
+  const currentUserId = sessionData?.user?.id;
+
+  const handleDeleteUser = (user: AdminListUser) => {
+    modals.openConfirmModal({
+      title: "Xóa tài khoản người dùng",
+      children: (
+        <Text size="sm">
+          Bạn có chắc chắn muốn xóa tài khoản của <b>{user.name} ({user.email})</b>?
+          Hành động này sẽ xóa vĩnh viễn tài khoản và các dữ liệu liên quan.
+        </Text>
+      ),
+      labels: { confirm: "Xóa", cancel: "Hủy" },
+      confirmProps: { color: "red" },
+      onConfirm: async () => {
+        try {
+          const res = await authClient.admin.removeUser({
+            userId: user.id,
+          });
+          if (res.error) {
+            throw new Error(res.error.message || "Không thể xóa tài khoản");
+          }
+          notifications.show({
+            title: "Thành công",
+            message: `Đã xóa tài khoản ${user.email}`,
+            color: "green",
+          });
+          void loadUsers();
+        } catch (err: any) {
+          notifications.show({
+            title: "Lỗi",
+            message: err.message || "Đã xảy ra lỗi khi xóa tài khoản.",
+            color: "red",
+          });
+        }
+      },
+    });
+  };
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -154,6 +196,9 @@ export default function AdminManagementPage() {
         email: newEmail.trim().toLowerCase(),
         password: newPassword || undefined,
         role: newRole,
+        data: {
+          plainPassword: newPassword || undefined,
+        }
       });
       if (res.error) {
         throw new Error(res.error.message ?? "Không tạo được tài khoản");
@@ -256,11 +301,12 @@ export default function AdminManagementPage() {
               <Table.Thead style={{ backgroundColor: "#F8FAFC" }}>
                 <Table.Tr>
                   <Table.Th style={{ fontWeight: 700, fontSize: "12px", color: "#475569" }}>Người dùng</Table.Th>
-                  <Table.Th style={{ width: "120px", fontWeight: 700, fontSize: "12px", color: "#475569" }}>Vai trò</Table.Th>
-                  <Table.Th style={{ width: "120px", fontWeight: 700, fontSize: "12px", color: "#475569" }}>Trạng thái</Table.Th>
-                  <Table.Th style={{ width: "120px", fontWeight: 700, fontSize: "12px", color: "#475569" }}>Ngày tạo</Table.Th>
-                  <Table.Th style={{ width: "72px", fontWeight: 700, fontSize: "12px", color: "#475569", textAlign: "right" }}>
-                    Chi tiết
+                  <Table.Th style={{ width: "110px", fontWeight: 700, fontSize: "12px", color: "#475569" }}>Vai trò</Table.Th>
+                  <Table.Th style={{ width: "110px", fontWeight: 700, fontSize: "12px", color: "#475569" }}>Trạng thái</Table.Th>
+                  <Table.Th style={{ width: "140px", fontWeight: 700, fontSize: "12px", color: "#475569" }}>Mật khẩu</Table.Th>
+                  <Table.Th style={{ width: "110px", fontWeight: 700, fontSize: "12px", color: "#475569" }}>Ngày tạo</Table.Th>
+                  <Table.Th style={{ width: "100px", fontWeight: 700, fontSize: "12px", color: "#475569", textAlign: "right" }}>
+                    Thao tác
                   </Table.Th>
                 </Table.Tr>
               </Table.Thead>
@@ -298,20 +344,35 @@ export default function AdminManagementPage() {
                         </Badge>
                       )}
                     </Table.Td>
+                    <Table.Td style={{ fontSize: "13px", color: "#64748B", fontFamily: "monospace" }}>
+                      {user.plainPassword || "—"}
+                    </Table.Td>
                     <Table.Td style={{ fontSize: "13px", color: "#64748B" }}>
                       {formatDate(user.createdAt)}
                     </Table.Td>
                     <Table.Td style={{ textAlign: "right" }}>
-                      <ActionIcon
-                        component={Link}
-                        href={`/superadmin/admins/${user.id}`}
-                        variant="subtle"
-                        color="gray"
-                        size="sm"
-                        aria-label="Xem chi tiết"
-                      >
-                        <IconEye size={16} />
-                      </ActionIcon>
+                      <Group gap="xs" justify="flex-end">
+                        <ActionIcon
+                          component={Link}
+                          href={`/superadmin/admins/${user.id}`}
+                          variant="subtle"
+                          color="gray"
+                          size="sm"
+                          aria-label="Xem chi tiết"
+                        >
+                          <IconEye size={16} />
+                        </ActionIcon>
+                        <ActionIcon
+                          variant="subtle"
+                          color="red"
+                          size="sm"
+                          aria-label="Xóa tài khoản"
+                          disabled={user.id === currentUserId}
+                          onClick={() => handleDeleteUser(user)}
+                        >
+                          <IconTrash size={16} />
+                        </ActionIcon>
+                      </Group>
                     </Table.Td>
                   </Table.Tr>
                 ))}

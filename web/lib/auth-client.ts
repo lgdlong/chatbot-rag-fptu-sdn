@@ -1,5 +1,5 @@
 import { createAuthClient } from "better-auth/react";
-import { adminClient } from "better-auth/client/plugins";
+import { adminClient, inferAdditionalFields } from "better-auth/client/plugins";
 import { adminAc, userAc } from "better-auth/plugins/admin/access";
 
 export const apiBaseUrl =
@@ -14,6 +14,14 @@ export const authClient = createAuthClient({
         ADMIN: adminAc,
         LECTURER: userAc,
         STUDENT: userAc,
+      },
+    }),
+    inferAdditionalFields({
+      user: {
+        plainPassword: {
+          type: "string",
+          required: false,
+        },
       },
     }),
   ],
