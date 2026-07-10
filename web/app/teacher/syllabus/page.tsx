@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
 import Link from "next/link";
 import {
   Title,
@@ -14,6 +14,8 @@ import {
   Badge,
   ActionIcon,
   Box,
+  Alert,
+  Skeleton,
 } from "@mantine/core";
 import {
   IconPlus,
@@ -25,63 +27,54 @@ import {
   IconCircleX,
   IconLink,
 } from "@tabler/icons-react";
-
-const mockSyllabi = [
-  {
-    id: 12580,
-    code: "FER202",
-    subjectName: "Front-End web development with React",
-    syllabusName: "FER202_Fall2025_v1.0",
-    isActive: true,
-    isApproved: true,
-    decisionNo: "359/QĐ-ĐHFPT 04/09/2025",
-  },
-  {
-    id: 12581,
-    code: "SDN302",
-    subjectName: "Server-Side development with NodeJS",
-    syllabusName: "SDN302_Fall2025_v1.1",
-    isActive: true,
-    isApproved: true,
-    decisionNo: "412/QĐ-ĐHFPT 10/09/2025",
-  },
-  {
-    id: 9426,
-    code: "FER201m",
-    subjectName: "Front-End web development with React (Old)",
-    syllabusName: "FER201m_Spring2024_v1",
-    isActive: false,
-    isApproved: true,
-    decisionNo: "100/QĐ-ĐHFPT 01/01/2024",
-  },
-  {
-    id: 12600,
-    code: "PRN212",
-    subjectName: "Basic Cross-Platform App Programming With .NET",
-    syllabusName: "PRN212_Draft_v2",
-    isActive: false,
-    isApproved: false,
-    decisionNo: "Pending",
-  },
-];
+import * as api from "@/lib/api";
+import type { ApiSyllabusSummary } from "@/lib/api";
 
 export default function SyllabusManagementPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
+  const [syllabi, setSyllabi] = useState<ApiSyllabusSummary[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [apiError, setApiError] = useState<string | null>(null);
 
-  const filteredSyllabi = mockSyllabi.filter((syllabus) => {
-    const matchesSearch =
-      syllabus.code.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      syllabus.subjectName.toLowerCase().includes(searchTerm.toLowerCase());
+  const loadSyllabi = useCallback(async () => {
+    setIsLoading(true);
+    setApiError(null);
+    try {
+      const { syllabuses } = await api.searchSyllabus();
+      setSyllabi(syllabuses);
+    } catch (err) {
+      console.error("Failed to load syllabi:", err);
+      setApiError("Không thể tải dữ liệu syllabus từ server.");
+      setSyllabi([]);
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
 
-    const matchesStatus =
-      statusFilter === "all" ||
-      (statusFilter === "active" && syllabus.isActive && syllabus.isApproved) ||
-      (statusFilter === "draft" && !syllabus.isApproved) ||
-      (statusFilter === "inactive" && !syllabus.isActive && syllabus.isApproved);
+  useEffect(() => {
+    void loadSyllabi();
+  }, [loadSyllabi]);
 
-    return matchesSearch && matchesStatus;
-  });
+  const filteredSyllabi = useMemo(() => {
+    const searchLower = searchTerm.trim().toLowerCase();
+
+    return syllabi.filter((syllabus) => {
+      const matchesSearch =
+        searchLower === "" ||
+        syllabus.code.toLowerCase().includes(searchLower) ||
+        syllabus.course.name.toLowerCase().includes(searchLower) ||
+        syllabus.syllabusName.toLowerCase().includes(searchLower);
+
+      const matchesStatus =
+        statusFilter === "all" ||
+        (statusFilter === "active" && syllabus.isActive && syllabus.isApproved) ||
+        (statusFilter === "draft" && !syllabus.isApproved) ||
+        (statusFilter === "inactive" && !syllabus.isActive && syllabus.isApproved);
+
+      return matchesSearch && matchesStatus;
+    });
+  }, [searchTerm, statusFilter, syllabi]);
 
   const getStatusBadge = (isActive: boolean, isApproved: boolean) => {
     if (isActive && isApproved) {
@@ -96,6 +89,7 @@ export default function SyllabusManagementPage() {
         </Badge>
       );
     }
+
     if (!isApproved) {
       return (
         <Badge
@@ -108,6 +102,7 @@ export default function SyllabusManagementPage() {
         </Badge>
       );
     }
+
     return (
       <Badge
         color="gray"
@@ -143,6 +138,12 @@ export default function SyllabusManagementPage() {
           Tạo Syllabus
         </Button>
       </Group>
+
+      {apiError && (
+        <Alert title="Lỗi API" color="red" radius={0}>
+          {apiError}
+        </Alert>
+      )}
 
       {/* Filters Card */}
       <Card p="md" radius={0} style={{ border: "1px solid #E2E8F0", backgroundColor: "white" }}>
@@ -186,62 +187,73 @@ export default function SyllabusManagementPage() {
 
       {/* Table Card */}
       <Card p={0} radius={0} style={{ border: "1px solid #E2E8F0", backgroundColor: "white" }}>
-        <Table layout="fixed" highlightOnHover striped>
-          <Table.Thead style={{ backgroundColor: "#F8FAFC" }}>
-            <Table.Tr>
-              <Table.Th style={{ width: "90px", fontWeight: 700, fontSize: "12px", color: "#475569" }}>ID</Table.Th>
-              <Table.Th style={{ width: "120px", fontWeight: 700, fontSize: "12px", color: "#475569" }}>Subject Code</Table.Th>
-              <Table.Th style={{ fontWeight: 700, fontSize: "12px", color: "#475569" }}>Tên môn học</Table.Th>
-              <Table.Th style={{ fontWeight: 700, fontSize: "12px", color: "#475569" }}>Syllabus Name</Table.Th>
-              <Table.Th style={{ width: "150px", fontWeight: 700, fontSize: "12px", color: "#475569" }}>Trạng thái</Table.Th>
-              <Table.Th style={{ fontWeight: 700, fontSize: "12px", color: "#475569" }}>Decision No</Table.Th>
-              <Table.Th style={{ width: "100px", fontWeight: 700, fontSize: "12px", color: "#475569", textAlign: "right" }}>Thao tác</Table.Th>
-            </Table.Tr>
-          </Table.Thead>
-          <Table.Tbody>
-            {filteredSyllabi.map((syllabus) => (
-              <Table.Tr key={syllabus.id}>
-                <Table.Td style={{ fontSize: "13px", color: "#64748B" }}>#{syllabus.id}</Table.Td>
-                <Table.Td style={{ fontSize: "13px", fontWeight: 700, color: "#1A1A1A" }}>{syllabus.code}</Table.Td>
-                <Table.Td style={{ fontSize: "13px", fw: 600 }}>{syllabus.subjectName}</Table.Td>
-                <Table.Td style={{ fontSize: "13px" }}>
-                  <Text
-                    component={Link}
-                    href={`/student/syllabus/${syllabus.code.toLowerCase()}`}
-                    style={{
-                      color: "#1A3A5C",
-                      fontWeight: 700,
-                      display: "inline-flex",
-                      alignItems: "center",
-                      gap: "4px",
-                      textDecoration: "underline",
-                    }}
-                  >
-                    <IconLink size={14} />
-                    {syllabus.syllabusName}
-                  </Text>
-                </Table.Td>
-                <Table.Td>{getStatusBadge(syllabus.isActive, syllabus.isApproved)}</Table.Td>
-                <Table.Td style={{ fontSize: "13px", color: "#475569" }}>{syllabus.decisionNo}</Table.Td>
-                <Table.Td style={{ textAlign: "right" }}>
-                  <Group gap="xs" justify="flex-end">
-                    <ActionIcon variant="subtle" color="gray" size="sm" title="Chỉnh sửa">
-                      <IconEdit size={16} />
-                    </ActionIcon>
-                    <ActionIcon variant="subtle" color="red" size="sm" title="Xóa">
-                      <IconTrash size={16} />
-                    </ActionIcon>
-                  </Group>
-                </Table.Td>
-              </Table.Tr>
-            ))}
-          </Table.Tbody>
-        </Table>
-
-        {filteredSyllabi.length === 0 && (
-          <Box p="xl" style={{ textAlign: "center", color: "#9CA3AF" }}>
-            <Text size="sm" fw={700}>Không tìm thấy kết quả phù hợp</Text>
+        {isLoading ? (
+          <Box p="xl">
+            <Skeleton height={28} width={180} mb="md" />
+            <Skeleton height={20} width="100%" mb="sm" />
+            <Skeleton height={20} width="100%" mb="sm" />
+            <Skeleton height={20} width="100%" />
           </Box>
+        ) : (
+          <>
+            <Table layout="fixed" highlightOnHover striped>
+              <Table.Thead style={{ backgroundColor: "#F8FAFC" }}>
+                <Table.Tr>
+                  <Table.Th style={{ width: "90px", fontWeight: 700, fontSize: "12px", color: "#475569" }}>ID</Table.Th>
+                  <Table.Th style={{ width: "120px", fontWeight: 700, fontSize: "12px", color: "#475569" }}>Subject Code</Table.Th>
+                  <Table.Th style={{ fontWeight: 700, fontSize: "12px", color: "#475569" }}>Tên môn học</Table.Th>
+                  <Table.Th style={{ fontWeight: 700, fontSize: "12px", color: "#475569" }}>Syllabus Name</Table.Th>
+                  <Table.Th style={{ width: "150px", fontWeight: 700, fontSize: "12px", color: "#475569" }}>Trạng thái</Table.Th>
+                  <Table.Th style={{ fontWeight: 700, fontSize: "12px", color: "#475569" }}>Decision No</Table.Th>
+                  <Table.Th style={{ width: "100px", fontWeight: 700, fontSize: "12px", color: "#475569", textAlign: "right" }}>Thao tác</Table.Th>
+                </Table.Tr>
+              </Table.Thead>
+              <Table.Tbody>
+                {filteredSyllabi.map((syllabus) => (
+                  <Table.Tr key={syllabus.id}>
+                    <Table.Td style={{ fontSize: "13px", color: "#64748B" }}>#{syllabus.id}</Table.Td>
+                    <Table.Td style={{ fontSize: "13px", fontWeight: 700, color: "#1A1A1A" }}>{syllabus.code}</Table.Td>
+                    <Table.Td style={{ fontSize: "13px", fontWeight: 600 }}>{syllabus.course.name}</Table.Td>
+                    <Table.Td style={{ fontSize: "13px" }}>
+                      <Text
+                        component={Link}
+                        href={`/student/syllabus/${syllabus.course.code.toLowerCase()}`}
+                        style={{
+                          color: "#1A3A5C",
+                          fontWeight: 700,
+                          display: "inline-flex",
+                          alignItems: "center",
+                          gap: "4px",
+                          textDecoration: "underline",
+                        }}
+                      >
+                        <IconLink size={14} />
+                        {syllabus.syllabusName}
+                      </Text>
+                    </Table.Td>
+                    <Table.Td>{getStatusBadge(syllabus.isActive, syllabus.isApproved)}</Table.Td>
+                    <Table.Td style={{ fontSize: "13px", color: "#475569" }}>{syllabus.decisionNo ?? "-"}</Table.Td>
+                    <Table.Td style={{ textAlign: "right" }}>
+                      <Group gap="xs" justify="flex-end">
+                        <ActionIcon variant="subtle" color="gray" size="sm" title="Chỉnh sửa">
+                          <IconEdit size={16} />
+                        </ActionIcon>
+                        <ActionIcon variant="subtle" color="red" size="sm" title="Xóa">
+                          <IconTrash size={16} />
+                        </ActionIcon>
+                      </Group>
+                    </Table.Td>
+                  </Table.Tr>
+                ))}
+              </Table.Tbody>
+            </Table>
+
+            {filteredSyllabi.length === 0 && (
+              <Box p="xl" style={{ textAlign: "center", color: "#9CA3AF" }}>
+                <Text size="sm" fw={700}>Không tìm thấy kết quả phù hợp</Text>
+              </Box>
+            )}
+          </>
         )}
       </Card>
     </Stack>
