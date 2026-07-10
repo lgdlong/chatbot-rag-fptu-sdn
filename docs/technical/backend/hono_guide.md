@@ -1,5 +1,11 @@
 # Cẩm Nang Toàn Diện Về Hono.js Cho Developer
 
+> Status: Current
+> Audience: Developer
+> Canonical: Yes — technical reference
+> Owner: Technical
+>
+
 Tài liệu này là nguồn dữ liệu chuẩn mực duy nhất (**Single Source of Truth**) về phát triển API sử dụng **Hono.js** trong hệ sinh thái **FPTU RAG Chatbot**.
 
 ---

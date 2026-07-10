@@ -1,5 +1,11 @@
 # Hướng dẫn Khởi chạy Hệ thống FPTU Chatbot RAG
 
+> Status: Current
+> Audience: Operations / Developer
+> Canonical: No — operational guidance
+> Owner: Technical
+>
+
 Tài liệu này cung cấp hướng dẫn từng bước để thiết lập môi trường, khởi tạo cơ sở dữ liệu và chạy toàn bộ hệ thống FPTU Chatbot RAG (bao gồm Backend API, Frontend Web, và các dịch vụ cơ sở hạ tầng như PostgreSQL và retrieval store).
 
 ---

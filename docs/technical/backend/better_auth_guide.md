@@ -1,5 +1,11 @@
 # Cẩm Nang Toàn Diện Về Better Auth Cho Developer
 
+> Status: Current
+> Audience: Developer
+> Canonical: Yes — technical reference
+> Owner: Technical
+>
+
 Tài liệu này là nguồn dữ liệu chuẩn mực duy nhất (**Single Source of Truth**) về việc cấu hình, vận hành và tích hợp **Better Auth** trong hệ sinh thái **FPTU RAG Chatbot**. 
 
 ---

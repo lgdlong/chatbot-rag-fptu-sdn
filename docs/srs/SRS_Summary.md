@@ -1,5 +1,9 @@
 # SRS Summary — Academic RAG Assistant
 
+> Status: Current
+> Audience: Stakeholder / BA / PM
+> Canonical: Yes
+> Owner: Business
 > Phiên bản: 1.0  
 > Cập nhật: 2026-06-23
 

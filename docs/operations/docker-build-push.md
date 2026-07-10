@@ -1,5 +1,11 @@
 # Hướng Dẫn Build & Push Docker Image (Chatbot RAG FPTU)
 
+> Status: Current
+> Audience: Operations / Developer
+> Canonical: No — operational guidance
+> Owner: Technical
+>
+
 Tài liệu này hướng dẫn chi tiết quy trình đóng gói ứng dụng (Dockerize) ở máy trạm cục bộ (Local Dev) và triển khai kéo thả (Pull & Run) trên máy chủ VPS Production.
 
 ---

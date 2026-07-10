@@ -1,5 +1,11 @@
 # Database Query Guide - Chatbot RAG FPTU
 
+> Status: Current
+> Audience: Developer
+> Canonical: Yes — technical reference
+> Owner: Technical
+>
+
 This guide explains how to connect to and query the PostgreSQL database for the `chatbot-rag-fptu` project.
 
 ## Prerequisites

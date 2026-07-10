@@ -1,5 +1,10 @@
 # Screen Inventory Cho Frontend
 
+> Status: Current
+> Audience: BA / Developer
+> Canonical: Yes — part of SRS
+> Owner: Business
+
 > Phiên bản: 1.0  
 > Cập nhật: 2026-06-23
 

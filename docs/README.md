@@ -1,3 +1,8 @@
+> Status: Current
+> Audience: All (Stakeholder, BA, Developer, Operations)
+> Canonical: Yes — navigation map
+> Owner: Docs
+
 # Docs map
 
 `docs/` is split by audience and ownership.

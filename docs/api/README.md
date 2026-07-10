@@ -1,5 +1,11 @@
 # Hướng Dẫn Tích Hợp API
 
+> Status: Current
+> Audience: Developer
+> Canonical: Yes — API reference
+> Owner: Technical
+>
+
 Tài liệu trong `docs/api/` là lớp tham chiếu kỹ thuật cho backend hiện tại. Nó không thay thế `docs/srs/`, và không phải nơi định nghĩa business scope chính thức.
 
 ---

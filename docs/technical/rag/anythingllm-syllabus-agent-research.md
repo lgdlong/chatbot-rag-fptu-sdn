@@ -1,5 +1,11 @@
 # Báo cáo nghiên cứu: AnythingLLM cho chatbot syllabus và tài liệu môn học
 
+> Status: Current
+> Audience: Developer
+> Canonical: Yes — technical reference
+> Owner: Technical
+>
+
 ## Thời gian nghiên cứu
 
 - Thực hiện ngày: 2026-05-30
