@@ -23,6 +23,11 @@ export const auth = betterAuth({
     errorURL: `${ENV.BETTER_AUTH_URL.replace("8001", "3000")}/login`,
   },
   trustedOrigins: ["http://localhost:3000"], // Whitelist Next.js frontend origin for CSRF
+  advanced: {
+    ipAddress: {
+      ipAddressHeaders: ["x-forwarded-for", "x-real-ip", "cf-connecting-ip"],
+    },
+  },
   emailAndPassword: {
     enabled: true,
     allowedDomains: ["@fpt.edu.vn", "@gmail.com"],
