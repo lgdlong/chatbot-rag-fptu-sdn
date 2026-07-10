@@ -106,3 +106,5 @@ Hệ thống RAG phục vụ kho tài liệu học tiếng Việt tại Đại h
 > *   Không bao giờ được thay đổi cấu hình `.gitignore` nhằm loại bỏ việc bỏ qua các file bí mật (như `.env`).
 > *   **Quy tắc file cấu hình (.env):** Tuyệt đối không tạo hoặc sử dụng các file `.env` cục bộ trong từng thư mục con (`api/` hay `web/`). Toàn bộ biến môi trường phải được cấu hình tập trung tại duy nhất một file `.env` ở thư mục gốc (root) dự án. Mã nguồn Backend/Frontend sẽ nạp cấu hình từ file `.env` root này.
 > *   Luôn kiểm tra các lỗi linting và kiểu dữ liệu (TypeScript) trước khi báo cáo hoàn thành công việc.
+>
+> **Phân biệt Investigation và Implementation:** Khi prompt là câu hỏi, yêu cầu kiểm tra, tra cứu, hay điều tra — chỉ thực hiện đúng việc đó và báo cáo kết quả. **KHÔNG** tự động fix lỗi, implement, hay thay đổi code. Chỉ implement khi user dùng động từ implementation rõ ràng (thêm/tạo/sửa/viết).

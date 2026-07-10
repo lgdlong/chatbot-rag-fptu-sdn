@@ -5,6 +5,7 @@
 
 ## General
 
+- **[CRITICAL] Phân biệt câu hỏi (investigation) và yêu cầu (implementation):** Khi prompt là câu hỏi, yêu cầu kiểm tra, tra cứu, hay điều tra — chỉ thực hiện đúng việc đó và báo cáo kết quả. **KHÔNG** tự động fix lỗi, implement, hay thay đổi code. Chỉ implement khi user dùng động từ implementation rõ ràng (thêm/tạo/sửa/viết).
 - **File Naming**: Use kebab-case for file names with a meaningful name that describes the purpose of the file, doesn't matter if the file name is long, just make sure when LLMs read the file names while using Grep or other tools, they can understand the purpose of the file right away without reading the file content.
 - **File Size Management**: Keep individual code files under 200 lines for optimal context management
   - Split large files into smaller, focused components/modules
