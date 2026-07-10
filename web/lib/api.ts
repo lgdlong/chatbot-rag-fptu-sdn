@@ -250,6 +250,49 @@ export async function getSyllabusDetail(
   return fetchApi(`/api/syllabus/${id}`);
 }
 
+export async function getSyllabusDocuments(
+  syllabusId: number
+): Promise<{ documents: ApiDocument[] }> {
+  return fetchApi(`/api/syllabus/${syllabusId}/documents`);
+}
+
+export async function uploadSyllabusDocument(
+  syllabusId: number,
+  file: File
+): Promise<{ document: ApiDocument }> {
+  const url = `${API_BASE_URL}/api/syllabus/${syllabusId}/documents`;
+  const formData = new FormData();
+  formData.append("file", file);
+
+  const res = await fetch(url, {
+    method: "POST",
+    credentials: "include",
+    body: formData,
+  });
+
+  if (!res.ok) {
+    let errorMessage = `API Error: ${res.status}`;
+    try {
+      const body = await res.json();
+      errorMessage = body.error || errorMessage;
+    } catch {
+      // ignore parse errors
+    }
+    throw new ApiError(errorMessage, res.status);
+  }
+
+  return res.json();
+}
+
+export async function deleteSyllabusDocument(
+  syllabusId: number,
+  documentId: string
+): Promise<{ success: boolean }> {
+  return fetchApi(`/api/syllabus/${syllabusId}/documents/${encodeURIComponent(documentId)}`, {
+    method: "DELETE",
+  });
+}
+
 // ─── Course APIs ───
 
 export async function getCourses(): Promise<{ courses: ApiCourse[] }> {

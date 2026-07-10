@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
 import {
   Title,
   Text,
@@ -15,9 +15,9 @@ import {
   Select,
   Modal,
   Alert,
-  SegmentedControl,
   Box,
   ThemeIcon,
+  Loader,
 } from "@mantine/core";
 import { Dropzone, FileWithPath } from "@mantine/dropzone";
 import {
@@ -33,60 +33,139 @@ import {
   IconLink,
   IconFileCode,
 } from "@tabler/icons-react";
-
-const mockDocuments = [
-  {
-    id: 1,
-    name: "FER202_Lecture01.pdf",
-    subjectCode: "FER202",
-    type: "pdf",
-    size: "2.4 MB",
-    status: "indexed",
-    uploadedAt: "2026-05-20",
-  },
-  {
-    id: 2,
-    name: "FER202_Lab01.docx",
-    subjectCode: "FER202",
-    type: "docx",
-    size: "156 KB",
-    status: "indexed",
-    uploadedAt: "2026-05-20",
-  },
-  {
-    id: 3,
-    name: "SDN302_Overview.pptx",
-    subjectCode: "SDN302",
-    type: "pptx",
-    size: "5.2 MB",
-    status: "processing",
-    uploadedAt: "2026-05-23",
-  },
-  {
-    id: 4,
-    name: "SDN302_Diagram.png",
-    subjectCode: "SDN302",
-    type: "image",
-    size: "892 KB",
-    status: "failed",
-    uploadedAt: "2026-05-23",
-  },
-];
+import * as api from "@/lib/api";
+import type { ApiSyllabusSummary, ApiDocument } from "@/lib/api";
 
 export default function DocumentManagementPage() {
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedSubject, setSelectedSubject] = useState<string>("all");
+  const [selectedSyllabusId, setSelectedSyllabusId] = useState<number | null>(null);
+  const [syllabi, setSyllabi] = useState<ApiSyllabusSummary[]>([]);
+  const [documents, setDocuments] = useState<ApiDocument[]>([]);
+  const [isLoadingSyllabi, setIsLoadingSyllabi] = useState(true);
+  const [isLoadingDocs, setIsLoadingDocs] = useState(false);
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
-  const [uploadType, setUploadType] = useState<string>("file");
   const [files, setFiles] = useState<FileWithPath[]>([]);
+  const [isUploading, setIsUploading] = useState(false);
+  const [apiError, setApiError] = useState<string | null>(null);
+  const [uploadError, setUploadError] = useState<string | null>(null);
 
-  const subjects = Array.from(new Set(mockDocuments.map((doc) => doc.subjectCode)));
+  const loadSyllabi = useCallback(async () => {
+    setIsLoadingSyllabi(true);
+    setApiError(null);
+    try {
+      const { syllabuses } = await api.searchSyllabus();
+      setSyllabi(syllabuses);
+      setSelectedSyllabusId(syllabuses[0]?.id ?? null);
+    } catch (err) {
+      console.error("Failed to load syllabi:", err);
+      setApiError("Không thể tải danh sách syllabus từ server.");
+    } finally {
+      setIsLoadingSyllabi(false);
+    }
+  }, []);
 
-  const filteredDocs = mockDocuments.filter((doc) => {
-    const matchesSearch = doc.name.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesSubject = selectedSubject === "all" || doc.subjectCode === selectedSubject;
-    return matchesSearch && matchesSubject;
-  });
+  const loadDocuments = useCallback(
+    async (syllabusId: number) => {
+      setIsLoadingDocs(true);
+      setApiError(null);
+      try {
+        const { documents } = await api.getSyllabusDocuments(syllabusId);
+        setDocuments(documents);
+      } catch (err) {
+        console.error("Failed to load documents:", err);
+        setApiError("Không thể tải danh sách tài liệu.");
+        setDocuments([]);
+      } finally {
+        setIsLoadingDocs(false);
+      }
+    },
+    []
+  );
+
+  useEffect(() => {
+    void loadSyllabi();
+  }, [loadSyllabi]);
+
+  useEffect(() => {
+    if (selectedSyllabusId !== null) {
+      void loadDocuments(selectedSyllabusId);
+    } else {
+      setDocuments([]);
+    }
+  }, [selectedSyllabusId, loadDocuments]);
+
+  const selectedSyllabus = useMemo(
+    () => syllabi.find((s) => s.id === selectedSyllabusId) ?? null,
+    [syllabi, selectedSyllabusId]
+  );
+
+  const handleUpload = async () => {
+    if (!selectedSyllabusId) {
+      setUploadError("Vui lòng chọn syllabus trước khi tải lên tài liệu.");
+      return;
+    }
+
+    if (files.length === 0) {
+      setUploadError("Vui lòng chọn file PDF để tải lên.");
+      return;
+    }
+
+    const file = files[0];
+    if (file.size > 50 * 1024 ** 2) {
+      setUploadError("File vượt quá giới hạn 50MB.");
+      return;
+    }
+
+    const isPdf = file.type === "application/pdf" || file.name.toLowerCase().endsWith(".pdf");
+    if (!isPdf) {
+      setUploadError("Hiện tại chỉ hỗ trợ upload file PDF.");
+      return;
+    }
+
+    setUploadError(null);
+    setIsUploading(true);
+    try {
+      await api.uploadSyllabusDocument(selectedSyllabusId, file);
+      setFiles([]);
+      setIsUploadModalOpen(false);
+      void loadDocuments(selectedSyllabusId);
+    } catch (err: unknown) {
+      console.error("Upload failed:", err);
+      const message = err instanceof Error ? err.message : "Lỗi khi upload tài liệu.";
+      setUploadError(message);
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
+  const handleDelete = async (documentId: string) => {
+    if (!selectedSyllabusId) return;
+    setApiError(null);
+
+    try {
+      await api.deleteSyllabusDocument(selectedSyllabusId, documentId);
+      void loadDocuments(selectedSyllabusId);
+    } catch (err) {
+      console.error("Delete failed:", err);
+      setApiError("Không thể xóa tài liệu.");
+    }
+  };
+
+  const subjectOptions = useMemo(
+    () =>
+      syllabi.map((syllabus) => ({
+        value: String(syllabus.id),
+        label: `${syllabus.course.code} - ${syllabus.course.name}`,
+      })),
+    [syllabi]
+  );
+
+  const filteredDocs = useMemo(() => {
+    const searchLower = searchTerm.trim().toLowerCase();
+    return documents.filter((doc) =>
+      searchLower === "" || doc.name.toLowerCase().includes(searchLower)
+    );
+  }, [searchTerm, documents]);
 
   const getFileIcon = (type: string) => {
     switch (type) {
@@ -101,19 +180,19 @@ export default function DocumentManagementPage() {
       case "video":
         return <IconVideo size={20} color="#0D9488" />;
       default:
-        return <IconFileText size={20} color="#64748B" />;
+        return <IconFileCode size={20} color="#64748B" />;
     }
   };
 
   const getStatusBadge = (status: string) => {
-    if (status === "indexed") {
+    if (status === "COMPLETED" || status === "completed" || status === "indexed") {
       return (
         <Badge variant="light" color="green" radius={0} fw={700} leftSection={<IconCircleCheck size={12} />}>
           Đã index RAG
         </Badge>
       );
     }
-    if (status === "processing") {
+    if (status === "PROCESSING" || status === "processing") {
       return (
         <Badge variant="light" color="yellow" radius={0} fw={700} leftSection={<IconClock size={12} />}>
           Đang xử lý
@@ -127,6 +206,8 @@ export default function DocumentManagementPage() {
     );
   };
 
+  const documentCountLabel = selectedSyllabus ? `${filteredDocs.length} tài liệu` : "Chọn syllabus để xem tài liệu";
+
   return (
     <Stack gap="xl">
       {/* Header */}
@@ -136,7 +217,7 @@ export default function DocumentManagementPage() {
             Quản lý Tài liệu
           </Title>
           <Text size="sm" c="dimmed">
-            Tải lên slide bài giảng, giáo trình PDF để chunking & embedding vào Qdrant cho Chatbot RAG.
+            Tải lên slide bài giảng PDF để chunking & embedding vào Qdrant cho Chatbot RAG.
           </Text>
         </div>
         <Button
@@ -145,27 +226,18 @@ export default function DocumentManagementPage() {
           radius={0}
           fw={700}
           onClick={() => setIsUploadModalOpen(true)}
+          disabled={!selectedSyllabusId}
         >
           Upload file mới
         </Button>
       </Group>
 
-      {/* Guidelines */}
-      <Alert
-        color="blue"
-        radius={0}
-        title="Quy định và Hướng dẫn Upload"
-        icon={<IconAlertCircle size={20} />}
-        styles={{ title: { fontWeight: 700 } }}
-      >
-        <Stack gap="xs" mt="xs">
-          <Text size="sm">• Định dạng hỗ trợ: <b>PDF, DOCX, PPTX (slide bài giảng), Hình ảnh (PNG, JPG)</b>. Với tài liệu video, vui lòng dán URL phụ đề.</Text>
-          <Text size="sm">• Giới hạn dung lượng: <b>Tối đa 50MB</b> mỗi file. Số lượng tối đa: <b>10 tài liệu</b> mỗi môn học.</Text>
-          <Text size="sm">• Tiến trình: Sau khi tải lên, hệ thống sẽ tự động phân mảnh văn bản (chunking) và nhúng vector ngữ nghĩa (Gemini Embedding) vào Qdrant DB.</Text>
-        </Stack>
-      </Alert>
+      {apiError && (
+        <Alert title="Lỗi API" color="red" radius={0}>
+          {apiError}
+        </Alert>
+      )}
 
-      {/* Filters Card */}
       <Card p="md" radius={0} style={{ border: "1px solid #E2E8F0", backgroundColor: "white" }}>
         <Group grow gap="md" align="center">
           <TextInput
@@ -178,57 +250,76 @@ export default function DocumentManagementPage() {
           />
 
           <Select
-            placeholder="Tất cả môn học"
-            data={[{ value: "all", label: "Tất cả môn học" }, ...subjects.map((sub) => ({ value: sub, label: sub }))]}
-            value={selectedSubject}
-            onChange={(val) => setSelectedSubject(val || "all")}
+            label="Chọn syllabus"
+            placeholder={isLoadingSyllabi ? "Đang tải syllabus..." : "Chọn syllabus..."}
+            data={subjectOptions}
+            value={selectedSyllabusId ? String(selectedSyllabusId) : null}
+            onChange={(value) => setSelectedSyllabusId(value ? Number(value) : null)}
             radius={0}
-            style={{ maxWidth: "200px" }}
+            style={{ maxWidth: "300px" }}
+            disabled={isLoadingSyllabi}
           />
         </Group>
       </Card>
 
-      {/* Document Table Card */}
       <Card p={0} radius={0} style={{ border: "1px solid #E2E8F0", backgroundColor: "white" }}>
-        <Table layout="fixed" highlightOnHover striped>
-          <Table.Thead style={{ backgroundColor: "#F8FAFC" }}>
-            <Table.Tr>
-              <Table.Th style={{ width: "60px", fontWeight: 700, fontSize: "12px", color: "#475569", textAlign: "center" }}>Loại</Table.Th>
-              <Table.Th style={{ fontWeight: 700, fontSize: "12px", color: "#475569" }}>Tên tài liệu</Table.Th>
-              <Table.Th style={{ width: "120px", fontWeight: 700, fontSize: "12px", color: "#475569" }}>Môn học</Table.Th>
-              <Table.Th style={{ width: "120px", fontWeight: 700, fontSize: "12px", color: "#475569" }}>Dung lượng</Table.Th>
-              <Table.Th style={{ width: "140px", fontWeight: 700, fontSize: "12px", color: "#475569" }}>Ngày tải lên</Table.Th>
-              <Table.Th style={{ width: "160px", fontWeight: 700, fontSize: "12px", color: "#475569" }}>Trạng thái RAG</Table.Th>
-              <Table.Th style={{ width: "80px", fontWeight: 700, fontSize: "12px", color: "#475569", textAlign: "right" }}>Xóa</Table.Th>
-            </Table.Tr>
-          </Table.Thead>
-          <Table.Tbody>
-            {filteredDocs.map((doc) => (
-              <Table.Tr key={doc.id}>
-                <Table.Td style={{ textAlign: "center" }}>{getFileIcon(doc.type)}</Table.Td>
-                <Table.Td style={{ fontSize: "13px", fontWeight: 700 }}>{doc.name}</Table.Td>
-                <Table.Td style={{ fontSize: "13px", fontWeight: 700, color: "#1A3A5C" }}>{doc.subjectCode}</Table.Td>
-                <Table.Td style={{ fontSize: "13px", color: "#64748B" }}>{doc.size}</Table.Td>
-                <Table.Td style={{ fontSize: "13px", color: "#64748B" }}>{doc.uploadedAt}</Table.Td>
-                <Table.Td>{getStatusBadge(doc.status)}</Table.Td>
-                <Table.Td style={{ textAlign: "right" }}>
-                  <ActionIcon variant="subtle" color="red" size="sm">
-                    <IconTrash size={16} />
-                  </ActionIcon>
-                </Table.Td>
-              </Table.Tr>
-            ))}
-          </Table.Tbody>
-        </Table>
+        <Group position="apart" align="center" style={{ padding: "20px" }}>
+          <Text size="sm" color="dimmed">
+            {documentCountLabel}
+          </Text>
+          {selectedSyllabus && (
+            <Text size="sm" color="dimmed">
+              {selectedSyllabus.course.code} • {selectedSyllabus.syllabusName}
+            </Text>
+          )}
+        </Group>
 
-        {filteredDocs.length === 0 && (
+        {isLoadingDocs ? (
+          <Box p="xl" style={{ textAlign: "center" }}>
+            <Loader />
+          </Box>
+        ) : (
+          <Table layout="fixed" highlightOnHover striped>
+            <Table.Thead style={{ backgroundColor: "#F8FAFC" }}>
+              <Table.Tr>
+                <Table.Th style={{ width: "60px", fontWeight: 700, fontSize: "12px", color: "#475569", textAlign: "center" }}>Loại</Table.Th>
+                <Table.Th style={{ fontWeight: 700, fontSize: "12px", color: "#475569" }}>Tên tài liệu</Table.Th>
+                <Table.Th style={{ width: "140px", fontWeight: 700, fontSize: "12px", color: "#475569" }}>Trạng thái</Table.Th>
+                <Table.Th style={{ width: "120px", fontWeight: 700, fontSize: "12px", color: "#475569" }}>Ngày tải lên</Table.Th>
+                <Table.Th style={{ width: "80px", fontWeight: 700, fontSize: "12px", color: "#475569", textAlign: "right" }}>Xóa</Table.Th>
+              </Table.Tr>
+            </Table.Thead>
+            <Table.Tbody>
+              {filteredDocs.map((doc) => (
+                <Table.Tr key={doc.id}>
+                  <Table.Td style={{ textAlign: "center" }}>{getFileIcon(doc.fileType || doc.name.split(".").pop() || "pdf")}</Table.Td>
+                  <Table.Td style={{ fontSize: "13px", fontWeight: 700 }}>{doc.name}</Table.Td>
+                  <Table.Td>{getStatusBadge(doc.status)}</Table.Td>
+                  <Table.Td style={{ fontSize: "13px", color: "#64748B" }}>{new Date(doc.createdAt).toLocaleDateString()}</Table.Td>
+                  <Table.Td style={{ textAlign: "right" }}>
+                    <ActionIcon variant="subtle" color="red" size="sm" onClick={() => void handleDelete(String(doc.id))}>
+                      <IconTrash size={16} />
+                    </ActionIcon>
+                  </Table.Td>
+                </Table.Tr>
+              ))}
+            </Table.Tbody>
+          </Table>
+        )}
+
+        {!selectedSyllabusId && !isLoadingSyllabi && (
+          <Box p="xl" style={{ textAlign: "center", color: "#9CA3AF" }}>
+            <Text size="sm" fw={700}>Vui lòng chọn syllabus để xem tài liệu</Text>
+          </Box>
+        )}
+
+        {selectedSyllabusId && filteredDocs.length === 0 && !isLoadingDocs && (
           <Box p="xl" style={{ textAlign: "center", color: "#9CA3AF" }}>
             <Text size="sm" fw={700}>Không tìm thấy tài liệu phù hợp</Text>
           </Box>
         )}
       </Card>
 
-      {/* Upload Dialog Modal */}
       <Modal
         opened={isUploadModalOpen}
         onClose={() => setIsUploadModalOpen(false)}
@@ -241,56 +332,31 @@ export default function DocumentManagementPage() {
         }}
       >
         <Stack gap="md" py="md">
-          <Select
-            label="Môn học áp dụng"
-            placeholder="Chọn môn học..."
-            data={["FER202", "SDN302", "PRN232"]}
-            required
-            radius={0}
-          />
+          <Text size="sm" color="dimmed">
+            Upload PDF cho syllabus: <strong>{selectedSyllabus?.course.code ?? "-"}</strong>
+          </Text>
 
-          <SegmentedControl
-            value={uploadType}
-            onChange={setUploadType}
-            data={[
-              { label: "Tập tin (Files)", value: "file" },
-              { label: "Đường dẫn (URL Video)", value: "url" },
-            ]}
+          <Dropzone
+            onDrop={(acceptedFiles) => setFiles(acceptedFiles)}
+            maxSize={50 * 1024 ** 2}
             radius={0}
             styles={{
-              root: { backgroundColor: "#F1F5F9" },
-              indicator: { backgroundColor: "#1A3A5C" },
-              control: { fontWeight: 700 },
+              root: { border: "2px dashed #CBD5E1", backgroundColor: "#F8FAFC", cursor: "pointer" },
             }}
-          />
+          >
+            <Stack align="center" gap="xs" py="md" style={{ textAlign: "center" }}>
+              <ThemeIcon size={48} radius="xl" color="blue.0" style={{ color: "#1A3A5C" }}>
+                <IconUpload size={24} />
+              </ThemeIcon>
+              <Text size="sm" fw={700}>Kéo thả file vào đây, hoặc click để chọn file</Text>
+              <Text size="xs" c="dimmed">Hỗ trợ: PDF (Tối đa 50MB)</Text>
+            </Stack>
+          </Dropzone>
 
-          {uploadType === "file" ? (
-            <Dropzone
-              onDrop={(acceptedFiles) => setFiles(acceptedFiles)}
-              maxSize={50 * 1024 ** 2}
-              radius={0}
-              styles={{
-                root: { border: "2px dashed #CBD5E1", backgroundColor: "#F8FAFC", cursor: "pointer" },
-              }}
-            >
-              <Stack align="center" gap="xs" py="md" style={{ textAlign: "center" }}>
-                <ThemeIcon size={48} radius="xl" color="blue.0" style={{ color: "#1A3A5C" }}>
-                  <IconUpload size={24} />
-                </ThemeIcon>
-                <Text size="sm" fw={700}>Kéo thả file vào đây, hoặc click để chọn file</Text>
-                <Text size="xs" c="dimmed">
-                  Hỗ trợ: PDF, DOCX, PPTX, PNG, JPG (Tối đa 50MB)
-                </Text>
-              </Stack>
-            </Dropzone>
-          ) : (
-            <TextInput
-              label="Đường dẫn bài giảng video (YouTube, Google Drive)"
-              placeholder="https://www.youtube.com/watch?v=..."
-              radius={0}
-              required
-              leftSection={<IconLink size={16} />}
-            />
+          {uploadError && (
+            <Alert color="red" radius={0}>
+              {uploadError}
+            </Alert>
           )}
 
           {files.length > 0 && (
@@ -312,14 +378,11 @@ export default function DocumentManagementPage() {
             <Button
               style={{ backgroundColor: "#F26F21" }}
               radius={0}
-              onClick={() => {
-                alert("Tiến trình Chunking & Embedding đã bắt đầu ở background...");
-                setIsUploadModalOpen(false);
-                setFiles([]);
-              }}
+              onClick={handleUpload}
+              disabled={files.length === 0 || isUploading || !selectedSyllabusId}
               fw={700}
             >
-              Bắt đầu index
+              {isUploading ? "Đang upload..." : "Bắt đầu upload"}
             </Button>
           </Group>
         </Stack>
