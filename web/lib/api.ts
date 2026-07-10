@@ -300,6 +300,24 @@ export async function deleteSyllabus(id: number): Promise<{ success: boolean }> 
   });
 }
 
+export async function deactivateSyllabus(id: number): Promise<{ success: boolean; syllabus: ApiSyllabusDetail }> {
+  return fetchApi(`/api/syllabus/${id}/deactivate`, {
+    method: "PATCH",
+  });
+}
+
+export async function approveSyllabus(id: number): Promise<{ success: boolean; syllabus: ApiSyllabusDetail }> {
+  return fetchApi(`/api/syllabus/${id}/approve`, {
+    method: "PATCH",
+  });
+}
+
+export async function activateSyllabus(id: number): Promise<{ success: boolean; syllabus: ApiSyllabusDetail }> {
+  return fetchApi(`/api/syllabus/${id}/activate`, {
+    method: "PATCH",
+  });
+}
+
 // ─── Course APIs ───
 
 export async function getCourses(): Promise<{ courses: ApiCourse[] }> {
@@ -544,6 +562,18 @@ export async function createLecturer(payload: {
   return fetchApi("/api/admin/create-lecturer", {
     method: "POST",
     body: JSON.stringify(payload),
+  });
+}
+
+export async function disableLecturer(userId: string): Promise<{ success: boolean }> {
+  return fetchApi(`/api/admin/disable-lecturer/${userId}`, {
+    method: "POST",
+  });
+}
+
+export async function enableLecturer(userId: string): Promise<{ success: boolean }> {
+  return fetchApi(`/api/admin/enable-lecturer/${userId}`, {
+    method: "POST",
   });
 }
 

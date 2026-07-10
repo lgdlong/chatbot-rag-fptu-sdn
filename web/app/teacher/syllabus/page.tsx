@@ -26,6 +26,8 @@ import {
   IconClock,
   IconCircleX,
   IconLink,
+  IconBan,
+  IconCircleDot,
 } from "@tabler/icons-react";
 import { modals } from "@mantine/modals";
 import { notifications } from "@mantine/notifications";
@@ -81,6 +83,55 @@ export default function SyllabusManagementPage() {
           notifications.show({
             title: "Lỗi",
             message: err.message || "Không thể xóa syllabus.",
+            color: "red",
+          });
+        }
+      },
+    });
+  };
+
+  const handleActivate = async (syllabus: ApiSyllabusSummary) => {
+    try {
+      await api.activateSyllabus(syllabus.id);
+      notifications.show({
+        title: "Thành công",
+        message: `Đã kích hoạt syllabus #${syllabus.id}`,
+        color: "green",
+      });
+      void loadSyllabi();
+    } catch (err: any) {
+      notifications.show({
+        title: "Lỗi",
+        message: err.message || "Không thể kích hoạt syllabus.",
+        color: "red",
+      });
+    }
+  };
+
+  const handleDeactivate = (syllabus: ApiSyllabusSummary) => {
+    modals.openConfirmModal({
+      title: "Huỷ kích hoạt Syllabus",
+      children: (
+        <Text size="sm">
+          Bạn có chắc chắn muốn huỷ kích hoạt syllabus <b>#{syllabus.id} - {syllabus.syllabusName}</b>?
+          Sinh viên sẽ không còn thấy syllabus này trên trang tìm kiếm nữa.
+        </Text>
+      ),
+      labels: { confirm: "Huỷ kích hoạt", cancel: "Hủy" },
+      confirmProps: { color: "orange" },
+      onConfirm: async () => {
+        try {
+          await api.deactivateSyllabus(syllabus.id);
+          notifications.show({
+            title: "Thành công",
+            message: `Đã huỷ kích hoạt syllabus #${syllabus.id}`,
+            color: "green",
+          });
+          void loadSyllabi();
+        } catch (err: any) {
+          notifications.show({
+            title: "Lỗi",
+            message: err.message || "Không thể huỷ kích hoạt syllabus.",
             color: "red",
           });
         }
@@ -267,6 +318,16 @@ export default function SyllabusManagementPage() {
                     <Table.Td style={{ fontSize: "13px", color: "#475569" }}>{syllabus.decisionNo ?? "-"}</Table.Td>
                     <Table.Td style={{ textAlign: "right" }}>
                       <Group gap="xs" justify="flex-end">
+                        {syllabus.isActive && syllabus.isApproved && (
+                          <ActionIcon variant="subtle" color="orange" size="sm" title="Huỷ kích hoạt" onClick={() => handleDeactivate(syllabus)}>
+                            <IconBan size={16} />
+                          </ActionIcon>
+                        )}
+                        {!syllabus.isActive && syllabus.isApproved && (
+                          <ActionIcon variant="subtle" color="green" size="sm" title="Kích hoạt" onClick={() => handleActivate(syllabus)}>
+                            <IconCircleDot size={16} />
+                          </ActionIcon>
+                        )}
                         <ActionIcon variant="subtle" color="gray" size="sm" title="Chỉnh sửa">
                           <IconEdit size={16} />
                         </ActionIcon>

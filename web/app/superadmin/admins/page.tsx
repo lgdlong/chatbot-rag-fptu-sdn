@@ -34,10 +34,13 @@ import {
   IconAlertCircle,
   IconUser,
   IconTrash,
+  IconBan,
+  IconCircleCheck,
 } from "@tabler/icons-react";
-import { authClient } from "../../../lib/auth-client";
+import { authClient, apiFetch } from "../../../lib/auth-client";
 import type { UserRole } from "../../contexts/AuthContext";
 import { modals } from "@mantine/modals";
+import * as api from "@/lib/api";
 
 const PAGE_SIZE = 10;
 
@@ -115,6 +118,68 @@ export default function AdminManagementPage() {
           notifications.show({
             title: "Lỗi",
             message: err.message || "Đã xảy ra lỗi khi xóa tài khoản.",
+            color: "red",
+          });
+        }
+      },
+    });
+  };
+
+  const handleDisableLecturer = (user: AdminListUser) => {
+    modals.openConfirmModal({
+      title: "Vô hiệu hoá tài khoản",
+      children: (
+        <Text size="sm">
+          Bạn có chắc chắn muốn vô hiệu hoá tài khoản của <b>{user.name} ({user.email})</b>?
+          Người dùng sẽ không thể đăng nhập cho đến khi được kích hoạt lại.
+        </Text>
+      ),
+      labels: { confirm: "Vô hiệu hoá", cancel: "Hủy" },
+      confirmProps: { color: "red" },
+      onConfirm: async () => {
+        try {
+          await api.disableLecturer(user.id);
+          notifications.show({
+            title: "Thành công",
+            message: `Đã vô hiệu hoá tài khoản ${user.email}`,
+            color: "green",
+          });
+          void loadUsers();
+        } catch (err: any) {
+          notifications.show({
+            title: "Lỗi",
+            message: err.message || "Không thể vô hiệu hoá tài khoản.",
+            color: "red",
+          });
+        }
+      },
+    });
+  };
+
+  const handleEnableLecturer = (user: AdminListUser) => {
+    modals.openConfirmModal({
+      title: "Kích hoạt lại tài khoản",
+      children: (
+        <Text size="sm">
+          Bạn có chắc chắn muốn kích hoạt lại tài khoản của <b>{user.name} ({user.email})</b>?
+          Người dùng sẽ có thể đăng nhập trở lại.
+        </Text>
+      ),
+      labels: { confirm: "Kích hoạt lại", cancel: "Hủy" },
+      confirmProps: { color: "green" },
+      onConfirm: async () => {
+        try {
+          await api.enableLecturer(user.id);
+          notifications.show({
+            title: "Thành công",
+            message: `Đã kích hoạt lại tài khoản ${user.email}`,
+            color: "green",
+          });
+          void loadUsers();
+        } catch (err: any) {
+          notifications.show({
+            title: "Lỗi",
+            message: err.message || "Không thể kích hoạt lại tài khoản.",
             color: "red",
           });
         }
@@ -362,6 +427,28 @@ export default function AdminManagementPage() {
                         >
                           <IconEye size={16} />
                         </ActionIcon>
+                        {user.role === "LECTURER" && !user.banned && (
+                          <ActionIcon
+                            variant="subtle"
+                            color="orange"
+                            size="sm"
+                            aria-label="Vô hiệu hoá"
+                            onClick={() => handleDisableLecturer(user)}
+                          >
+                            <IconBan size={16} />
+                          </ActionIcon>
+                        )}
+                        {user.role === "LECTURER" && user.banned && (
+                          <ActionIcon
+                            variant="subtle"
+                            color="green"
+                            size="sm"
+                            aria-label="Kích hoạt lại"
+                            onClick={() => handleEnableLecturer(user)}
+                          >
+                            <IconCircleCheck size={16} />
+                          </ActionIcon>
+                        )}
                         <ActionIcon
                           variant="subtle"
                           color="red"
