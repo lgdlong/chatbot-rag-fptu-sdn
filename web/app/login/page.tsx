@@ -16,6 +16,7 @@ import {
   Divider,
   Box,
   Alert,
+  Anchor,
 } from "@mantine/core";
 import {
   IconLock,
@@ -231,6 +232,17 @@ export default function LoginPage() {
                   onChange={(e) => setPassword(e.target.value)}
                   leftSection={<IconLock size={16} color="#9CA3AF" />}
                 />
+                <Group justify="flex-end" mt={2}>
+                  <Anchor
+                    component={Link}
+                    href="/forgot-password"
+                    size="xs"
+                    c="dimmed"
+                    fw={600}
+                  >
+                    Quên mật khẩu?
+                  </Anchor>
+                </Group>
 
                 <Button
                   type="submit"
@@ -261,22 +273,43 @@ export default function LoginPage() {
               ĐĂNG NHẬP BẰNG GOOGLE
             </Button>
 
-            <Box mt="md" style={{ textAlign: "center" }}>
-              <Text size="xs" fw={700} style={{ color: "#9CA3AF" }}>
-                Bạn là giảng viên?{" "}
-                <Button
-                  component={Link}
-                  href="/register-teacher"
-                  variant="subtle"
-                  p={0}
-                  h="auto"
-                  fw={700}
-                  style={{ color: "#1A3A5C", textDecoration: "underline" }}
-                >
-                  Đăng ký tại đây
-                </Button>
-              </Text>
-            </Box>
+            <Divider label="DEV LOGIN" labelPosition="center" size="xs" c="dimmed" />
+
+            <Group grow>
+              <Button
+                onClick={() => loginAsRole("ADMIN")}
+                variant="light"
+                color="red"
+                size="xs"
+                radius={0}
+                fw={700}
+                leftSection={<IconShieldCheck size={14} />}
+              >
+                Admin
+              </Button>
+              <Button
+                onClick={() => loginAsRole("LECTURER")}
+                variant="light"
+                color="orange"
+                size="xs"
+                radius={0}
+                fw={700}
+                leftSection={<IconUserCog size={14} />}
+              >
+                Lecturer
+              </Button>
+              <Button
+                onClick={() => loginAsRole("STUDENT")}
+                variant="light"
+                color="green"
+                size="xs"
+                radius={0}
+                fw={700}
+                leftSection={<IconUserCheck size={14} />}
+              >
+                Student
+              </Button>
+            </Group>
 
           </Stack>
 
