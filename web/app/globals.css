@@ -56,3 +56,25 @@ body {
   border-color: #E2E8F0 #E2E8F0 transparent #E2E8F0 !important;
   background-color: #F8FAFC !important;
 }
+
+.custom-tabs-tab {
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  padding: 14px 20px !important;
+  border-radius: 0 !important;
+  color: #64748b !important;
+  border-bottom: 2px solid transparent !important;
+  background: transparent !important;
+  transition: all 0.2s ease;
+}
+
+.custom-tabs-tab[data-active="true"] {
+  color: #1A3A5C !important;
+  border-bottom-color: #F37021 !important;
+  background: transparent !important;
+}
+
+.custom-tabs-tab:hover {
+  background: #F8FAFC !important;
+  color: #1A3A5C !important;
+}

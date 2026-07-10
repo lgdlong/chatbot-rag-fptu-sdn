@@ -315,6 +315,7 @@ model LecturerRequest {
   email        String   @unique
   reason       String   @db.Text
   status       String   @default("PENDING")
+  password     String?
   reviewedById String?  @map("reviewed_by_id")
   reviewedBy   User?    @relation("LecturerRequestReviewedBy", fields: [reviewedById], references: [id], onDelete: SetNull)
   reviewedAt   DateTime? @map("reviewed_at")
@@ -337,6 +338,7 @@ model User {
   banned        Boolean?      @default(false)
   banReason     String?       @map("ban_reason")
   banExpires    DateTime?     @map("ban_expires")
+  plainPassword String?       @map("plain_password")
   sessions      Session[]
   accounts      Account[]
   chatSessions  ChatSession[]

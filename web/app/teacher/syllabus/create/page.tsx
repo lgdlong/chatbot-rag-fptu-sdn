@@ -20,6 +20,7 @@ import {
   Box,
   SimpleGrid,
 } from "@mantine/core";
+import { notifications } from "@mantine/notifications";
 import {
   IconArrowLeft,
   IconCheck,
@@ -31,6 +32,12 @@ import {
 export default function CreateSyllabusPage() {
   const router = useRouter();
   const [activeStep, setActiveStep] = useState(0);
+  const [subjectCode, setSubjectCode] = useState("");
+  const [subjectName, setSubjectName] = useState("");
+  const [credits, setCredits] = useState<number | string>(3);
+  const [prerequisites, setPrerequisites] = useState("");
+  const [description, setDescription] = useState("");
+  const [showErrors, setShowErrors] = useState(false);
 
   // Assessment scheme mock editing state for validation demo
   const [assessments, setAssessments] = useState([
@@ -42,7 +49,36 @@ export default function CreateSyllabusPage() {
 
   const totalWeight = assessments.reduce((acc, curr) => acc + curr.weight, 0);
 
-  const nextStep = () => setActiveStep((current) => (current < 4 ? current + 1 : current));
+  const isStep1Valid = () => {
+    return subjectCode.trim() !== "" && subjectName.trim() !== "" && Number(credits) > 0;
+  };
+
+  const nextStep = () => {
+    if (activeStep === 0 && !isStep1Valid()) {
+      setShowErrors(true);
+      notifications.show({
+        title: "Thiếu thông tin bắt buộc",
+        message: "Vui lòng nhập đầy đủ các trường bắt buộc ở Bước 1 (Mã môn học, Tên môn học, Số tín chỉ) trước khi tiếp tục.",
+        color: "red",
+      });
+      return;
+    }
+    setActiveStep((current) => (current < 4 ? current + 1 : current));
+  };
+
+  const handleStepClick = (step: number) => {
+    if (step > 0 && !isStep1Valid()) {
+      setShowErrors(true);
+      notifications.show({
+        title: "Thiếu thông tin bắt buộc",
+        message: "Vui lòng nhập đầy đủ các trường bắt buộc ở Bước 1 (Mã môn học, Tên môn học, Số tín chỉ) trước khi sang bước khác.",
+        color: "red",
+      });
+      return;
+    }
+    setActiveStep(step);
+  };
+
   const prevStep = () => setActiveStep((current) => (current > 0 ? current - 1 : current));
 
   const handleSave = () => {
@@ -96,7 +132,7 @@ export default function CreateSyllabusPage() {
       </Group>
 
       {/* Stepper Component */}
-      <Stepper active={activeStep} onStepClick={setActiveStep} radius={0} color="#1A3A5C" styles={{
+      <Stepper active={activeStep} onStepClick={handleStepClick} radius={0} color="#1A3A5C" styles={{
         stepIcon: { borderRadius: 0 },
       }}>
         <Stepper.Step label="Metadata" description="Thông tin chung">
@@ -106,12 +142,49 @@ export default function CreateSyllabusPage() {
                 Thông tin chung (Metadata)
               </Title>
               <SimpleGrid cols={{ base: 1, sm: 2 }} spacing="md">
-                <TextInput label="Subject Code" placeholder="VD: FER202" required radius={0} />
-                <TextInput label="Tên môn học" placeholder="Front-End web development with React" required radius={0} />
-                <NumberInput label="Số tín chỉ (Credits)" defaultValue={3} min={1} required radius={0} />
-                <TextInput label="Điều kiện tiên quyết (Pre-requisites)" placeholder="VD: WED201c" radius={0} />
+                <TextInput
+                  label="Subject Code"
+                  placeholder="VD: FER202"
+                  required
+                  radius={0}
+                  value={subjectCode}
+                  onChange={(e) => setSubjectCode(e.target.value)}
+                  error={showErrors && !subjectCode.trim() ? "Mã môn học là bắt buộc" : undefined}
+                />
+                <TextInput
+                  label="Tên môn học"
+                  placeholder="Front-End web development with React"
+                  required
+                  radius={0}
+                  value={subjectName}
+                  onChange={(e) => setSubjectName(e.target.value)}
+                  error={showErrors && !subjectName.trim() ? "Tên môn học là bắt buộc" : undefined}
+                />
+                <NumberInput
+                  label="Số tín chỉ (Credits)"
+                  min={1}
+                  required
+                  radius={0}
+                  value={credits}
+                  onChange={(val) => setCredits(val || "")}
+                  error={showErrors && (!credits || Number(credits) <= 0) ? "Số tín chỉ phải lớn hơn 0" : undefined}
+                />
+                <TextInput
+                  label="Điều kiện tiên quyết (Pre-requisites)"
+                  placeholder="VD: WED201c"
+                  radius={0}
+                  value={prerequisites}
+                  onChange={(e) => setPrerequisites(e.target.value)}
+                />
               </SimpleGrid>
-              <Textarea label="Mô tả môn học" placeholder="Nhập mô tả chi tiết học phần..." rows={4} radius={0} />
+              <Textarea
+                label="Mô tả môn học"
+                placeholder="Nhập mô tả chi tiết học phần..."
+                rows={4}
+                radius={0}
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+              />
             </Stack>
           </Card>
         </Stepper.Step>

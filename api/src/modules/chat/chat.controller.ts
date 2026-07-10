@@ -607,7 +607,7 @@ chatRouter.post("/send", async (c) => {
     try {
       const ai = new GoogleGenAI({ apiKey: ENV.GEMINI_API_KEY });
       const summaryResponse = await ai.models.generateContent({
-        model: "gemini-3.1-flash-lite",
+        model: ENV.GEMINI_TEXT_MODEL,
         contents: `Hãy tóm tắt câu hỏi sau thành một tiêu đề hội thoại ngắn gọn (tối đa 5 từ), trả về duy nhất văn bản thuần túy không chứa bất kỳ markdown, dấu ngoặc hay dấu chấm nào:\n\n"${message}"`,
       });
       const generatedTitle = summaryResponse.text?.trim() || "Cuộc hội thoại mới";

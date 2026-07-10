@@ -1,7 +1,9 @@
-import { randomBytes } from "node:crypto";
+import { randomBytes, randomUUID } from "node:crypto";
 import { Hono, type Context } from "hono";
 import { auth } from "./auth.js";
 import { prisma } from "./services/db.service.js";
+import { sendEmail } from "./services/email.service.js";
+import { ENV } from "../../config/env.js";
 
 export const lecturerRequestRouter = new Hono();
 
@@ -28,9 +30,13 @@ lecturerRequestRouter.post("/lecturer-request", async (c) => {
     const name = typeof body.name === "string" ? body.name.trim() : "";
     const email = typeof body.email === "string" ? body.email.trim().toLowerCase() : "";
     const reason = typeof body.reason === "string" ? body.reason.trim() : "";
+    const password = typeof body.password === "string" ? body.password : "";
 
-    if (!name || !email || !reason) {
-      return c.json({ error: "Name, email and reason are required" }, 400);
+    if (!name || !email || !reason || !password) {
+      return c.json({ error: "Họ tên, email, lý do đăng ký và mật khẩu là bắt buộc." }, 400);
+    }
+    if (password.length < 8) {
+      return c.json({ error: "Mật khẩu đăng ký phải dài tối thiểu 8 ký tự." }, 400);
     }
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -49,7 +55,7 @@ lecturerRequestRouter.post("/lecturer-request", async (c) => {
     }
 
     const request = await prisma.lecturerRequest.create({
-      data: { name, email, reason },
+      data: { name, email, reason, password },
     });
 
     return c.json({ success: true, request }, 201);
@@ -89,15 +95,15 @@ lecturerRequestRouter.post("/admin/lecturer-requests/:requestId/approve", async 
     }
 
     const existingUser = await prisma.user.findUnique({ where: { email: request.email } });
-    let temporaryPassword = "";
+    const registeredPassword = request.password || "FPTU123456@"; // Fallback phòng hờ
 
     if (!existingUser) {
-      temporaryPassword = generateTemporaryPassword();
       const signUpRes = await auth.api.signUpEmail({
         body: {
           name: request.name,
           email: request.email,
-          password: temporaryPassword,
+          password: registeredPassword,
+          plainPassword: registeredPassword,
         },
       });
 
@@ -125,12 +131,65 @@ lecturerRequestRouter.post("/admin/lecturer-requests/:requestId/approve", async 
       },
     });
 
+    // Tạo token và link đổi mật khẩu
+    const frontendUrl = ENV.BETTER_AUTH_URL.replace("8001", "3000");
+    const tokenValue = randomUUID().replace(/-/g, "");
+    const expiresAt = new Date(Date.now() + 60 * 60 * 1000); // 1 giờ
+
+    await prisma.verification.create({
+      data: {
+        id: tokenValue,
+        identifier: `password-reset:${request.email}`,
+        value: tokenValue,
+        expiresAt,
+      }
+    });
+
+    const resetLink = `${frontendUrl}/reset-password?token=${tokenValue}`;
+
+    // Gửi email thông báo phê duyệt
+    if (!existingUser) {
+      await sendEmail({
+        to: request.email,
+        subject: "Yêu cầu đăng ký Giảng viên của bạn đã được phê duyệt",
+        text: `Chào ${request.name},\n\nYêu cầu đăng ký làm Giảng viên của bạn trên hệ thống FPTU RAG Chatbot đã được phê duyệt thành công.\n\nThông tin đăng nhập:\n- Email: ${request.email}\n- Mật khẩu: (Mật khẩu bạn đã nhập lúc đăng ký xét duyệt)\n\nNếu muốn đổi mật khẩu, bạn có thể nhấp vào liên kết sau:\n${resetLink}\n\nTrân trọng,\nBan quản trị FPTU RAG Chatbot`,
+        html: `<p>Chào <b>${request.name}</b>,</p>
+               <p>Yêu cầu đăng ký làm Giảng viên của bạn trên hệ thống FPTU RAG Chatbot đã được <b>phê duyệt thành công</b>.</p>
+               <p><b>Thông tin đăng nhập của bạn:</b></p>
+               <ul>
+                 <li><b>Email:</b> ${request.email}</li>
+                 <li><b>Mật khẩu:</b> (Mật khẩu bạn đã thiết lập lúc gửi yêu cầu đăng ký)</li>
+               </ul>
+               <p>Nếu bạn muốn thay đổi hoặc thiết lập lại mật khẩu mới, vui lòng click vào nút dưới đây:</p>
+               <p><a href="${resetLink}" style="display:inline-block;padding:12px 24px;color:white;background-color:#F26F21;text-decoration:none;font-weight:bold;">Đổi Mật Khẩu</a></p>
+               <p>Hoặc truy cập trực tiếp qua liên kết sau:</p>
+               <p>${resetLink}</p>
+               <br/>
+               <p>Trân trọng,<br/>Ban quản trị FPTU RAG Chatbot</p>`
+      });
+    } else {
+      await sendEmail({
+        to: request.email,
+        subject: "Quyền truy cập Giảng viên của bạn đã được kích hoạt",
+        text: `Chào ${request.name},\n\nTài khoản của bạn đã được phân quyền Giảng viên thành công trên hệ thống FPTU RAG Chatbot.\n\nBạn có thể đăng nhập bằng tài khoản hiện tại của mình, hoặc nhấp vào liên kết sau nếu muốn thiết lập lại mật khẩu mới:\n${resetLink}\n\nTrân trọng,\nBan quản trị FPTU RAG Chatbot`,
+        html: `<p>Chào <b>${request.name}</b>,</p>
+               <p>Tài khoản của bạn đã được phân quyền <b>Giảng viên</b> thành công trên hệ thống FPTU RAG Chatbot.</p>
+               <p>Bạn có thể đăng nhập bằng mật khẩu hiện tại của mình.</p>
+               <p>Nếu bạn muốn thay đổi hoặc thiết lập lại mật khẩu mới, vui lòng nhấp vào liên kết dưới đây:</p>
+               <p><a href="${resetLink}" style="display:inline-block;padding:12px 24px;color:white;background-color:#1A3A5C;text-decoration:none;font-weight:bold;">Đổi Mật Khẩu</a></p>
+               <p>Hoặc truy cập trực tiếp qua liên kết sau:</p>
+               <p>${resetLink}</p>
+               <br/>
+               <p>Trân trọng,<br/>Ban quản trị FPTU RAG Chatbot</p>`
+      });
+    }
+
     return c.json({
       success: true,
       message: "Lecturer request approved successfully.",
       credentials: {
         email: request.email,
-        temporaryPassword: temporaryPassword || "Tài khoản đã tồn tại, giữ nguyên mật khẩu hiện tại.",
+        temporaryPassword: existingUser ? "Tài khoản đã tồn tại, dùng mật khẩu hiện tại." : registeredPassword,
       },
     });
   } catch (err: any) {
