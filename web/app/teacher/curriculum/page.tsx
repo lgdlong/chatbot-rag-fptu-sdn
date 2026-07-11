@@ -15,6 +15,7 @@ import { IconSearch } from "@tabler/icons-react";
 import { CurriculumTab } from "@/components/teacher/curriculum/CurriculumTab";
 import { MajorTab } from "@/components/teacher/curriculum/MajorTab";
 import { SpecializationTab } from "@/components/teacher/curriculum/SpecializationTab";
+import { SubjectTab } from "@/components/teacher/curriculum/SubjectTab";
 
 export default function CurriculumManagementPage() {
   const [activeTab, setActiveTab] = useState<string | null>("curriculum");
@@ -29,7 +30,7 @@ export default function CurriculumManagementPage() {
             Chương trình đào tạo
           </Title>
           <Text size="sm" c="dimmed">
-            Quản lý Ngành, Chuyên ngành hẹp và Khung chương trình (Curriculum)
+            Quản lý Môn học, Ngành, Chuyên ngành hẹp và Khung chương trình (Curriculum)
           </Text>
         </div>
       </Group>
@@ -43,6 +44,7 @@ export default function CurriculumManagementPage() {
         }
       }}>
         <Tabs.List style={{ backgroundColor: "white", borderBottom: "1px solid #E2E8F0" }}>
+          <Tabs.Tab value="subject">Môn học (Subject)</Tabs.Tab>
           <Tabs.Tab value="curriculum">Khung Chương trình (Curriculum)</Tabs.Tab>
           <Tabs.Tab value="major">Ngành (Major)</Tabs.Tab>
           <Tabs.Tab value="specialization">Chuyên ngành hẹp (Specialization)</Tabs.Tab>
@@ -59,6 +61,10 @@ export default function CurriculumManagementPage() {
               style={{ maxWidth: "400px" }}
             />
           </Box>
+
+          <Tabs.Panel value="subject">
+            <SubjectTab search={search} />
+          </Tabs.Panel>
 
           <Tabs.Panel value="curriculum">
             <CurriculumTab search={search} />
