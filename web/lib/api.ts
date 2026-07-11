@@ -318,10 +318,127 @@ export async function activateSyllabus(id: number): Promise<{ success: boolean; 
   });
 }
 
+// ─── Create Syllabus API ───
+
+export interface CreateSyllabusPayload {
+  courseId: string;
+  syllabusName: string;
+  syllabusNameEnglish?: string;
+  credits: number;
+  prerequisites?: string;
+  description?: string;
+  studentTasks?: string;
+  tools?: string;
+  minAvgMarkToPass?: number;
+  decisionNo?: string;
+  note?: string;
+}
+
+export interface UpdateSyllabusFullPayload {
+  syllabusName?: string;
+  syllabusNameEnglish?: string;
+  credits?: number;
+  prerequisites?: string;
+  description?: string;
+  studentTasks?: string;
+  tools?: string;
+  minAvgMarkToPass?: number;
+  decisionNo?: string;
+  note?: string;
+  materials?: Array<{
+    description: string;
+    author?: string | null;
+    publisher?: string | null;
+    publishedDate?: string | null;
+    isbn?: string | null;
+    isMainMaterial?: string | null;
+    isHardCopy?: string | null;
+    isOnline?: string | null;
+    edition?: string | null;
+    note?: string | null;
+  }>;
+  clos?: Array<{
+    cloName: string;
+    cloDetails: string;
+    loDetails?: string | null;
+  }>;
+  schedules?: Array<{
+    session: number;
+    topic: string;
+    learningMethod?: string | null;
+    lo?: string | null;
+    studentTasks?: string | null;
+  }>;
+  assessments?: Array<{
+    category: string;
+    type?: string | null;
+    part?: string | null;
+    weight: number;
+    completionCriteria?: string | null;
+    duration?: string | null;
+    clo?: string | null;
+    questionType?: string | null;
+    noQuestion?: string | null;
+    knowledgeAndSkill?: string | null;
+    gradingGuide?: string | null;
+    note?: string | null;
+  }>;
+  references?: Array<{
+    citation: string;
+  }>;
+}
+
+export async function createSyllabus(
+  payload: CreateSyllabusPayload
+): Promise<{ syllabus: ApiSyllabusDetail }> {
+  return fetchApi("/api/syllabus", {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+}
+
+export async function updateSyllabusFull(
+  id: number,
+  payload: UpdateSyllabusFullPayload
+): Promise<{ success: boolean; syllabus: ApiSyllabusDetail }> {
+  return fetchApi(`/api/syllabus/${id}`, {
+    method: "PUT",
+    body: JSON.stringify(payload),
+  });
+}
+
 // ─── Course APIs ───
 
 export async function getCourses(): Promise<{ courses: ApiCourse[] }> {
   return fetchApi("/api/courses");
+}
+
+export async function createCourse(data: {
+  code: string;
+  name: string;
+}): Promise<{ course: ApiCourse }> {
+  return fetchApi("/api/courses", {
+    method: "POST",
+    body: JSON.stringify(data),
+  });
+}
+
+export async function updateCourse(
+  id: string,
+  data: { code?: string; name?: string }
+): Promise<{ course: ApiCourse }> {
+  return fetchApi(`/api/courses/${id}`, {
+    method: "PATCH",
+    body: JSON.stringify(data),
+  });
+}
+
+export async function deleteCourse(
+  id: string
+): Promise<{ success: boolean }> {
+  return fetchApi(`/api/courses/${id}`, {
+    method: "DELETE",
+  });
 }
 
 // ─── Chat APIs ───
