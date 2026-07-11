@@ -195,7 +195,6 @@ export class SyllabusService {
    * refactor controller timing).
    */
   static async createSyllabus(input: {
-    syllabusId: number;
     courseId: string;
     syllabusName: string;
     syllabusNameEnglish?: string;
@@ -207,12 +206,15 @@ export class SyllabusService {
     minAvgMarkToPass: number;
     decisionNo?: string;
     note?: string;
+    degreeLevel?: string;
+    timeAllocation?: string;
+    scoringScale?: string;
     userId: string;
   }): Promise<unknown> {
-    if (!input.syllabusId || !input.courseId || !input.syllabusName) {
+    if (!input.courseId || !input.syllabusName) {
       throw new ValidationError(
         400,
-        "Syllabus ID (number), Course ID, and Syllabus Name are required",
+        "Course ID and Syllabus Name are required",
       );
     }
 
@@ -221,13 +223,7 @@ export class SyllabusService {
       throw new ValidationError(404, "Course not found");
     }
 
-    const idExists = await SyllabusRepository.findByIdLight(input.syllabusId);
-    if (idExists) {
-      throw new ValidationError(409, "Syllabus ID already exists");
-    }
-
     const syllabus = await SyllabusRepository.create({
-      id: input.syllabusId,
       course: { connect: { id: input.courseId } },
       syllabusName: input.syllabusName,
       syllabusNameEnglish: input.syllabusNameEnglish ?? null,
@@ -239,6 +235,9 @@ export class SyllabusService {
       minAvgMarkToPass: new Prisma.Decimal(input.minAvgMarkToPass),
       decisionNo: input.decisionNo ?? null,
       note: input.note ?? null,
+      degreeLevel: input.degreeLevel ?? "Bachelor",
+      timeAllocation: input.timeAllocation ?? null,
+      scoringScale: input.scoringScale ?? "10",
       isApproved: false,
       isActive: false,
     });

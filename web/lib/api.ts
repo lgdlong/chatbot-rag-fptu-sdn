@@ -329,9 +329,12 @@ export interface CreateSyllabusPayload {
   description?: string;
   studentTasks?: string;
   tools?: string;
+  scoringScale?: string;
   minAvgMarkToPass?: number;
   decisionNo?: string;
   note?: string;
+  degreeLevel?: string;
+  timeAllocation?: string;
 }
 
 export interface UpdateSyllabusFullPayload {
@@ -342,9 +345,12 @@ export interface UpdateSyllabusFullPayload {
   description?: string;
   studentTasks?: string;
   tools?: string;
+  scoringScale?: string;
   minAvgMarkToPass?: number;
   decisionNo?: string;
   note?: string;
+  degreeLevel?: string;
+  timeAllocation?: string;
   materials?: Array<{
     description: string;
     author?: string | null;
@@ -368,6 +374,10 @@ export interface UpdateSyllabusFullPayload {
     learningMethod?: string | null;
     lo?: string | null;
     studentTasks?: string | null;
+    itu?: string | null;
+    studentMaterials?: string | null;
+    sDownload?: string | null;
+    urls?: string | null;
   }>;
   assessments?: Array<{
     category: string;
