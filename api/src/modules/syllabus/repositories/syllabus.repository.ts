@@ -80,16 +80,22 @@ export class SyllabusRepository {
    * by activate, deactivate, approve, update, delete to decide whether
    * the route can proceed (404 otherwise) without dragging the deep
    * include tree down the wire.
+   *
+   * The generic `S` captures the caller's `select` shape so the return
+   * type narrows to `Prisma.SyllabusGetPayload<{ select: S }> | null`
+   * -- without it, TS would widen the return to the full `Syllabus`
+   * row because the conditional spread on the `select` key is
+   * unresolvable to prisma's overloaded `findUnique` return type.
    */
-  static async findByIdLight(
+  static async findByIdLight<S extends Prisma.SyllabusSelect>(
     id: number,
-    options?: { tx?: Prisma.TransactionClient; select?: Prisma.SyllabusSelect },
-  ) {
+    options?: { tx?: Prisma.TransactionClient; select?: S },
+  ): Promise<Prisma.SyllabusGetPayload<{ select: S }> | null> {
     const client = options?.tx || prisma;
     return client.syllabus.findUnique({
       where: { id },
       ...(options?.select ? { select: options.select } : {}),
-    });
+    }) as Prisma.SyllabusGetPayload<{ select: S }> | null;
   }
 
   static async findByCourseId(
