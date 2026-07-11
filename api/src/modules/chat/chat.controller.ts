@@ -5,6 +5,7 @@ import { auth } from "../auth/auth.js";
 import { prisma } from "../auth/services/db.service.js";
 import { RagService } from "../rag/services/rag.service.js";
 import { ENV } from "../../config/env.js";
+import { DEV_LOGIN_ACCOUNTS } from "../../config/dev-login.js";
 import { GoogleGenAI } from "@google/genai";
 import { Prisma } from "@prisma/client";
 import { ChatRepository } from "./repositories/chat.repository.js";
@@ -175,42 +176,18 @@ async function persistAssistantMessage(
 chatRouter.post("/dev-login", async (c) => {
   try {
     const { role } = await c.req.json().catch(() => ({ role: "student" }));
-
-    let mappedRole = "STUDENT";
-    let email = "student-test@fpt.edu.vn";
-    let name = "Sinh viên E2E Test";
-    let userId = "user-test-e2e-student-id";
-    let accountId = "account-test-e2e-student-id";
-
-    if (role === "lecturer") {
-      mappedRole = "LECTURER";
-      email = "lecturer-test@fpt.edu.vn";
-      name = "Giảng viên E2E Test";
-      userId = "user-test-e2e-lecturer-id";
-      accountId = "account-test-e2e-lecturer-id";
-    } else if (role === "admin") {
-      mappedRole = "ADMIN";
-      email = "admin-test@fpt.edu.vn";
-      name = "Quản trị viên E2E Test";
-      userId = "user-test-e2e-admin-id";
-      accountId = "account-test-e2e-admin-id";
-    }
+    const account = DEV_LOGIN_ACCOUNTS[role] ?? DEV_LOGIN_ACCOUNTS.student;
 
     const user = await prisma.user.upsert({
-      where: { email },
-      update: {
-        role: mappedRole,
-      },
+      where: { email: account.email },
+      update: { role: account.role },
       create: {
-        id: userId,
-        name,
-        email,
-        role: mappedRole,
+        id: account.userId,
+        name: account.name,
+        email: account.email,
+        role: account.role,
       },
     });
-
-    const passwordHash =
-      "299f315028cd53bed28cf3e9006d6393:ff5ad14a24855e26ff311acadf19af30d112bd83bf5ab6d8d9bb827a6f88c313ade1e3d676b54b50b3384dc58dd812076bb4a7188e98c1b92ea027630b8dfaf1";
 
     const existingAccount = await prisma.account.findFirst({
       where: { userId: user.id },
@@ -219,19 +196,17 @@ chatRouter.post("/dev-login", async (c) => {
     if (!existingAccount) {
       await prisma.account.create({
         data: {
-          id: accountId,
+          id: account.accountId,
           accountId: user.id,
           providerId: "credential",
           userId: user.id,
-          password: passwordHash,
+          password: account.passwordHash,
         },
       });
     } else {
       await prisma.account.update({
         where: { id: existingAccount.id },
-        data: {
-          password: passwordHash,
-        },
+        data: { password: account.passwordHash },
       });
     }
 
@@ -241,8 +216,8 @@ chatRouter.post("/dev-login", async (c) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        email,
-        password: "SuperPassword123!",
+        email: account.email,
+        password: account.password,
       }),
     });
 
