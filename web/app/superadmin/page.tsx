@@ -22,116 +22,162 @@ import {
   IconShield,
   IconUserCheck,
   IconActivity,
-  IconPlus,
   IconUsers,
   IconSettings,
+  IconBook,
+  IconFileText,
+  IconMessages,
+  IconSchool,
 } from "@tabler/icons-react";
-import { authClient, apiFetch } from "../../lib/auth-client";
+import {
+  getAdminDashboardStats,
+  getQueryTrend,
+  getAdminActivity,
+  type DashboardStats,
+  type QueryTrendItem,
+  type ActivityItem,
+} from "../../lib/api";
 
-interface WhitelistListResponse {
-  emails: unknown[];
-  pagination: {
-    page: number;
-    limit: number;
-    total: number;
-    totalPages: number;
-  };
-}
-
-interface DashboardStats {
-  totalAdmins: number;
-  totalWhitelist: number;
-  totalUsers: number;
-}
-
-const chartData = [
-  { month: "T3/2026", Queries: 450 },
-  { month: "T4/2026", Queries: 890 },
-  { month: "T5/2026", Queries: 1200 },
-  { month: "T6/2026", Queries: 1482 },
-];
-
-const systemActivity = [
-  {
-    type: "admin",
-    action: "Tài khoản admin mới được tạo: admin2@fpt.edu.vn",
-    time: "1 giờ trước",
-  },
-  {
-    type: "whitelist",
-    action: "Cập nhật danh sách whitelist: thêm 15 sinh viên khóa K19",
-    time: "3 giờ trước",
-  },
-  {
-    type: "login",
-    action: "Quản trị viên admin1@fpt.edu.vn đã đăng nhập",
-    time: "5 giờ trước",
-  },
-];
+// ── Helpers ──
 
 function formatCount(n: number): string {
   return n.toLocaleString("vi-VN");
 }
 
+function timeAgo(iso: string): string {
+  const diff = Date.now() - new Date(iso).getTime();
+  const mins = Math.floor(diff / 60_000);
+  if (mins < 1) return "Vài giây trước";
+  if (mins < 60) return `${mins} phút trước`;
+  const hours = Math.floor(mins / 60);
+  if (hours < 24) return `${hours} giờ trước`;
+  const days = Math.floor(hours / 24);
+  if (days < 30) return `${days} ngày trước`;
+  return new Date(iso).toLocaleDateString("vi-VN");
+}
+
+function formatMonth(ym: string): string {
+  // "2026-03" → "T3/2026"
+  const [y, m] = ym.split("-");
+  return `T${Number(m)}/${y}`;
+}
+
+// ── Page ──
+
 export default function SuperAdminDashboardPage() {
   const [stats, setStats] = useState<DashboardStats | null>(null);
+  const [chartData, setChartData] = useState<QueryTrendItem[]>([]);
+  const [activity, setActivity] = useState<ActivityItem[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const loadStats = useCallback(async () => {
+  const loadData = useCallback(async () => {
     setLoading(true);
     try {
-      const [usersPageRes, whitelistRes, usersListRes] = await Promise.all([
-        authClient.admin.listUsers({ query: { limit: "1", offset: "0" } }),
-        apiFetch<WhitelistListResponse>("/api/whitelist?page=1&limit=1"),
-        authClient.admin.listUsers({ query: { limit: "500", offset: "0" } }),
+      const [dashboardStats, trend, recentActivity] = await Promise.all([
+        getAdminDashboardStats(),
+        getQueryTrend(12),
+        getAdminActivity(20),
       ]);
 
-      if (usersPageRes.error) {
-        throw new Error(usersPageRes.error.message ?? "Không tải được danh sách người dùng");
-      }
-
-      const totalUsers = usersPageRes.data?.total ?? 0;
-      const users = usersListRes.data?.users ?? [];
-      const totalAdmins = users.filter((u) => u.role === "ADMIN").length;
-      const totalWhitelist = whitelistRes.pagination.total;
-
-      setStats({ totalAdmins, totalWhitelist, totalUsers });
+      setStats(dashboardStats);
+      setChartData(trend);
+      setActivity(recentActivity);
     } catch (err) {
-      const message = err instanceof Error ? err.message : "Không tải được số liệu dashboard";
+      const message =
+        err instanceof Error ? err.message : "Không tải được số liệu dashboard";
       notifications.show({ title: "Lỗi", message, color: "red" });
-      setStats({ totalAdmins: 0, totalWhitelist: 0, totalUsers: 0 });
+      setStats(null);
+      setChartData([]);
+      setActivity([]);
     } finally {
       setLoading(false);
     }
   }, []);
 
   useEffect(() => {
-    void loadStats();
-  }, [loadStats]);
+    void loadData();
+  }, [loadData]);
 
-  const statCards = [
-    {
-      name: "Tổng Admin",
-      value: stats ? formatCount(stats.totalAdmins) : "—",
-      icon: IconShield,
-      color: "blue" as const,
-      description: "Tài khoản quản trị (role ADMIN)",
-    },
-    {
-      name: "Sinh viên Whitelist",
-      value: stats ? formatCount(stats.totalWhitelist) : "—",
-      icon: IconUserCheck,
-      color: "green" as const,
-      description: "Email sinh viên được cấp quyền",
-    },
-    {
-      name: "Tổng người dùng",
-      value: stats ? formatCount(stats.totalUsers) : "—",
-      icon: IconUsers,
-      color: "purple" as const,
-      description: "Tất cả tài khoản trong hệ thống",
-    },
-  ];
+  // ── Stat cards ──
+
+  const statCards = stats
+    ? [
+        {
+          name: "Quản trị viên",
+          value: formatCount(stats.admins),
+          icon: IconShield,
+          color: "blue" as const,
+          description: "Tài khoản role ADMIN",
+        },
+        {
+          name: "Giảng viên",
+          value: formatCount(stats.lecturers),
+          icon: IconSchool,
+          color: "cyan" as const,
+          description: "Tài khoản role LECTURER",
+        },
+        {
+          name: "Sinh viên",
+          value: formatCount(stats.students),
+          icon: IconUsers,
+          color: "purple" as const,
+          description: "Tài khoản role STUDENT",
+        },
+        {
+          name: "Whitelist",
+          value: formatCount(stats.whitelist),
+          icon: IconUserCheck,
+          color: "green" as const,
+          description: "Email sinh viên được duyệt",
+        },
+        {
+          name: "Môn học",
+          value: formatCount(stats.courses),
+          icon: IconBook,
+          color: "orange" as const,
+          description: "Course trong hệ thống",
+        },
+        {
+          name: "Đề cương",
+          value: formatCount(stats.syllabuses),
+          icon: IconFileText,
+          color: "red" as const,
+          description: "Phiên bản Syllabus",
+        },
+        {
+          name: "Tài liệu",
+          value: formatCount(stats.documents),
+          icon: IconFileText,
+          color: "teal" as const,
+          description: "Document đã upload",
+        },
+        {
+          name: "Hội thoại",
+          value: formatCount(stats.chatSessions),
+          icon: IconMessages,
+          color: "grape" as const,
+          description: "Chat session đã tạo",
+        },
+      ]
+    : [];
+
+  const colorMap: Record<string, { bg: string; text: string }> = {
+    blue: { bg: "#E8EFF7", text: "#1A3A5C" },
+    cyan: { bg: "#E0F7FA", text: "#00838F" },
+    green: { bg: "#DCFCE7", text: "#16A34A" },
+    purple: { bg: "#F3E8FF", text: "#7C3AED" },
+    orange: { bg: "#FFF3E0", text: "#E65100" },
+    red: { bg: "#FFEBEE", text: "#C62828" },
+    teal: { bg: "#E0F2F1", text: "#00695C" },
+    grape: { bg: "#F3E5F5", text: "#7B1FA2" },
+  };
+
+  // ── Chart adapters ──
+
+  const chartSeries = chartData.map((d) => ({
+    month: formatMonth(d.month),
+    Queries: d.queries,
+  }));
 
   return (
     <Stack gap="xl">
@@ -144,6 +190,15 @@ export default function SuperAdminDashboardPage() {
             Quản lý và giám sát tài nguyên RAG Hybrid
           </Text>
         </div>
+        <Button
+          variant="outline"
+          size="xs"
+          color="#1A3A5C"
+          onClick={loadData}
+          loading={loading}
+        >
+          Làm mới
+        </Button>
       </Group>
 
       {loading && !stats ? (
@@ -151,15 +206,10 @@ export default function SuperAdminDashboardPage() {
           <Loader color="#1A3A5C" size="lg" type="bars" />
         </Center>
       ) : (
-        <SimpleGrid cols={{ base: 1, sm: 2, lg: 3 }} spacing="md">
+        <SimpleGrid cols={{ base: 1, sm: 2, lg: 4 }} spacing="md">
           {statCards.map((stat) => {
             const Icon = stat.icon;
-            const colors = {
-              blue: { bg: "#E8EFF7", text: "#1A3A5C" },
-              green: { bg: "#DCFCE7", text: "#16A34A" },
-              purple: { bg: "#F3E8FF", text: "#7C3AED" },
-            }[stat.color];
-
+            const colors = colorMap[stat.color];
             return (
               <Card
                 key={stat.name}
@@ -173,15 +223,27 @@ export default function SuperAdminDashboardPage() {
                     <ThemeIcon size={44} radius={0} style={{ backgroundColor: colors.bg, color: colors.text }}>
                       <Icon size={22} />
                     </ThemeIcon>
-                    <Text size="10px" fw={800} c="dimmed" style={{ textTransform: "uppercase", letterSpacing: "1px" }}>
+                    <Text
+                      size="10px"
+                      fw={800}
+                      c="dimmed"
+                      style={{ textTransform: "uppercase", letterSpacing: "1px" }}
+                    >
                       Thời gian thực
                     </Text>
                   </Group>
                   <div>
-                    <Text size="xs" fw={700} c="dimmed" style={{ textTransform: "uppercase", letterSpacing: "0.5px" }}>
+                    <Text
+                      size="xs"
+                      fw={700}
+                      c="dimmed"
+                      style={{ textTransform: "uppercase", letterSpacing: "0.5px" }}
+                    >
                       {stat.name}
                     </Text>
-                    <Text style={{ fontSize: "28px", fontWeight: 900, color: "#1A3A5C", marginTop: "4px" }}>
+                    <Text
+                      style={{ fontSize: "28px", fontWeight: 900, color: "#1A3A5C", marginTop: "4px" }}
+                    >
                       {stat.value}
                     </Text>
                     <Text size="11px" c="dimmed" mt={4}>
@@ -203,14 +265,20 @@ export default function SuperAdminDashboardPage() {
                 Số lượng câu hỏi RAG Chatbot hàng tháng
               </Title>
               <Box style={{ height: "220px" }}>
-                <BarChart
-                  h={200}
-                  data={chartData}
-                  dataKey="month"
-                  series={[{ name: "Queries", color: "#1A3A5C" }]}
-                  tickLine="y"
-                  gridAxis="y"
-                />
+                {chartSeries.length > 0 ? (
+                  <BarChart
+                    h={200}
+                    data={chartSeries}
+                    dataKey="month"
+                    series={[{ name: "Queries", color: "#1A3A5C" }]}
+                    tickLine="y"
+                    gridAxis="y"
+                  />
+                ) : (
+                  <Center h={200}>
+                    <Text size="sm" c="dimmed">Chưa có dữ liệu</Text>
+                  </Center>
+                )}
               </Box>
             </Card>
 
@@ -221,31 +289,49 @@ export default function SuperAdminDashboardPage() {
                 </Title>
               </Box>
               <Stack gap={0}>
-                {systemActivity.map((activity, index) => (
-                  <Box
-                    key={index}
-                    p="md"
-                    style={{
-                      borderBottom: index === systemActivity.length - 1 ? "none" : "1px solid #F1F5F9",
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "16px",
-                    }}
-                    className="hover-bg-gray"
-                  >
-                    <ThemeIcon size={36} radius={0} style={{ backgroundColor: "#E8EFF7", color: "#1A3A5C" }}>
-                      <IconActivity size={18} />
-                    </ThemeIcon>
-                    <Box style={{ flexGrow: 1 }}>
-                      <Text size="sm" fw={700} style={{ color: "#1A1A1A" }}>
-                        {activity.action}
-                      </Text>
-                      <Text size="10px" c="dimmed" mt={2}>
-                        {activity.time}
-                      </Text>
+                {activity.length > 0 ? (
+                  activity.map((act, index) => (
+                    <Box
+                      key={act.id}
+                      p="md"
+                      style={{
+                        borderBottom:
+                          index === activity.length - 1 ? "none" : "1px solid #F1F5F9",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "16px",
+                      }}
+                      className="hover-bg-gray"
+                    >
+                      <ThemeIcon
+                        size={36}
+                        radius={0}
+                        style={{ backgroundColor: "#E8EFF7", color: "#1A3A5C" }}
+                      >
+                        <IconActivity size={18} />
+                      </ThemeIcon>
+                      <Box style={{ flexGrow: 1 }}>
+                        <Text size="sm" fw={700} style={{ color: "#1A1A1A" }}>
+                          {act.action}{" "}
+                          {act.user && (
+                            <Text component="span" size="sm" c="dimmed">
+                              — {act.user.name} ({act.user.email})
+                            </Text>
+                          )}
+                        </Text>
+                        <Text size="10px" c="dimmed" mt={2}>
+                          {timeAgo(act.createdAt)}
+                        </Text>
+                      </Box>
                     </Box>
+                  ))
+                ) : (
+                  <Box p="md">
+                    <Text size="sm" c="dimmed">
+                      Chưa có hoạt động nào được ghi nhận.
+                    </Text>
                   </Box>
-                ))}
+                )}
               </Stack>
             </Card>
           </Stack>
@@ -253,7 +339,11 @@ export default function SuperAdminDashboardPage() {
 
         <Grid.Col span={{ base: 12, lg: 4 }}>
           <Stack gap="md">
-            <Text fw={800} size="xs" style={{ color: "#1A3A5C", letterSpacing: "1.5px", textTransform: "uppercase" }}>
+            <Text
+              fw={800}
+              size="xs"
+              style={{ color: "#1A3A5C", letterSpacing: "1.5px", textTransform: "uppercase" }}
+            >
               Lối tắt quản lý
             </Text>
 

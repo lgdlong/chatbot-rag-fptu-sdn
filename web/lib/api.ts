@@ -577,3 +577,46 @@ export async function enableLecturer(userId: string): Promise<{ success: boolean
   });
 }
 
+// ─── Admin Dashboard Stats APIs ───
+
+export interface DashboardStats {
+  admins: number;
+  lecturers: number;
+  whitelist: number;
+  students: number;
+  syllabuses: number;
+  courses: number;
+  documents: number;
+  chatSessions: number;
+}
+
+export interface QueryTrendItem {
+  month: string;
+  queries: number;
+}
+
+export interface ActivityItem {
+  id: string;
+  action: string;
+  entityType: string;
+  entityId: string;
+  details: unknown;
+  createdAt: string;
+  user: { name: string; email: string } | null;
+}
+
+/** Aggregate entity counts for the superadmin dashboard */
+export async function getAdminDashboardStats(): Promise<DashboardStats> {
+  return fetchApi("/api/admin/stats/dashboard");
+}
+
+/** Monthly RAG query counts (ChatMessage) */
+export async function getQueryTrend(months = 12): Promise<QueryTrendItem[]> {
+  return fetchApi(`/api/admin/stats/query-trend?months=${months}`);
+}
+
+/** Recent audit-log entries */
+export async function getAdminActivity(limit = 20): Promise<ActivityItem[]> {
+  return fetchApi(`/api/admin/stats/activity?limit=${limit}`);
+}
+
