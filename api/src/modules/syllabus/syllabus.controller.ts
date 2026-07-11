@@ -3,6 +3,7 @@ import { Hono, type Context } from "hono";
 import { auth } from "../auth/auth.js";
 import { ValidationError } from "../courses/services/course.service.js";
 import { SyllabusService } from "./services/syllabus.service.js";
+import { isPdfByContent, sanitizeFilename } from "./utils/file-validation.utils.js";
 
 export const syllabusRouter = new Hono();
 
@@ -286,11 +287,17 @@ syllabusRouter.post("/:syllabusId/documents", async (c) => {
     }, 400);
   }
 
+  // Magic byte check (security: verify actual content is PDF)
+  const headerBuffer = Buffer.from(await file.slice(0, 4).arrayBuffer());
+  if (!isPdfByContent(headerBuffer)) {
+    return c.json({ error: "File content does not appear to be a valid PDF" }, 400);
+  }
+
   try {
     const result = await SyllabusService.uploadDocument({
       syllabusId,
       file,
-      filename: file.name,
+      filename: sanitizeFilename(file.name),
       fileType: "pdf",
       userId: authResult.session.user.id,
     });

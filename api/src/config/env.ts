@@ -48,4 +48,9 @@ export const ENV = {
   RESEND_API_KEY: process.env.RESEND_API_KEY || "",
   // Dev uses Resend test domain; for production, set EMAIL_FROM env to a verified domain
   EMAIL_FROM: process.env.EMAIL_FROM || "FPTU RAG Chatbot <onboarding@resend.dev>",
+
+  // Cloudinary for image upload
+  CLOUDINARY_CLOUD_NAME: process.env.CLOUDINARY_CLOUD_NAME || "",
+  CLOUDINARY_API_KEY: process.env.CLOUDINARY_API_KEY || "",
+  CLOUDINARY_API_SECRET: process.env.CLOUDINARY_API_SECRET || "",
 } as const;

@@ -1,6 +1,5 @@
 import "./config/env.js"; // Load environment variables first!
 import { serve } from "@hono/node-server";
-import { serveStatic } from "@hono/node-server/serve-static";
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { auth } from "./modules/auth/auth.js";
@@ -42,8 +41,7 @@ app.use(
   }),
 );
 
-// Serve uploaded documents statically from ./uploads directory
-app.use("/uploads/*", serveStatic({ root: "./" }));
+
 
 // Mount API modules
 app.route("/api/courses", ragRouter);

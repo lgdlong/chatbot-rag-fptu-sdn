@@ -21,11 +21,14 @@ import { VideoLinkRepository } from "../repositories/video-link.repository.js";
 
 import { ValidationError } from "../../courses/services/course.service.js";
 import { SyllabusSyncService } from "./syllabus-sync.service.js";
+import { removeChunkFiles, removeFileIfExists } from "../utils/file-system.utils.js";
 import {
-  removeChunkFiles,
-  removeFileIfExists,
-  saveUploadedFile,
-} from "../utils/file-system.utils.js";
+  uploadPdfBuffer,
+  deleteByUrl,
+  CloudinaryError,
+} from "../utils/cloudinary.service.js";
+import { buildPublicId } from "../utils/file-validation.utils.js";
+import { logger } from "../../../utils/logger.js";
 
 export type UploadDocumentInput = {
   syllabusId: number;
@@ -66,6 +69,47 @@ export type UpdateSyllabusInput = {
   references?: unknown[];
   videoLinks?: unknown[];
 };
+
+/**
+ * Delete the underlying file for a Document row. Dispatches by URL
+ * shape:
+ *   - `cloudinary.com` URL  -> `deleteByUrl()` (Cloudinary SDK)
+ *   - legacy `/uploads/...` -> `removeFileIfExists()` on local disk
+ * Errors are logged and swallowed so a missing file never blocks a
+ * delete (matches the pre-refactor controller's best-effort stance).
+ */
+async function deleteDocumentFile(fileUrl: string | null, documentId: string): Promise<void> {
+  if (!fileUrl) {
+    logger.warn("[Delete] Document has no fileUrl, skipping file deletion", { documentId });
+    return;
+  }
+
+  // Cloudinary URL
+  if (fileUrl.includes("cloudinary.com")) {
+    try {
+      await deleteByUrl(fileUrl);
+    } catch (err) {
+      logger.error("[Delete] Cloudinary delete failed", {
+        documentId,
+        fileUrl: fileUrl.substring(0, 100),
+        error: err instanceof Error ? err.message : String(err),
+      });
+    }
+    return;
+  }
+
+  // Legacy local path
+  try {
+    const localPath = join(".", fileUrl.replace(/^\/+/, ""));
+    await removeFileIfExists(localPath);
+    logger.info("[Delete] Legacy local file removed", { documentId, path: localPath });
+  } catch (err) {
+    logger.error("[Delete] Legacy local file delete failed", {
+      documentId,
+      error: err instanceof Error ? err.message : String(err),
+    });
+  }
+}
 
 /**
  * SyllabusService -- all business logic for the syllabus module.
@@ -641,13 +685,15 @@ export class SyllabusService {
   static async uploadDocument(
     input: UploadDocumentInput,
   ): Promise<UploadDocumentResult> {
+    // Step 0: Resolve syllabus
     const syllabus = await SyllabusRepository.findByIdLight(input.syllabusId, {
-      select: { id: true, courseId: true, course: { select: { code: true } } },
+      select: { id: true, courseId: true, course: { select: { code: true, name: true } } },
     });
     if (!syllabus) {
       throw new ValidationError(404, "Syllabus not found");
     }
 
+    // Step 1: Check course document limit
     const existingDocsCount = await SyllabusRepository.countCourseDocuments(
       syllabus.courseId,
     );
@@ -658,56 +704,109 @@ export class SyllabusService {
       );
     }
 
-    const { filePath, buffer } = await saveUploadedFile(input.file);
+    // Step 2: Convert file to buffer (needed for both Cloudinary + AnythingLLM)
+    let buffer: Buffer;
+    try {
+      const arrayBuffer = await input.file.arrayBuffer();
+      buffer = Buffer.from(arrayBuffer);
+    } catch (err) {
+      logger.error("[Upload] Failed to read file buffer", {
+        fileName: input.file.name,
+        error: err instanceof Error ? err.message : String(err),
+      });
+      throw new ValidationError(400, "Failed to read uploaded file");
+    }
+
+    // Step 3: Upload to Cloudinary
+    const publicId = buildPublicId(syllabus.course.code, input.file.name);
+    let secureUrl: string;
+
+    try {
+      const result = await uploadPdfBuffer(buffer, publicId);
+      secureUrl = result.secureUrl;
+    } catch (err) {
+      logger.error("[Upload] Cloudinary upload failed", {
+        publicId,
+        fileName: input.file.name,
+        error: err instanceof Error ? err.message : String(err),
+      });
+      throw new CloudinaryError(
+        "Failed to upload document to cloud storage. Please try again.",
+        err instanceof Error ? err : undefined,
+      );
+    }
+
+    // Step 4: DB transaction (atomic: Document + Workspace + IngestionJob)
     const workspaceSlug = `${syllabus.course.code.toLowerCase()}_${input.syllabusId}`;
 
-    const doc = await prisma.$transaction(async (tx) => {
-      const createdDocument = await tx.document.create({
-        data: {
-          name: input.file.name,
-          fileUrl: filePath,
-          fileType: "pdf",
-          status: DocumentStatus.PENDING,
-          syllabus: { connect: { id: input.syllabusId } },
-        },
+    let doc: Awaited<ReturnType<typeof prisma.document.create>> & { ingestionJobId: string };
+
+    try {
+      doc = await prisma.$transaction(async (tx) => {
+        const createdDocument = await tx.document.create({
+          data: {
+            name: input.filename,
+            fileUrl: secureUrl,
+            fileType: "pdf",
+            status: DocumentStatus.PENDING,
+            syllabus: { connect: { id: input.syllabusId } },
+          },
+        });
+
+        const workspace = await RagWorkspaceRepository.upsertBySyllabus(
+          {
+            syllabusId: input.syllabusId,
+            workspaceSlug,
+            workspaceName: workspaceSlug,
+          },
+          { tx },
+        );
+
+        const job = await IngestionJobRepository.create(
+          {
+            document: { connect: { id: createdDocument.id } },
+            workspace: { connect: { id: workspace.id } },
+            status: IngestionJobStatus.PENDING,
+          },
+          { tx },
+        );
+
+        await tx.document.update({
+          where: { id: createdDocument.id },
+          data: { status: DocumentStatus.PROCESSING },
+        });
+
+        await IngestionJobRepository.update(
+          job.id,
+          { status: IngestionJobStatus.PROCESSING },
+          { tx },
+        );
+
+        return {
+          ...createdDocument,
+          status: DocumentStatus.PROCESSING,
+          ingestionJobId: job.id,
+        };
       });
-
-      const workspace = await RagWorkspaceRepository.upsertBySyllabus(
-        {
-          syllabusId: input.syllabusId,
-          workspaceSlug,
-          workspaceName: workspaceSlug,
-        },
-        { tx },
-      );
-
-      const job = await IngestionJobRepository.create(
-        {
-          document: { connect: { id: createdDocument.id } },
-          workspace: { connect: { id: workspace.id } },
-          status: IngestionJobStatus.PENDING,
-        },
-        { tx },
-      );
-
-      await tx.document.update({
-        where: { id: createdDocument.id },
-        data: { status: DocumentStatus.PROCESSING },
+    } catch (dbError) {
+      // Transaction failed — clean up orphan Cloudinary upload
+      logger.error("[Upload] DB transaction failed after Cloudinary upload", {
+        publicId,
+        error: dbError instanceof Error ? dbError.message : String(dbError),
       });
+      try {
+        await deleteByUrl(secureUrl);
+        logger.info("[Upload] Cleaned up orphan Cloudinary asset", { publicId });
+      } catch (cleanupErr) {
+        logger.error("[Upload] Failed to clean up orphan Cloudinary asset", {
+          publicId,
+          error: cleanupErr instanceof Error ? cleanupErr.message : String(cleanupErr),
+        });
+      }
+      throw dbError;
+    }
 
-      await IngestionJobRepository.update(
-        job.id,
-        { status: IngestionJobStatus.PROCESSING },
-        { tx },
-      );
-
-      return {
-        ...createdDocument,
-        status: DocumentStatus.PROCESSING,
-        ingestionJobId: job.id,
-      };
-    });
-
+    // Step 5: Fire-and-forget — audit log
     Promise.resolve().then(async () => {
       try {
         await createAuditLog({
@@ -718,28 +817,21 @@ export class SyllabusService {
           details: { fileName: input.file.name, syllabusId: input.syllabusId },
         });
       } catch (auditErr) {
-        console.error("[AuditLog] Failed to write:", auditErr);
+        logger.error("[AuditLog] Failed to write", { error: auditErr instanceof Error ? auditErr.message : String(auditErr) });
       }
     });
 
+    // Step 6: Fire-and-forget — AnythingLLM ingestion
     Promise.resolve().then(async () => {
       try {
-        console.log(
-          `[Ingestion] Ensuring AnythingLLM workspace exists for: "${workspaceSlug}"`,
-        );
+        logger.info(`[Ingestion] Starting for workspace "${workspaceSlug}"`);
         await AnythingLlmAdapter.ensureWorkspace(workspaceSlug);
 
-        console.log(
-          `[Ingestion] Uploading file "${input.file.name}" to AnythingLLM...`,
-        );
         const docLocation = await AnythingLlmAdapter.uploadPdf(
           input.file.name,
           buffer,
         );
 
-        console.log(
-          `[Ingestion] Embedding document into AnythingLLM workspace "${workspaceSlug}"...`,
-        );
         await AnythingLlmAdapter.updateWorkspaceEmbeddings(workspaceSlug, {
           adds: [docLocation],
         });
@@ -751,14 +843,9 @@ export class SyllabusService {
           payload: { workspaceSlug, sourceLocation: docLocation },
           sourceLocation: docLocation,
         });
-        console.log(
-          `[Ingestion] Document "${input.file.name}" successfully embedded and marked COMPLETED!`,
-        );
+        logger.info(`[Ingestion] Completed for document "${input.file.name}"`);
       } catch (error) {
-        console.error(
-          `[Ingestion] Failed to ingest document "${input.file.name}":`,
-          error,
-        );
+        logger.error(`[Ingestion] Failed for "${input.file.name}"`, { error: error instanceof Error ? error.message : String(error) });
         const errorMessage = error instanceof Error ? error.message : String(error);
         try {
           await applyIngestionCallback({
@@ -769,10 +856,7 @@ export class SyllabusService {
             payload: { workspaceSlug },
           });
         } catch (dbErr) {
-          console.error(
-            "[Ingestion] Failed to mark document status as FAILED in DB:",
-            dbErr,
-          );
+          logger.error("[Ingestion] Failed to mark FAILED status in DB", { error: dbErr instanceof Error ? dbErr.message : String(dbErr) });
         }
       }
     });
@@ -828,8 +912,7 @@ export class SyllabusService {
       );
     }
 
-    const originalFilePath = join(".", document.fileUrl.replace(/^\/+/, ""));
-    await removeFileIfExists(originalFilePath);
+    await deleteDocumentFile(document.fileUrl, document.id);
     await removeChunkFiles(input.documentId);
 
     try {
