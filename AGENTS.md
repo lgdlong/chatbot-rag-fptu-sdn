@@ -49,6 +49,15 @@ Thư mục này chứa các cẩm nang hướng dẫn Agent thực hiện các t
 > **Ưu Tiên Dùng CodeGraph Để Tra Cứu Code:**
 > Dự án có cơ sở dữ liệu CodeGraph ở `.codegraph/`. Trước khi dùng `grep` hoặc `read` để tìm hiểu code, hãy gọi `codegraph_explore` trước. Một cú pháp ngắn (tên symbol, câu hỏi tự nhiên) trả về mã nguồn, call path và phạm vi ảnh hưởng — tiết kiệm đáng kể số lần đọc file so với grep/read thủ công. Chỉ dùng grep/read để xác nhận chi tiết mà codegraph chưa cover.
 
+> [!IMPORTANT]
+> **Mặc Định Dùng Caveman Mode:**
+> Agent **mặc định phải dùng caveman mode** nếu skill `caveman` có sẵn. Quy tắc chọn level dựa vào câu hỏi đầu tiên của user:
+> - **Code / Debug / Implementation** (thêm/tạo/sửa/viết code, fix bug, debug) → dùng **caveman mode full**
+> - **Business / Brainstorm / Hỏi ý kiến** (hỏi về business, brainstorm, thảo luận giải pháp, kiến trúc) → dùng **caveman mode lite**
+> - **Investigation / Research** (tra cứu, điều tra, tìm hiểu) → dùng **caveman mode lite**
+>
+> Mục đích: tiết kiệm token, giữ technical substance, bỏ fluff. Xem skill `caveman` để biết thêm chi tiết các level.
+
 ---
 
 ## 3. Bản Đồ Lệnh CLI (Commands Guide)
