@@ -43,7 +43,7 @@ export type UploadDocumentResult = {
 
 export type SearchSyllabusInput = {
   subjectCode?: string;
-  role?: "STUDENT" | "LECTURER" | "ADMIN" | null;
+  role?: string | null;
 };
 
 export type UpdateSyllabusInput = {
@@ -115,7 +115,7 @@ export class SyllabusService {
    */
   static async getSyllabusDetail(
     id: number,
-    role: string | null,
+    role: string | null | undefined,
   ): Promise<unknown> {
     const syllabus = await SyllabusRepository.findById(id, { deep: true });
     if (!syllabus) {
