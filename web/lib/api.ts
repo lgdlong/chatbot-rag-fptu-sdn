@@ -667,6 +667,43 @@ export async function deleteCurriculum(id: string): Promise<{ success: boolean }
   });
 }
 
+export interface ApiCurriculumSubject {
+  curriculumId: string;
+  courseId: string;
+  semesterNo: number;
+  isSpecializationSpecific: boolean;
+  course: ApiCourse;
+}
+
+export interface ApiCurriculumDetail extends ApiCurriculum {
+  subjects: ApiCurriculumSubject[];
+}
+
+export async function getCurriculumDetail(
+  curriculumId: string
+): Promise<{ curriculum: ApiCurriculumDetail }> {
+  return fetchApi(`/api/curriculum/curriculums/${curriculumId}`);
+}
+
+export async function assignSubjectToCurriculum(
+  curriculumId: string,
+  data: { courseId: string; semesterNo: number; isSpecializationSpecific: boolean }
+): Promise<{ success: boolean; link: ApiCurriculumSubject }> {
+  return fetchApi(`/api/curriculum/curriculums/${curriculumId}/subjects`, {
+    method: "POST",
+    body: JSON.stringify(data),
+  });
+}
+
+export async function removeSubjectFromCurriculum(
+  curriculumId: string,
+  courseId: string
+): Promise<{ success: boolean }> {
+  return fetchApi(`/api/curriculum/curriculums/${curriculumId}/subjects/${courseId}`, {
+    method: "DELETE",
+  });
+}
+
 // ─── Admin: Create Lecturer ───
 
 export interface CreateLecturerResponse {
