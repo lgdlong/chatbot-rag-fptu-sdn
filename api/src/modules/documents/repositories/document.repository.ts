@@ -19,24 +19,39 @@ export class DocumentRepository {
     })
   }
 
-  static async update(id: string, data: Prisma.DocumentUpdateInput) {
-    return prisma.document.update({
+  static async update(
+    id: string,
+    data: Prisma.DocumentUpdateInput,
+    options?: { tx?: Prisma.TransactionClient },
+  ) {
+    const client = (options?.tx as any) || prisma
+    return client.document.update({
       where: { id },
       data,
     })
   }
 
-  static async delete(id: string) {
-    return prisma.document.delete({
+  static async delete(
+    id: string,
+    options?: { tx?: Prisma.TransactionClient },
+  ) {
+    const client = (options?.tx as any) || prisma
+    return client.document.delete({
       where: { id },
     })
   }
 
-  static async updateStatus(id: string, status: DocumentStatus, error?: string) {
+  static async updateStatus(
+    id: string,
+    status: DocumentStatus,
+    error?: string,
+    options?: { tx?: Prisma.TransactionClient },
+  ) {
     if (error) {
       console.error(`[DocumentRepository] Ingestion error for document ${id}: ${error}`)
     }
-    return prisma.document.update({
+    const client = (options?.tx as any) || prisma
+    return client.document.update({
       where: { id },
       data: { status },
     })

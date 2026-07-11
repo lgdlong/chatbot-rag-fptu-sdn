@@ -1,5 +1,8 @@
 import { IngestionJobStatus, type DocumentStatus, Prisma } from "@prisma/client";
 import { prisma } from "../../auth/services/db.service.js";
+import { IngestionJobRepository } from "../../syllabus/repositories/ingestion-job.repository.js";
+import { DocumentRepository } from "../repositories/document.repository.js";
+import { CallbackEventRepository } from "../repositories/callback-event.repository.js";
 
 type IngestionCallbackStatus = DocumentStatus;
 
@@ -18,13 +21,10 @@ function mapJobStatus(status: IngestionCallbackStatus) {
 
 export async function applyIngestionCallback(input: IngestionCallbackInput) {
   const job = input.jobId
-    ? await prisma.ingestionJob.findUnique({ where: { id: input.jobId } })
-    : await prisma.ingestionJob.findUnique({ where: { documentId: input.documentId } });
+    ? await IngestionJobRepository.findById(input.jobId)
+    : await IngestionJobRepository.findByDocumentId(input.documentId);
 
-  const document = await prisma.document.findUnique({
-    where: { id: input.documentId },
-    select: { id: true },
-  });
+  const document = await DocumentRepository.findById(input.documentId);
 
   if (!document) {
     throw new Error(`Document ${input.documentId} not found`);
@@ -34,8 +34,8 @@ export async function applyIngestionCallback(input: IngestionCallbackInput) {
   const eventName = `INGESTION_${input.status}`;
 
   await prisma.$transaction(async (tx) => {
-    await tx.callbackEvent.create({
-      data: {
+    await CallbackEventRepository.create(
+      {
         document: { connect: { id: input.documentId } },
         ...(job ? { job: { connect: { id: job.id } } } : {}),
         eventName,
@@ -44,24 +44,27 @@ export async function applyIngestionCallback(input: IngestionCallbackInput) {
         errorMessage: input.error ?? null,
         processedAt: new Date(),
       },
-    });
+      { tx },
+    );
 
-    await tx.document.update({
-      where: { id: input.documentId },
-      data: { status: input.status },
-    });
+    await DocumentRepository.update(
+      input.documentId,
+      { status: input.status },
+      { tx },
+    );
 
     if (job) {
-      await tx.ingestionJob.update({
-        where: { id: job.id },
-        data: {
+      await IngestionJobRepository.update(
+        job.id,
+        {
           status: mapJobStatus(input.status),
           callbackPayload: callbackPayload,
           errorMessage: input.error ?? null,
           completedAt: new Date(),
           ...(input.sourceLocation ? { sourceLocation: input.sourceLocation } : {}),
         },
-      });
+        { tx },
+      );
     }
   });
 }
