@@ -25,6 +25,33 @@ export class UserRepository {
     })
   }
 
+  /**
+   * Promote or change a user's role (e.g. STUDENT -> LECTURER).
+   * Single-column update; keeps the rest of the row untouched.
+   */
+  static async updateRole(id: string, role: string) {
+    return prisma.user.update({
+      where: { id },
+      data: { role },
+    })
+  }
+
+  /**
+   * Soft-disable a user by flipping the `banned` flag. `banReason` is stored
+   * alongside the flag (null when re-enabling) so future operators can see
+   * why the account was disabled.
+   */
+  static async setBanned(
+    id: string,
+    banned: boolean,
+    banReason: string | null
+  ) {
+    return prisma.user.update({
+      where: { id },
+      data: { banned, banReason },
+    })
+  }
+
   static async delete(id: string) {
     return prisma.user.delete({
       where: { id },
