@@ -3,6 +3,7 @@ import { SpecializationRepository } from "../repositories/specialization.reposit
 import { CurriculumRepository } from "../repositories/curriculum.repository.js";
 import { CurriculumSubjectRepository } from "../repositories/curriculum-subject.repository.js";
 import { CourseRepository } from "../../courses/repositories/course.repository.js";
+import { CORE_SUBJECTS } from "../../../constants/core-subjects.js";
 
 /**
  * Error class that carries an HTTP status code so the controller layer can
@@ -347,5 +348,33 @@ export class CurriculumService {
     }
 
     return CurriculumSubjectRepository.deleteByCompoundKey(curr.id, courseId);
+  }
+
+  static async quickFillCoreSubjects(curriculumId: string) {
+    const curr = await CurriculumRepository.findByCurriculumId(curriculumId);
+    if (!curr) {
+      throw new CurriculumServiceError(404, "Curriculum not found");
+    }
+
+    let addedCount = 0;
+    for (const subject of CORE_SUBJECTS) {
+      const course = await CourseRepository.findByCode(subject.code);
+      if (!course) continue; // skip if course not in DB
+
+      try {
+        await CurriculumSubjectRepository.create({
+          curriculumId: curr.id,
+          courseId: course.id,
+          semesterNo: subject.semesterNo,
+          isSpecializationSpecific: false,
+        });
+        addedCount++;
+      } catch (err: any) {
+        // P2002 = already linked, skip silently
+        if (err?.code !== "P2002") throw err;
+      }
+    }
+
+    return { success: true, count: addedCount };
   }
 }

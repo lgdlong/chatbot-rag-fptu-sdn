@@ -338,6 +338,20 @@ curriculumRouter.post("/curriculums/:curriculumId/subjects", async (c) => {
   }
 });
 
+// Quick-fill 44 core subjects into curriculum
+curriculumRouter.post("/curriculums/:curriculumId/quick-fill", async (c) => {
+  const authResult = await requireAdmin(c);
+  if (authResult.error) return authResult.error;
+
+  const curriculumId = c.req.param("curriculumId");
+  try {
+    const result = await CurriculumService.quickFillCoreSubjects(curriculumId);
+    return c.json(result, 201);
+  } catch (err) {
+    return respondWithServiceError(c, err);
+  }
+});
+
 // Gỡ môn học khỏi khung chương trình
 curriculumRouter.delete("/curriculums/:curriculumId/subjects/:courseId", async (c) => {
   const authResult = await requireAdmin(c);

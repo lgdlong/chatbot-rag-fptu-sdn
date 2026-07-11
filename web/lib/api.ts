@@ -695,6 +695,14 @@ export async function assignSubjectToCurriculum(
   });
 }
 
+export async function quickFillCoreSubjects(
+  curriculumId: string
+): Promise<{ success: boolean; count: number }> {
+  return fetchApi(`/api/curriculum/curriculums/${curriculumId}/quick-fill`, {
+    method: "POST",
+  });
+}
+
 export async function removeSubjectFromCurriculum(
   curriculumId: string,
   courseId: string

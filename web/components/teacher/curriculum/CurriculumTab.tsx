@@ -57,6 +57,7 @@ export function CurriculumTab({ search }: CurriculumTabProps) {
   const [isSpecSpecific, setIsSpecSpecific] = useState(false);
   const [subjectAddError, setSubjectAddError] = useState<string | null>(null);
   const [subjectAdding, setSubjectAdding] = useState(false);
+  const [quickFilling, setQuickFilling] = useState(false);
   const [availableCourses, setAvailableCourses] = useState<ApiCourse[]>([]);
 
   const loadData = useCallback(async () => {
@@ -184,6 +185,31 @@ export function CurriculumTab({ search }: CurriculumTabProps) {
       setAvailableCourses(coursesData.courses);
     } catch { /* courses not loaded */ }
   }, []);
+
+  const handleQuickFill = useCallback(async () => {
+    if (!selectedCurriculum) return;
+    setQuickFilling(true);
+    try {
+      const result = await api.quickFillCoreSubjects(selectedCurriculum.curriculumId);
+      notifications.show({
+        title: "Thành công",
+        message: `Đã điền ${result.count} môn cơ bản vào khung chương trình.`,
+        color: "green",
+      });
+      // Refresh subject list
+      const data = await api.getCurriculumDetail(selectedCurriculum.curriculumId);
+      setCurriculumSubjects(data.curriculum.subjects);
+      void loadData();
+    } catch (err: any) {
+      notifications.show({
+        title: "Lỗi",
+        message: err.message || "Không thể điền môn cơ bản.",
+        color: "red",
+      });
+    } finally {
+      setQuickFilling(false);
+    }
+  }, [selectedCurriculum]);
 
   const handleAddSubject = async () => {
     if (!selectedCourseId || !selectedCurriculum) {
@@ -429,15 +455,28 @@ export function CurriculumTab({ search }: CurriculumTabProps) {
       >
         <Stack gap="md" py="md">
           <Box>
-            <Button
-              leftSection={<IconPlus size={16} />}
-              style={{ backgroundColor: "#F26F21" }}
-              radius={0}
-              fw={700}
-              onClick={openAddSubjectForm}
-            >
-              Thêm môn học
-            </Button>
+            <Group gap="sm">
+              <Button
+                leftSection={<IconPlus size={16} />}
+                style={{ backgroundColor: "#F26F21" }}
+                radius={0}
+                fw={700}
+                onClick={openAddSubjectForm}
+              >
+                Thêm môn học
+              </Button>
+              <Button
+                variant="outline"
+                color="blue"
+                radius={0}
+                fw={700}
+                onClick={handleQuickFill}
+                loading={quickFilling}
+                leftSection={<IconListDetails size={16} />}
+              >
+                Điền 44 môn cơ bản
+              </Button>
+            </Group>
           </Box>
 
           {subjectsLoading ? (
