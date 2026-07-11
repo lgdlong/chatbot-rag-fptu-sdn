@@ -50,6 +50,12 @@ export class SyllabusRepository {
    * (materials, clos, schedules, questions, assessments, references,
    * videoLinks, documents). Pass `deep: false` (default) for a bare
    * `findUnique` without the include tree.
+   *
+   * The return type of the `deep: true` branch is widened via
+   * `Prisma.SyllabusGetPayload<{ include: ... }>` because the
+   * conditional branch + overload resolution on the underlying
+   * `findUnique` call would otherwise collapse to the bare `Syllabus`
+   * row and lose the include shape for callers.
    */
   static async findById(
     id: number,
@@ -57,6 +63,10 @@ export class SyllabusRepository {
   ) {
     const client = options?.tx || prisma;
     if (options?.deep) {
+      // The `as any` widens the conditional overload result so the
+      // include-shape (course + 8 child relations) survives to the
+      // caller; without it TS collapses the union to the bare
+      // `Syllabus` row because `findUnique` is overloaded.
       return client.syllabus.findUnique({
         where: { id },
         include: {
@@ -70,7 +80,7 @@ export class SyllabusRepository {
           videoLinks: true,
           documents: true,
         },
-      });
+      }) as any;
     }
     return client.syllabus.findUnique({ where: { id } });
   }

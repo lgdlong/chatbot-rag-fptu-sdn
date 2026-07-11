@@ -165,4 +165,25 @@ export class CourseRepository {
       },
     })
   }
+
+  // ---------------------------------------------------------------------
+  // Track F additions -- chat-scope support
+  // ---------------------------------------------------------------------
+
+  /**
+   * Lookup the (id, code, name) tuple for an arbitrary set of course ids.
+   * Used by the chat-scope resolver to map a list of course ids (from the
+   * pre-filtered document query) into the display fields needed by the
+   * scope summary. No includes; callers that need documents / syllabuses
+   * should pick a heavier `findById*` variant.
+   */
+  static async findManyByIds(ids: string[]) {
+    if (ids.length === 0) {
+      return []
+    }
+    return prisma.course.findMany({
+      where: { id: { in: ids } },
+      select: { id: true, code: true, name: true },
+    })
+  }
 }

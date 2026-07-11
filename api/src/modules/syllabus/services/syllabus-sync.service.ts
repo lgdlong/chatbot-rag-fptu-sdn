@@ -1,24 +1,13 @@
-import { prisma } from "../../auth/services/db.service.js";
 import { AnythingLlmAdapter } from "../../rag/services/anythingllm.adapter.js";
+import { RagWorkspaceRepository } from "../repositories/rag-workspace.repository.js";
+import { SyllabusRepository } from "../repositories/syllabus.repository.js";
 
 export class SyllabusSyncService {
   /**
    * Sinh nội dung Markdown hoàn chỉnh của Syllabus dựa trên dữ liệu có cấu trúc từ DB.
    */
   public static async generateMarkdown(syllabusId: number): Promise<string> {
-    const syllabus = await prisma.syllabus.findUnique({
-      where: { id: syllabusId },
-      include: {
-        course: true,
-        clos: true,
-        schedules: {
-          orderBy: { session: "asc" },
-        },
-        assessments: true,
-        materials: true,
-        references: true,
-      },
-    });
+    const syllabus = await SyllabusRepository.findById(syllabusId, { deep: true });
 
     if (!syllabus) {
       throw new Error(`Syllabus with ID ${syllabusId} not found`);
@@ -67,7 +56,7 @@ export class SyllabusSyncService {
 
     if (syllabus.clos.length > 0) {
       md += `### 5. Chuẩn đầu ra môn học (Course Learning Outcomes - CLOs)\n`;
-      syllabus.clos.forEach((clo) => {
+      syllabus.clos.forEach((clo: { cloName: string; cloDetails: string; loDetails: string | null }) => {
         md += `- **${clo.cloName}:** ${clo.cloDetails}\n`;
         if (clo.loDetails) {
           md += `  - Ánh xạ chuẩn đầu ra chương trình (LO): ${clo.loDetails}\n`;
@@ -80,7 +69,7 @@ export class SyllabusSyncService {
       md += `### 6. Cơ cấu đánh giá (Assessment Scheme)\n`;
       md += `| Đầu điểm (Category) | Hình thức (Type) | Trọng số (Weight) | Chuẩn đầu ra (CLO) | Hướng dẫn/Ghi chú |\n`;
       md += `| :--- | :--- | :--- | :--- | :--- |\n`;
-      syllabus.assessments.forEach((a) => {
+      syllabus.assessments.forEach((a: { category: string; type: string | null; weight: unknown; clo: string | null; completionCriteria: string | null; gradingGuide: string | null; note: string | null }) => {
         md += `| ${a.category} | ${a.type || "N/A"} | ${a.weight}% | ${a.clo || "N/A"} | ${a.completionCriteria || ""} ${a.gradingGuide || ""} ${a.note || ""} |\n`;
       });
       md += `\n`;
@@ -90,7 +79,7 @@ export class SyllabusSyncService {
       md += `### 7. Lịch trình học tập (Schedules)\n`;
       md += `| Buổi (Session) | Chủ đề (Topic) | Hình thức (Method) | Đáp ứng CLO | Nhiệm vụ sinh viên |\n`;
       md += `| :--- | :--- | :--- | :--- | :--- |\n`;
-      syllabus.schedules.forEach((s) => {
+      syllabus.schedules.forEach((s: { session: number; topic: string; learningMethod: string | null; lo: string | null; studentTasks: string | null }) => {
         md += `| Buổi ${s.session} | ${s.topic} | ${s.learningMethod || "N/A"} | ${s.lo || "N/A"} | ${s.studentTasks || "N/A"} |\n`;
       });
       md += `\n`;
@@ -98,7 +87,7 @@ export class SyllabusSyncService {
 
     if (syllabus.materials.length > 0) {
       md += `### 8. Giáo trình & Học liệu chính (Main Materials)\n`;
-      syllabus.materials.forEach((m) => {
+      syllabus.materials.forEach((m: { isMainMaterial: string | null; description: string; author: string | null; publisher: string | null; publishedDate: string | null }) => {
         md += `- **[${m.isMainMaterial || "Material"}] ${m.description}**\n`;
         if (m.author) md += `  - Tác giả (Author): ${m.author}\n`;
         if (m.publisher) md += `  - Nhà xuất bản (Publisher): ${m.publisher} (${m.publishedDate || ""})\n`;
@@ -108,7 +97,7 @@ export class SyllabusSyncService {
 
     if (syllabus.references.length > 0) {
       md += `### 9. Tài liệu tham khảo (References)\n`;
-      syllabus.references.forEach((r) => {
+      syllabus.references.forEach((r: { citation: string }) => {
         md += `- ${r.citation}\n`;
       });
       md += `\n`;
@@ -121,13 +110,9 @@ export class SyllabusSyncService {
    * Đồng bộ Snapshot Markdown của Syllabus lên AnythingLLM workspace.
    */
   public static async syncSyllabusToAnythingLlm(syllabusId: number): Promise<void> {
-    const syllabus = await prisma.syllabus.findUnique({
-      where: { id: syllabusId },
-      include: {
-        course: true,
-      },
+    const syllabus = await SyllabusRepository.findByIdLight(syllabusId, {
+      select: { id: true, syllabusName: true, course: { select: { code: true } } },
     });
-
     if (!syllabus) {
       throw new Error(`Syllabus with ID ${syllabusId} not found`);
     }
@@ -144,19 +129,11 @@ export class SyllabusSyncService {
     await AnythingLlmAdapter.ensureWorkspace(workspaceSlug);
 
     // 3. Đăng ký hoặc lấy thông tin RagWorkspace trong DB
-    let ragWorkspace = await prisma.ragWorkspace.findUnique({
-      where: { syllabusId },
+    const ragWorkspace = await RagWorkspaceRepository.upsertBySyllabus({
+      syllabusId,
+      workspaceSlug,
+      workspaceName,
     });
-
-    if (!ragWorkspace) {
-      ragWorkspace = await prisma.ragWorkspace.create({
-        data: {
-          syllabusId,
-          workspaceSlug,
-          workspaceName,
-        },
-      });
-    }
 
     // 4. Nếu đã có snapshot cũ, tiến hành xóa khỏi AnythingLLM
     const oldLocation = ragWorkspace.anythingLlmId;
@@ -180,11 +157,8 @@ export class SyllabusSyncService {
     await AnythingLlmAdapter.updateWorkspaceEmbeddings(workspaceSlug, { adds: [newLocation] });
 
     // 7. Cập nhật ID/Location snapshot mới vào DB
-    await prisma.ragWorkspace.update({
-      where: { id: ragWorkspace.id },
-      data: {
-        anythingLlmId: newLocation,
-      },
+    await RagWorkspaceRepository.update(ragWorkspace.id, {
+      anythingLlmId: newLocation,
     });
 
     console.log(`[Syllabus Sync] Successfully synced snapshot markdown to AnythingLLM workspace "${workspaceSlug}"!`);
