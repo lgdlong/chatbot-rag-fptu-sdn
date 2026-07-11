@@ -30,6 +30,7 @@ import {
   IconAlertCircle,
   IconPlus,
   IconTrash,
+  IconRocket,
 } from "@tabler/icons-react";
 import {
   createSyllabus,
@@ -38,6 +39,7 @@ import {
   type ApiCourse,
   type CreateSyllabusPayload,
 } from "@/lib/api";
+import { DEMO_DATASETS, type DemoDatasetKey } from "./demo-data";
 
 type CloRow = { cloName: string; cloDetails: string; loDetails: string };
 
@@ -77,6 +79,7 @@ export default function CreateSyllabusPage() {
   const [courses, setCourses] = useState<ApiCourse[]>([]);
   const [coursesLoading, setCoursesLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
+  const [demoKey, setDemoKey] = useState<DemoDatasetKey>("FER202");
 
   useEffect(() => {
     getCourses()
@@ -84,6 +87,19 @@ export default function CreateSyllabusPage() {
       .catch(() => notifications.show({ title: "Lỗi", message: "Không thể tải danh sách môn học", color: "red" }))
       .finally(() => setCoursesLoading(false));
   }, []);
+
+  const handleQuickFill = (key: DemoDatasetKey) => {
+    const data = DEMO_DATASETS[key];
+    if (!data) return;
+    (Object.keys(data) as (keyof typeof data)[]).forEach((field) => {
+      form.setFieldValue(field as any, data[field] as any);
+    });
+    notifications.show({
+      title: "Đã điền dữ liệu",
+      message: `Đã điền nhanh bộ data "${key}" — ${data.syllabusName}`,
+      color: "green",
+    });
+  };
 
   const form = useForm({
     defaultValues: {
@@ -706,6 +722,34 @@ export default function CreateSyllabusPage() {
           <Text size="sm" c="dimmed">Hoàn thành 5 bước để tạo bản nháp đề cương môn học</Text>
         </div>
       </Group>
+
+      {/* Quick-fill demo data */}
+      <Card p="sm" radius={0} style={{ border: "1px solid #E2E8F0", backgroundColor: "#FAFBFC" }}>
+        <Group gap="sm" align="end">
+          <div style={{ flex: 1 }}>
+            <Select
+              label="Điền nhanh dữ liệu mẫu"
+              placeholder="Chọn bộ data..."
+              radius={0}
+              data={Object.keys(DEMO_DATASETS).map((k) => ({
+                value: k,
+                label: `${k} — ${DEMO_DATASETS[k as DemoDatasetKey].syllabusName}`,
+              }))}
+              value={demoKey}
+              onChange={(val) => setDemoKey((val as DemoDatasetKey) || "FER202")}
+            />
+          </div>
+          <Button
+            leftSection={<IconRocket size={16} />}
+            style={{ backgroundColor: "#1A3A5C" }}
+            radius={0}
+            fw={700}
+            onClick={() => handleQuickFill(demoKey)}
+          >
+            Điền nhanh
+          </Button>
+        </Group>
+      </Card>
 
       <form
         onSubmit={(e) => {
