@@ -1,3 +1,34 @@
+/**
+ * ============================================================================
+ * TRANSACTION PATTERN (Phase 0.4 -- layer-refactor)
+ * ============================================================================
+ * Repositories accept an optional `tx?: Prisma.TransactionClient` parameter.
+ * Services call `prisma.$transaction(async (tx) => { ... })` and pass the
+ * `tx` client into each repository call via `{ tx }`.
+ *
+ * Repository methods use `tx || prisma` so they work both standalone (with
+ * the global prisma client) and inside a transaction (with the tx client).
+ *
+ * Services MAY import prisma for `$transaction()` calls ONLY -- this is the
+ * sole scoped exception to the "only repositories import prisma" rule.
+ *
+ * Example:
+ *
+ *   // In a service:
+ *   await prisma.$transaction(async (tx) => {
+ *     await UserRepository.update(id, data, { tx });
+ *     await AuditLogRepository.create({ ... }, { tx });
+ *   });
+ *
+ *   // In a repository:
+ *   static async update(id, data, options?: { tx?: Prisma.TransactionClient }) {
+ *     const client = options?.tx || prisma;
+ *     return client.user.update({ where: { id }, data });
+ *   }
+ *
+ * ============================================================================
+ */
+
 import { PrismaClient } from "@prisma/client";
 
 export const prisma = new PrismaClient();
