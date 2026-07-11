@@ -1,5 +1,4 @@
-import { Prisma } from "@prisma/client";
-import { prisma } from "./db.service.js";
+import { AuditLogRepository } from "../repositories/audit-log.repository.js";
 
 export type AuditAction =
   | "CREATE_SYLLABUS"
@@ -23,13 +22,11 @@ export async function createAuditLog(params: {
   entityId: string;
   details?: Record<string, unknown>;
 }) {
-  await prisma.auditLog.create({
-    data: {
-      userId: params.userId,
-      action: params.action,
-      entityType: params.entityType,
-      entityId: params.entityId,
-      details: (params.details ?? undefined) as Prisma.InputJsonValue | undefined,
-    },
+  await AuditLogRepository.create({
+    userId: params.userId,
+    action: params.action,
+    entityType: params.entityType,
+    entityId: params.entityId,
+    details: params.details,
   });
 }
