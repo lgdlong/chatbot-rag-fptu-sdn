@@ -4,34 +4,45 @@ import { Prisma } from "@prisma/client";
 /**
  * RagWorkspaceRepository -- pure data-access wrapper for `prisma.ragWorkspace`.
  *
- * Phase 0.3 stubs were filled in during Track D because `CourseService.update`
- * and `CourseService.delete` (the four-course-module service) both need
- * workspace-row mutations while iterating syllabuses. Track G will consume the
- * remaining read-side helpers (`findBySyllabus`, `upsertBySyllabus`, `update`)
- * from `SyllabusService` / `syllabus-sync.service.ts`.
- *
- * Static-method pattern, no DI. No `tx?: Prisma.TransactionClient` for now --
- * Track G can extend these signatures when its multi-entity writes land.
+ * Track D filled in the Phase 0.3 stub surface for `CourseService.update`
+ * and `CourseService.delete` (the four-course-module service) which both
+ * iterate syllabuses while mutating workspace rows. Track G extends every
+ * method with the optional `tx?: Prisma.TransactionClient` parameter
+ * (Phase 0.4 pattern) so `SyllabusService.uploadDocument` and future
+ * Track-H `rag.service.ts` flows can compose workspace writes inside a
+ * `prisma.$transaction` block. The body of each existing method is
+ * unchanged -- only the signature gained a second arg.
  */
 export class RagWorkspaceRepository {
   /**
    * Fetch the workspace row linked to a syllabus (or null). The `syllabusId`
    * column is `@unique` so this is at most one row.
    */
-  static async findBySyllabus(syllabusId: number) {
-    return prisma.ragWorkspace.findUnique({ where: { syllabusId } });
+  static async findBySyllabus(
+    syllabusId: number,
+    options?: { tx?: Prisma.TransactionClient },
+  ) {
+    const client = options?.tx || prisma;
+    return client.ragWorkspace.findUnique({ where: { syllabusId } });
   }
 
   /**
    * Create-or-update by syllabus. Mirrors the `upsert` used in
-   * `syllabus.controller.ts` so callers can stop importing prisma.
+   * `SyllabusService.uploadDocument` so callers can stop importing prisma.
+   * Called inside a `prisma.$transaction` block by the upload pipeline --
+   * passes `{ tx }` to opt into the same atomic scope as the doc + job
+   * creates.
    */
-  static async upsertBySyllabus(input: {
-    syllabusId: number;
-    workspaceSlug: string;
-    workspaceName: string;
-  }) {
-    return prisma.ragWorkspace.upsert({
+  static async upsertBySyllabus(
+    input: {
+      syllabusId: number;
+      workspaceSlug: string;
+      workspaceName: string;
+    },
+    options?: { tx?: Prisma.TransactionClient },
+  ) {
+    const client = options?.tx || prisma;
+    return client.ragWorkspace.upsert({
       where: { syllabusId: input.syllabusId },
       create: {
         syllabusId: input.syllabusId,
@@ -56,8 +67,10 @@ export class RagWorkspaceRepository {
       workspaceName?: string;
       anythingLlmId?: string;
     },
+    options?: { tx?: Prisma.TransactionClient },
   ) {
-    return prisma.ragWorkspace.update({ where: { id }, data });
+    const client = options?.tx || prisma;
+    return client.ragWorkspace.update({ where: { id }, data });
   }
 
   /**
@@ -73,8 +86,10 @@ export class RagWorkspaceRepository {
   static async updateManyBySyllabus(
     syllabusId: number,
     data: { workspaceSlug: string; workspaceName: string },
+    options?: { tx?: Prisma.TransactionClient },
   ) {
-    return prisma.ragWorkspace.updateMany({
+    const client = options?.tx || prisma;
+    return client.ragWorkspace.updateMany({
       where: { syllabusId },
       data: {
         workspaceSlug: data.workspaceSlug,
@@ -88,7 +103,11 @@ export class RagWorkspaceRepository {
    * `CourseService.delete` after the AnythingLLM workspace has been
    * purged, so the local metadata stays consistent.
    */
-  static async deleteManyBySyllabus(syllabusId: number) {
-    return prisma.ragWorkspace.deleteMany({ where: { syllabusId } });
+  static async deleteManyBySyllabus(
+    syllabusId: number,
+    options?: { tx?: Prisma.TransactionClient },
+  ) {
+    const client = options?.tx || prisma;
+    return client.ragWorkspace.deleteMany({ where: { syllabusId } });
   }
 }
