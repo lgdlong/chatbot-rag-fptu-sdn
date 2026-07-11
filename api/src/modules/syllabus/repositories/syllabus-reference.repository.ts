@@ -24,4 +24,19 @@ export class SyllabusReferenceRepository {
     const client = options?.tx || prisma;
     return client.syllabusReference.create({ data });
   }
+
+  /**
+   * All citation rows attached to a syllabus. Used by Track H
+   * (rag.service.ts) to load the reference list for the "Materials &
+   * References" query branch. Mirrors the pre-refactor
+   * `prisma.syllabusReference.findMany({ where: { syllabusId } })`
+   * call site.
+   */
+  static async findManyBySyllabus(
+    syllabusId: number,
+    options?: { tx?: Prisma.TransactionClient },
+  ) {
+    const client = options?.tx || prisma;
+    return client.syllabusReference.findMany({ where: { syllabusId } });
+  }
 }

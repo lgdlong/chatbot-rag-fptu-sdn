@@ -27,9 +27,15 @@ export class SyllabusScheduleRepository {
 
   static async findManyBySyllabus(
     syllabusId: number,
-    options?: { tx?: Prisma.TransactionClient },
+    options?: {
+      tx?: Prisma.TransactionClient;
+      orderBy?: Prisma.SyllabusScheduleOrderByWithRelationInput;
+    },
   ) {
     const client = options?.tx || prisma;
-    return client.syllabusSchedule.findMany({ where: { syllabusId } });
+    return client.syllabusSchedule.findMany({
+      where: { syllabusId },
+      ...(options?.orderBy ? { orderBy: options.orderBy } : {}),
+    });
   }
 }

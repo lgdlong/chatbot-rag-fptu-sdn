@@ -1,6 +1,11 @@
 import { GeminiService } from "./gemini.service.js";
 import { AnythingLlmAdapter } from "./anythingllm.adapter.js";
-import { prisma } from "../../auth/services/db.service.js";
+import { SyllabusRepository } from "../../syllabus/repositories/syllabus.repository.js";
+import { AssessmentSchemeRepository } from "../../syllabus/repositories/assessment-scheme.repository.js";
+import { SyllabusCloRepository } from "../../syllabus/repositories/syllabus-clo.repository.js";
+import { SyllabusScheduleRepository } from "../../syllabus/repositories/syllabus-schedule.repository.js";
+import { SyllabusMaterialRepository } from "../../syllabus/repositories/syllabus-material.repository.js";
+import { SyllabusReferenceRepository } from "../../syllabus/repositories/syllabus-reference.repository.js";
 import type { ResolvedChatScope } from "../../chat/services/chat-scope.service.js";
 
 type ActiveSyllabus = {
@@ -32,20 +37,19 @@ export class RagService {
     let activeSyllabus: ActiveSyllabus | null = null;
 
     if (courseId) {
-      activeSyllabus = await prisma.syllabus.findFirst({
-        where: {
-          courseId,
-          isActive: true,
+      activeSyllabus = (await SyllabusRepository.findFirstActiveSyllabus(
+        courseId,
+        {
           isApproved: true,
+          select: {
+            id: true,
+            courseId: true,
+            prerequisites: true,
+            credits: true,
+            tools: true,
+          },
         },
-        select: {
-          id: true,
-          courseId: true,
-          prerequisites: true,
-          credits: true,
-          tools: true,
-        },
-      });
+      )) as ActiveSyllabus | null;
     }
 
     const queryLower = normalizeSearchText(query);
@@ -57,7 +61,7 @@ export class RagService {
       if (queryLower.match(/(thi|cuoi ky|final|assignment|lab|diem|trong so|percent|weight|%|assessment|danh gia)/g)) {
         isSyllabusQuery = true;
         queryTypeLabel = "Assessment Scheme";
-        const assessments = await prisma.assessmentScheme.findMany({ where: { syllabusId: activeSyllabus.id } });
+        const assessments = await AssessmentSchemeRepository.findManyBySyllabus(activeSyllabus.id);
         structuredContext = `[Assessment Scheme - Cơ cấu phân bổ trọng số điểm đánh giá]:\n${assessments
           .map(
             (a) =>
@@ -75,7 +79,7 @@ export class RagService {
       } else if (queryLower.match(/(clo|lo|dau ra|chuan dau ra)/g)) {
         isSyllabusQuery = true;
         queryTypeLabel = "Course Learning Outcomes (CLOs)";
-        const clos = await prisma.syllabusClo.findMany({ where: { syllabusId: activeSyllabus.id } });
+        const clos = await SyllabusCloRepository.findManyBySyllabus(activeSyllabus.id);
         structuredContext = `[CLOs - Các chuẩn đầu ra môn học]:\n${clos
           .map(
             (c) =>
@@ -85,10 +89,10 @@ export class RagService {
       } else if (queryLower.match(/(buoi|session|lich trinh|weekly schedule|topic)/g)) {
         isSyllabusQuery = true;
         queryTypeLabel = "Weekly Schedule";
-        const schedules = await prisma.syllabusSchedule.findMany({
-          where: { syllabusId: activeSyllabus.id },
-          orderBy: { session: "asc" },
-        });
+        const schedules = await SyllabusScheduleRepository.findManyBySyllabus(
+          activeSyllabus.id,
+          { orderBy: { session: "asc" } },
+        );
         structuredContext = `[Weekly Schedule - Lịch trình giảng dạy chi tiết buổi học]:\n${schedules
           .map(
             (s) =>
@@ -102,8 +106,8 @@ export class RagService {
       } else if (queryLower.match(/(sach|giao trinh|material|tai lieu tham khao)/g)) {
         isSyllabusQuery = true;
         queryTypeLabel = "Materials & References";
-        const materials = await prisma.syllabusMaterial.findMany({ where: { syllabusId: activeSyllabus.id } });
-        const references = await prisma.syllabusReference.findMany({ where: { syllabusId: activeSyllabus.id } });
+        const materials = await SyllabusMaterialRepository.findManyBySyllabus(activeSyllabus.id);
+        const references = await SyllabusReferenceRepository.findManyBySyllabus(activeSyllabus.id);
         structuredContext = `[Materials - Học liệu chính/phụ (Giáo trình)]:\n${materials
           .map(
             (m) =>

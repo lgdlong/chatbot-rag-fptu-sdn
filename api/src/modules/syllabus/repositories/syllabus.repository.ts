@@ -123,15 +123,36 @@ export class SyllabusRepository {
    * First active syllabus for a given course. Used by the chat-scope
    * resolver and Track H (RAG) flows that need to know which syllabus
    * version is the current published one.
+   *
+   * Callers that also need an `isApproved` filter or a narrowed
+   * `select` shape pass them through `options`; the default mirrors
+   * the original chat-scope behaviour (`isActive: true` only, full
+   * row). The generic `S` captures the caller's `select` shape so
+   * the return type narrows to
+   * `Prisma.SyllabusGetPayload<{ select: S }> | null` -- without
+   * it, TS would widen the return to the full `Syllabus` row because
+   * the conditional spread on the `select` key is unresolvable to
+   * prisma's overloaded `findFirst` return type.
    */
-  static async findFirstActiveSyllabus(
+  static async findFirstActiveSyllabus<S extends Prisma.SyllabusSelect>(
     courseId: string,
-    options?: { tx?: Prisma.TransactionClient },
-  ) {
+    options?: {
+      tx?: Prisma.TransactionClient;
+      isApproved?: boolean;
+      select?: S;
+    },
+  ): Promise<Prisma.SyllabusGetPayload<{ select: S }> | null> {
     const client = options?.tx || prisma;
     return client.syllabus.findFirst({
-      where: { courseId, isActive: true },
-    });
+      where: {
+        courseId,
+        isActive: true,
+        ...(options?.isApproved === undefined
+          ? {}
+          : { isApproved: options.isApproved }),
+      },
+      ...(options?.select ? { select: options.select } : {}),
+    }) as Prisma.SyllabusGetPayload<{ select: S }> | null;
   }
 
   static async create(
