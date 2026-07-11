@@ -32,6 +32,7 @@ export function SpecializationTab({ search }: SpecializationTabProps) {
   const [specs, setSpecs] = useState<ApiSpecialization[]>([]);
   const [majors, setMajors] = useState<ApiMajor[]>([]);
   const [loading, setLoading] = useState(true);
+  const [subjectCounts, setSubjectCounts] = useState<Record<string, number>>({});
 
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [adding, setAdding] = useState(false);
@@ -50,6 +51,20 @@ export function SpecializationTab({ search }: SpecializationTabProps) {
       ]);
       setSpecs(specsData.specializations);
       setMajors(majorsData.majors);
+
+      // Fetch subject counts for each specialization
+      const counts: Record<string, number> = {};
+      await Promise.all(
+        specsData.specializations.map(async (spec) => {
+          try {
+            const result = await api.getSpecializationSubjectCount(spec.id);
+            counts[spec.id] = result.specializationSpecific;
+          } catch {
+            counts[spec.id] = 0;
+          }
+        })
+      );
+      setSubjectCounts(counts);
     } catch (err: any) {
       console.error(err);
       notifications.show({
@@ -184,11 +199,14 @@ export function SpecializationTab({ search }: SpecializationTabProps) {
             <Table.Th style={{ fontWeight: 700, fontSize: "12px", color: "#475569" }}>Tên Chuyên ngành</Table.Th>
             <Table.Th style={{ fontWeight: 700, fontSize: "12px", color: "#475569" }}>Thuộc Ngành</Table.Th>
             <Table.Th style={{ fontWeight: 700, fontSize: "12px", color: "#475569" }}>Mô tả</Table.Th>
+            <Table.Th style={{ width: "130px", fontWeight: 700, fontSize: "12px", color: "#475569", textAlign: "center" }}>Môn đặc thù</Table.Th>
             <Table.Th style={{ width: "100px", fontWeight: 700, fontSize: "12px", color: "#475569", textAlign: "right" }}>Thao tác</Table.Th>
           </Table.Tr>
         </Table.Thead>
         <Table.Tbody>
-          {filteredSpecs.map((spec) => (
+          {filteredSpecs.map((spec) => {
+            const specCount = subjectCounts[spec.id] ?? 0;
+            return (
             <Table.Tr key={spec.id}>
               <Table.Td style={{ fontSize: "13px", fontWeight: 700, color: "#1A3A5C" }}>{spec.code}</Table.Td>
               <Table.Td style={{ fontSize: "13px" }}>{spec.name}</Table.Td>
@@ -198,13 +216,24 @@ export function SpecializationTab({ search }: SpecializationTabProps) {
                 </Badge>
               </Table.Td>
               <Table.Td style={{ fontSize: "13px", color: "#64748B" }}>{spec.description || "—"}</Table.Td>
+              <Table.Td style={{ textAlign: "center" }}>
+                <Badge
+                  color={specCount === 4 ? "green" : "orange"}
+                  variant="filled"
+                  radius={0}
+                  size="sm"
+                >
+                  {specCount}/4 môn đặc thù
+                </Badge>
+              </Table.Td>
               <Table.Td style={{ textAlign: "right" }}>
                 <ActionIcon variant="subtle" color="red" size="sm" onClick={() => handleDeleteSpec(spec)}>
                   <IconTrash size={16} />
                 </ActionIcon>
               </Table.Td>
             </Table.Tr>
-          ))}
+            );
+          })}
         </Table.Tbody>
       </Table>
 

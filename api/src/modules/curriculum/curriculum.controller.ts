@@ -1,6 +1,7 @@
 import { Hono, type Context } from "hono";
 import { auth } from "../auth/auth.js";
 import { CurriculumService, CurriculumServiceError } from "./services/curriculum.service.js";
+import { prisma } from "../auth/services/db.service.js";
 
 export const curriculumRouter = new Hono();
 
@@ -121,6 +122,29 @@ curriculumRouter.get("/specializations", async (c) => {
   try {
     const specializations = await CurriculumService.listSpecializations();
     return c.json({ specializations });
+  } catch (err: any) {
+    return c.json({ error: err.message }, 500);
+  }
+});
+
+// Đếm số môn đặc thù của một chuyên ngành hẹp
+curriculumRouter.get("/specializations/:specializationId/subject-count", async (c) => {
+  const session = await auth.api.getSession({ headers: c.req.raw.headers });
+  if (!session?.user) return c.json({ error: "Unauthorized" }, 401);
+
+  const specializationId = c.req.param("specializationId");
+  try {
+    const count = await prisma.curriculumSubject.count({
+      where: {
+        isSpecializationSpecific: true,
+        curriculum: { specializationId },
+      },
+    });
+
+    return c.json({
+      total: 4,
+      specializationSpecific: count,
+    });
   } catch (err: any) {
     return c.json({ error: err.message }, 500);
   }

@@ -639,6 +639,12 @@ export async function deleteSpecialization(id: string): Promise<{ success: boole
   });
 }
 
+export async function getSpecializationSubjectCount(
+  specializationId: string
+): Promise<{ total: number; specializationSpecific: number }> {
+  return fetchApi(`/api/curriculum/specializations/${specializationId}/subject-count`);
+}
+
 export async function getCurriculums(): Promise<{ curriculums: ApiCurriculum[] }> {
   return fetchApi("/api/curriculum/curriculums");
 }
