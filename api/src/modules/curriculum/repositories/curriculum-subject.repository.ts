@@ -38,4 +38,19 @@ export class CurriculumSubjectRepository {
       },
     });
   }
+
+  static async countSpecializationSpecificSubjects(
+    specializationId: string,
+    options?: { tx?: Prisma.TransactionClient },
+  ) {
+    const client = options?.tx || prisma;
+    return client.curriculumSubject.count({
+      where: {
+        isSpecializationSpecific: true,
+        curriculum: {
+          specializationId: specializationId,
+        },
+      },
+    });
+  }
 }

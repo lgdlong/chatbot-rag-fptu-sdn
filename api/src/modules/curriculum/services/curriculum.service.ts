@@ -306,6 +306,20 @@ export class CurriculumService {
       throw new CurriculumServiceError(404, "Subject/Course not found");
     }
 
+    // Validate max 4 specialization-specific subjects
+    if (normalizedFlag && curr.specializationId) {
+      const specSubjectCount =
+        await CurriculumSubjectRepository.countSpecializationSpecificSubjects(
+          curr.specializationId,
+        );
+      if (specSubjectCount >= 4) {
+        throw new CurriculumServiceError(
+          409,
+          `Chuyên ngành hẹp chỉ có tối đa 4 môn học đặc thù. Hiện đã có ${specSubjectCount} môn.`,
+        );
+      }
+    }
+
     try {
       return await CurriculumSubjectRepository.create({
         curriculumId: curr.id,
