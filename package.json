@@ -17,6 +17,7 @@
     "turbo": "^2.0.4"
   },
   "dependencies": {
+    "@tanstack/react-form": "^1.33.1",
     "playwright": "^1.61.1"
   }
 }

@@ -58,11 +58,13 @@ export function SubjectTab({ search }: SubjectTabProps) {
 
   const filteredCourses = useMemo(() => {
     const s = search.trim().toLowerCase();
-    return courses.filter(
-      (c) =>
-        c.code.toLowerCase().includes(s) ||
-        c.name.toLowerCase().includes(s)
-    );
+    return courses
+      .filter(
+        (c) =>
+          c.code.toLowerCase().includes(s) ||
+          c.name.toLowerCase().includes(s)
+      )
+      .sort((a, b) => a.code.localeCompare(b.code));
   }, [search, courses]);
 
   const handleAddCourse = async () => {

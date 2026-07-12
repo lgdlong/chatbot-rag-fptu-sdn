@@ -85,7 +85,7 @@ model Course {
 
 // Bảng phiên bản Syllabus (1 Môn → N Syllabus, tối đa 1 bản active)
 model Syllabus {
-  id                   Int                    @id // Sử dụng ID Syllabus thực tế của FLM (ví dụ: 12580)
+  id                   Int                    @id @default(autoincrement())
   courseId             String                 @map("course_id")
   course               Course                 @relation(fields: [courseId], references: [id], onDelete: Cascade)
   syllabusName         String                 @map("syllabus_name")

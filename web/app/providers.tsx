@@ -71,7 +71,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
   return (
     <AuthProvider>
       <MantineProvider theme={theme} defaultColorScheme="light" forceColorScheme="light">
-        <Notifications />
+        <Notifications position="top-right" />
         <NavigationProgress />
         <ModalsProvider>
           {children}
