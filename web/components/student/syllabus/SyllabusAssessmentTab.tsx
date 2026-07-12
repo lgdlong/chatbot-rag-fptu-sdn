@@ -72,24 +72,24 @@ export function SyllabusAssessmentTab({ assessment_scheme }: SyllabusAssessmentT
             striped
             withTableBorder
             withColumnBorders
-            style={{ minWidth: "1100px", backgroundColor: "white" }}
+            style={{ minWidth: "1300px", tableLayout: "fixed", backgroundColor: "white" }}
             fz="xs"
           >
             <Table.Thead>
               <Table.Tr style={{ background: "linear-gradient(135deg, #8b5cf6, #7c3aed)" }}>
                 {[
-                  { label: "Category", w: "10%" },
-                  { label: "Type", w: "10%" },
-                  { label: "Part", w: "5%" },
-                  { label: "Weight", w: "6%" },
-                  { label: "Completion Criteria", w: "8%" },
-                  { label: "Duration", w: "7%" },
-                  { label: "CLO", w: "6%" },
+                  { label: "Category", w: "7%" },
+                  { label: "Type", w: "7%" },
+                  { label: "Part", w: "3%" },
+                  { label: "Weight", w: "5%" },
+                  { label: "Completion Criteria", w: "5%" },
+                  { label: "Duration", w: "5%" },
+                  { label: "CLO", w: "5%" },
                   { label: "Question Type", w: "8%" },
                   { label: "No. Questions", w: "6%" },
-                  { label: "Knowledge & Skill", w: "16%" },
-                  { label: "Grading Guide", w: "14%" },
-                  { label: "Note", w: "8%" },
+                  { label: "Knowledge & Skill", w: "17%" },
+                  { label: "Grading Guide", w: "16%" },
+                  { label: "Note", w: "16%" },
                 ].map(({ label, w }) => (
                   <Table.Th
                     key={label}

@@ -312,6 +312,12 @@ export async function approveSyllabus(id: number): Promise<{ success: boolean; s
   });
 }
 
+export async function syncSyllabus(id: number): Promise<{ success: boolean }> {
+  return fetchApi(`/api/syllabus/${id}/sync`, {
+    method: "POST",
+  });
+}
+
 export async function activateSyllabus(id: number): Promise<{ success: boolean; syllabus: ApiSyllabusDetail }> {
   return fetchApi(`/api/syllabus/${id}/activate`, {
     method: "PATCH",

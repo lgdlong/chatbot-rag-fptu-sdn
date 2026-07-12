@@ -60,7 +60,7 @@ export default function StudentLayout({ children }: { children: React.ReactNode 
             boxShadow: "0 2px 16px rgba(10, 30, 61, 0.45)",
           }}
         >
-          <Container size="xl" style={{ height: "100%" }}>
+          <Container fluid style={{ height: "100%" }}>
             <Group justify="space-between" align="center" style={{ height: "100%" }}>
 
               {/* ─── Logo + Brand ─── */}

@@ -28,6 +28,7 @@ import {
   IconLink,
   IconBan,
   IconCircleDot,
+  IconCloudUpload,
 } from "@tabler/icons-react";
 import { modals } from "@mantine/modals";
 import { notifications } from "@mantine/notifications";
@@ -40,6 +41,7 @@ export default function SyllabusManagementPage() {
   const [syllabi, setSyllabi] = useState<ApiSyllabusSummary[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [apiError, setApiError] = useState<string | null>(null);
+  const [syncingIds, setSyncingIds] = useState<Set<number>>(new Set());
 
   const loadSyllabi = useCallback(async () => {
     setIsLoading(true);
@@ -88,6 +90,30 @@ export default function SyllabusManagementPage() {
         }
       },
     });
+  };
+
+  const handleSync = async (syllabus: ApiSyllabusSummary) => {
+    setSyncingIds((prev) => new Set(prev).add(syllabus.id));
+    try {
+      await api.syncSyllabus(syllabus.id);
+      notifications.show({
+        title: "Đồng bộ thành công",
+        message: `Đã gửi yêu cầu đồng bộ syllabus #${syllabus.id} lên AnythingLLM`,
+        color: "green",
+      });
+    } catch (err: any) {
+      notifications.show({
+        title: "Lỗi đồng bộ",
+        message: err.message || "Không thể đồng bộ syllabus lên AnythingLLM.",
+        color: "red",
+      });
+    } finally {
+      setSyncingIds((prev) => {
+        const next = new Set(prev);
+        next.delete(syllabus.id);
+        return next;
+      });
+    }
   };
 
   const handleActivate = async (syllabus: ApiSyllabusSummary) => {
@@ -323,6 +349,16 @@ export default function SyllabusManagementPage() {
                           title="Chỉnh sửa"
                         >
                           <IconEdit size={16} />
+                        </ActionIcon>
+                        <ActionIcon
+                          variant="subtle"
+                          color="blue"
+                          size="sm"
+                          title="Đồng bộ lên AnythingLLM"
+                          onClick={() => handleSync(syllabus)}
+                          loading={syncingIds.has(syllabus.id)}
+                        >
+                          <IconCloudUpload size={16} />
                         </ActionIcon>
                         <ActionIcon variant="subtle" color="red" size="sm" title="Xóa" onClick={() => handleDeleteSyllabus(syllabus)}>
                           <IconTrash size={16} />

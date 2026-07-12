@@ -11,7 +11,6 @@ import {
   Card,
   Box,
   Badge,
-  Container,
   ThemeIcon,
   Skeleton,
   Alert,
@@ -137,7 +136,7 @@ export default function StudentDashboard() {
           }}
         />
 
-        <Container size="xl">
+        <Box px={{ base: "md", sm: "xl" }}>
           <Stack gap="lg" align="center" style={{ textAlign: "center" }}>
             <Group gap="xs" justify="center">
               <ThemeIcon
@@ -239,11 +238,11 @@ export default function StudentDashboard() {
               </Text>
             </Box>
           </Stack>
-        </Container>
+        </Box>
       </Box>
 
       {/* ─── Content Area ─── */}
-      <Container size="xl" py="xl">
+      <Box px={{ base: "md", sm: "xl" }} py="xl">
         {/* API Error Banner */}
         {apiError && (
           <Alert
@@ -396,7 +395,7 @@ export default function StudentDashboard() {
             </Stack>
           </Stack>
         )}
-      </Container>
+      </Box>
 
       <style>{`
         .subject-card:hover {

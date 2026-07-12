@@ -170,14 +170,14 @@ export default function SyllabusViewerPage() {
             padding: "28px 0",
           }}
         >
-          <Container size="xl">
+          <Container fluid>
             <Skeleton height={32} width={150} mb="lg" style={{ opacity: 0.3 }} />
             <Skeleton height={24} width={100} mb="sm" style={{ opacity: 0.3 }} />
             <Skeleton height={36} width={400} mb="sm" style={{ opacity: 0.3 }} />
             <Skeleton height={16} width={300} style={{ opacity: 0.3 }} />
           </Container>
         </Box>
-        <Container size="xl" py="xl">
+        <Container fluid py="xl">
           <Skeleton height={48} mb="lg" />
           <Stack gap="md">
             {[1, 2, 3].map((i) => (
@@ -252,7 +252,7 @@ export default function SyllabusViewerPage() {
           }}
         />
 
-        <Container size="xl">
+        <Container fluid>
           {/* Back button */}
           <Button
             component={Link}
@@ -396,7 +396,7 @@ export default function SyllabusViewerPage() {
           boxShadow: "0 2px 8px rgba(0,0,0,0.06)",
         }}
       >
-        <Container size="xl">
+        <Container fluid>
           <Tabs
             value={activeTab}
             onChange={setActiveTab}
@@ -444,7 +444,7 @@ export default function SyllabusViewerPage() {
       </Box>
 
       {/* ─── Tab Content ─── */}
-      <Container size="xl" py="xl">
+      <Container fluid py="xl">
         {activeTab === "overview" && <SyllabusOverviewTab metadata={metadata} />}
         {activeTab === "materials" && <SyllabusMaterialsTab materials={materials} />}
         {activeTab === "clos" && <SyllabusCLOsTab clos={clos} metadata={metadata} />}
