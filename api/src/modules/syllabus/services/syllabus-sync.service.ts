@@ -124,43 +124,66 @@ export class SyllabusSyncService {
     const mdContent = await this.generateMarkdown(syllabusId);
     const fileName = `syllabus_${syllabus.id}_snapshot.md`;
 
-    // 2. Đảm bảo workspace tồn tại trong AnythingLLM
-    console.log(`[Syllabus Sync] Ensuring AnythingLLM workspace "${workspaceSlug}" exists`);
-    await AnythingLlmAdapter.ensureWorkspace(workspaceSlug);
-
-    // 3. Đăng ký hoặc lấy thông tin RagWorkspace trong DB
+    // 2. Đăng ký hoặc lấy thông tin RagWorkspace trong DB
     const ragWorkspace = await RagWorkspaceRepository.upsertBySyllabus({
       syllabusId,
       workspaceSlug,
       workspaceName,
     });
 
-    // 4. Nếu đã có snapshot cũ, tiến hành xóa khỏi AnythingLLM
-    const oldLocation = ragWorkspace.anythingLlmId;
-    if (oldLocation) {
-      try {
-        console.log(`[Syllabus Sync] Removing old snapshot embedding: "${oldLocation}"`);
-        await AnythingLlmAdapter.updateWorkspaceEmbeddings(workspaceSlug, { deletes: [oldLocation] });
-        console.log(`[Syllabus Sync] Purging old snapshot document: "${oldLocation}"`);
-        await AnythingLlmAdapter.purgeDocuments([oldLocation]);
-      } catch (err) {
-        console.error(`[Syllabus Sync] Non-blocking warning: Failed to clean up old snapshot "${oldLocation}":`, err);
+    // 3. Đánh dấu trạng thái đồng bộ là SYNCING
+    await RagWorkspaceRepository.update(ragWorkspace.id, { syncStatus: "SYNCING" });
+
+    try {
+      // 4. Đảm bảo workspace tồn tại trong AnythingLLM
+      console.log(`[Syllabus Sync] Ensuring AnythingLLM workspace "${workspaceSlug}" exists`);
+      await AnythingLlmAdapter.ensureWorkspace(workspaceSlug);
+
+      // 5. Nếu đã có snapshot cũ, tiến hành xóa khỏi AnythingLLM
+      const oldLocation = ragWorkspace.anythingLlmId;
+      if (oldLocation) {
+        try {
+          console.log(`[Syllabus Sync] Removing old snapshot embedding: "${oldLocation}"`);
+          await AnythingLlmAdapter.updateWorkspaceEmbeddings(workspaceSlug, { deletes: [oldLocation] });
+          console.log(`[Syllabus Sync] Purging old snapshot document: "${oldLocation}"`);
+          await AnythingLlmAdapter.purgeDocuments([oldLocation]);
+        } catch (err) {
+          console.error(`[Syllabus Sync] Non-blocking warning: Failed to clean up old snapshot "${oldLocation}":`, err);
+        }
       }
+
+      // 6. Tải lên snapshot markdown mới
+      console.log(`[Syllabus Sync] Uploading new snapshot markdown for syllabus: ${syllabus.id}`);
+      const newLocation = await AnythingLlmAdapter.uploadMarkdown(fileName, mdContent);
+
+      // 7. Nhúng snapshot vào workspace
+      console.log(`[Syllabus Sync] Embedding new snapshot markdown into workspace: "${workspaceSlug}"`);
+      await AnythingLlmAdapter.updateWorkspaceEmbeddings(workspaceSlug, { adds: [newLocation] });
+
+      // 8. Cập nhật ID/Location snapshot mới vào DB
+      await RagWorkspaceRepository.update(ragWorkspace.id, {
+        anythingLlmId: newLocation,
+      });
+
+      // 9. Đánh dấu đồng bộ thành công
+      await RagWorkspaceRepository.update(ragWorkspace.id, {
+        syncStatus: "SYNCED",
+        syncError: null,
+        lastSyncedAt: new Date(),
+      });
+
+      console.log(`[Syllabus Sync] Successfully synced snapshot markdown to AnythingLLM workspace "${workspaceSlug}"!`);
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "Unknown error";
+      console.error(`[Syllabus Sync] Sync failed for syllabus ${syllabusId}:`, message);
+
+      // Đánh dấu đồng bộ thất bại
+      await RagWorkspaceRepository.update(ragWorkspace.id, {
+        syncStatus: "FAILED",
+        syncError: message,
+      });
+
+      throw err;
     }
-
-    // 5. Tải lên snapshot markdown mới
-    console.log(`[Syllabus Sync] Uploading new snapshot markdown for syllabus: ${syllabus.id}`);
-    const newLocation = await AnythingLlmAdapter.uploadMarkdown(fileName, mdContent);
-
-    // 6. Nhúng snapshot vào workspace
-    console.log(`[Syllabus Sync] Embedding new snapshot markdown into workspace: "${workspaceSlug}"`);
-    await AnythingLlmAdapter.updateWorkspaceEmbeddings(workspaceSlug, { adds: [newLocation] });
-
-    // 7. Cập nhật ID/Location snapshot mới vào DB
-    await RagWorkspaceRepository.update(ragWorkspace.id, {
-      anythingLlmId: newLocation,
-    });
-
-    console.log(`[Syllabus Sync] Successfully synced snapshot markdown to AnythingLLM workspace "${workspaceSlug}"!`);
   }
 }

@@ -283,21 +283,7 @@ export class SyllabusService {
   ): Promise<unknown> {
     const assessments = input.assessments ?? [];
 
-    if (assessments.length > 0) {
-      let totalWeight = 0;
-      for (const item of assessments) {
-        const w = parseFloat(String((item as { weight?: unknown }).weight));
-        if (!isNaN(w)) {
-          totalWeight += w;
-        }
-      }
-      if (Math.abs(totalWeight - 100.0) > 0.01) {
-        throw new ValidationError(
-          400,
-          `Tổng trọng số đánh giá phải bằng đúng 100%. Hiện tại: ${totalWeight.toFixed(2)}%`,
-        );
-      }
-    }
+    // NOTE: assessment weight sum validation removed per user request
 
     const existing = await SyllabusRepository.findByIdLight(input.id);
     if (!existing) {

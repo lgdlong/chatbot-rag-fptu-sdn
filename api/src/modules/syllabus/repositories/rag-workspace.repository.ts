@@ -66,6 +66,9 @@ export class RagWorkspaceRepository {
       workspaceSlug?: string;
       workspaceName?: string;
       anythingLlmId?: string;
+      syncStatus?: string;
+      syncError?: string | null;
+      lastSyncedAt?: Date;
     },
     options?: { tx?: Prisma.TransactionClient },
   ) {

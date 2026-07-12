@@ -3,6 +3,7 @@ import { Hono, type Context } from "hono";
 import { auth } from "../auth/auth.js";
 import { ValidationError } from "../courses/services/course.service.js";
 import { SyllabusService } from "./services/syllabus.service.js";
+import { SyllabusSyncService } from "./services/syllabus-sync.service.js";
 import { isPdfByContent, sanitizeFilename } from "./utils/file-validation.utils.js";
 
 export const syllabusRouter = new Hono();
@@ -324,6 +325,33 @@ syllabusRouter.delete("/:syllabusId/documents/:documentId", async (c) => {
     });
     return c.json({ success: true });
   } catch (err: unknown) {
+    return respondWithServiceError(c, err);
+  }
+});
+
+// ==========================================
+// 10. API ĐỒNG BỘ SYLLABUS LÊN ANYTHINGLLM (SYNC)
+// ==========================================
+// POST /api/syllabus/:id/sync — manual sync trigger
+syllabusRouter.post("/:id/sync", async (c) => {
+  const authResult = await requireLecturer(c);
+  if (authResult.error) return authResult.error;
+
+  const id = parseInt(c.req.param("id"));
+  if (isNaN(id)) return c.json({ error: "Invalid Syllabus ID" }, 400);
+
+  try {
+    // Fire-and-forget sync — consistent with existing pattern
+    Promise.resolve().then(async () => {
+      try {
+        await SyllabusSyncService.syncSyllabusToAnythingLlm(id);
+      } catch (syncErr) {
+        console.error(`[Sync Trigger Error] Failed to sync syllabus ${id}:`, syncErr);
+      }
+    });
+
+    return c.json({ success: true, message: "Sync triggered" });
+  } catch (err) {
     return respondWithServiceError(c, err);
   }
 });
