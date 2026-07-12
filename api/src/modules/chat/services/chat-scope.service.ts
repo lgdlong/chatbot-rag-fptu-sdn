@@ -2,6 +2,7 @@ import { ChatSessionScopeMode } from "@prisma/client";
 import { UserRepository } from "../../auth/repositories/user.repository.js";
 import { CourseRepository } from "../../courses/repositories/course.repository.js";
 import { DocumentRepository } from "../../documents/repositories/document.repository.js";
+import { prisma } from "../../auth/services/db.service.js";
 
 export type ScopedCourse = {
   id: string;
@@ -62,12 +63,14 @@ function orderedScopedDocuments(documentIds: string[], documents: ScopedDocument
 /**
  * Resolve the set of course ids a chat user can query against.
  *
- * "Accessible" here means: courses that have at least one syllabus with
- * at least one COMPLETED document. The original implementation did an
- * explicit user-existence pre-check via prisma.user.findUnique. We keep
- * the UserRepository lookup so the semantics are preserved (a missing
- * user still yields an empty array), but everything else is delegated to
- * DocumentRepository / CourseRepository. Zero prisma calls in this file.
+ * "Accessible" here means: courses that have at least one syllabus.
+ * Syllabus snapshots are synced to AnythingLLM on creation, so even
+ * without uploaded PDF documents the chatbot can still answer based
+ * on syllabus data (FLM support).
+ *
+ * The original implementation limited this to courses with at least
+ * one COMPLETED document, which broke the FLM chatbot flow — students
+ * couldn't ask anything until a PDF was uploaded and ingested.
  */
 export async function resolveAccessibleChatCourseIds(userId: string) {
   const user = await UserRepository.findById(userId);
@@ -75,7 +78,10 @@ export async function resolveAccessibleChatCourseIds(userId: string) {
     return [];
   }
 
-  return DocumentRepository.findCourseIdsWithCompletedDocuments();
+  const rows = await prisma.course.findMany({
+    select: { id: true },
+  });
+  return rows.map((r) => r.id);
 }
 
 export async function resolveAccessibleChatDocuments(userId: string): Promise<ScopedDocument[]> {

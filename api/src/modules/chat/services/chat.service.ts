@@ -1,4 +1,3 @@
-import { GoogleGenAI } from "@google/genai";
 import { Prisma } from "@prisma/client";
 import { auth } from "../../auth/auth.js";
 import { ENV } from "../../../config/env.js";
@@ -124,9 +123,7 @@ function normalizeIds(values: unknown): string[] {
  * streaming, and the document catalog query.
  *
  * Layer rule: must NOT import prisma.{table} directly. The only
- * exceptions are GoogleGenAI (used only for first-message title
- * generation, which is an AI concern, not a data concern) and
- * `auth.handler` / `Request` for the devLogin sign-in (HTTP boundary
+ * exceptions are `auth.handler` / `Request` for the devLogin sign-in (HTTP boundary
  * that the controller cannot own because we need the response headers
  * to propagate the Set-Cookie to the caller). DB access is fully
  * delegated to ChatRepository / UserRepository / DocumentRepository,
@@ -248,18 +245,11 @@ export class ChatService {
   }
 
   /**
-   * Ask Gemini to summarize the first user message into a <=5 word
-   * Vietnamese title. Pure-text prompt with strict "no markdown" rules
-   * matches the pre-refactor controller's prompt verbatim. Returns
-   * "Cuộc hội thoại mới" when the model yields no text.
+   * Generate session title from the first user message.
+   * Uses simple truncation — no direct AI calls, everything routes through AnythingLLM.
    */
-  public static async generateTitleForFirstMessage(message: string): Promise<string> {
-    const ai = new GoogleGenAI({ apiKey: ENV.GEMINI_API_KEY });
-    const summaryResponse = await ai.models.generateContent({
-      model: ENV.GEMINI_TEXT_MODEL,
-      contents: `Hãy tóm tắt câu hỏi sau thành một tiêu đề hội thoại ngắn gọn (tối đa 5 từ), trả về duy nhất văn bản thuần túy không chứa bất kỳ markdown, dấu ngoặc hay dấu chấm nào:\n\n"${message}"`,
-    });
-    return summaryResponse.text?.trim() || "Cuộc hội thoại mới";
+  public static generateTitleForFirstMessage(message: string): string {
+    return message.length > 30 ? `${message.substring(0, 30)}...` : message;
   }
 
   // ---------------------------------------------------------------------

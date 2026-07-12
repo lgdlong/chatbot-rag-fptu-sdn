@@ -67,7 +67,9 @@ export class AnythingLlmAdapter {
 
   public static async ensureWorkspace(workspaceSlug: string) {
     const workspaces = await this.listWorkspaceSlugs();
-    if (workspaces.includes(workspaceSlug)) {
+    const exists = workspaces.includes(workspaceSlug);
+
+    if (exists) {
       return;
     }
 
@@ -78,6 +80,9 @@ export class AnythingLlmAdapter {
     });
 
     await assertOk(response, `AnythingLLM workspace creation failed for ${workspaceSlug}`);
+
+    // Set LLM guardrail system prompt immediately after creation
+    await this.updateWorkspaceSystemPrompt(workspaceSlug);
   }
 
   public static async uploadPdf(fileName: string, buffer: Uint8Array) {
@@ -150,6 +155,41 @@ export class AnythingLlmAdapter {
     });
 
     await assertOk(response, `AnythingLLM workspace rename failed for ${oldSlug}`);
+  }
+
+  public static async updateWorkspaceSystemPrompt(workspaceSlug: string) {
+    const prompt = ENV.ANYTHING_LLM_SYSTEM_PROMPT;
+    const response = await fetch(`${baseUrl()}/api/v1/workspace/${workspaceSlug}/update`, {
+      method: "POST",
+      headers: authHeaders(true),
+      body: JSON.stringify({
+        name: workspaceSlug,
+        slug: workspaceSlug,
+        openAiPrompt: prompt,
+      }),
+    });
+
+    await assertOk(response, `AnythingLLM system prompt update failed for ${workspaceSlug}`);
+  }
+
+  public static async syncAllWorkspacePrompts() {
+    const workSlugs = await this.listWorkspaceSlugs();
+    if (workSlugs.length === 0) {
+      return { updated: 0, failed: 0 };
+    }
+
+    let updated = 0;
+    let failed = 0;
+    for (const slug of workSlugs) {
+      try {
+        await this.updateWorkspaceSystemPrompt(slug);
+        updated++;
+      } catch {
+        failed++;
+      }
+    }
+
+    return { updated, failed };
   }
 
   public static async deleteWorkspace(workspaceSlug: string) {
