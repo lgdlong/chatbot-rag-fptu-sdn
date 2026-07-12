@@ -297,22 +297,8 @@ export default function SyllabusManagementPage() {
                     <Table.Td style={{ fontSize: "13px", color: "#64748B" }}>#{syllabus.id}</Table.Td>
                     <Table.Td style={{ fontSize: "13px", fontWeight: 700, color: "#1A1A1A" }}>{syllabus.course.code}</Table.Td>
                     <Table.Td style={{ fontSize: "13px", fontWeight: 600 }}>{syllabus.course.name}</Table.Td>
-                    <Table.Td style={{ fontSize: "13px" }}>
-                      <Text
-                        component={Link}
-                        href={`/student/syllabus/${syllabus.course.code.toLowerCase()}`}
-                        style={{
-                          color: "#1A3A5C",
-                          fontWeight: 700,
-                          display: "inline-flex",
-                          alignItems: "center",
-                          gap: "4px",
-                          textDecoration: "underline",
-                        }}
-                      >
-                        <IconLink size={14} />
-                        {syllabus.syllabusName}
-                      </Text>
+                    <Table.Td style={{ fontSize: "13px", fontWeight: 600 }}>
+                      {syllabus.syllabusName}
                     </Table.Td>
                     <Table.Td>{getStatusBadge(syllabus.isActive, syllabus.isApproved)}</Table.Td>
                     <Table.Td style={{ fontSize: "13px", color: "#475569" }}>{syllabus.decisionNo ?? "-"}</Table.Td>
@@ -328,7 +314,14 @@ export default function SyllabusManagementPage() {
                             <IconCircleDot size={16} />
                           </ActionIcon>
                         )}
-                        <ActionIcon variant="subtle" color="gray" size="sm" title="Chỉnh sửa">
+                        <ActionIcon
+                          component={Link}
+                          href={`/teacher/syllabus/${syllabus.id}/edit`}
+                          variant="subtle"
+                          color="gray"
+                          size="sm"
+                          title="Chỉnh sửa"
+                        >
                           <IconEdit size={16} />
                         </ActionIcon>
                         <ActionIcon variant="subtle" color="red" size="sm" title="Xóa" onClick={() => handleDeleteSyllabus(syllabus)}>
