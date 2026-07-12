@@ -243,15 +243,18 @@ model Document {
 
 // Bảng mapping workspace RAG theo từng phiên bản Syllabus
 model RagWorkspace {
-  id            String   @id @default(uuid())
-  syllabusId    Int      @unique @map("syllabus_id")
-  syllabus      Syllabus @relation(fields: [syllabusId], references: [id], onDelete: Cascade)
-  workspaceSlug String   @unique @map("workspace_slug")
-  workspaceName String   @map("workspace_name")
-  anythingLlmId String?  @map("anything_llm_id")
+  id            String    @id @default(uuid())
+  syllabusId    Int       @unique @map("syllabus_id")
+  syllabus      Syllabus  @relation(fields: [syllabusId], references: [id], onDelete: Cascade)
+  workspaceSlug String    @unique @map("workspace_slug")
+  workspaceName String    @map("workspace_name")
+  anythingLlmId String?   @map("anything_llm_id")
+  syncStatus    String?   @map("sync_status") // PENDING, SYNCING, SYNCED, FAILED
+  syncError     String?   @db.Text @map("sync_error")
+  lastSyncedAt  DateTime? @map("last_synced_at")
   ingestionJobs IngestionJob[]
-  createdAt     DateTime @default(now()) @map("created_at")
-  updatedAt     DateTime @updatedAt @map("updated_at")
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
 
   @@map("rag_workspaces")
 }

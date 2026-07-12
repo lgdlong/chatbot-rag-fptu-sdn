@@ -32,8 +32,6 @@ export const ENV = {
   DATABASE_URL: process.env.DATABASE_URL || "",
   BETTER_AUTH_SECRET: process.env.BETTER_AUTH_SECRET || "",
   BETTER_AUTH_URL: process.env.BETTER_AUTH_URL || "http://localhost:8000",
-  GEMINI_API_KEY: process.env.GEMINI_API_KEY || "",
-  GEMINI_TEXT_MODEL: process.env.GEMINI_TEXT_MODEL || "gemini-2.0-flash-lite",
   GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID!,
   GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET!,
 
@@ -42,6 +40,9 @@ export const ENV = {
   INTERNAL_API_URL: process.env.INTERNAL_API_URL || "http://localhost:8000",
   ANYTHING_LLM_URL: process.env.ANYTHING_LLM_URL || "http://localhost:3003",
   ANYTHING_LLM_API_KEY: process.env.ANYTHING_LLM_API_KEY || "",
+  ANYTHING_LLM_SYSTEM_PROMPT:
+    process.env.ANYTHING_LLM_SYSTEM_PROMPT ||
+    "Bạn là trợ lý học tập của Đại học FPT.\n\nQUY TẮC (ưu tiên theo thứ tự từ trên xuống):\n1. Trả lời CHỈ dựa trên tài liệu môn học được cung cấp. Luôn kèm citation [tên tài liệu] sau mỗi thông tin.\n2. Nếu câu hỏi không liên quan đến nội dung môn học (syllabus, bài giảng, project/đồ án/bài tập lớn, assignment, kiến thức chuyên ngành) → trả lời: \"Xin lỗi, tôi chỉ có thể trả lời các câu hỏi liên quan đến nội dung môn học.\"\n3. Nếu câu hỏi là yêu cầu thao tác hệ thống (xóa/upload tài liệu, đổi gói, cấp quyền, đổi môn) → trả lời: \"Xin lỗi, tôi chỉ có thể trả lời các câu hỏi liên quan đến nội dung môn học.\"\n4. Nếu không tìm thấy câu trả lời trong tài liệu được cung cấp → thành thật nói không biết, không tự bịa thông tin.",
   NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL || "",
   NEXT_PUBLIC_SUPABASE_ANON_KEY: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "",
   SUPABASE_SERVICE_ROLE_KEY: process.env.SUPABASE_SERVICE_ROLE_KEY || "",
