@@ -1,0 +1,1081 @@
+{
+  "metadata": {
+    "syllabus_id": "14232",
+    "syllabus_name": "Elementary Japanese 1- A1.1_Tiếng Nhật sơ cấp 1-A1.1",
+    "syllabus_name_english": "Elementary Japanese 1- A1.1",
+    "subject_code": "JPD113",
+    "credits": "3",
+    "degree_level": "Cử nhân (bachelor)",
+    "time_allocation": "Thời gian học tập: 150 giờ\nTrong đó: 45 giờ trên lớp (20 sessions, mỗi session=135p) + 1 giờ thi+ 104 giờ tự học",
+    "prerequisites": "Không",
+    "description": "I. Yêu cầu định hướng triển khai của môn học: Môn học cung cấp kiến thức, kỹ năng cơ bản của tiếng Nhật ở trình độ sơ cấp 1 (tương đương với trình độ A1) cho đối tượng sinh viên học tiếng Nhật là ngoại ngữ 2 tại trường Đại học.\nII. Mục tiêu của môn học:\nSau khi hoàn thành môn học, sinh viên có thể đạt được các mục tiêu như sau:\n1) Có thể viết, đọc thành thạo bảng chữ cái tiếng Nhật (chữ mềm, chữ cứng)\n2) Có thể nắm được khoảng 200 từ vựng cơ bản, cách viết và đọc của khoảng hơn 30 chữ Hán, khoảng hơn 20 cấu trúc ngữ pháp cơ bản dùng trong hội thoại sơ cấp.\n3) Có thể hiểu, sử dụng các cách nói quen thuộc được sử dụng trong đời sống thường nhật để đáp ứng nhu cầu giao tiếp cụ thể như có thể tự giới thiệu bản thân (giới thiệu tên, quốc tịch, nghề nghiệp, sở thích v.v..); có thể hỏi địa điểm, có thể giao tiếp với nhân viên để hỏi giá tiền, gọi đồ v.v…; có thể kể về những hoạt động hằng ngày của bản thân, hỏi giờ làm việc của các cơ quan tổ chức.\n4) Rèn luyện được kỹ năng làm việc nhóm, phát triển bản thân thông qua các hoạt động nhóm trong lớp (role play..) và các hoạt động ngoại khóa.",
+    "student_tasks": "- Tham dự tối thiểu 80% số giờ học trên lớp mới đủ điều kiện tham gia thi kì thi cuối môn.\n- Học từ vựng và tìm hiểu trước bài học, làm các bài tập và nhiệm vụ do GV giao.\n- Ôn tập bài giảng, đối chiếu với giáo trình để nắm vững các kiến thức.\n- Trên lớp tích cực tham gia trao đổi, xây dựng bài.",
+    "tools": "- Sử dụng giáo trình chính và giáo trình bổ trợ bằng tiếng Nhật.\n- Sử dụng slide môn học.\n- Tra cứu, tham khảo các nội dung có liên quan đến môn học trên mạng hoặc giáo trình tham khảo được giới thiệu trong môn học.\n- Sử dụng https://heyjapan.net/ để học bảng chữ cái và ôn thi cuối kỳ.\n- Sử dụng AI (ChatGPT, Copilot, v.v.) để tra cứu cách dùng từ vựng, ứng dụng của ngữ pháp, và các từ ghép Hán tự ngoài các từ đã được học.",
+    "scoring_scale": "10",
+    "decision_no": "444/QĐ-ĐHFPT dated 04/23/2026",
+    "is_approved": "True",
+    "note": "",
+    "min_avg_mark_to_pass": "5",
+    "is_active": "True",
+    "approved_date": "4/23/2026"
+  },
+  "materials": [
+    {
+      "description": "Kana Nyuumon (Nhập môn Kana)",
+      "author": "Japan Foundation",
+      "publisher": "",
+      "published_date": "",
+      "edition": "",
+      "isbn": "",
+      "is_main_material": "",
+      "is_hard_copy": "",
+      "is_online": "",
+      "note": ""
+    },
+    {
+      "description": "できる日本語 初級 本冊",
+      "author": "嶋田和子",
+      "publisher": "アルク",
+      "published_date": "2011",
+      "edition": "",
+      "isbn": "ISBN-10 : 4757419775ISBN-13 : 978-4757419773",
+      "is_main_material": "",
+      "is_hard_copy": "",
+      "is_online": "",
+      "note": "Giáo trình Dekiru quyển đỏ (Tiếng Nhật trong tầm tay)"
+    },
+    {
+      "description": "わたしのことばノート 初級 (できる日本語)",
+      "author": "できる日本語教材開発プロジェクト",
+      "publisher": "嶋田 和子",
+      "published_date": "凡人社",
+      "edition": "",
+      "isbn": "ISBN-10 : 4893588117ISBN-13 : 978-4893588111",
+      "is_main_material": "",
+      "is_hard_copy": "",
+      "is_online": "",
+      "note": ""
+    },
+    {
+      "description": "わたしの文法ノート 初級 (できる日本語)",
+      "author": "嶋田和子",
+      "publisher": "凡人社",
+      "published_date": "2012",
+      "edition": "",
+      "isbn": "ISBN-10 : 489358801XISBN-13 : 978-4893588012",
+      "is_main_material": "",
+      "is_hard_copy": "",
+      "is_online": "",
+      "note": ""
+    },
+    {
+      "description": "漢字たまご 初級",
+      "author": "有山優樹 (著), 落合知春 (著), 立原雅子 (著), 林英子 (著), 山口知才子 (著), 酒井弘美 (イラスト), 嶋田和子 (監修)",
+      "publisher": "凡人社",
+      "published_date": "2012",
+      "edition": "",
+      "isbn": "ISBN-10 : 4893588311ISBN-13 : 978-4893588319",
+      "is_main_material": "",
+      "is_hard_copy": "",
+      "is_online": "",
+      "note": ""
+    }
+  ],
+  "clos": [
+    {
+      "clo_name": "1",
+      "clo_details": "CLO1",
+      "lo_details": "Nhận biết được các ký tự trong hệ thống chữ cái tiếng Nhật (chữ mềm, chữ cứng)."
+    },
+    {
+      "clo_name": "2",
+      "clo_details": "CLO2",
+      "lo_details": "Ghi nhớ 200 từ vựng, 23 cấu trúc ngữ pháp, 35 chữ Hán liên quan đến các chủ đề được học."
+    },
+    {
+      "clo_name": "3",
+      "clo_details": "CLO3",
+      "lo_details": "Vận dụng từ vựng, mẫu câu, chữ Hán đã được học để có thể tự giới thiệu bản thân (giới thiệu tên, tuổi, quốc tịch, nghề nghiệp, ngày sinh nhật, sở thích); hội thoại đơn giản về chủ đề mua sắm, gọi đồ; có thể kể về những hoạt động hằng ngày của bản thân, hỏi giờ làm việc của các cơ quan tổ chức."
+    },
+    {
+      "clo_name": "4",
+      "clo_details": "CLO4",
+      "lo_details": "Đọc được đoạn văn ngắn trình độ sơ cấp bằng tiếng Nhật."
+    },
+    {
+      "clo_name": "5",
+      "clo_details": "CLO5",
+      "lo_details": "Rèn luyện kỹ năng làm việc nhóm, phát triển bản thân thông qua các hoạt động nhóm trong lớp (role play..)."
+    }
+  ],
+  "schedule": [
+    {
+      "session": "1",
+      "topic": "Tiết 1:(*) Giới thiệu khái quát về chương trình(*) Giới thiệu về tiếng Nhật",
+      "learning_method": "Offline",
+      "lo": "CLO1",
+      "itu": "I, T,U",
+      "student_materials": "Slide của slot 1 (tiết 1)",
+      "s_download": "JPD113",
+      "student_tasks": "1) Nắm được khái quát về chương trình môn JPD113; nắm được những nét cơ bản về tiếng Nhật.2) Ôn tập các nội dung được nêu.3) Dùng https://heyjapan.net/ để luyện tập bảng chữ đã học.",
+      "urls": ""
+    },
+    {
+      "session": "2",
+      "topic": "Tiết 2:(*) Học Hiragana: 20 chữ đầu tiên(*) Chào hỏi cơ bản 1",
+      "learning_method": "Offline",
+      "lo": "CLO1",
+      "itu": "I, T,U",
+      "student_materials": "Slide của slot 1 (tiết 2)",
+      "s_download": "",
+      "student_tasks": "1) Tiến hành luyện viết, đọc 20 chữ hiragana đầu.2) Nắm được các mẫu câu chào hỏi cơ bản 1.",
+      "urls": ""
+    },
+    {
+      "session": "3",
+      "topic": "Tiết 3:(*) Luyện tập: Hiragana và Chào hỏi cơ bản 1(*) Học Hiragana: 26 chữ tiếp theo",
+      "learning_method": "Offline",
+      "lo": "CLO1",
+      "itu": "ITU",
+      "student_materials": "Slide của slot 2 (tiết 1)",
+      "s_download": "JPD113_3",
+      "student_tasks": "1) Luyện tập các chữ đã học ở buổi trước. 2) Tiến hành luyện đọc, luyện viết 26 chữ Hiragana tiếp.3) Xác nhận các thông tin chưa rõ.4) Dùng https://heyjapan.net/ để luyện tập bảng chữ đã học.",
+      "urls": ""
+    },
+    {
+      "session": "4",
+      "topic": "Tiết 1:(*) Học Hiragana: âm đục(*) Chào hỏi cơ bản 2",
+      "learning_method": "Offline",
+      "lo": "CLO1",
+      "itu": "I, T,U",
+      "student_materials": "Slide của slot 2 (tiết 2)",
+      "s_download": "JPD113_4",
+      "student_tasks": "1) Ôn tập các chữ cái đã học buổi trước2) Luyện đọc và nhận biết các âm đục3) Học chào hỏi cơ bản 2 (tiếp)4) Dùng https://heyjapan.net/ để luyện tập bảng chữ đã học",
+      "urls": ""
+    },
+    {
+      "session": "5",
+      "topic": "Tiết 2(*) Luyện tập: Hiragana và Chào hỏi cơ bản 2(*) Học Hiragana: Âm ghép, âm mũi",
+      "learning_method": "Offline",
+      "lo": "CLO1",
+      "itu": "I, T,U",
+      "student_materials": "Slide của slot 3 (tiết 1)",
+      "s_download": "JPD113_5",
+      "student_tasks": "1) Luyện tập các chữ cái đã học ở buổi trước2) Luyện đọc và nhận diện âm ghép, âm mũi3) Xác nhận các thông tin chưa rõ4) Dùng https://heyjapan.net/ để luyện tập bảng chữ đã học",
+      "urls": ""
+    },
+    {
+      "session": "6",
+      "topic": "Tiết 3 (*) Chào hỏi cơ bản 3 (*) Câu dùng trong lớp học…",
+      "learning_method": "Offline",
+      "lo": "CLO1",
+      "itu": "ITU",
+      "student_materials": "Slide của slot 3 (tiết 2)",
+      "s_download": "JPD113_6",
+      "student_tasks": "1) Học chào hỏi cơ bản 3 2) Luyện tập các câu dùng trong lớp học 3) Dùng https://heyjapan.net/ để luyện tập bảng chữ đã học",
+      "urls": ""
+    },
+    {
+      "session": "7",
+      "topic": "Tiết 1:(*) Luyện tập: Hiragana và Chào hỏi cơ bản 3(*) Học Hiragana: Âm dài",
+      "learning_method": "Offline",
+      "lo": "CLO1",
+      "itu": "I, T,U",
+      "student_materials": "Slide của slot 4 (tiết 1)",
+      "s_download": "JPD113_7",
+      "student_tasks": "1) Luyện tập bảng hiragana và chào hỏi cơ bản 32) Luyện đọc và nhận diện âm dài3) Dùng https://heyjapan.net/ để luyện tập bảng chữ đã học",
+      "urls": ""
+    },
+    {
+      "session": "8",
+      "topic": "Tiết 2:(*) Học Hiragana: Âm ngắt.(*) Số đếm(*) Chào hỏi cơ bản 4",
+      "learning_method": "Offline",
+      "lo": "CLO1",
+      "itu": "ITU",
+      "student_materials": "Slide của slot 4 (tiết 2)",
+      "s_download": "JPD113_8",
+      "student_tasks": "1) Nhận diện và luyện tập âm ngắt2) Nắm được cách nói số, cách ghép số trong tiếng Nhật3) Dùng https://heyjapan.net/ để luyện tập bảng chữ đã học",
+      "urls": ""
+    },
+    {
+      "session": "9",
+      "topic": "Tiết 3:(*) Luyện tập: Hiragana và Chào hỏi cơ bản 4",
+      "learning_method": "Offline",
+      "lo": "CLO1",
+      "itu": "I, T,U",
+      "student_materials": "Slide của slot 5 (tiết 1)",
+      "s_download": "JPD113_9",
+      "student_tasks": "1) Tham gia luyện tập toàn bộ bảng hiragana2) Luyện tập phần chào hỏi cơ bản 43) Xác nhận các thông tin chưa rõ4) Dùng https://heyjapan.net/ để luyện tập bảng chữ đã học",
+      "urls": ""
+    },
+    {
+      "session": "10",
+      "topic": "Tiết 1:(*) Chào hỏi cơ bản 5(*) Tổng ôn bảng chữ Hiragana",
+      "learning_method": "Offline",
+      "lo": "CLO1",
+      "itu": "ITU",
+      "student_materials": "Slide của slot 5 (tiết 2)",
+      "s_download": "JPD113_10",
+      "student_tasks": "1) Luyện tập chào hỏi cơ bản (tiếp)2) Thử cài bộ gõ và tập gõ chữ Nhật trên máy tính",
+      "urls": ""
+    },
+    {
+      "session": "11",
+      "topic": "Tiết 2:(*) Giới thiệu về bảng chữ cứng (katakana).(*) Học Katakana: 20 chữ đầu",
+      "learning_method": "Offline",
+      "lo": "CLO1",
+      "itu": "I, T,U",
+      "student_materials": "Slide của slot 6 (tiết 1)",
+      "s_download": "JPD113_11",
+      "student_tasks": "1) Nắm được đặc điểm, cách dùng của bảng chữ cứng (katakana)2) Luyện viết, luyện đọc 20 chữ katakana đầu tiên3) Xác nhận các thông tin chưa rõ4) Dùng https://heyjapan.net/ để luyện tập bảng chữ đã học",
+      "urls": ""
+    },
+    {
+      "session": "12",
+      "topic": "Tiết 3:(*) Học Katakana: 20 chữ đầu (tiếp); luyện tập",
+      "learning_method": "Offline",
+      "lo": "CLO1",
+      "itu": "I, T,U",
+      "student_materials": "Slide của slot 6 (tiết 2)",
+      "s_download": "JPD113_12",
+      "student_tasks": "1)Tiếp tục luyện viết, luyện đọc 20 chữ katakana đầu tiên2) Xác nhận các thông tin chưa rõ3) Dùng https://heyjapan.net/ để luyện tập bảng chữ đã học",
+      "urls": ""
+    },
+    {
+      "session": "13",
+      "topic": "Tiết 1:(*) Luyện tập:(*) Học Katakana: 26 chữ",
+      "learning_method": "Offline",
+      "lo": "CLO1",
+      "itu": "I, T,U",
+      "student_materials": "Slide của slot 7 (tiết 1)",
+      "s_download": "JPD113_13",
+      "student_tasks": "1) Luyện tập các chữ cứng đã học buổi trước2) Luyện viết, luyện đọc 26 chữ katakana tiếp theo3) Xác nhận các thông tin chưa rõ4) Dùng https://heyjapan.net/ để luyện tập bảng chữ đã học",
+      "urls": ""
+    },
+    {
+      "session": "14",
+      "topic": "Tiết 2:(*) Học Katakana: 26 chữ (tiếp)",
+      "learning_method": "Offline",
+      "lo": "CLO1",
+      "itu": "I, T,U",
+      "student_materials": "Slide của slot 7 (tiết 2)",
+      "s_download": "JPD113_14",
+      "student_tasks": "1) Luyện viết, luyện đọc 26 chữ katakana (tiếp)2) Xác nhận các thông tin chưa rõ3) Dùng https://heyjapan.net/ để luyện tập bảng chữ đã học",
+      "urls": ""
+    },
+    {
+      "session": "15",
+      "topic": "Tiết 3:(*) Luyện tập:(*) Học Katakana: Âm dài",
+      "learning_method": "Offline",
+      "lo": "CLO1",
+      "itu": "I, T,U",
+      "student_materials": "Slide của slot 8 (tiết 1)",
+      "s_download": "JPD113_15",
+      "student_tasks": "1) Nắm được các nội dung của bài học 2) Tham gia luyện tập, thảo luận về các vấn đề đặt ra3) Xác nhận các thông tin chưa rõ4) Dùng https://heyjapan.net/ để luyện tập bảng chữ đã học",
+      "urls": ""
+    },
+    {
+      "session": "16",
+      "topic": "Tiết 1:(*) Luyện tập:(*) Học Katakana: Âm ngắt + Âm ghép",
+      "learning_method": "Offline",
+      "lo": "CLO1",
+      "itu": "I, T,U",
+      "student_materials": "Slide của slot 8 (tiết 2)",
+      "s_download": "JPD113_16",
+      "student_tasks": "1) Luyện tập2) Nhận diện, luyện đọc, luyện viết âm ngắt và âm ghép3) Dùng https://heyjapan.net/ để luyện tập bảng chữ đã học",
+      "urls": ""
+    },
+    {
+      "session": "17",
+      "topic": "Tiết 2:(*) Ôn tập tổng hợp chữ mềm, cứng",
+      "learning_method": "Offline",
+      "lo": "CLO1",
+      "itu": "ITU",
+      "student_materials": "Slide các bài học trước (slot 1 đến slot 8)",
+      "s_download": "JPD113_17",
+      "student_tasks": "1) Ôn tập nội dung đã được học2) Xác nhận các thông tin chưa rõ3) Làm bài thi trung thực, nghiêm túc4) Dùng https://heyjapan.net/ để luyện tập bảng chữ đã học",
+      "urls": ""
+    },
+    {
+      "session": "18",
+      "topic": "Tiết 3:(*) Ôn tập tổng hợp chữ mềm, cứng (tiếp)(*) Giới thiệu về giáo trìnhできる日本初級, sách tham khảo như 文法ノート初級、言葉ノート初級",
+      "learning_method": "Offline",
+      "lo": "CLO1",
+      "itu": "ITU",
+      "student_materials": "Giáo trình chính",
+      "s_download": "",
+      "student_tasks": "1) Nắm được thông tin về giáo trình.2) Chuẩn bị cho giờ học tiếp theo: Sử dụng AI (ChatGPT, Copilot, v.v.) để tra cứu cách dùng từ vựng phần 1 bài 1, tìm hiểu về đặc điểm ngữ pháp tiếng Nhật và các trợ từ trong tiếng Nhật.",
+      "urls": ""
+    },
+    {
+      "session": "19",
+      "topic": "Tiết 1:第1課 - ST1: + 話してみよう（P15）+ 聞いてみよう（P15 - CD A01）+ チャレンジ1,2（P16- CD A02,03）+ 語彙確認+ 言ってみよう1,2（P18 ） - 文法説明私は［名前］です",
+      "learning_method": "Offline",
+      "lo": "CLO2,CLO3,CLO5",
+      "itu": "ITU",
+      "student_materials": "Giáo trình chínhSlide của slot 10 (tiết 1)",
+      "s_download": "",
+      "student_tasks": "1) Tham gia luyện tập, thảo luận về các vấn đề đặt ra.2) Học từ vựng. 3) Luyện tập đặt câu với mẫu câu về giới thiệu bản thân. 4) Nghe hiểu thông tin liên quan tới bài học.",
+      "urls": ""
+    },
+    {
+      "session": "20",
+      "topic": "Tiết 2:第1課 - ST1 （続き）+ チャレンジ 3（P17- CD A04）+ 言ってみよう3（P18 ） - 文法説明お国はどちらですか - 応用会話練習",
+      "learning_method": "Offline",
+      "lo": "CLO2,CLO3,CLO5",
+      "itu": "I, T,U",
+      "student_materials": "Giáo trình chínhSlide của slot 10 (tiết 2)",
+      "s_download": "",
+      "student_tasks": "1) Luyện tập đặt câu với mẫu câu về giới thiệu đất nước2) Nghe hiểu thông tin liên quan tới bài học3) Luyện tập hội thoại",
+      "urls": ""
+    },
+    {
+      "session": "21",
+      "topic": "Tiết 3:第1課 - ST1（続き）+ チャレンジ4,5（P17 - CD A05-06）+ 言ってみよう4,5（P18 ） - 文法説明お仕事は［仕事］ですかはい、［仕事］です いいえ、［仕事］じゃありません - 応用会話練習",
+      "learning_method": "Offline",
+      "lo": "CLO2,CLO3,CLO5",
+      "itu": "ITU",
+      "student_materials": "Giáo trình chínhSlide của slot 11 (tiết 1)",
+      "s_download": "",
+      "student_tasks": "1) Sử dụng AI (ChatGPT, Copilot, v.v.) luyện tập đặt câu với mẫu câu giới thiệu nghề nghiệp, mẫu câu phủ định, câu nghi vấn của danh từ2) Nghe hiểu thông tin liên quan tới bài học3) Luyện tập hội thoại",
+      "urls": ""
+    },
+    {
+      "session": "22",
+      "topic": "Tiết 1:第1課 - ST1（続き）+ チャレンジ6（P17 - CD A07）+ 言ってみよう6（P19 ） - 文法説明NのN - 応用会話練習+ やってみよう（P19 - CD A08)",
+      "learning_method": "Offline",
+      "lo": "CLO2,CLO3,CLO5",
+      "itu": "I, T,U",
+      "student_materials": "Giáo trình chínhSlide của slot 11 (tiết 2)",
+      "s_download": "",
+      "student_tasks": "1) Luyện tập đặt câu với mẫu câu giới thiệu tên cơ quan công ty nơi mình học tập công tác (NのN)2) Làm bài tập nghe p193) Luyện tập hội thoại",
+      "urls": ""
+    },
+    {
+      "session": "23",
+      "topic": "Tiết 2:第1課- ST2: + チャレンジ1,2,（P20,21 - CD A09-10）+ 語彙確認+ 言ってみよう1,2（P22 ） - 文法説明～歳です",
+      "learning_method": "Offline",
+      "lo": "CLO2,CLO3,CLO5",
+      "itu": "ITU",
+      "student_materials": "Giáo trình chínhSlide của slot 12 (tiết 1)",
+      "s_download": "",
+      "student_tasks": "1) Sử dụng AI (ChatGPT, Copilot, v.v.) để tra cứu cách dùng từ vựng phần 2 bài 1.2) Luyện tập đặt câu với mẫu ngữ pháp nói tuổi.3) Nghe hiểu thông tin liên quan tới bài học.",
+      "urls": ""
+    },
+    {
+      "session": "24",
+      "topic": "Tiết 3:第1課- ST2 （続き） - 文法説明いつ ～月～日 - 応用会話練習",
+      "learning_method": "Offline",
+      "lo": "CLO2,CLO5",
+      "itu": "I, T,U",
+      "student_materials": "Giáo trình chínhSlide của slot 12 (tiết 1)",
+      "s_download": "",
+      "student_tasks": "1) Luyện tập cách nói ngày tháng, mẫu câu hỏi và trả lời về ngày tháng năm sinh2) Luyện tập hội thoại",
+      "urls": ""
+    },
+    {
+      "session": "25",
+      "topic": "Tiết 1:第1課- ST2（続き）やってみよう（P23 CD A11-12) 練習問題",
+      "learning_method": "Offline",
+      "lo": "CLO2,CLO3,CLO5",
+      "itu": "I, T,U",
+      "student_materials": "Giáo trình chínhSlide của slot 13 (tiết 1)",
+      "s_download": "",
+      "student_tasks": "1) Luyện bài nghe p232) Làm sẵn các bài tập trong sách bài tập từ vựng và ngữ pháp3) Đặt câu hỏi cho những nội dung không hiểu",
+      "urls": ""
+    },
+    {
+      "session": "26",
+      "topic": "Tiết 2:第1課- ST2（続き）練習問題（続き）",
+      "learning_method": "Offline",
+      "lo": "CLO2,CLO3,CLO5",
+      "itu": "I, T,U",
+      "student_materials": "Giáo trình chínhSlide của slot 13 (tiết 2)",
+      "s_download": "",
+      "student_tasks": "1) Làm các bài tập theo yêu cầu của giảng viên.2) Đặt câu hỏi với những nội dung khó.3) Luyện tập thêm ở nhà.",
+      "urls": ""
+    },
+    {
+      "session": "27",
+      "topic": "Tiết 3:第1課 - ST3: + チャレンジ1,2（P24 CD A13, 14 ）+ 語彙確認+ 言ってみよう1,2（P26 ）- 文法説明何ですかNとN",
+      "learning_method": "Offline",
+      "lo": "CLO2,CLO3,CLO5",
+      "itu": "ITU",
+      "student_materials": "Giáo trình chínhSlide của slot 14 (tiết 1)",
+      "s_download": "",
+      "student_tasks": "1) Sử dụng AI (ChatGPT, Copilot, v.v.) để tra cứu cách dùng từ vựng phần 3 bài 1.2) Luyện tập ngữ pháp 何ですか,NとN. 3) Nghe hiểu thông tin liên quan tới bài học.",
+      "urls": ""
+    },
+    {
+      "session": "28",
+      "topic": "Tiết 1:第1課 - ST3: + チャレンジ3（P25 CD A15 ）+ 言ってみよう3（P26 ）- 文法説明Nも- 応用会話練習+ やってみよう（P27 CD A16 ）",
+      "learning_method": "Offline",
+      "lo": "CLO2,CLO3,CLO5",
+      "itu": "I, T,U",
+      "student_materials": "Giáo trình chínhSlide của slot 14 (tiết 2)",
+      "s_download": "",
+      "student_tasks": "1) Luyện tập mẫu ngữ pháp Nも2) Nghe hiểu thông tin liên quan đến bài học3) Luyện hội thoại4) Làm bài tập nghe p27",
+      "urls": ""
+    },
+    {
+      "session": "29",
+      "topic": "Tiết 2: 第一課 漢字",
+      "learning_method": "Offline",
+      "lo": "CLO2,CLO5",
+      "itu": "I, T,U",
+      "student_materials": "Slide slot 15: chữ Hán Bài 1",
+      "s_download": "",
+      "student_tasks": "1) Nghe giải thích phần chữ Hán, đặt câu hỏi cho nội dung chưa rõ2) Dùng AI tra cứu thêm các từ ghép của các chữ Hán đã học3) Luyện tập chữ Hán ở nhà",
+      "urls": ""
+    },
+    {
+      "session": "30",
+      "topic": "Tiết 3:＋第一課復習 ‐もう一度聞こう ‐宿題確認",
+      "learning_method": "Offline",
+      "lo": "CLO2,CLO3,CLO4,CLO5",
+      "itu": "I, T,U",
+      "student_materials": "Giáo trình chính",
+      "s_download": "",
+      "student_tasks": "1) Làm các bài tập trong sách BT từ vựng và ngữ pháp.2) Luyện nghe trên lớp và ở nhà.3) Đặt câu hỏi với những nội dung chưa rõ.",
+      "urls": ""
+    },
+    {
+      "session": "31",
+      "topic": "Tiết 1:＋Bài kiểm tra 1 (bảng chữ+bài 1)",
+      "learning_method": "Offline",
+      "lo": "CLO2,CLO4",
+      "itu": "I, T,U",
+      "student_materials": "Bài kiểm tra 1 do GV tự biên soạn",
+      "s_download": "",
+      "student_tasks": "1) Làm bài kiểm tra trung thực, nghiêm túc2) Chuẩn bị cho giờ học tiếp theo: Dùng AI tra cứu từ vựng bài 2",
+      "urls": ""
+    },
+    {
+      "session": "32",
+      "topic": "Tiết 2:第2課 - ST1: +話してみよう（P31）+聞いてみよう（P31 CD A17）+ 語彙確認",
+      "learning_method": "Offline",
+      "lo": "CLO2,CLO3,CLO5",
+      "itu": "ITU",
+      "student_materials": "Giáo trình chínhSlide của slot 17 (tiết 1)",
+      "s_download": "",
+      "student_tasks": "Nghe hiểu thông tin liên quan tới bài học trang 31",
+      "urls": ""
+    },
+    {
+      "session": "33",
+      "topic": "Tiết 3:第2課 - ST1: +チャレンジ1（P32,33 CDA18）-- 文法説明何階ですか 階数の言い方言ってみよう1（P34 ）- 応用会話練習",
+      "learning_method": "Offline",
+      "lo": "CLO2,CLO3,CLO5",
+      "itu": "ITU",
+      "student_materials": "Giáo trình chínhSlide của slot 17 (tiết 2)",
+      "s_download": "",
+      "student_tasks": "1) Sử dụng AI (ChatGPT, Copilot, v.v.) để luyện tập đặt câu với mẫu ngữ pháp hỏi tầng 何階ですか 階数の言い方.2) Luyện nghe hiểu thông tin liên quan đến bài học3) Đặt câu hỏi cho những nội dung chưa rõ",
+      "urls": ""
+    },
+    {
+      "session": "34",
+      "topic": "Tiết 1:第2課 - ST1 （続き）+チャレンジ2.1（P33 CD A19）+言ってみよう2.1（P34 ）-- 文法説明～はどこですかここ・そこ・あそこ - 会話練習",
+      "learning_method": "Offline",
+      "lo": "CLO2,CLO3,CLO5",
+      "itu": "I, T,U",
+      "student_materials": "Giáo trình chínhSlide của slot 18 (Tiết 1)",
+      "s_download": "",
+      "student_tasks": "1) Luyện tập ngữ pháp～はどこですかここ・そこ・あそこ 2) Nghe hiểu thông tin liên quan tới bài học.3) Đặt câu hỏi cho nội dung chưa rõ",
+      "urls": ""
+    },
+    {
+      "session": "35",
+      "topic": "Tiết 2: 第2課 - ST1 （続き） +チャレンジ2.2（P33 CD A20） +言ってみよう2.2（P35 ） -- 文法説明 ～はどこですか こちら・そちら・あちら 会話練習 + やってみよう（P35 CD A21 ）",
+      "learning_method": "Offline",
+      "lo": "CLO2,CLO3,CLO5",
+      "itu": "ITU",
+      "student_materials": "Giáo trình chính Slide của slot 18 (Tiết 2)",
+      "s_download": "",
+      "student_tasks": "1) Nghe hiểu thông tin liên quan đến bài học 2) Luyện tập ngữ pháp～はどこですか こちら・そちら・あちら 3) Luyện tập hội thoại 4) Làm bài tập nghe p35",
+      "urls": ""
+    },
+    {
+      "session": "36",
+      "topic": "Tiết 3:第2課 - ST2: +チャレンジ1（P36 CD A22）+ 語彙確認+言ってみよう1（P38）-- 文法説明～はいくらですか これ・それ・あれ",
+      "learning_method": "Offline",
+      "lo": "CLO2,CLO3,CLO5",
+      "itu": "ITU",
+      "student_materials": "Giáo trình chínhSlide của slot 19 (Tiết 1)",
+      "s_download": "",
+      "student_tasks": "1) Sử dụng AI (ChatGPT, Copilot, v.v.) để tra cứu cách dùng từ vựng phần 2 bài 22) Luyện tập cấu trúc ～はいくらですか これ・それ・あれ3) Nghe hiểu thông tin liên quan tới bài học",
+      "urls": ""
+    },
+    {
+      "session": "37",
+      "topic": "Tiết 1:第2課 - ST2 （続き）+チャレンジ 2（P36 CD A23）+言ってみよう2（P38）- 文法説明このN・そのN・あのN- 応用会話練習",
+      "learning_method": "Offline",
+      "lo": "CLO2,CLO3,CLO5",
+      "itu": "I, T,U",
+      "student_materials": "Giáo trình chínhSlide của slot 19 (Tiết 2)",
+      "s_download": "",
+      "student_tasks": "1) Luyện tập đặt câu với mẫu ngữ pháp このN・そのN・あのN2) Nghe hiểu thông tin liên quan tới bài học3) Luyện hội thoại4) Đặt câu hỏi cho những nội dung chưa rõ",
+      "urls": ""
+    },
+    {
+      "session": "38",
+      "topic": "Tiết 2:第2課 - ST2: （続き）+チャレンジ3（P37 CD A24）+言ってみよう3（P38,39 ）- 文法説明Nをください - 応用会話練習",
+      "learning_method": "Offline",
+      "lo": "CLO2,CLO3,CLO5",
+      "itu": "ITU",
+      "student_materials": "Giáo trình chínhSlide của slot 20 (Tiết 1)",
+      "s_download": "",
+      "student_tasks": "1) Nghe hiểu thông tin liên quan tới bài họcチャレンジ32) Luyện tập ngữ pháp Nをください 3) Luyện tập nói trên lớp 言ってみよう3 và luyện hội thoại4) Đặt câu hỏi cho nội dung chưa rõ",
+      "urls": ""
+    },
+    {
+      "session": "39",
+      "topic": "Tiết 3: 第2課 - ST2: （続き） + やってみよう（P39 CD A25 ） + 読解：値段の読み方",
+      "learning_method": "Offline",
+      "lo": "CLO2,CLO3,CLO4,CLO5",
+      "itu": "ITU",
+      "student_materials": "Giáo trình chính Slide của slot 20 (Tiết 2)",
+      "s_download": "",
+      "student_tasks": "1) Luyện nghe bài tập nghe P39 2) Làm bài đọc 値段の読み方 trong slide",
+      "urls": ""
+    },
+    {
+      "session": "40",
+      "topic": "Tiết 1:第2課 - ST3: +チャレンジ1（P40 CD A26）+ 語彙確認+言ってみよう1（P42 ）-- 文法説明何のN",
+      "learning_method": "Offline",
+      "lo": "CLO2,CLO3,CLO5",
+      "itu": "ITU",
+      "student_materials": "Giáo trình chínhSlide của slot 21 (Tiết 1)",
+      "s_download": "",
+      "student_tasks": "1) Sử dụng AI (ChatGPT, Copilot, v.v.) để tra cứu cách dùng từ vựng phần 3 bài 22) Nghe hiểu thông tin liên quan tới bài học チャレンジ13) Luyện tập ngữ pháp 何のN",
+      "urls": ""
+    },
+    {
+      "session": "41",
+      "topic": "Tiết 2:第2課 - ST3: +チャレンジ2,3,4（P40 CD A27-29）+言ってみよう2,3,4（P43 ）- 文法説明［言語］でどこのNNを（～つ）ください- 応用会話練習",
+      "learning_method": "Offline",
+      "lo": "CLO2,CLO3,CLO5",
+      "itu": "ITU",
+      "student_materials": "Giáo trình chínhSlide của slot 21 (Tiết 2)",
+      "s_download": "",
+      "student_tasks": "1) Nghe hiểu thông tin liên quan tới bài học チャレンジ2,3,42) Sử dụng AI (ChatGPT, Copilot, v.v.) để tra cứu cách dùng và đặt câu với mẫu ngữ pháp mới［言語］でどこのNNを（～つ）ください3) Luyện tập nói theo phần 言ってみよう2,3,44) Luyện tập hội thoại",
+      "urls": ""
+    },
+    {
+      "session": "42",
+      "topic": "Tiết 3:第2課 - ST3: （続き） + チャレンジ5（P41 CD A30） +言ってみよう5（P43 ）-- 文法説明だれのN",
+      "learning_method": "Offline",
+      "lo": "CLO2,CLO3,CLO5",
+      "itu": "I, T,U",
+      "student_materials": "Giáo trình chínhSlide của slot 22 (tiết 1)",
+      "s_download": "",
+      "student_tasks": "1) Tham gia thảo luận về các vấn đề đặt ra2) Học từ vựng 3) Nắm được các nội dung của bài học",
+      "urls": ""
+    },
+    {
+      "session": "43",
+      "topic": "Tiết 1:第2課 - ST3: （続き） + やってみよう（P43 CD A31 ） +漢字：第2課",
+      "learning_method": "Offline",
+      "lo": "CLO2,CLO3,CLO5",
+      "itu": "I, T,U",
+      "student_materials": "Giáo trình chínhSlide chữ Hánslot 22",
+      "s_download": "",
+      "student_tasks": "1) Làm bài tập nghe P432) Nghe giải thích phần chữ Hán, đặt câu hỏi cho nội dung chưa rõ3) Dùng AI tra cứu thêm các từ ghép của các chữ Hán đã học4) Luyện tập chữ Hán ở nhà",
+      "urls": ""
+    },
+    {
+      "session": "44",
+      "topic": "Tiết 2:＋第2課復習 ‐もう一度聞こう ‐宿題確認",
+      "learning_method": "Offline",
+      "lo": "CLO2,CLO3,CLO5",
+      "itu": "I, T,U",
+      "student_materials": "Giáo trình chính",
+      "s_download": "",
+      "student_tasks": "1) Ôn tập nội dung đã được học.2) Xác nhận các thông tin chưa rõ.",
+      "urls": ""
+    },
+    {
+      "session": "45",
+      "topic": "Tiết 3:第3課 - ST1: +話してみよう（P47）+聞いてみよう（P47 CD A32）+チャレンジ1（P48 CDA33）+ 語彙確認言ってみよう1（P50 ）-- 文法説明今、何時ですか 時間の言い方",
+      "learning_method": "Offline",
+      "lo": "CLO2,CLO3,CLO5",
+      "itu": "ITU",
+      "student_materials": "Giáo trình chínhSlide của slot 24 (tiết 1)",
+      "s_download": "",
+      "student_tasks": "1) Tham gia luyện tập, thảo luận về các vấn đề đặt ra ở 話してみよう（P47）2) Sử dụng AI (ChatGPT, Copilot, v.v.) để tra cứu cách dùng từ vựng phần 1 bài 3 3) Nghe hiểu thông tin liên quan tới bài học チャレンジ1, 聞いてみよう.4) Luyện tập ngữ pháp 今、何時ですか 時間の言い方",
+      "urls": ""
+    },
+    {
+      "session": "46",
+      "topic": "Tiết 1:第3課 - ST1 (続き） +チャレンジ2,3（49 CDA34, 35）言ってみよう2,3（P50 ）-- 文法説明［時間］から［時間］までです何曜日ですか 曜日の言い方 - 応用会話練習",
+      "learning_method": "Offline",
+      "lo": "CLO2,CLO3,CLO5",
+      "itu": "ITU",
+      "student_materials": "Giáo trình chínhSlide của slot 24 (tiết 2)",
+      "s_download": "",
+      "student_tasks": "1) Nghe hiểu thông tin liên quan tới bài học チャレンジ2,3.2) Sử dụng AI (ChatGPT, Copilot, v.v.) để tra cứu cách dùng và đặt câu với mẫu ngữ pháp mới［時間］から［時間］までです何曜日ですか 曜日の言い方. 3) Luyện tập đặt câu, luyện hội thoại.",
+      "urls": ""
+    },
+    {
+      "session": "47",
+      "topic": "Tiết 2:第3課 - ST1 （続き）+ やってみよう（P51 CD A36 ）",
+      "learning_method": "Offline",
+      "lo": "CLO2,CLO3,CLO5",
+      "itu": "I, T,U",
+      "student_materials": "Giáo trình chính",
+      "s_download": "",
+      "student_tasks": "1) Luyện nghe trên lớp p51 và ở nhà.2) Ôn tập nội dung đã được học.3) Xác nhận các thông tin chưa rõ.",
+      "urls": ""
+    },
+    {
+      "session": "48",
+      "topic": "Tiết 3:第3課 - ST1 （続き） ‐漢字：第3課",
+      "learning_method": "Offline",
+      "lo": "CLO2, CLO5",
+      "itu": "",
+      "student_materials": "Slide slot 25: chữ Hán bài 3",
+      "s_download": "",
+      "student_tasks": "1) Theo dõi bài giảng về chữ Hán. 2) Dùng AI tra cứu thêm các từ ghép của các chữ Hán đã học.",
+      "urls": ""
+    },
+    {
+      "session": "49",
+      "topic": "Tiết 1:第3課 - ST2: +チャレンジ1（P52 CD A37）+ 語彙確認+言ってみよう1（P54 ）-- 文法説明Vます（予定） ～をVます",
+      "learning_method": "Offline",
+      "lo": "CLO2,CLO3,CLO5",
+      "itu": "I, T,U",
+      "student_materials": "Giáo trình chínhSlide của slot 26 (tiết 1)",
+      "s_download": "",
+      "student_tasks": "1) Học trước từ vựng phần 2 bài 3.2) Nghe hiểu thông tin liên quan tới bài học チャレンジ1.3) Luyện tập đặt câu với mẫu ngữ pháp Vます（予定） ～をVます.4) Luyện tập hội thoại.",
+      "urls": ""
+    },
+    {
+      "session": "50",
+      "topic": "Tiết 2:第3課 - ST2: +チャレンジ2（P52 CD A38）+言ってみよう2（P54 ）-- 文法説明［場所］へ- 応用会話練習",
+      "learning_method": "Offline",
+      "lo": "CLO2,CLO3,CLO5",
+      "itu": "I, T,U",
+      "student_materials": "Giáo trình chínhSlide của slot 26 (tiết 2)",
+      "s_download": "",
+      "student_tasks": "1) Nghe hiểu thông tin liên quan tới bài học チャレンジ22) Luyện tập ngữ pháp ［場所］へ3) Luyện tập hội thoại4) Đặt câu hỏi với nội dung chưa rõ",
+      "urls": ""
+    },
+    {
+      "session": "51",
+      "topic": "Tiết 3:第3課 - ST2: （続き）+チャレンジ3（P53 CD A39）+ 語彙確認+言ってみよう3（P55 ）-- 文法説明Vません- 応用会話練習",
+      "learning_method": "Offline",
+      "lo": "CLO2,CLO3,CLO5",
+      "itu": "ITU",
+      "student_materials": "Giáo trình chínhSlide của slot 27( tiết 1)",
+      "s_download": "",
+      "student_tasks": "1) Sử dụng AI (ChatGPT, Copilot, v.v.) để tra cứu cách dùng từ vựng phần 2 bài 32) Nghe hiểu thông tin liên quan tới bài học チャレンジ33) Luyện tập mẫu ngữ pháp Vません.4) Luyện tập đặt câu, luyện tập hội thoại 言ってみよう3",
+      "urls": ""
+    },
+    {
+      "session": "52",
+      "topic": "Tiết 1:第3課 - ST2: （続き）+チャレンジ4（P53 CD A40）+言ってみよう4（P55 ）- 文法説明［場所］で- 応用会話練習 + やってみよう（P56 CD A41 ）",
+      "learning_method": "Offline",
+      "lo": "CLO2,CLO3,CLO5",
+      "itu": "I, T,U",
+      "student_materials": "Giáo trình chínhSlide của slot 27( tiết 1)",
+      "s_download": "",
+      "student_tasks": "1) Nghe hiểu thông tin liên quan tới bài học チャレンジ42) Luyện tập mẫu ngữ pháp ［場所］で3) Luyện tập đặt câu, luyện tập hội thoại 言ってみよう44) Luyện bài tập nghe P56",
+      "urls": ""
+    },
+    {
+      "session": "53",
+      "topic": "Tiết 2:第3課 - ST3: +チャレンジ1（P58 CD A42）+ 語彙確認+言ってみよう1（P60 ）-- 文法説明Vます（習慣）",
+      "learning_method": "Offline",
+      "lo": "CLO2,CLO3,CLO5",
+      "itu": "ITU",
+      "student_materials": "Giáo trình chínhSlide của slot 28 (tiết 1)",
+      "s_download": "",
+      "student_tasks": "1) Nghe hiểu thông tin liên quan tới bài học チャレンジ2) Sử dụng AI (ChatGPT, Copilot, v.v.) để tra cứu cách dùng từ vựng phần 3 bài 33) Luyện tập ngữ pháp Vます（習慣）4) Luyện tập đặt câu, luyện nói 言ってみよう1",
+      "urls": ""
+    },
+    {
+      "session": "54",
+      "topic": "Tiết 3:第3課 - ST3: +チャレンジ2,3,4（P58 CD A43-45）+言ってみよう2,3,4（P61 ）-- 文法説明NやNなど何もVません［時間］に- 応用会話練習",
+      "learning_method": "Offline",
+      "lo": "CLO2,CLO3,CLO5",
+      "itu": "I, T,U",
+      "student_materials": "Giáo trình chínhSlide của slot 28 (tiết 2)",
+      "s_download": "",
+      "student_tasks": "1) Nghe hiểu thông tin liên quan tới bài học チャレンジ2,3,42) Luyện tập đặt câu với mẫu ngữ pháp NやNなど何もVません［時間］に3) Luyện tập nói, luyện đặt câu",
+      "urls": ""
+    },
+    {
+      "session": "55",
+      "topic": "Tiết 1:第3課 - ST3: （続き） + チャレンジ5,6（P59 CD A46,47） +言ってみよう5,6（P62 ）-- 文法説明［時間］から［時間］までVますどこへも行きません",
+      "learning_method": "Offline",
+      "lo": "CLO2,CLO3,CLO5",
+      "itu": "ITU",
+      "student_materials": "Giáo trình chínhSlide của slot 29 (tiết 1)",
+      "s_download": "",
+      "student_tasks": "1) Nghe hiểu thông tin liên quan tới bài học チャレンジ5,62) Sử dụng AI (ChatGPT, Copilot, v.v.) để tra cứu cách dùng và đặt câu với mẫu ngữ pháp mới［時間］から［時間］までVますどこへも行きません3) Luyện tập nói, luyện đặt câu",
+      "urls": ""
+    },
+    {
+      "session": "56",
+      "topic": "Tiết 2:第3課 - ST3: （続き） - 応用会話練習 + やってみよう（P63 CD A48 ） ‐もう一度聞こう",
+      "learning_method": "Offline",
+      "lo": "CLO2,CLO3,CLO5",
+      "itu": "I, T,U",
+      "student_materials": "Giáo trình chínhSlide của slot 29 (tiết 2)",
+      "s_download": "",
+      "student_tasks": "1) Luyện tập hội thoại2) Luyện nghe trên lớp P63; luyện nghe bài cuối sách3) Đặt câu hỏi cho nội dung chưa rõ",
+      "urls": ""
+    },
+    {
+      "session": "57",
+      "topic": "Tiết 3:＋第3課 ‐宿題確認",
+      "learning_method": "Offline",
+      "lo": "CLO2,CLO3,CLO4,CLO5",
+      "itu": "I, T,U",
+      "student_materials": "Giáo trình chínhSlide của slot 30 (tiết 1)",
+      "s_download": "",
+      "student_tasks": "1) Ôn tập lại từ vựng bài 32) Ôn tập kiến thức bài 3",
+      "urls": ""
+    },
+    {
+      "session": "58",
+      "topic": "Tiết 1: ＋Bài kiểm tra 2 (bài 2, bài 3)",
+      "learning_method": "Offline",
+      "lo": "CLO2,CLO4",
+      "itu": "ITU",
+      "student_materials": "Bài kiểm tra 2 do GV tự biên soạn",
+      "s_download": "",
+      "student_tasks": "Nghiêm túc làm bài",
+      "urls": ""
+    },
+    {
+      "session": "59",
+      "topic": "Tiết 2:＋期末試験の復習",
+      "learning_method": "Offline",
+      "lo": "CLO1~CLO5",
+      "itu": "I, T,U",
+      "student_materials": "Giáo trình chínhSlide của slot 30 (tiết 2)",
+      "s_download": "",
+      "student_tasks": "1) Làm các bài tập trong sách Bài tập từ vựng, BT ngữ pháp2) Ôn tập từ bài 1 đến 33) Đặt câu hỏi cho nội dung chưa rõ4) Dùng https://heyjapan.net/ để ôn tập về danh từ địa điểm, món ăn, số đếm, thời gian…",
+      "urls": ""
+    },
+    {
+      "session": "60",
+      "topic": "Tiết 3:＋期末試験の復習",
+      "learning_method": "Offline",
+      "lo": "CLO1~CLO5",
+      "itu": "I, T,U",
+      "student_materials": "Giáo trình chínhSlide của slot 30 (tiết 2)",
+      "s_download": "",
+      "student_tasks": "1) Làm các bài tập trong sách Bài tập từ vựng, BT ngữ pháp2) Ôn tập từ bài 1 đến 33) Đặt câu hỏi cho nội dung chưa rõ4) Dùng https://heyjapan.net/ để ôn tập về danh từ địa điểm, món ăn, số đếm, thời gian…",
+      "urls": ""
+    }
+  ],
+  "constructive_questions": [
+    {
+      "session_no": "1",
+      "name": "CQ1.1",
+      "details": "Tiếng Nhật có bao nhiêu kiểu chữ viết, chức năng của mỗi kiểu chữ ?"
+    },
+    {
+      "session_no": "2",
+      "name": "CQ1.2",
+      "details": "Các chữ Hiragana sau： Hàng A: あ、い、う、え、お Hàng K: か、き、く、け、こ được tạo thành từ các hình ảnh nào?"
+    },
+    {
+      "session_no": "3",
+      "name": "CQ1.3",
+      "details": "36 chữ Hiragana còn lại được tạo thành từ các hình ảnh nào?"
+    },
+    {
+      "session_no": "5",
+      "name": "CQ2.1",
+      "details": "Âm đục/ bán âm đục là những âm như thế nào? Cho ví dụ minh họa"
+    },
+    {
+      "session_no": "6",
+      "name": "CQ2.2",
+      "details": "Âm ghép là những âm như thế nào? Cho ví dụ minh họa"
+    },
+    {
+      "session_no": "7",
+      "name": "CQ2.3",
+      "details": "Giới thiệu một số câu chào hỏi cơ bản theo từng buổi trong tiếng Nhật?"
+    },
+    {
+      "session_no": "8",
+      "name": "CQ3.1",
+      "details": "Âm dài là những âm như thế nào? Cho ví dụ minh họa"
+    },
+    {
+      "session_no": "9",
+      "name": "CQ3.2",
+      "details": "Âm ngắt là những âm như thế nào? Cho ví dụ minh họa"
+    },
+    {
+      "session_no": "10",
+      "name": "CQ3.3",
+      "details": "Các cách thể hiện sự xin lỗi, cảm ơn trong tiếng Nhật ?"
+    },
+    {
+      "session_no": "21",
+      "name": "CQ7.1",
+      "details": "Nội dung câu CQ7.1 Khi gặp mặt một ai đó lần đầu tiên, chúng ta sẽ chào hỏi như thế nào? Và chúng ta sẽ giới thiệu những thông tin gì về bản thân?"
+    },
+    {
+      "session_no": "21",
+      "name": "CQ7.2",
+      "details": "Nội dung câu CQ7.2 Hãy nêu những cách hỏi về tên, quốc tịch, nghề nghiệp bằng tiếng Nhật."
+    },
+    {
+      "session_no": "22",
+      "name": "CQ7.3",
+      "details": "Nội dung câu CQ7.3 So sánh mẫu câu khẳng định, phủ định, câu hỏi để nói những thông tin (tên, quốc tịch, nghề nghiệp) trong tiếng Nhật và tiếng Việt?"
+    },
+    {
+      "session_no": "23",
+      "name": "CQ7.4",
+      "details": "Nội dung câu CQ7.4 Trong hội thoại, khi người trả lời đồng ý hoặc không đồng ý với người nói sẽ có những cách diễn đạt khác nhau. Hãy chỉ ra cách diễn đạt đó như thế nào."
+    },
+    {
+      "session_no": "24",
+      "name": "CQ8.1",
+      "details": "Nội dung câu CQ8.1 Cách nói sinh nhật trong tiếng Nhật như thế nào? Nêu cụ thể cách nói sinh nhật mình, cách hỏi sinh nhật người khác và cho ví dụ."
+    },
+    {
+      "session_no": "25",
+      "name": "CQ8.2",
+      "details": "Nội dung câu CQ8.2 Cách nói tuổi trong tiếng Nhật như thế nào? Có những lưu ý gì khi đếm tuổi?"
+    },
+    {
+      "session_no": "26",
+      "name": "CQ8.3",
+      "details": "Nội dung câu CQ8.3 Cách nói ngày, tháng trong tiếng Nhật như thế nào?"
+    },
+    {
+      "session_no": "26",
+      "name": "CQ8.4",
+      "details": "Nội dung câu CQ8.4 Những lưu ý khi nói ngày tháng trong tiếng Nhật là gì? Có những quy tắc gì đặc biệt khi nói ngày tháng không?"
+    },
+    {
+      "session_no": "27",
+      "name": "CQ9.1",
+      "details": "Nội dung câu CQ9.1 Khi muốn nói từ 2 sở thích trở lên, và muốn nói: \"Tôi cũng có sở thích như vậy\" thì chúng ta sẽ nói như thế nào?"
+    },
+    {
+      "session_no": "27",
+      "name": "CQ9.2",
+      "details": "Nội dung câu CQ9.2 Khi nói về sở thích, chúng ta thường dùng những từ như thế nào? Tạo flash card hay dùng ảnh minh họa"
+    },
+    {
+      "session_no": "28",
+      "name": "CQ9.3",
+      "details": "Nội dung câu CQ9.3 Cách nói sở thích của mình và hỏi sở thích của người khác như thế nào?"
+    },
+    {
+      "session_no": "29",
+      "name": "CQ9.4",
+      "details": "Nội dung câu CQ9.4 Khi giới thiệu với một người lần đầu tiên gặp mặt về bản thân mình, bạn sẽ giới thiệu các thông tin gì? Nêu bài giới thiệu bằng tiếng Nhật."
+    },
+    {
+      "session_no": "34",
+      "name": "CQ12.1",
+      "details": "Nội dung câu CQ12.1 Khi vào trung tâm mua sắm, thường sử dụng những từ vựng gì?"
+    },
+    {
+      "session_no": "35",
+      "name": "CQ12.2",
+      "details": "Nội dung câu CQ12.2 Khi muốn nói tầng trong tiếng Nhật thì nói như thế nào?( những tầng nào có cách đọc đặc biệt?)"
+    },
+    {
+      "session_no": "35",
+      "name": "CQ12.3",
+      "details": "Nội dung câu CQ12.3 Cách hỏi tầng trong tiếng Nhật như thế nào?"
+    },
+    {
+      "session_no": "36",
+      "name": "CQ12.4",
+      "details": "Nội dung câu CQ12.4 Khi muốn hỏi vị trí của nơi muốn mua đồ/ vị trí của vật... thì hỏi như thế nào?"
+    },
+    {
+      "session_no": "37",
+      "name": "CQ13.1",
+      "details": "Nội dung câu CQ13.1 Khi muốn trả lời vị trí của nơi / vị trí của vật một cách lịch sự... thì trả lời như thế nào?"
+    },
+    {
+      "session_no": "37",
+      "name": "CQ13.2",
+      "details": "Nội dung câu CQ13.2 Khi muốn hỏi tên của công ty của đối phương thì hỏi như thế nào?"
+    },
+    {
+      "session_no": "38",
+      "name": "CQ13.3",
+      "details": "Nội dung câu CQ13.3 Khi muốn hỏi giá sản phẩm thì hỏi như thế nào?"
+    },
+    {
+      "session_no": "39",
+      "name": "CQ13.4",
+      "details": "Nội dung câu CQ13.4 Cách nói số hàng trăm, hàng nghìn, hàng vạn trong tiếng Nhật như thế nào?"
+    },
+    {
+      "session_no": "39",
+      "name": "CQ13.5",
+      "details": "Nội dung câu CQ13.5 Sự khác nhau giữa これ・それ・あれ và この・その・あの là gì?"
+    },
+    {
+      "session_no": "40",
+      "name": "CQ14.1",
+      "details": "Nội dung câu CQ14.1 Sau khi hỏi giá sản phẩm, khi quyết định mua sắm sẽ nói như thế nào?"
+    },
+    {
+      "session_no": "41",
+      "name": "CQ14.2",
+      "details": "Nội dung câu CQ14.2 Những từ vựng sử dụng trong nhà hàng liên quan đến ăn uống là gì?"
+    },
+    {
+      "session_no": "42",
+      "name": "CQ14.3",
+      "details": "Nội dung câu CQ14.3 Cách hỏi và trả lời món ăn (đồ uống) được làm từ gì như thế nào?"
+    },
+    {
+      "session_no": "43",
+      "name": "CQ15.1",
+      "details": "Nội dung câu CQ15.1 Cách hỏi 1 từ vựng nào đó sang ngôn ngữ khác là gì?"
+    },
+    {
+      "session_no": "43",
+      "name": "CQ15.2",
+      "details": "Nội dung câu CQ15.2 Cách hỏi xuất xứ của một món đồ là gì?"
+    },
+    {
+      "session_no": "44",
+      "name": "CQ15.3",
+      "details": "Nội dung câu CQ15.3 Muốn hỏi đồ vật này là của ai thì hỏi như thế nào?"
+    },
+    {
+      "session_no": "45",
+      "name": "CQ15.4",
+      "details": "Nội dung câu CQ15.4 Số đếm trong Hán tự được viết như thế nào?"
+    },
+    {
+      "session_no": "45",
+      "name": "CQ15.5",
+      "details": "Nội dung câu CQ15.5 Cách đọc âm ON, âm KUN và ý nghĩa các chữ Hán trong bài 2 là gì?"
+    }
+  ],
+  "assessment_scheme": [
+    {
+      "category": "Kiểm tra nhỏ (small test)",
+      "type": "on-going",
+      "part": "2",
+      "weight": "40.0%",
+      "completion_criteria": ">0",
+      "duration": "35'",
+      "clo": "CLO1,2",
+      "question_type": "Small test 1: Trắc nghiệm Small test 2: Trắc nghiệm",
+      "no_question": "30~35 câu",
+      "knowledge_and_skill": "1) Small test 1: bảng chữ+ bài 1 (từ vựng, ngữ pháp, chữ Hán) Small test 2: bài 2, bài 3 (từ vựng, ngữ pháp, chữ Hán) 2) Kỹ năng: đọc",
+      "grading_guide": "Trực tiếp trên lớp",
+      "note": "1) Giảng viên phụ trách tự chủ ra đề, chấm bài và tổng hợp điểm. 2) Tỷ trọng cụ thể 2 phần như sau: Small test 1: 20%, Small test 2: 20%"
+    },
+    {
+      "category": "Tham gia giờ học tại giảng đường",
+      "type": "on-going",
+      "part": "1",
+      "weight": "15.0%",
+      "completion_criteria": ">0",
+      "duration": "135'",
+      "clo": "CLO5",
+      "question_type": "",
+      "no_question": "",
+      "knowledge_and_skill": "",
+      "grading_guide": "Trực tiếp trên lớp",
+      "note": "Tiêu chí đánh giá:1) Chuyên cần (Đi học đầy đủ): 5%2) Thái độ, ý thức trên lớp+ Sự tích cực, hăng hái tham gia bài giảng: 10%"
+    },
+    {
+      "category": "Thi cuối kỳ",
+      "type": "Final exam",
+      "part": "2",
+      "weight": "45.0%",
+      "completion_criteria": "4",
+      "duration": "40'",
+      "clo": "CLO1~CLO4",
+      "question_type": "Trắc nghiệm+ Speaking",
+      "no_question": "Phần MC (từ vựng, ngữ pháp, chữ Hán): 30 câu; Speaking: 1 đoạn văn+ 3~5 câu hỏi đáp",
+      "knowledge_and_skill": "1) Từ vựng, ngữ pháp, chữ Hán bài 1~bài 3 2) Kỹ năng: nghe, nói, đọc",
+      "grading_guide": "Thi trên trường",
+      "note": "1.Thi đề chung2. Điều kiện hoàn thành môn học: thỏa mãn đồng thời 2 điều kiện dưới đây:a) Điểm đánh giá quá trình >0; Điểm thi cuối kì >=4/10; Tổng điểm chung cho toàn bộ môn học >=5/10;b) Thi cuối kỳ không có kỹ năng nào bị 0."
+    },
+    {
+      "category": "Thi cuối kỳ: Từ vựng, ngữ pháp, chữ Hán",
+      "type": "Final exam phần từ vựng, ngữ pháp, chữ Hán",
+      "part": "1",
+      "weight": "15.0%",
+      "completion_criteria": ">0",
+      "duration": "30'",
+      "clo": "CLO1,2,4",
+      "question_type": "Trắc nghiệm: từ vựng, ngữ pháp, chữ Hán bài 1~bài 3",
+      "no_question": "30 câu",
+      "knowledge_and_skill": "1) Từ vựng, ngữ pháp, chữ Hán bài 1~bài 3 2) Kỹ năng: đọc",
+      "grading_guide": "Thi trên trường",
+      "note": ""
+    },
+    {
+      "category": "Thi cuối kỳ: Nói",
+      "type": "Final exam phần nói",
+      "part": "1",
+      "weight": "30.0%",
+      "completion_criteria": ">0",
+      "duration": "8'/SV",
+      "clo": "CLO1~CLO4",
+      "question_type": "Speaking: Đọc đoạn văn+ trả lời câu hỏi",
+      "no_question": "1 đoạn văn+ 3~5 câu hỏi",
+      "knowledge_and_skill": "1) Từ vựng, ngữ pháp, chữ Hán bài 1~bài 3 2) Kỹ năng: nghe, nói, đọc",
+      "grading_guide": "Thi trên trường",
+      "note": ""
+    }
+  ],
+  "references": [
+    "- Tham dự tối thiểu 80% số giờ học trên lớp mới đủ điều kiện tham gia thi kì thi cuối môn. - Học từ vựng và tìm hiểu trước bài học, làm các bài tập và nhiệm vụ do GV giao. - Ôn tập bài giảng, đối chiếu với giáo trình để nắm vững các kiến thức. - Trên lớp tích cực tham gia trao đổi, xây dựng bài.",
+    "- Sử dụng giáo trình chính và giáo trình bổ trợ bằng tiếng Nhật. - Sử dụng slide môn học. - Tra cứu, tham khảo các nội dung có liên quan đến môn học trên mạng hoặc giáo trình tham khảo được giới thiệu trong môn học. - Sử dụng https://heyjapan.net/ để học bảng chữ cái và ôn thi cuối kỳ. - Sử dụng AI (ChatGPT, Copilot, v.v.) để tra cứu cách dùng từ vựng, ứng dụng của ngữ pháp, và các từ ghép Hán tự ngoài các từ đã được học.",
+    "444/QĐ-ĐHFPT dated 04/23/2026",
+    "ISBN-10 : 4757419775ISBN-13 : 978-4757419773",
+    "Giáo trình Dekiru quyển đỏ (Tiếng Nhật trong tầm tay)",
+    "ISBN-10 : 4893588117ISBN-13 : 978-4893588111",
+    "ISBN-10 : 489358801XISBN-13 : 978-4893588012",
+    "ISBN-10 : 4893588311ISBN-13 : 978-4893588319",
+    "Tiết 3:(*) Ôn tập tổng hợp chữ mềm, cứng (tiếp)(*) Giới thiệu về giáo trìnhできる日本初級, sách tham khảo như 文法ノート初級、言葉ノート初級",
+    "1) Nắm được thông tin về giáo trình.2) Chuẩn bị cho giờ học tiếp theo: Sử dụng AI (ChatGPT, Copilot, v.v.) để tra cứu cách dùng từ vựng phần 1 bài 1, tìm hiểu về đặc điểm ngữ pháp tiếng Nhật và các trợ từ trong tiếng Nhật.",
+    "Giáo trình chínhSlide của slot 10 (tiết 1)",
+    "Giáo trình chínhSlide của slot 10 (tiết 2)",
+    "Giáo trình chínhSlide của slot 11 (tiết 1)",
+    "Giáo trình chínhSlide của slot 11 (tiết 2)",
+    "Giáo trình chínhSlide của slot 12 (tiết 1)",
+    "Giáo trình chínhSlide của slot 13 (tiết 1)",
+    "Giáo trình chínhSlide của slot 13 (tiết 2)",
+    "Giáo trình chínhSlide của slot 14 (tiết 1)",
+    "Giáo trình chínhSlide của slot 14 (tiết 2)",
+    "Giáo trình chínhSlide của slot 17 (tiết 1)",
+    "Giáo trình chínhSlide của slot 17 (tiết 2)",
+    "Giáo trình chínhSlide của slot 18 (Tiết 1)",
+    "Giáo trình chính Slide của slot 18 (Tiết 2)",
+    "Giáo trình chínhSlide của slot 19 (Tiết 1)",
+    "Giáo trình chínhSlide của slot 19 (Tiết 2)",
+    "Giáo trình chínhSlide của slot 20 (Tiết 1)",
+    "Giáo trình chính Slide của slot 20 (Tiết 2)",
+    "Giáo trình chínhSlide của slot 21 (Tiết 1)",
+    "Giáo trình chínhSlide của slot 21 (Tiết 2)",
+    "Giáo trình chínhSlide của slot 22 (tiết 1)",
+    "Giáo trình chínhSlide chữ Hánslot 22",
+    "Giáo trình chínhSlide của slot 24 (tiết 1)",
+    "Giáo trình chínhSlide của slot 24 (tiết 2)",
+    "Giáo trình chínhSlide của slot 26 (tiết 1)",
+    "Giáo trình chínhSlide của slot 26 (tiết 2)",
+    "Giáo trình chínhSlide của slot 27( tiết 1)",
+    "Giáo trình chínhSlide của slot 28 (tiết 1)",
+    "Giáo trình chínhSlide của slot 28 (tiết 2)",
+    "Giáo trình chínhSlide của slot 29 (tiết 1)",
+    "Giáo trình chínhSlide của slot 29 (tiết 2)",
+    "Giáo trình chínhSlide của slot 30 (tiết 1)",
+    "Giáo trình chínhSlide của slot 30 (tiết 2)"
+  ]
+}

@@ -1,0 +1,333 @@
+{
+  "metadata": {
+    "syllabus_id": "13592",
+    "syllabus_name": "Graduation Thesis Startup Project_Dự án khởi nghiệp tốt nghiệp",
+    "syllabus_name_english": "Graduation Thesis Startup Project",
+    "subject_code": "EXE401",
+    "credits": "10",
+    "degree_level": "Bachelor",
+    "time_allocation": "Study hour (500h) =\n22.5 contact hours with supervisor (135mn x 10 slots)\n11.25 contact hours with mentor (135 mn x 5 slots)\n1.5h defense\n464.75h self-study",
+    "prerequisites": "1. EXE201\n2. Pass On-the-job training\n3. Pass 80% of total credits (PHE_COM*, On-the-job training excluded for Vietnamese students, PHE_COM* excluded for intl. students).",
+    "description": "The Graduation Thesis Startup Project is the third step of experience that brings together the startup project  developed in EXE101 and EXE201 in a further perspective. It enables students to continously enhance their whole project's performannce under the guidance of mentor, instructor and other supports of the university.\nBeside the startup project, students will demonstrate, according to a guide reserved for them, the contribution of their major's knowledge and skills in various components of the project. Students will complete writing of the final business plan in a formal format and defending their arguments in front of the examination board.\nThe examination will be given in such areas as (1) project background (2) market analysis, (3) value proposition (4) technology touch (5) major's requirement (6) key activity plan, (7) financial analysis, (8) future roadmap.",
+    "student_tasks": "(1) Plan and carry out advanced tasks independently and as a group member\n(2) Produce document and product according to project requirement\n(3) Defense individually work in front of examination board",
+    "tools": "",
+    "scoring_scale": "10",
+    "decision_no": "1318/QĐ-ĐHFPT dated 11/27/2025",
+    "is_approved": "True",
+    "note": "",
+    "min_avg_mark_to_pass": "5",
+    "is_active": "True",
+    "approved_date": "11/27/2025"
+  },
+  "materials": [
+    {
+      "description": "'Hướng dẫn thực hiện Quy chế đào tạo về Dự án khởi nghiệp tốt nghiệp",
+      "author": "",
+      "publisher": "",
+      "published_date": "",
+      "edition": "",
+      "isbn": "",
+      "is_main_material": "",
+      "is_hard_copy": "",
+      "is_online": "",
+      "note": "ban hành kèm theo syllabus này"
+    },
+    {
+      "description": "'Quy chế đào tạo hệ đại học chính quy tại Trường Đại học FPT",
+      "author": "",
+      "publisher": "",
+      "published_date": "",
+      "edition": "",
+      "isbn": "",
+      "is_main_material": "",
+      "is_hard_copy": "",
+      "is_online": "",
+      "note": "ban hành kèm theo quyết định số 774/QĐ-ĐHFPT ngày 07/09/2022"
+    },
+    {
+      "description": "'Quyết định về việc triển khai Chương trình Trải nghiệm khởi nghiệp tại Trường Đại học FPT",
+      "author": "",
+      "publisher": "",
+      "published_date": "",
+      "edition": "",
+      "isbn": "",
+      "is_main_material": "",
+      "is_hard_copy": "",
+      "is_online": "",
+      "note": "ban hành kèm theo quyết định số 911/QĐ-ĐHFPT ngày 31/08/2023"
+    }
+  ],
+  "clos": [
+    {
+      "clo_name": "1",
+      "clo_details": "CLO1",
+      "lo_details": "Plan and conduct advanced tasks both independently and collaboratively"
+    },
+    {
+      "clo_name": "2",
+      "clo_details": "CLO2",
+      "lo_details": "Apply appropriate professional methods and techniques to develop different components of the startup project"
+    },
+    {
+      "clo_name": "3",
+      "clo_details": "CLO3",
+      "lo_details": "Write a business plan based thesis fulfilling well-defined academic criteria"
+    },
+    {
+      "clo_name": "4",
+      "clo_details": "CLO4",
+      "lo_details": "Demonstrate skills in presenting and defending the startup project"
+    },
+    {
+      "clo_name": "5",
+      "clo_details": "CLO5",
+      "lo_details": "Exhibit professional working attitudes"
+    }
+  ],
+  "schedule": [
+    {
+      "session": "1",
+      "topic": "Supervision 1 Course guideline presentation",
+      "learning_method": "Offline",
+      "lo": "LO1,2,3,5",
+      "itu": "IU",
+      "student_materials": "Syllabus",
+      "s_download": "EXE401_SP25_Tai lieu huong dan",
+      "student_tasks": "Develop the startup project Prepare for final written thesis",
+      "urls": ""
+    },
+    {
+      "session": "2",
+      "topic": "Mentoring 1 Project development",
+      "learning_method": "Offline",
+      "lo": "LO1,2,3,5",
+      "itu": "U",
+      "student_materials": "Syllabus",
+      "s_download": "EXE401_SP25_Quy dinh Hoi dong va phieu cham",
+      "student_tasks": "Develop the startup project",
+      "urls": ""
+    },
+    {
+      "session": "3",
+      "topic": "Supervision 2 Project development and thesis preparation",
+      "learning_method": "Offline",
+      "lo": "LO1,2,3,5",
+      "itu": "U",
+      "student_materials": "Syllabus",
+      "s_download": "QD06 DHFPT trien khai TNKN",
+      "student_tasks": "Develop the startup project Prepare for the thesis",
+      "urls": ""
+    },
+    {
+      "session": "4",
+      "topic": "Supervision 3 Project development and thesis preparation",
+      "learning_method": "Offline",
+      "lo": "LO1,2,3,5",
+      "itu": "U",
+      "student_materials": "Syllabus",
+      "s_download": "",
+      "student_tasks": "Develop the startup project Prepare for the thesis",
+      "urls": ""
+    },
+    {
+      "session": "5",
+      "topic": "Mentoring 2 Project development",
+      "learning_method": "Offline",
+      "lo": "LO1,2,3,5",
+      "itu": "U",
+      "student_materials": "Syllabus",
+      "s_download": "",
+      "student_tasks": "Develop the startup project",
+      "urls": ""
+    },
+    {
+      "session": "6",
+      "topic": "Supervision 4 Project development and thesis preparation",
+      "learning_method": "Offline",
+      "lo": "LO1,2,3,5",
+      "itu": "U",
+      "student_materials": "Syllabus",
+      "s_download": "",
+      "student_tasks": "Develop the startup project Prepare for the thesis",
+      "urls": ""
+    },
+    {
+      "session": "7",
+      "topic": "Supervision 5 Project development and thesis preparation",
+      "learning_method": "Offline",
+      "lo": "LO1,2,3,5",
+      "itu": "U",
+      "student_materials": "Syllabus",
+      "s_download": "",
+      "student_tasks": "Develop the startup project Prepare for the thesis",
+      "urls": ""
+    },
+    {
+      "session": "8",
+      "topic": "Mentoring 3 Project development",
+      "learning_method": "Offline",
+      "lo": "LO1,2,3,4,5",
+      "itu": "U",
+      "student_materials": "Syllabus",
+      "s_download": "",
+      "student_tasks": "Develop the startup project",
+      "urls": ""
+    },
+    {
+      "session": "9",
+      "topic": "Supervision 6 Project development and thesis preparation",
+      "learning_method": "Offline",
+      "lo": "LO1,2,3,5",
+      "itu": "U",
+      "student_materials": "Syllabus",
+      "s_download": "",
+      "student_tasks": "Develop the startup project Prepare for the thesis",
+      "urls": ""
+    },
+    {
+      "session": "10",
+      "topic": "Supervision 7 Project development and thesis preparation",
+      "learning_method": "Offline",
+      "lo": "LO1,2,3,5",
+      "itu": "U",
+      "student_materials": "Syllabus",
+      "s_download": "",
+      "student_tasks": "Develop the startup project Prepare for the thesis",
+      "urls": ""
+    },
+    {
+      "session": "11",
+      "topic": "Mentoring 4 Project development",
+      "learning_method": "Offline",
+      "lo": "LO1,2,3,5",
+      "itu": "U",
+      "student_materials": "Syllabus",
+      "s_download": "",
+      "student_tasks": "Develop the startup project",
+      "urls": ""
+    },
+    {
+      "session": "12",
+      "topic": "Supervision 8 Project development and thesis preparation",
+      "learning_method": "Offline",
+      "lo": "LO1,2,3,5",
+      "itu": "U",
+      "student_materials": "Syllabus",
+      "s_download": "",
+      "student_tasks": "Develop the startup project Prepare for the thesis",
+      "urls": ""
+    },
+    {
+      "session": "13",
+      "topic": "Supervision 9 Project development and thesis preparation",
+      "learning_method": "Offline",
+      "lo": "LO1,2,3,5",
+      "itu": "U",
+      "student_materials": "Syllabus",
+      "s_download": "",
+      "student_tasks": "Develop the startup project Prepare for the thesis",
+      "urls": ""
+    },
+    {
+      "session": "14",
+      "topic": "Mentoring 5 Project development",
+      "learning_method": "Offline",
+      "lo": "LO1,2,3,5",
+      "itu": "U",
+      "student_materials": "Syllabus",
+      "s_download": "",
+      "student_tasks": "Develop the startup project",
+      "urls": ""
+    },
+    {
+      "session": "15",
+      "topic": "Supervision 10 Final Thesis preparation Practice for Presentation",
+      "learning_method": "Offline",
+      "lo": "LO1,2,3,4,5",
+      "itu": "U",
+      "student_materials": "Syllabus",
+      "s_download": "",
+      "student_tasks": "Prepare final thesis Practice for Presentation",
+      "urls": ""
+    }
+  ],
+  "constructive_questions": [],
+  "assessment_scheme": [
+    {
+      "category": "Final written thesis by supervisor",
+      "type": "on-going",
+      "part": "1",
+      "weight": "20.0%",
+      "completion_criteria": ">0",
+      "duration": "According to deadlines by the Academics Department",
+      "clo": "LO1,2,3,4",
+      "question_type": "Written business portfolio. Cf. course guide",
+      "no_question": "",
+      "knowledge_and_skill": "Combination of all relevant major requirement, academic writting skills with required format",
+      "grading_guide": "1. Marked by Supervisor (cf the Subject's Guide) 2. The mark is given to the project group",
+      "note": ""
+    },
+    {
+      "category": "Participation",
+      "type": "on-going",
+      "part": "1",
+      "weight": "10.0%",
+      "completion_criteria": ">0",
+      "duration": "All the course",
+      "clo": "LO5",
+      "question_type": "",
+      "no_question": "",
+      "knowledge_and_skill": "",
+      "grading_guide": "1. Marked by Supervisor (cf the Subject's Guide) 2. The mark is given to each student individually based on their individual and group work",
+      "note": ""
+    },
+    {
+      "category": "Results inherited from EXE201",
+      "type": "on-going",
+      "part": "1",
+      "weight": "20.0%",
+      "completion_criteria": ">0",
+      "duration": "",
+      "clo": "LO1,2,3,4,5",
+      "question_type": "",
+      "no_question": "",
+      "knowledge_and_skill": "",
+      "grading_guide": "The mark of EXE201",
+      "note": ""
+    },
+    {
+      "category": "Final written thesis by evaluation commitee",
+      "type": "Final exam",
+      "part": "1",
+      "weight": "30.0%",
+      "completion_criteria": "4",
+      "duration": "According to deadlines by the Academics Department",
+      "clo": "LO1,2,3,4",
+      "question_type": "Written business portfolio. Cf. course guide",
+      "no_question": "",
+      "knowledge_and_skill": "Combination of all relevant major requirement, academic writting skills with required format",
+      "grading_guide": "1. Marked by each of board's members, based on the rubrics (cf the Subject's Guide) 2. The mark is given to the project group 3. The mark is the average of board members mark",
+      "note": ""
+    },
+    {
+      "category": "Oral defense",
+      "type": "Final exam",
+      "part": "1",
+      "weight": "20.0%",
+      "completion_criteria": "4",
+      "duration": "45 minutes presentation and demonstration + 45 minutes Q&A for each group",
+      "clo": "LO1,2,3,4,5",
+      "question_type": "Oral thesis defense",
+      "no_question": "Presentation of the startup project with required format",
+      "knowledge_and_skill": "Combination of all relevant acquired knowledge, project feasibility and presentation skills",
+      "grading_guide": "1. Oral defense language: English 2. Marked by each of board's members, based on the rubrics (cf the Subject's Guide) 3. The mark is given to each student individually. 4. The mark is the average of board members mark",
+      "note": ""
+    }
+  ],
+  "references": [
+    "1318/QĐ-ĐHFPT dated 11/27/2025",
+    "MaterialDescriptionAuthorPublisherPublishedDateEditionISBNIsMainMaterialIsHardCopyIsOnlineNote 'Hướng dẫn thực hiện Quy chế đào tạo về Dự án khởi nghiệp tốt nghiệp ban hành kèm theo syllabus này 'Quy chế đào tạo hệ đại học chính quy tại Trường Đại học FPT ban hành kèm theo quyết định số 774/QĐ-ĐHFPT ngày 07/09/2022 'Quyết định về việc triển khai Chương trình Trải nghiệm khởi nghiệp tại Trường Đại học FPT ban hành kèm theo quyết định số 911/QĐ-ĐHFPT ngày 31/08/2023",
+    "ban hành kèm theo quyết định số 774/QĐ-ĐHFPT ngày 07/09/2022",
+    "ban hành kèm theo quyết định số 911/QĐ-ĐHFPT ngày 31/08/2023"
+  ]
+}

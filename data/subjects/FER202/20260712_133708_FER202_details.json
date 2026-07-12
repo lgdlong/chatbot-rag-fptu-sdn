@@ -1,0 +1,846 @@
+{
+  "metadata": {
+    "syllabus_id": "12580",
+    "syllabus_name": "Front-End web development with React_Phát triển web Front-End với React",
+    "syllabus_name_english": "Front-End web development with React",
+    "subject_code": "FER202",
+    "credits": "3",
+    "degree_level": "Bachelor",
+    "time_allocation": "Study hour (150h) = 45h contact hours + 1h final exam + 85' practical exam + 104h self-study",
+    "prerequisites": "WED201c",
+    "description": "Learn front-end web development for implementing a multi-platform solution:- Overview of client-side web UI frameworks, focusing on Bootstrap. Students will explore grids, responsive design, Bootstrap CSS, and JavaScript components.- Basics of Node.js, npm- JavaScript-based front-end development with the React library: ES6 for React applications, Reactstrap for Bootstrap-based responsive UI, React components, React Router for single-page applications, and designing controlled forms.- Hooks to leverage React features like state and lifecycle in functional components, reducing reliance on class components.- Flux architecture and Redux, covering Redux principles and building React-Redux powered applications.Fetch for client-server communication, integrating REST APIs on the server side.- Modern syntax and patterns for ReactJS development, paired with foundational knowledge to ensure long-term relevance.- AI Integration: Use of AI tools (e.g., code generation with GenAI) to enhance development efficiency, with emphasis on transparency and ethical usage.- Assessment Methods: Evaluation through practical labs, assignments, and reviews using stratified sampling, scored via Likert scales (1-5) for syntax, logic, customization, and transparency, converted to a 10-point scale.",
+    "student_tasks": "- Students must attend at least 80% of contact slots to be eligible for the final examination.- Students are responsible for completing all exercises assigned by the instructor in class or at home and submitting them on time.- Regularly check announcements on FU FLM at https://flm.fpt.edu.vn/ for the latest course updates, including assignment submission deadlines and feedback on assignments and project work.-  AI-Related Task: Utilize AI tools (e.g., GenAI for code generation or debugging) responsibly in assignments and projects, and clearly document their usage (e.g., prompts, outputs) in submissions to ensure transparency and ethical application.",
+    "tools": "- Visual Studio Code (https://code.visualstudio.com) - Internet- Git (Bitbucket/Github source management)- Node.jsAI tools- Gemini (https://gemini.google.com/app)- Grok (https://grok.com/)- ChatGPT (https://chatgpt.com/)",
+    "scoring_scale": "10",
+    "decision_no": "359/QĐ-ĐHFPT dated 04/09/2025",
+    "is_approved": "True",
+    "note": "",
+    "min_avg_mark_to_pass": "5",
+    "is_active": "True",
+    "approved_date": "4/9/2025"
+  },
+  "materials": [
+    {
+      "description": "https://getbootstrap.com/docs/5.3/getting-started/introduction/",
+      "author": "",
+      "publisher": "",
+      "published_date": "",
+      "edition": "",
+      "isbn": "",
+      "is_main_material": "",
+      "is_hard_copy": "",
+      "is_online": "",
+      "note": ""
+    },
+    {
+      "description": "https://react.dev/learn",
+      "author": "",
+      "publisher": "",
+      "published_date": "",
+      "edition": "",
+      "isbn": "",
+      "is_main_material": "",
+      "is_hard_copy": "",
+      "is_online": "",
+      "note": ""
+    },
+    {
+      "description": "https://react.dev/learn/start-a-new-react-project#nextjs",
+      "author": "",
+      "publisher": "",
+      "published_date": "",
+      "edition": "",
+      "isbn": "",
+      "is_main_material": "",
+      "is_hard_copy": "",
+      "is_online": "",
+      "note": ""
+    }
+  ],
+  "clos": [
+    {
+      "clo_name": "1",
+      "clo_details": "CLO1",
+      "lo_details": "Describe Front-end Web UI Frameworks overview"
+    },
+    {
+      "clo_name": "2",
+      "clo_details": "CLO2",
+      "lo_details": "Install React application and Understand React component"
+    },
+    {
+      "clo_name": "3",
+      "clo_details": "CLO3",
+      "lo_details": "Explain JSX and ES6"
+    },
+    {
+      "clo_name": "4",
+      "clo_details": "CLO4",
+      "lo_details": "Explain the Bootstrap, React-boostrap"
+    },
+    {
+      "clo_name": "5",
+      "clo_details": "CLO5",
+      "lo_details": "Discuss the React Component Life Cycle, Forms and Routes"
+    },
+    {
+      "clo_name": "6",
+      "clo_details": "CLO6",
+      "lo_details": "Discuss Hook, Event Handling and crafting reusable component in React"
+    },
+    {
+      "clo_name": "7",
+      "clo_details": "CLO7",
+      "lo_details": "Discuss fetch and catching data in Client-Server Communication and Code Splitting Using Lazy Components and Suspense"
+    },
+    {
+      "clo_name": "8",
+      "clo_details": "CLO8",
+      "lo_details": "Discuss Flow Architecture and Redux"
+    },
+    {
+      "clo_name": "9",
+      "clo_details": "CLO9",
+      "lo_details": "Apply AI tools in React development and evaluate their ethical use and transparency"
+    }
+  ],
+  "schedule": [
+    {
+      "session": "1",
+      "topic": "Assignment Introduction with AI Integration",
+      "learning_method": "Offline",
+      "lo": "CLO1-CLO9",
+      "itu": "I, T",
+      "student_materials": "Assignment brief",
+      "s_download": "FER202",
+      "student_tasks": "Study assignment brief, brainstorm app idea with AI, note CLO1-CLO9 requirements",
+      "urls": ""
+    },
+    {
+      "session": "2",
+      "topic": "Course Introduction1.1 Full Stack Web Development: The Big Picture1.2 React 19 Introduction",
+      "learning_method": "Offline",
+      "lo": "CLO1",
+      "itu": "I",
+      "student_materials": "Slides",
+      "s_download": "Outline course structure, discuss full-stack roles, highlight React 19 updates",
+      "student_tasks": "Study slides, note key concepts of full-stack and React 19",
+      "urls": ""
+    },
+    {
+      "session": "3",
+      "topic": "1.3 Git- Setting up Git- Basic Git Commands- Setting up an Online Git repository1.4 Node.js and npm- Setting up Node.js and npm- Basics of Node.js and npm",
+      "learning_method": "Offline",
+      "lo": "CLO1",
+      "itu": "I, T, U",
+      "student_materials": "Slides",
+      "s_download": "Explain Git purpose, demo git init/add/commit on terminal, troubleshoot install issues Show GitHub signup, demo git push, guide Node.js/npm install with version check",
+      "student_tasks": "Install Git, practice basic commands (init, add, commit), study slidesCreate GitHub account, push repo, install Node.js/npm, study slides",
+      "urls": ""
+    },
+    {
+      "session": "4",
+      "topic": "Rendering with JSX + ES 62.1 ES6",
+      "learning_method": "Offline",
+      "lo": "CLO3",
+      "itu": "I, T",
+      "student_materials": "Slides",
+      "s_download": "Present ES6 syntax (e.g., () =>), demo in browser console, assign practice tasks",
+      "student_tasks": "Study ES6 features (arrow functions, destructuring), practice examples",
+      "urls": ""
+    },
+    {
+      "session": "5",
+      "topic": "2.2 ES6 (cont'd)- Using AI to generate ES6 code snippets",
+      "learning_method": "Offline",
+      "lo": "CLO3, CLO9",
+      "itu": "T, U",
+      "student_materials": "Slides, exercises, AI tool",
+      "s_download": "Show AI Prompt (e.g., “Generate ES6 map”), explain output, check student snippets",
+      "student_tasks": "Use GenAI (e.g., ChatGPT) to generate ES6 snippets, compare with slides, do exercises",
+      "urls": ""
+    },
+    {
+      "session": "6",
+      "topic": "2.3 ES6 (cont'd)",
+      "learning_method": "Offline",
+      "lo": "CLO3",
+      "itu": "U",
+      "student_materials": "Slides, exercises",
+      "s_download": "Answer questions, review exercise submissions, suggest improvements",
+      "student_tasks": "Complete ES6 exercises, apply to simple React components",
+      "urls": ""
+    },
+    {
+      "session": "7",
+      "topic": "3.1 Rendering HTML3.2 Creating your own JSX elements",
+      "learning_method": "Offline",
+      "lo": "CLO3",
+      "itu": "T, U",
+      "student_materials": "Slides",
+      "s_download": "Explain JSX vs HTML, demo <div>{variable}</div>, guide JSX element creation",
+      "student_tasks": "Study JSX syntax, create basic JSX elements, practice rendering",
+      "urls": ""
+    },
+    {
+      "session": "8",
+      "topic": "3.3 Using JavaScript expressions",
+      "learning_method": "Offline",
+      "lo": "CLO3",
+      "itu": "U",
+      "student_materials": "Slides",
+      "s_download": "Review expression syntax (e.g., {count + 1}), assist with practice, provide examples",
+      "student_tasks": "Use JS expressions in JSX, practice with examples",
+      "urls": ""
+    },
+    {
+      "session": "9",
+      "topic": "3.4 Building fragments of JSXLAB 1: Install React + JSX Basics",
+      "learning_method": "Offline",
+      "lo": "CLO1, CLO2, CLO3",
+      "itu": "T, U",
+      "student_materials": "Slides, lab questions",
+      "s_download": "Explain Lab 1 goals, demo CRA setup, troubleshoot JSX issues",
+      "student_tasks": "Install React app with CRA, build JSX fragments, complete Lab 1",
+      "urls": ""
+    },
+    {
+      "session": "10",
+      "topic": "Review Lab 1",
+      "learning_method": "Offline",
+      "lo": "CLO1, CLO2, CLO3, CLO9",
+      "itu": "U",
+      "student_materials": "Lab submissions",
+      "s_download": "Run AI on submissions (e.g., syntax check), review 10 students (13.5 min each), discuss",
+      "student_tasks": "Submit Lab 1, use AI to debug code, prepare questions for review",
+      "urls": ""
+    },
+    {
+      "session": "11",
+      "topic": "Review Lab 1 (td)",
+      "learning_method": "Offline",
+      "lo": "CLO1, CLO2, CLO3, CLO9",
+      "itu": "U",
+      "student_materials": "Lab submissions",
+      "s_download": "Run AI on submissions (e.g., syntax check), review 10 students (13.5 min each), discuss",
+      "student_tasks": "Submit Lab 1, use AI to debug code, prepare questions for review",
+      "urls": ""
+    },
+    {
+      "session": "12",
+      "topic": "Bootstrap and React-bootstrap4.1 Bootstrap & React-Bootstrap Introduction- Set up a project with Bootstrap & React-Bootstrap- Configure a web project to use Bootstrap and React-Bootstrap",
+      "learning_method": "Offline",
+      "lo": "CLO4",
+      "itu": "I, T",
+      "student_materials": "Slides",
+      "s_download": "Present BS5 features, demo npm install bootstrap, guide React-BS integration",
+      "student_tasks": "Study Bootstrap/React-Bootstrap, set up project with both",
+      "urls": ""
+    },
+    {
+      "session": "13",
+      "topic": "4.2 Bootstrap Grid System",
+      "learning_method": "Offline",
+      "lo": "CLO4",
+      "itu": "T, U",
+      "student_materials": "Slides",
+      "s_download": "Show grid classes (e.g., col-md-6), demo responsive layout, assist with exercises",
+      "student_tasks": "Practice grid system layouts, apply to sample UI",
+      "urls": ""
+    },
+    {
+      "session": "14",
+      "topic": "4.3 Bootstrap and React-Bootstrap CSS Components- Navigation and Navigation Bar- Icon and Fonts- User Input: Buttons and Forms- Tabular data (Table)",
+      "learning_method": "Offline",
+      "lo": "CLO4",
+      "itu": "T, U",
+      "student_materials": "Slides, exercises",
+      "s_download": "Demo <Navbar> and <Button>, explain props, review student UI builds",
+      "student_tasks": "Build UI with BS components (nav, buttons), do exercises",
+      "urls": ""
+    },
+    {
+      "session": "15",
+      "topic": "5.1 Bootstrap JavaScript Components- Tabs, Pills and Tabbed Navigation",
+      "learning_method": "Offline",
+      "lo": "CLO4",
+      "itu": "T, U",
+      "student_materials": "Slides, exercises",
+      "s_download": "Show <Tabs> usage, demo interactivity, guide testing",
+      "student_tasks": "Implement JS components (tabs/pills), test functionality",
+      "urls": ""
+    },
+    {
+      "session": "16",
+      "topic": "5.2 Hide and Seek: Collapse and Accordion",
+      "learning_method": "Offline",
+      "lo": "CLO4",
+      "itu": "U",
+      "student_materials": "Slides, exercises",
+      "s_download": "Explain <Collapse>, review student implementations, suggest enhancements",
+      "student_tasks": "Add collapse/accordion to UI, practice interactivity",
+      "urls": ""
+    },
+    {
+      "session": "17",
+      "topic": "5.3 Compare betweent Bootstrap and React-Bootstrap",
+      "learning_method": "Offline",
+      "lo": "CLO4",
+      "itu": "T, U",
+      "student_materials": "Slides, exercises",
+      "s_download": "Discuss BS vs React-BS pros/cons",
+      "student_tasks": "Build UI with BS/React-BS",
+      "urls": ""
+    },
+    {
+      "session": "18",
+      "topic": "LAB 2: Bootstrap and React-Bootstrap UI",
+      "learning_method": "Offline",
+      "lo": "CLO4",
+      "itu": "T, U",
+      "student_materials": "Slides, lab questions",
+      "s_download": "Explain Lab 2 goals, troubleshoot UI issues",
+      "student_tasks": "Compare in Lab 2, submit work",
+      "urls": ""
+    },
+    {
+      "session": "19",
+      "topic": "Review Lab 2",
+      "learning_method": "Offline",
+      "lo": "CLO4, CLO9",
+      "itu": "U",
+      "student_materials": "Lab submissions",
+      "s_download": "Analyze submissions with AI (e.g., CSS efficiency), review 10 students, give feedback",
+      "student_tasks": "Submit Lab 2, use AI to optimize UI code, prepare for review",
+      "urls": ""
+    },
+    {
+      "session": "20",
+      "topic": "Review Lab 2 (td)",
+      "learning_method": "Offline",
+      "lo": "CLO4, CLO9",
+      "itu": "U",
+      "student_materials": "Lab submissions",
+      "s_download": "Analyze submissions with AI (e.g., CSS efficiency), review 10 students, give feedback",
+      "student_tasks": "Submit Lab 2, use AI to optimize UI code, prepare for review",
+      "urls": ""
+    },
+    {
+      "session": "21",
+      "topic": "React Component6.1 What's react component? How to build it?6.2 Component Properties",
+      "learning_method": "Offline",
+      "lo": "CLO2",
+      "itu": "I, T, U",
+      "student_materials": "Slides",
+      "s_download": "Explain component structure, demo <Comp prop=\"value\" />, guide initial build",
+      "student_tasks": "Study component basics, build a simple component with props",
+      "urls": ""
+    },
+    {
+      "session": "22",
+      "topic": "6.3 Component State- Setting initial component state- Creating component state- Merging component state",
+      "learning_method": "Offline",
+      "lo": "CLO2",
+      "itu": "I, T",
+      "student_materials": "Slides, exercises",
+      "s_download": "Show state = {} in class, demo useState, assign state exercises Demo setState merging, guide functional state updates, review student work",
+      "student_tasks": "Practice setting initial state in components, do exercisesBuild components with state (Class/Functional), merge state, practice",
+      "urls": ""
+    },
+    {
+      "session": "23",
+      "topic": "Event Handling7.1 Declaring event handlers- Binding handlers to elements- Using synthetic event objects- Understanding event pooling",
+      "learning_method": "Offline",
+      "lo": "CLO6",
+      "itu": "I, T, U",
+      "student_materials": "Slides, exercises",
+      "s_download": "Explain onClick, demo binding in class/functional, guide event setup Show event.target, discuss pooling, assist with exercises",
+      "student_tasks": "Study event handling, bind handlers to elements, practicePractice synthetic events, explore pooling, do exercises",
+      "urls": ""
+    },
+    {
+      "session": "24",
+      "topic": "7.2 Using event handler context and parameters- Declaring inline event handlersLAB 3: Class vs Functional Components",
+      "learning_method": "Offline",
+      "lo": "CLO2, CLO6",
+      "itu": "T, U",
+      "student_materials": "Slides, exercises, lab questions",
+      "s_download": "Demo inline onClick={() => ...}, explain Lab 3 goals, assist with comparison",
+      "student_tasks": "Add inline handlers, compare Class/Functional in Lab 3, submit work",
+      "urls": ""
+    },
+    {
+      "session": "25",
+      "topic": "Review Lab 3",
+      "learning_method": "Offline",
+      "lo": "CLO2, CLO6, CLO9",
+      "itu": "U",
+      "student_materials": "Lab submissions",
+      "s_download": "Check submissions with AI (e.g., refactor suggestions), review 10 students, discuss",
+      "student_tasks": "Submit Lab 3, use AI to refactor code, prepare for review",
+      "urls": ""
+    },
+    {
+      "session": "26",
+      "topic": "Review Lab 3 (td)",
+      "learning_method": "Offline",
+      "lo": "CLO2, CLO6, CLO9",
+      "itu": "U",
+      "student_materials": "Lab submissions",
+      "s_download": "Check submissions with AI (e.g., refactor suggestions), review 10 students, discuss",
+      "student_tasks": "Submit Lab 3, use AI to refactor code, prepare for review",
+      "urls": ""
+    },
+    {
+      "session": "27",
+      "topic": "8.1 Passing property values8.2 Stateless Components",
+      "learning_method": "Offline",
+      "lo": "CLO5",
+      "itu": "T, U",
+      "student_materials": "Slides",
+      "s_download": "Demo <Comp prop={value} />, explain stateless benefits, guide practice",
+      "student_tasks": "Build stateless components, pass props, practice",
+      "urls": ""
+    },
+    {
+      "session": "28",
+      "topic": "Container components8.3 Providing and consuming contex",
+      "learning_method": "Offline",
+      "lo": "CLO5",
+      "itu": "T, U",
+      "student_materials": "Slides",
+      "s_download": "Show Context.Provider, demo data sharing, assist with implementation",
+      "student_tasks": "Implement context in components, test data sharing, practice",
+      "urls": ""
+    },
+    {
+      "session": "29",
+      "topic": "8.4 Render props8.5 Refactoring class components using hooks",
+      "learning_method": "Offline",
+      "lo": "CLO6",
+      "itu": "T, U",
+      "student_materials": "Slides",
+      "s_download": "Demo <Comp render={() => ...} />, show Hook conversion, assist with exercises",
+      "student_tasks": "Refactor class components with Hooks, practice render props",
+      "urls": ""
+    },
+    {
+      "session": "30",
+      "topic": "Getting Started with Hooks9.1 Maintaining state using Hooks",
+      "learning_method": "Offline",
+      "lo": "CLO6",
+      "itu": "I, T",
+      "student_materials": "Slides",
+      "s_download": "Explain useState syntax, demo counter example, assign practice tasks",
+      "student_tasks": "Study useState, implement in a component, practice",
+      "urls": ""
+    },
+    {
+      "session": "31",
+      "topic": "9.2 Performing initialization and cleanup actions",
+      "learning_method": "Offline",
+      "lo": "CLO6",
+      "itu": "T, U",
+      "student_materials": "Slides, exercises",
+      "s_download": "Show useEffect(() => {}, []), demo cleanup, review exercises",
+      "student_tasks": "Use useEffect for lifecycle tasks, do exercises",
+      "urls": ""
+    },
+    {
+      "session": "32",
+      "topic": "9.3 Sharing Data with Context Hooks",
+      "learning_method": "Offline",
+      "lo": "CLO5, CLO6",
+      "itu": "T, U",
+      "student_materials": "Slides",
+      "s_download": "Demo useContext, show data flow, guide multi-component sharing",
+      "student_tasks": "Implement context Hooks, share data across components, practice",
+      "urls": ""
+    },
+    {
+      "session": "33",
+      "topic": "9.4 Using Reducer Hooks for State ManagementLAB 4: Hooks & Events",
+      "learning_method": "Offline",
+      "lo": "CLO6",
+      "itu": "T, U",
+      "student_materials": "Slides, lab questions",
+      "s_download": "Explain useReducer vs useState, demo Lab 4 setup, troubleshoot event issues",
+      "student_tasks": "Use useReducer for complex state, complete Lab 4 with events",
+      "urls": ""
+    },
+    {
+      "session": "34",
+      "topic": "Review Lab 4",
+      "learning_method": "Offline",
+      "lo": "CLO6, CLO9",
+      "itu": "U",
+      "student_materials": "Lab submissions",
+      "s_download": "Analyze event logic with AI, review 10 students (stratified), suggest improvements",
+      "student_tasks": "Submit Lab 4, use AI to enhance event logic, prepare for review",
+      "urls": ""
+    },
+    {
+      "session": "35",
+      "topic": "Review Lab 4 (td)",
+      "learning_method": "Offline",
+      "lo": "CLO6, CLO9",
+      "itu": "U",
+      "student_materials": "Lab submissions",
+      "s_download": "Analyze event logic with AI, review 10 students (stratified), suggest improvements",
+      "student_tasks": "Submit Lab 4, use AI to enhance event logic, prepare for review",
+      "urls": ""
+    },
+    {
+      "session": "36",
+      "topic": "Progress Test - 01",
+      "learning_method": "Offline",
+      "lo": "CLO1-CLO6",
+      "itu": "T, U",
+      "student_materials": "Test questions",
+      "s_download": "Upload test to Exam website, monitor testing, collect submissions",
+      "student_tasks": "Study materials, complete Progress Test 1",
+      "urls": ""
+    },
+    {
+      "session": "37",
+      "topic": "Handling Navigation with Routes10.1 Declaring routes- Decoupling route declaration",
+      "learning_method": "Offline",
+      "lo": "CLO5",
+      "itu": "I, T",
+      "student_materials": "Slides",
+      "s_download": "Explain <Route>, demo basic routing, guide setup",
+      "student_tasks": "Study React Router, set up basic routes, practice",
+      "urls": ""
+    },
+    {
+      "session": "38",
+      "topic": "10.2 Handling route parameters- Resource IDs in routes- Optional parameters",
+      "learning_method": "Offline",
+      "lo": "CLO5",
+      "itu": "T, U",
+      "student_materials": "Slides",
+      "s_download": "Show /:id, demo parameter access, assist with exercises",
+      "student_tasks": "Add route parameters, test navigation, practice",
+      "urls": ""
+    },
+    {
+      "session": "39",
+      "topic": "10.3 Using link components- Basic linking- URL and query parameters",
+      "learning_method": "Offline",
+      "lo": "CLO5, CLO7",
+      "itu": "T, U",
+      "student_materials": "Slides",
+      "s_download": "Demo <Link to=\"/\">, explain Lab 5 goals, troubleshoot lazy loading",
+      "student_tasks": "Build routed app with <Link> and lazy loading, complete Lab 5",
+      "urls": ""
+    },
+    {
+      "session": "40",
+      "topic": "Code Splitting Using Lazy Components and Suspense11.1 Using Lazy API11.2 Using the Suspense component-Simulating latency",
+      "learning_method": "Offline",
+      "lo": "CLO7",
+      "itu": "T, U",
+      "student_materials": "Slides",
+      "s_download": "Demo React.lazy(() => import()), show <Suspense>, guide latency practice",
+      "student_tasks": "Use React.lazy and Suspense, simulate latency, do exercises",
+      "urls": ""
+    },
+    {
+      "session": "41",
+      "topic": "11.3 Avoiding lazy components11.4 Exploring lazy pages and routes",
+      "learning_method": "Offline",
+      "lo": "CLO7",
+      "itu": "T, U",
+      "student_materials": "Slides, exercises",
+      "s_download": "Discuss lazy pitfalls, demo route splitting",
+      "student_tasks": "Apply lazy loading to routes, test performance",
+      "urls": ""
+    },
+    {
+      "session": "42",
+      "topic": "Client - Server Communication12.1 Set up a simple server that makes data available for clientsLAB 5: Routes & Lazy Loading",
+      "learning_method": "Offline",
+      "lo": "CLO7",
+      "itu": "I, T",
+      "student_materials": "Slides, lab questions",
+      "s_download": "Explain JSON server, demo json-server --watch, guide setup Assist with Lab 5 completion",
+      "student_tasks": "Set up JSON server, study client-server basics, complete Lab 5",
+      "urls": ""
+    },
+    {
+      "session": "43",
+      "topic": "Review Lab 5",
+      "learning_method": "Offline",
+      "lo": "CLO5, CLO7, CLO9",
+      "itu": "U",
+      "student_materials": "Lab submissions",
+      "s_download": "Analyze routing with AI, review 10 students, provide optimization feedback",
+      "student_tasks": "Submit Lab 5, use AI to optimize routing, prepare for review",
+      "urls": ""
+    },
+    {
+      "session": "44",
+      "topic": "Review Lab 5 (td)",
+      "learning_method": "Offline",
+      "lo": "CLO5, CLO7, CLO9",
+      "itu": "U",
+      "student_materials": "Lab submissions",
+      "s_download": "Analyze routing with AI, review 10 students, provide optimization feedback",
+      "student_tasks": "Submit Lab 5, use AI to optimize routing, prepare for review",
+      "urls": ""
+    },
+    {
+      "session": "45",
+      "topic": "12.2 Access the data from the server using a browser12.3 Use the json-server as a simple static web server",
+      "learning_method": "Offline",
+      "lo": "CLO7",
+      "itu": "T, U",
+      "student_materials": "Slides",
+      "s_download": "Demo browser fetch, guide data display, troubleshoot server issues",
+      "student_tasks": "Fetch data from server, display in app, practice",
+      "urls": ""
+    },
+    {
+      "session": "46",
+      "topic": "Fetching and Catching Data with React13.1 When to fetch and store data in React.How to use window.fetch.",
+      "learning_method": "Offline",
+      "lo": "CLO7",
+      "itu": "I, T",
+      "student_materials": "Slides",
+      "s_download": "Explain fetch timing, demo fetch(url), guide implementation",
+      "student_tasks": "Study fetch, implement in app, practice",
+      "urls": ""
+    },
+    {
+      "session": "47",
+      "topic": "13.2 What promises are.How async/await works.",
+      "learning_method": "Offline",
+      "lo": "CLO7",
+      "itu": "T, U",
+      "student_materials": "Slides, exercises",
+      "s_download": "Show async () => await fetch(), assist with exercises, explain promises",
+      "student_tasks": "Use async/await with fetch, practice exercises",
+      "urls": ""
+    },
+    {
+      "session": "48",
+      "topic": "13.3 Getting Data with AxiosHow to simplify network requests with Axios.LAB 6: Fetching Data",
+      "learning_method": "Offline",
+      "lo": "CLO7",
+      "itu": "T, U",
+      "student_materials": "Slides, lab questions",
+      "s_download": "Demo axios.get(), explain migration steps, assist with Lab 6 tasks",
+      "student_tasks": "Replace fetch with Axios, complete Lab 6",
+      "urls": ""
+    },
+    {
+      "session": "49",
+      "topic": "Review Lab 6",
+      "learning_method": "Offline",
+      "lo": "CLO7, CLO9",
+      "itu": "U",
+      "student_materials": "Lab submissions",
+      "s_download": "Check fetch logic with AI, review 10 students, suggest data handling improvements",
+      "student_tasks": "Submit Lab 6, use AI to refine fetch logic, prepare for review",
+      "urls": ""
+    },
+    {
+      "session": "50",
+      "topic": "Review Lab 6 (td)",
+      "learning_method": "Offline",
+      "lo": "CLO7, CLO9",
+      "itu": "U",
+      "student_materials": "Lab submissions",
+      "s_download": "Check fetch logic with AI, review 10 students, suggest data handling improvements",
+      "student_tasks": "Submit Lab 6, use AI to refine fetch logic, prepare for review",
+      "urls": ""
+    },
+    {
+      "session": "51",
+      "topic": "Flow Architecture and Intrduction to Redux14.1 Explain the Redux approach to implementing a variant of the Flow architecture.",
+      "learning_method": "Offline",
+      "lo": "CLO8",
+      "itu": "I, T",
+      "student_materials": "Slides",
+      "s_download": "Present Redux flow, demo store setup, guide initial practice",
+      "student_tasks": "Study Redux principles, set up basic store, practice",
+      "urls": ""
+    },
+    {
+      "session": "52",
+      "topic": "14.2 Install and Configure Redux.",
+      "learning_method": "Offline",
+      "lo": "CLO8",
+      "itu": "I, T",
+      "student_materials": "Slides",
+      "s_download": "Show npm install redux, demo store config, assist with setup",
+      "student_tasks": "Install Redux, configure store, practice",
+      "urls": ""
+    },
+    {
+      "session": "53",
+      "topic": "14.3 Define Redux Toolkit",
+      "learning_method": "Offline",
+      "lo": "CLO8, CLO9",
+      "itu": "T, U",
+      "student_materials": "Slides, AI tool",
+      "s_download": "Show AI Prompt for Toolkit, demo configureStore, review student integrations",
+      "student_tasks": "Use GenAI to generate Redux Toolkit code, integrate into app, practice",
+      "urls": ""
+    },
+    {
+      "session": "54",
+      "topic": "Redux architecture15.1 Split the reducer function into multiple simpler functions and combine the reducer functions15.2 Use Redux Thunk middleware to return a function instead of an action",
+      "learning_method": "Offline",
+      "lo": "CLO8",
+      "itu": "T, U",
+      "student_materials": "Slides",
+      "s_download": "Demo combineReducers, show Thunk async action, assist with exercises",
+      "student_tasks": "Split reducers, implement Redux Thunk for async, practice",
+      "urls": ""
+    },
+    {
+      "session": "55",
+      "topic": "15.3 Use a logger middleware to print a log of actions initiated on the Redux store",
+      "learning_method": "Offline",
+      "lo": "CLO8",
+      "itu": "T, U",
+      "student_materials": "Slides",
+      "s_download": "Demo redux-logger, explain log output, guide middleware integration",
+      "student_tasks": "Add logger middleware, monitor actions, practice",
+      "urls": ""
+    },
+    {
+      "session": "56",
+      "topic": "Progress Test - 02",
+      "learning_method": "Offline",
+      "lo": "CLO7-CLO8CLO1-CLO8",
+      "itu": "T, U",
+      "student_materials": "Test questions",
+      "s_download": "Upload test to Exam website, monitor testing, grade submissions",
+      "student_tasks": "Study materials, complete Progress Test 2",
+      "urls": ""
+    },
+    {
+      "session": "57",
+      "topic": "Assignment Evaluate",
+      "learning_method": "Offline",
+      "lo": "CLO1-CLO9",
+      "itu": "U",
+      "student_materials": "Assignment submissions",
+      "s_download": "",
+      "student_tasks": "Submit assignment, prepare for review with AI-optimized code",
+      "urls": ""
+    },
+    {
+      "session": "58",
+      "topic": "Assignment Evaluate",
+      "learning_method": "Offline",
+      "lo": "CLO1-CLO9",
+      "itu": "U",
+      "student_materials": "Assignment submissions",
+      "s_download": "",
+      "student_tasks": "Submit assignment, prepare for review with AI-optimized code",
+      "urls": ""
+    },
+    {
+      "session": "59",
+      "topic": "Assignment Evaluate",
+      "learning_method": "Offline",
+      "lo": "CLO1-CLO9",
+      "itu": "U",
+      "student_materials": "Assignment submissions",
+      "s_download": "",
+      "student_tasks": "Submit assignment, prepare for review with AI-optimized code",
+      "urls": ""
+    },
+    {
+      "session": "60",
+      "topic": "Assignment Evaluate",
+      "learning_method": "Offline",
+      "lo": "CLO1-CLO9",
+      "itu": "U",
+      "student_materials": "Assignment submissions",
+      "s_download": "",
+      "student_tasks": "Submit assignment, prepare for review with AI-optimized code",
+      "urls": ""
+    }
+  ],
+  "constructive_questions": [],
+  "assessment_scheme": [
+    {
+      "category": "Assignment",
+      "type": "on-going",
+      "part": "1",
+      "weight": "15.0%",
+      "completion_criteria": ">0",
+      "duration": "Guided in tutorials (Sessions 1), cont. at home",
+      "clo": "CLO1-CLO9",
+      "question_type": "AI prompt, Likert review",
+      "no_question": "",
+      "knowledge_and_skill": "Full-stack app using React, AI tools, covering CLO1-CLO9",
+      "grading_guide": "Individual or team work, guided by instructor, submission by deadline",
+      "note": "Introduced in Session 1, Evaluate in Session 57-60."
+    },
+    {
+      "category": "Labs",
+      "type": "on-going",
+      "part": "6",
+      "weight": "20.0%",
+      "completion_criteria": ">0",
+      "duration": "Guided and reviewed in tutorial sesions; Cont. at home",
+      "clo": "Lab 1: CLO1, CLO2, CLO3Lab 2: CLO4Lab 3: CLO2, CLO6Lab 4: CLO6, CLO9Lab 5: CLO5, CLO7Lab 6: CLO7, CLO9",
+      "question_type": "Practical exercises using AI prompt, Likert review",
+      "no_question": "",
+      "knowledge_and_skill": "Lab 1: React setup, JSXLab 2: Bootstrap UILab 3: Components, EventsLab 4: HooksLab 5: Routes, Lazy LoadingLab 6: Fetching data",
+      "grading_guide": "Teachers support tutorials, students complete independently, 1-1 review for 10 students per Lab",
+      "note": "Reviewed in Sessions 10, 19, 25, 34, 43, 49 using AI assistance (CLO9). Submission via EduNext."
+    },
+    {
+      "category": "Practical Exam",
+      "type": "on-going",
+      "part": "1",
+      "weight": "20.0%",
+      "completion_criteria": "4",
+      "duration": "85'",
+      "clo": "CLO1-CLO9",
+      "question_type": "Preferable to be marked by scripts",
+      "no_question": "",
+      "knowledge_and_skill": "Build React app with AI integration, covering CLO1-CLO9",
+      "grading_guide": "Supervised by proctor(s) sent by exam board",
+      "note": ""
+    },
+    {
+      "category": "Progress test",
+      "type": "on-going",
+      "part": "2",
+      "weight": "15.0%",
+      "completion_criteria": ">0",
+      "duration": "30' each",
+      "clo": "PT 1CLO1 - CLO6PT 2CLO7 - CLO8",
+      "question_type": "Multiple choice or essay",
+      "no_question": "20-25 (MCQ) or 5-8 (essay) per PT",
+      "knowledge_and_skill": "PT 1: Fundamentals, Components, HooksPT 2: Client-Server, Redux",
+      "grading_guide": "Supervised by instructor, online or in-class",
+      "note": "PT 1 in Session 36, PT 2 in Session 56, reviewed post-grading by instructor."
+    },
+    {
+      "category": "Final exam",
+      "type": "Final exam",
+      "part": "1",
+      "weight": "30.0%",
+      "completion_criteria": "4",
+      "duration": "60'",
+      "clo": "CLO1-CLO9",
+      "question_type": "multiple choice",
+      "no_question": "50",
+      "knowledge_and_skill": "all topics; more than 70% new questions (for the current semester);",
+      "grading_guide": "supervised by proctor(s) sent by exam board",
+      "note": ""
+    }
+  ],
+  "references": [
+    "359/QĐ-ĐHFPT dated 04/09/2025",
+    "MaterialDescriptionAuthorPublisherPublishedDateEditionISBNIsMainMaterialIsHardCopyIsOnlineNote https://getbootstrap.com/docs/5.3/getting-started/introduction/ https://react.dev/learn https://react.dev/learn/start-a-new-react-project#nextjs"
+  ]
+}

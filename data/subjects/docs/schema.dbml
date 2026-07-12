@@ -1,0 +1,172 @@
+// DBML (Database Markup Language) - Đề cương chi tiết FPT FLM Syllabus
+// Xem thêm tài liệu tại: https://dbml.dbdiagram.io/docs/
+// Dán toàn bộ nội dung file này vào trang https://dbdiagram.io để xem ERD trực quan và tương tác.
+
+Project FPT_FLM_Syllabus {
+  database_type: 'PostgreSQL'
+  note: 'Thiết kế cơ sở dữ liệu chi tiết để lưu trữ và quản lý Syllabus cào tự động từ FPT FLM.'
+}
+
+// -------------------------------------------------------------
+// 1. BẢNG THÔNG TIN CHUNG SYLLABUS
+// -------------------------------------------------------------
+Table syllabuses {
+  id integer [primary key, note: 'ID Syllabus chính từ FLM (Ví dụ: 10358). Làm khóa chính.']
+  subject_code varchar(50) [not null, note: 'Mã môn học (Ví dụ: EXE101, FER202)']
+  syllabus_name varchar(255) [not null, note: 'Tên tiếng Việt của đề cương chi tiết']
+  syllabus_name_english varchar(255) [note: 'Tên tiếng Anh của đề cương chi tiết']
+  credits integer [not null, default: 3, note: 'Số lượng tín chỉ của môn học']
+  degree_level varchar(100) [default: 'Bachelor', note: 'Hệ đào tạo / Cấp độ học thuật']
+  time_allocation text [note: 'Phân bổ thời gian (Ví dụ: Lên lớp, Tự học, Thực hành...)']
+  prerequisites text [note: 'Các môn học tiên quyết (Danh sách phân tách)']
+  description text [note: 'Mô tả chi tiết nội dung và mục tiêu của môn học']
+  student_tasks text [note: 'Nhiệm vụ, vai trò và yêu cầu đối với sinh viên']
+  tools text [note: 'Các công cụ, phần mềm, phần cứng cần thiết để học môn này']
+  scoring_scale varchar(50) [default: '10', note: 'Thang điểm đánh giá áp dụng (Thường là 10)']
+  decision_no varchar(150) [note: 'Quyết định phê duyệt số bao nhiêu']
+  approved_date date [note: 'Ngày quyết định phê duyệt chính thức được ký']
+  min_avg_mark_to_pass numeric(4,2) [default: 5.0, note: 'Điểm trung bình tối thiểu để qua môn học']
+  is_active boolean [default: true, note: 'Trạng thái hoạt động của đề cương này']
+  is_approved boolean [default: true, note: 'Đã phê duyệt hay chưa']
+  note text [note: 'Các ghi chú bổ sung liên quan đến đề cương']
+  created_at timestamp [default: `now()`, note: 'Thời gian tạo bản ghi hệ thống']
+  updated_at timestamp [default: `now()`, note: 'Thời gian cập nhật bản ghi gần nhất']
+
+  indexes {
+    subject_code [name: 'idx_syllabuses_subject_code']
+  }
+}
+
+// -------------------------------------------------------------
+// 2. BẢNG HỌC LIỆU MÔN HỌC (MATERIALS)
+// -------------------------------------------------------------
+Table syllabus_materials {
+  id integer [primary key, increment, note: 'Khóa chính tự tăng']
+  syllabus_id integer [not null, note: 'Liên kết tới bảng syllabuses']
+  description text [not null, note: 'Mô tả học liệu / Tên sách giáo trình chi tiết']
+  author varchar(255) [note: 'Tác giả của học liệu']
+  publisher varchar(255) [note: 'Nhà xuất bản']
+  published_date varchar(100) [note: 'Năm xuất bản / Ngày phát hành']
+  edition varchar(100) [note: 'Phiên bản / Lần tái bản (Ví dụ: 3rd Edition)']
+  isbn varchar(100) [note: 'Mã vạch chuẩn quốc tế ISBN']
+  is_main_material varchar(50) [note: 'Được đánh dấu là giáo trình chính hay tham khảo thêm']
+  is_hard_copy varchar(50) [note: 'Trạng thái sách in giấy']
+  is_online varchar(50) [note: 'Trạng thái tài liệu trực tuyến / E-book']
+  note text [note: 'Ghi chú thêm về học liệu']
+
+  indexes {
+    syllabus_id [name: 'idx_materials_syllabus_id']
+  }
+}
+
+// -------------------------------------------------------------
+// 3. BẢNG CHUẨN ĐẦU RA MÔN HỌC (CLOS)
+// -------------------------------------------------------------
+Table syllabus_clos {
+  id integer [primary key, increment, note: 'Khóa chính tự tăng']
+  syllabus_id integer [not null, note: 'Liên kết tới bảng syllabuses']
+  clo_name varchar(50) [not null, note: 'Mã chuẩn đầu ra môn học (Ví dụ: CLO1, CLO2)']
+  clo_details text [not null, note: 'Nội dung mô tả chi tiết năng lực đạt được']
+  lo_details text [note: 'Liên kết / Map sang chuẩn đầu ra chương trình học (LO)']
+
+  indexes {
+    syllabus_id [name: 'idx_clos_syllabus_id']
+  }
+}
+
+// -------------------------------------------------------------
+// 4. BẢNG LỊCH TRÌNH CHI TIẾT (SCHEDULE)
+// -------------------------------------------------------------
+Table syllabus_schedules {
+  id integer [primary key, increment, note: 'Khóa chính tự tăng']
+  syllabus_id integer [not null, note: 'Liên kết tới bảng syllabuses']
+  session integer [not null, note: 'Số thứ tự buổi học (Ví dụ: Buổi 1, Buổi 2)']
+  topic text [not null, note: 'Nội dung chủ đề giảng dạy / thảo luận']
+  learning_method varchar(255) [note: 'Hình thức học tập (Lên lớp trực tiếp / Trực tuyến)']
+  lo varchar(100) [note: 'Mã CLO đáp ứng trong buổi học (Phân tách bởi dấu phẩy, ví dụ: CLO1,CLO3)']
+  itu varchar(50) [note: 'Mức độ tương tác chuẩn đầu ra (I: Introduce, T: Teach, U: Utilize)']
+  student_materials text [note: 'Các phần tài liệu/sách/slide sinh viên cần chuẩn bị trước']
+  s_download text [note: 'Tài liệu, giáo trình, slide do giảng viên cung cấp']
+  student_tasks text [note: 'Nhiệm vụ chi tiết sinh viên phải hoàn thành tại nhà hoặc trên lớp']
+  urls text [note: 'Đường dẫn liên kết slide, video, hoặc bài tập thực hành']
+
+  indexes {
+    syllabus_id [name: 'idx_schedules_syllabus_id']
+    session [name: 'idx_schedules_session']
+  }
+}
+
+// -------------------------------------------------------------
+// 5. BẢNG CÂU HỎI KIẾN TẠO EDUNEXT
+// -------------------------------------------------------------
+Table constructive_questions {
+  id integer [primary key, increment, note: 'Khóa chính tự tăng']
+  syllabus_id integer [not null, note: 'Liên kết tới bảng syllabuses']
+  session_no integer [not null, note: 'Buổi học liên kết sử dụng câu hỏi thảo luận này']
+  name varchar(100) [not null, note: 'Mã định danh câu hỏi kiến tạo (Ví dụ: HCM1.1, Q2.3)']
+  details text [note: 'Nội dung câu hỏi tình huống hoặc tranh luận trên Edunext']
+
+  indexes {
+    syllabus_id [name: 'idx_constructive_questions_syllabus_id']
+  }
+}
+
+// -------------------------------------------------------------
+// 6. BẢNG PHÂN BỔ ĐẦU ĐIỂM CHI TIẾT (ASSESSMENT SCHEME)
+// -------------------------------------------------------------
+Table assessment_schemes {
+  id integer [primary key, increment, note: 'Khóa chính tự tăng']
+  syllabus_id integer [not null, note: 'Liên kết tới bảng syllabuses']
+  category varchar(255) [not null, note: 'Đầu điểm chính (Ví dụ: Progress Assessment, Mid-term, Final Exam)']
+  type varchar(100) [note: 'Dạng bài đánh giá (on-going assessment, final exam, project)']
+  part varchar(50) [note: 'Phần chấm điểm (Ví dụ: Part 1, Part 2)']
+  weight numeric(5,2) [not null, note: 'Trọng số phần trăm của đầu điểm này trong tổng số 100%']
+  completion_criteria text [note: 'Điều kiện tối thiểu để vượt qua đầu điểm này (Ví dụ: >= 0, >= 5)']
+  duration varchar(100) [note: 'Thời gian làm bài thi (Ví dụ: 15 mins, 60 minutes, 2 days)']
+  clo varchar(255) [note: 'Mã CLO được đo lường thông qua bài đánh giá này']
+  question_type varchar(255) [note: 'Dạng thức câu hỏi thi (Ví dụ: Multiple choice, Essay, Presentation)']
+  no_question varchar(100) [note: 'Số lượng câu hỏi / Số lượng task đánh giá']
+  knowledge_and_skill text [note: 'Mô tả chi tiết kiến thức và kỹ năng cần kiểm chứng']
+  grading_guide text [note: 'Hướng dẫn cụ thể cho giảng viên cách cho điểm / Rubrics chi tiết']
+  note text [note: 'Ghi chú đặc biệt về quy chế thi, điều kiện miễn trừ hoặc cách thức tính điểm']
+
+  indexes {
+    syllabus_id [name: 'idx_assessments_syllabus_id']
+  }
+}
+
+// -------------------------------------------------------------
+// 7. BẢNG TÀI LIỆU THAM KHẢO CHÍNH QUY (REFERENCES)
+// -------------------------------------------------------------
+Table syllabus_references {
+  id integer [primary key, increment, note: 'Khóa chính tự tăng']
+  syllabus_id integer [not null, note: 'Liên kết tới bảng syllabuses']
+  citation text [not null, note: 'Chuỗi trích dẫn tài liệu tham khảo chính quy (IEEE/APA format)']
+
+  indexes {
+    syllabus_id [name: 'idx_references_syllabus_id']
+  }
+}
+
+// -------------------------------------------------------------
+// ĐỊNH NGHĨA RÀNG BUỘC KHÓA NGOẠI (FOREIGN KEY RELATIONSHIPS)
+// -------------------------------------------------------------
+
+// Một đề cương có nhiều học liệu. Khi xóa đề cương sẽ xóa học liệu liên quan.
+Ref: syllabus_materials.syllabus_id > syllabuses.id [delete: cascade]
+
+// Một đề cương có nhiều chuẩn đầu ra CLO. Khi xóa đề cương sẽ tự động xóa các CLO tương ứng.
+Ref: syllabus_clos.syllabus_id > syllabuses.id [delete: cascade]
+
+// Một đề cương có nhiều buổi học theo lịch trình. Khi xóa đề cương sẽ xóa lịch trình của nó.
+Ref: syllabus_schedules.syllabus_id > syllabuses.id [delete: cascade]
+
+// Một đề cương có nhiều câu hỏi kiến tạo Edunext. Khi xóa đề cương sẽ tự động xóa các câu hỏi này.
+Ref: constructive_questions.syllabus_id > syllabuses.id [delete: cascade]
+
+// Một đề cương có nhiều đầu điểm thành phần. Khi xóa đề cương sẽ tự động xóa các đầu điểm tương ứng.
+Ref: assessment_schemes.syllabus_id > syllabuses.id [delete: cascade]
+
+// Một đề cương có nhiều tài liệu tham khảo chính quy. Khi xóa đề cương sẽ tự động xóa các tài liệu này.
+Ref: syllabus_references.syllabus_id > syllabuses.id [delete: cascade]
+

@@ -1,0 +1,1283 @@
+{
+  "metadata": {
+    "syllabus_id": "14010",
+    "syllabus_name": "English 6 (University success)_Tiếng Anh 6",
+    "syllabus_name_english": "",
+    "subject_code": "TRS601",
+    "credits": "0",
+    "degree_level": "Advanced 2",
+    "time_allocation": "Study hour (300h) = 105 contact hours (70 slots) + 2 hours final exam + 193 hours self-study\nInteractive Classroom Teaching\n1 slot =90'",
+    "prerequisites": "Passed ENT403 or Level 5 LUK or TRS501 or equivalent",
+    "description": "\"This course is designed to further develop the learner's confidence and fluency in using the English language and to enrich their learning experience through interactive lessons and communicative exercises.\nUpon completion of the course, students should be able to:\n- Identify main ideas and supporting details; analyze cohesive devices (pronouns, conjunctions, transitional phrases); Create appropriate graphic organizers (mind maps, Venn diagrams, flowcharts) for different text types.\n- Demonstrate improved reading fluency, recognize and use rhetorical techniques.\n- Analyze textual references to visuals and interpret information presented in charts, graphs, diagrams, and infographics.\n- Identify and understand statements of acts and opinions, identify implication and inference,\n- Identify and evaluate evidence and argumentation; understand multiple perspectives and evaluate sources\n- Recognize and understand definitions and classifications within a text\n- Organize and structure ideas effectively at the sentence, paragraph, and essay levels in academic writing.\n- Deliver clear, well-organized, and impactful oral presentations with appropriate academic register and confidence.\n- Master (300) academic vocabulary words from the Academic Word List, demonstrating accuracy on vocabulary assessments and correctly using target words in their written assignments and oral presentations.\nStudents are also expect to:\n- Be cooperative, supportive, and responsible in group work\n- Take advantages of AI, online applications, language labs, and online platforms in performing learning tasks\n- Adhere to plagiarism rules in performing learning tasks.\n- Demonstrate critical thinking",
+    "student_tasks": "- Attend at least 80% of contact hours in order to be accepted to the final examination\n- Actively participate in class activities\n- Fulfil tasks given by the instructor after class\n- Use their own laptop in class only for learning purposes\n- Use the Student Access Code provided with the textbook\n- Access the course website for up-to-date information and material of the course, for online support from teachers and other students, and for practicing and assessment.",
+    "tools": "- Internet, AI\n- MyEnglishLab: www.MyEnglishLab.com/Register",
+    "scoring_scale": "10",
+    "decision_no": "1318/QĐ-ĐHFPT dated 11/27/2025",
+    "is_approved": "True",
+    "note": "1) On-going assessment\n-  Progress tests: 02*20%: 40%\n-  Project: 20 %\n2) Final Examination (FE): 40%\n3) Final Result: 100%\n4) Completion Criteria:  On-going assessment >0, each part of the final exam must be >0, Final Exam Score >=4/10 & Final Result  >=5/10.",
+    "min_avg_mark_to_pass": "5",
+    "is_active": "True",
+    "approved_date": "11/27/2025"
+  },
+  "materials": [
+    {
+      "description": "English Newspapers• Advertisements• Magazines• English Teaching/Learning Websites",
+      "author": "",
+      "publisher": "",
+      "published_date": "",
+      "edition": "",
+      "isbn": "",
+      "is_main_material": "",
+      "is_hard_copy": "",
+      "is_online": "",
+      "note": ""
+    },
+    {
+      "description": "University Success - Transition level - Reading, Pearson Package, including:For Student and Teacher:1) ST: Student’s Book2) MyEnglishLab: www.MyEnglishLab.com/Register3) http://cms.fpt.edu.vnFor Teacher: 4) Student’s Book5) MyEnglishLab:",
+      "author": "Lawrence Zwier and Maggie Vosters",
+      "publisher": "Pearson.",
+      "published_date": "",
+      "edition": "",
+      "isbn": "978-0-13-440078-5",
+      "is_main_material": "",
+      "is_hard_copy": "",
+      "is_online": "",
+      "note": ""
+    }
+  ],
+  "clos": [
+    {
+      "clo_name": "1",
+      "clo_details": "CLO1",
+      "lo_details": "Identify main ideas and supporting details; analyze cohesive devices (pronouns, conjunctions, transitional phrases); Create appropriate graphic organizers (mind maps, Venn diagrams, flowcharts) for different text types."
+    },
+    {
+      "clo_name": "2",
+      "clo_details": "CLO10",
+      "lo_details": "Use AI tools, online platforms, and language learning technologies responsibly to support learning, collaboration, and research, while adhering to academic integrity principles."
+    },
+    {
+      "clo_name": "3",
+      "clo_details": "CLO2",
+      "lo_details": "Demonstrate improved reading fluency, recognize and use rhetorical techniques."
+    },
+    {
+      "clo_name": "4",
+      "clo_details": "CLO3",
+      "lo_details": "Analyze textual references to visuals and interpret information presented in charts, graphs, diagrams, and infographics."
+    },
+    {
+      "clo_name": "5",
+      "clo_details": "CLO4",
+      "lo_details": "Identify and understand statements of acts and opinions, identify implication and inference."
+    },
+    {
+      "clo_name": "6",
+      "clo_details": "CLO5",
+      "lo_details": "Identify and evaluate evidence and argumentation; understand multiple perspectives and evaluate sources."
+    },
+    {
+      "clo_name": "7",
+      "clo_details": "CLO6",
+      "lo_details": "Recognize and understand definitions and classifications within a text."
+    },
+    {
+      "clo_name": "8",
+      "clo_details": "CLO7",
+      "lo_details": "Organize and structure ideas effectively at the sentence, paragraph, and essay levels in academic writing."
+    },
+    {
+      "clo_name": "9",
+      "clo_details": "CLO8",
+      "lo_details": "Deliver formal, well-organized, and impactful oral presentations with appropriate academic register and confidence."
+    },
+    {
+      "clo_name": "10",
+      "clo_details": "CLO9",
+      "lo_details": "Master (300) academic vocabulary words from the Academic Word List, demonstrating accuracy on vocabulary assessments and correctly using target words in their written assignments and oral presentations."
+    }
+  ],
+  "schedule": [
+    {
+      "session": "1",
+      "topic": "Course Introduction*Contents Covered in the Course Book*Using MyEngishLab",
+      "learning_method": "Offline",
+      "lo": "",
+      "itu": "I",
+      "student_materials": "",
+      "s_download": "TRS601_1",
+      "student_tasks": "",
+      "urls": ""
+    },
+    {
+      "session": "2",
+      "topic": "Part 1: SociologyGetting Started Fundamental Supporting Skill 1: Reading Actively & Skimming for Gist",
+      "learning_method": "Offline",
+      "lo": "CLO1CLO9, CLO10",
+      "itu": "ITU",
+      "student_materials": "Teacher's book, Teacher's Resource",
+      "s_download": "",
+      "student_tasks": "Class discussion, group work, pair work, games, exercises",
+      "urls": ""
+    },
+    {
+      "session": "3",
+      "topic": "Part 1: SociologySupporting Skill 2: Scanning for Details",
+      "learning_method": "Offline",
+      "lo": "CLO1CLO9, CLO10",
+      "itu": "ITU",
+      "student_materials": "Teacher's book, Teacher's Resource",
+      "s_download": "",
+      "student_tasks": "Class discussion, group work, pair work, games, exercises",
+      "urls": ""
+    },
+    {
+      "session": "4",
+      "topic": "Part 1: SociologyReading - Writing Connection: Annotating &Taking Notes",
+      "learning_method": "Offline",
+      "lo": "CLO1CLO9, CLO10",
+      "itu": "ITU",
+      "student_materials": "Teacher's book, Teacher's Resource",
+      "s_download": "",
+      "student_tasks": "Class discussion, group work, pair work, games, exercises",
+      "urls": ""
+    },
+    {
+      "session": "5",
+      "topic": "Part 1: SociologyLanguage Skills: Using Dictionaries to Strengthen Vocabulary",
+      "learning_method": "Offline",
+      "lo": "CLO1CLO9, CLO10",
+      "itu": "ITU",
+      "student_materials": "Teacher's book, Teacher's Resource",
+      "s_download": "",
+      "student_tasks": "Class discussion, group work, pair work, games, exercises",
+      "urls": ""
+    },
+    {
+      "session": "6",
+      "topic": "Part 1: SociologyApply your Skills* Essay Writing: Opinion essay* Reflective writing",
+      "learning_method": "Offline",
+      "lo": "CLO1CLO9, CLO10",
+      "itu": "ITU",
+      "student_materials": "Teacher's book, Teacher's Resource",
+      "s_download": "",
+      "student_tasks": "Class discussion, group work, pair work, games, exercises",
+      "urls": ""
+    },
+    {
+      "session": "7",
+      "topic": "Part 1: EconomicsGetting Started & FundamentalSupporting Skill 1",
+      "learning_method": "Offline",
+      "lo": "CLO1CLO9, CLO10",
+      "itu": "ITU",
+      "student_materials": "Teacher's book, Teacher's Resource",
+      "s_download": "",
+      "student_tasks": "Class discussion, group work, pair work, games, exercises",
+      "urls": ""
+    },
+    {
+      "session": "8",
+      "topic": "Part 1: EconomicsSupporting Skill 2",
+      "learning_method": "Offline",
+      "lo": "CLO1CLO9, CLO10",
+      "itu": "ITU",
+      "student_materials": "Teacher's book, Teacher's Resource",
+      "s_download": "",
+      "student_tasks": "Class discussion, group work, pair work, games, exercises",
+      "urls": ""
+    },
+    {
+      "session": "9",
+      "topic": "Part 1: EconomicsSupporting Skill 3",
+      "learning_method": "Offline",
+      "lo": "CLO1CLO9, CLO10",
+      "itu": "ITU",
+      "student_materials": "Teacher's book, Teacher's Resource",
+      "s_download": "",
+      "student_tasks": "Class discussion, group work, pair work, games, exercises",
+      "urls": ""
+    },
+    {
+      "session": "10",
+      "topic": "Part 1: EconomicsReading - Writing Connection",
+      "learning_method": "Offline",
+      "lo": "CLO1CLO9, CLO10",
+      "itu": "ITU",
+      "student_materials": "Teacher's book, Teacher's Resource",
+      "s_download": "",
+      "student_tasks": "Class discussion, group work, pair work, games, exercises",
+      "urls": ""
+    },
+    {
+      "session": "11",
+      "topic": "Part 1: EconomicsLanguage Skills",
+      "learning_method": "Offline",
+      "lo": "CLO1CLO9, CLO10",
+      "itu": "ITU",
+      "student_materials": "Teacher's book, Teacher's Resource",
+      "s_download": "",
+      "student_tasks": "Class discussion, group work, pair work, games, exercises",
+      "urls": ""
+    },
+    {
+      "session": "12",
+      "topic": "Part 1: EconomicsApply your Skills* Essay Writing: Opinion essay* Reflective writing",
+      "learning_method": "Offline",
+      "lo": "CLO1, CLO7CLO9, CLO10",
+      "itu": "ITU",
+      "student_materials": "Teacher's book, Teacher's Resource",
+      "s_download": "",
+      "student_tasks": "Class discussion, group work, pair work, games, exercises",
+      "urls": ""
+    },
+    {
+      "session": "13",
+      "topic": "Part 1: BiologyGetting Started & Fundamental Skill: Understanding Cohesion",
+      "learning_method": "Offline",
+      "lo": "CLO1CLO9, CLO10",
+      "itu": "ITU",
+      "student_materials": "Teacher's book, Teacher's Resource",
+      "s_download": "",
+      "student_tasks": "Class discussion, group work, pair work, games, exercises",
+      "urls": ""
+    },
+    {
+      "session": "14",
+      "topic": "Part 1: Biology Supporting Skill 1: Recognizing Patterns of Cohesion",
+      "learning_method": "Offline",
+      "lo": "CLO1CLO9, CLO10",
+      "itu": "ITU",
+      "student_materials": "Teacher's book, Teacher's Resource",
+      "s_download": "",
+      "student_tasks": "Class discussion, group work, pair work, games, exercises",
+      "urls": ""
+    },
+    {
+      "session": "15",
+      "topic": "Part 1: BiologySupporting Skill 2: Understanding Cohesion in Descriptions",
+      "learning_method": "Offline",
+      "lo": "CLO1CLO9, CLO10",
+      "itu": "ITU",
+      "student_materials": "Teacher's book, Teacher's Resource",
+      "s_download": "",
+      "student_tasks": "Class discussion, group work, pair work, games, exercises",
+      "urls": ""
+    },
+    {
+      "session": "16",
+      "topic": "Part 1: BiologyReading-Writing Connection : Using Outline & Graphic Organizers",
+      "learning_method": "Offline",
+      "lo": "CLO1CLO9, CLO10",
+      "itu": "ITU",
+      "student_materials": "Teacher's book, Teacher's Resource",
+      "s_download": "",
+      "student_tasks": "Class discussion, group work, pair work, games, exercises",
+      "urls": ""
+    },
+    {
+      "session": "17",
+      "topic": "Part 1: BiologyLanguage Skill: Recognizing Collocation",
+      "learning_method": "Offline",
+      "lo": "CLO1CLO9, CLO10",
+      "itu": "ITU",
+      "student_materials": "Teacher's book, Teacher's Resource",
+      "s_download": "",
+      "student_tasks": "Class discussion, group work, pair work, games, exercises",
+      "urls": ""
+    },
+    {
+      "session": "18",
+      "topic": "Part 1: BiologyApply Your Skills* Essay Writing: Opinion essay* Reflective writing* PROJECT ANNOUNCEMENT & GUIDANCE- Understanding AI, its uses, benefits, risks- How to write clear and specific prompts",
+      "learning_method": "Offline",
+      "lo": "CLO1, CLO7CLO9, CLO10",
+      "itu": "ITU",
+      "student_materials": "Teacher's book, Teacher's Resource",
+      "s_download": "",
+      "student_tasks": "Class discussion, group work, pair work, games, exercises",
+      "urls": ""
+    },
+    {
+      "session": "19",
+      "topic": "Part 1: HumanitiesGetting Stared & Fundamental Skill: Developing Reading Fluency",
+      "learning_method": "Offline",
+      "lo": "CLO2CLO9, CLO10",
+      "itu": "ITU",
+      "student_materials": "Teacher's book, Teacher's Resource",
+      "s_download": "",
+      "student_tasks": "Class discussion, group work, pair work, games, exercises",
+      "urls": ""
+    },
+    {
+      "session": "20",
+      "topic": "Part 1: HumanitySupporting Skill 1: Increasing Fluency",
+      "learning_method": "Offline",
+      "lo": "CLO2CLO9, CLO10",
+      "itu": "ITU",
+      "student_materials": "Teacher's book, Teacher's Resource",
+      "s_download": "",
+      "student_tasks": "Class discussion, group work, pair work, games, exercises",
+      "urls": ""
+    },
+    {
+      "session": "21",
+      "topic": "Part 1: HumanitySupporting Skill 2: Tolerating Ambiguity",
+      "learning_method": "Offline",
+      "lo": "CLO2CLO9, CLO10",
+      "itu": "ITU",
+      "student_materials": "Teacher's book, Teacher's Resource",
+      "s_download": "",
+      "student_tasks": "Class discussion, group work, pair work, games, exercises",
+      "urls": ""
+    },
+    {
+      "session": "22",
+      "topic": "Part 1: HumanityReading - Writing Connection: Recognizing and Using Rhetorical Techniques",
+      "learning_method": "Offline",
+      "lo": "CLO2CLO9, CLO10",
+      "itu": "ITU",
+      "student_materials": "Teacher's book, Teacher's Resource",
+      "s_download": "",
+      "student_tasks": "Class discussion, group work, pair work, games, exercises",
+      "urls": ""
+    },
+    {
+      "session": "23",
+      "topic": "Part 1: HumanityLanguage Skills: Understanding Nomination",
+      "learning_method": "Offline",
+      "lo": "CLO2CLO9, CLO10",
+      "itu": "ITU",
+      "student_materials": "Teacher's book, Teacher's Resource",
+      "s_download": "",
+      "student_tasks": "Class discussion, group work, pair work, games, exercises",
+      "urls": ""
+    },
+    {
+      "session": "24",
+      "topic": "Part 1: HumanityApply Your Skills* Essay Writing: Opinion essay* Reflective writing",
+      "learning_method": "Offline",
+      "lo": "CLO2, CLO7CLO9, CLO10",
+      "itu": "ITU",
+      "student_materials": "Teacher's book, Teacher's Resource",
+      "s_download": "",
+      "student_tasks": "Class discussion, group work, pair work, games, exercises",
+      "urls": ""
+    },
+    {
+      "session": "25",
+      "topic": "Part 1: Environmental EngineeringGetting Started & Fundamental Skill: Interpreting Visuals",
+      "learning_method": "Offline",
+      "lo": "CLO3CLO9, CLO10",
+      "itu": "ITU",
+      "student_materials": "Teacher's book, Teacher's Resource",
+      "s_download": "",
+      "student_tasks": "Class discussion, group work, pair work, games, exercises",
+      "urls": ""
+    },
+    {
+      "session": "26",
+      "topic": "Part 1: Environmental EngineeringSupporting Skill 1: Understanding Text References to Visuals",
+      "learning_method": "Offline",
+      "lo": "CLO3CLO9, CLO10",
+      "itu": "ITU",
+      "student_materials": "Teacher's book, Teacher's Resource",
+      "s_download": "",
+      "student_tasks": "Class discussion, group work, pair work, games, exercises",
+      "urls": ""
+    },
+    {
+      "session": "27",
+      "topic": "Part 1: Environmental EngineeringSupporting Skill 2: Interpreting the Information in Visuals",
+      "learning_method": "Offline",
+      "lo": "CLO3CLO9, CLO10",
+      "itu": "ITU",
+      "student_materials": "Teacher's book, Teacher's Resource",
+      "s_download": "",
+      "student_tasks": "Class discussion, group work, pair work, games, exercises",
+      "urls": ""
+    },
+    {
+      "session": "28",
+      "topic": "Part 1: Environmental EngineeringReading - Writing Connection: Referring to Visual Data within and beyond a Reading",
+      "learning_method": "Offline",
+      "lo": "CLO3CLO9, CLO10",
+      "itu": "ITU",
+      "student_materials": "Teacher's book, Teacher's Resource",
+      "s_download": "",
+      "student_tasks": "Class discussion, group work, pair work, games, exercises",
+      "urls": ""
+    },
+    {
+      "session": "29",
+      "topic": "Part 1: Environmental EngineeringLanguage Skill: Recognizing & Learning Multiword Vocabulary Items",
+      "learning_method": "Offline",
+      "lo": "CLO3CLO9, CLO10",
+      "itu": "ITU",
+      "student_materials": "Teacher's book, Teacher's Resource",
+      "s_download": "",
+      "student_tasks": "Class discussion, group work, pair work, games, exercises",
+      "urls": ""
+    },
+    {
+      "session": "30",
+      "topic": "Part 1: Environmental EngineeringApply Your Skills* Essay Writing: Opinion essay* Reflective writing* PROJECT PROGRESS CHECK & GUIDANCE: AI tools to support Data collection, Data analysis and Discussion",
+      "learning_method": "Offline",
+      "lo": "CLO3, CLO7CLO9, CLO10",
+      "itu": "ITU",
+      "student_materials": "Teacher's book, Teacher's Resource",
+      "s_download": "",
+      "student_tasks": "Class discussion, group work, pair work, games, exercises",
+      "urls": ""
+    },
+    {
+      "session": "31",
+      "topic": "Review Part 1",
+      "learning_method": "Offline",
+      "lo": "CLO1-CLO3, CLO7CLO9, CLO10",
+      "itu": "ITU",
+      "student_materials": "Teacher's book, Teacher's Resource",
+      "s_download": "",
+      "student_tasks": "Class discussion, group work, pair work, games, exercises",
+      "urls": ""
+    },
+    {
+      "session": "32",
+      "topic": "Progress Test 1",
+      "learning_method": "Offline",
+      "lo": "CLO1-CLO3, CLO7CLO9, CLO10",
+      "itu": "ITU",
+      "student_materials": "EOS",
+      "s_download": "",
+      "student_tasks": "Do Test 1",
+      "urls": ""
+    },
+    {
+      "session": "33",
+      "topic": "Part 2: SociologyGetting Started & Critical Thinking Skill: Distinguishing Fact from Opinion",
+      "learning_method": "Offline",
+      "lo": "CLO4CLO9, CLO10",
+      "itu": "ITU",
+      "student_materials": "Teacher's book, Teacher's Resource",
+      "s_download": "",
+      "student_tasks": "Class discussion, group work, pair work, games, exercises",
+      "urls": ""
+    },
+    {
+      "session": "34",
+      "topic": "Part 2: SociologySupporting Skill 1: Recognizing & Interpreting Statements of Opinion",
+      "learning_method": "Offline",
+      "lo": "CLO4CLO9, CLO10",
+      "itu": "ITU",
+      "student_materials": "Teacher's book, Teacher's Resource",
+      "s_download": "",
+      "student_tasks": "Class discussion, group work, pair work, games, exercises",
+      "urls": ""
+    },
+    {
+      "session": "35",
+      "topic": "Part 2: SociologySupporting Skill 2: Recognizing & Interpreting Statements of Facts",
+      "learning_method": "Offline",
+      "lo": "CLO4CLO9, CLO10",
+      "itu": "ITU",
+      "student_materials": "Teacher's book, Teacher's Resource",
+      "s_download": "",
+      "student_tasks": "Class discussion, group work, pair work, games, exercises",
+      "urls": ""
+    },
+    {
+      "session": "36",
+      "topic": "Part 2: SociologyReading - Writing Connection: Understanding & Producing Critiques",
+      "learning_method": "Offline",
+      "lo": "CLO4CLO9, CLO10",
+      "itu": "ITU",
+      "student_materials": "Teacher's book, Teacher's Resource",
+      "s_download": "",
+      "student_tasks": "Class discussion, group work, pair work, games, exercises",
+      "urls": ""
+    },
+    {
+      "session": "37",
+      "topic": "Part 2: SociologyLanguage Skill: Understanding Signpost Expressions that Limit or Define",
+      "learning_method": "Offline",
+      "lo": "CLO4CLO9, CLO10",
+      "itu": "ITU",
+      "student_materials": "Teacher's book, Teacher's Resource",
+      "s_download": "",
+      "student_tasks": "Class discussion, group work, pair work, games, exercises",
+      "urls": ""
+    },
+    {
+      "session": "38",
+      "topic": "Part 2: SociologyApply Your Skills",
+      "learning_method": "Offline",
+      "lo": "CLO4CLO9, CLO10",
+      "itu": "ITU",
+      "student_materials": "Teacher's book, Teacher's Resource",
+      "s_download": "",
+      "student_tasks": "Class discussion, group work, pair work, games, exercises",
+      "urls": ""
+    },
+    {
+      "session": "39",
+      "topic": "Part 2: EconomicsGetting Started & Critical Thinking Skill: Understanding Implication & Inference* Essay Writing: Opinion essay* Reflective writing* PROJECT PROGRESS CHECK & GUIDANCE: AI tools to prepare a Video Presentation",
+      "learning_method": "Offline",
+      "lo": "CLO4, CLO7CLO9, CLO10",
+      "itu": "ITU",
+      "student_materials": "Teacher's book, Teacher's Resource",
+      "s_download": "",
+      "student_tasks": "Class discussion, group work, pair work, games, exercises",
+      "urls": ""
+    },
+    {
+      "session": "40",
+      "topic": "Part 2: EconomicsSupporting Skill 1: making Strong Inferences & Avoiding Weak Ones",
+      "learning_method": "Offline",
+      "lo": "CLO4CLO9, CLO10",
+      "itu": "ITU",
+      "student_materials": "Teacher's book, Teacher's Resource",
+      "s_download": "",
+      "student_tasks": "Class discussion, group work, pair work, games, exercises",
+      "urls": ""
+    },
+    {
+      "session": "41",
+      "topic": "Part 2: EconomicsSupporting Skill 2: Distinguishing Between Deliberate Implications & Direct Statements",
+      "learning_method": "Offline",
+      "lo": "CLO4CLO9, CLO10",
+      "itu": "ITU",
+      "student_materials": "Teacher's book, Teacher's Resource",
+      "s_download": "",
+      "student_tasks": "Class discussion, group work, pair work, games, exercises",
+      "urls": ""
+    },
+    {
+      "session": "42",
+      "topic": "Part 2: EconomicsReading - Writing Connection: Paraphrasing",
+      "learning_method": "Offline",
+      "lo": "CLO4CLO9, CLO10",
+      "itu": "ITU",
+      "student_materials": "Teacher's book, Teacher's Resource",
+      "s_download": "",
+      "student_tasks": "Class discussion, group work, pair work, games, exercises",
+      "urls": ""
+    },
+    {
+      "session": "43",
+      "topic": "Part 2: EconomicsLanguage Skill: Identifying & Using Equivalent & near Equivalent Expressions",
+      "learning_method": "Offline",
+      "lo": "CLO4CLO9, CLO10",
+      "itu": "ITU",
+      "student_materials": "Teacher's book, Teacher's Resource",
+      "s_download": "",
+      "student_tasks": "Class discussion, group work, pair work, games, exercises",
+      "urls": ""
+    },
+    {
+      "session": "44",
+      "topic": "Part 2: EconomicsApply your Skills* Essay Writing: Opinion essay* Reflective writing",
+      "learning_method": "Offline",
+      "lo": "CLO4, CLO7CLO9, CLO10",
+      "itu": "ITU",
+      "student_materials": "Teacher's book, Teacher's Resource",
+      "s_download": "",
+      "student_tasks": "Class discussion, group work, pair work, games, exercises",
+      "urls": ""
+    },
+    {
+      "session": "45",
+      "topic": "Part 2: BiologyGetting Started & Critical Thinking Skill: Evaluating Evidence & Argumentation",
+      "learning_method": "Offline",
+      "lo": "CLO5CLO9, CLO10",
+      "itu": "ITU",
+      "student_materials": "Teacher's book, Teacher's Resource",
+      "s_download": "",
+      "student_tasks": "Class discussion, group work, pair work, games, exercises",
+      "urls": ""
+    },
+    {
+      "session": "46",
+      "topic": "Part 2: BiologySupporting Skill 1: Identifying & Evaluating Evidence",
+      "learning_method": "Offline",
+      "lo": "CLO5CLO9, CLO10",
+      "itu": "ITU",
+      "student_materials": "Teacher's book, Teacher's Resource",
+      "s_download": "",
+      "student_tasks": "Class discussion, group work, pair work, games, exercises",
+      "urls": ""
+    },
+    {
+      "session": "47",
+      "topic": "Part 2: BiologySupporting Skill 2: Recognizing & Dealing with Faulty Rhetoric",
+      "learning_method": "Offline",
+      "lo": "CLO5CLO9, CLO10",
+      "itu": "ITU",
+      "student_materials": "Teacher's book, Teacher's Resource",
+      "s_download": "",
+      "student_tasks": "Class discussion, group work, pair work, games, exercises",
+      "urls": ""
+    },
+    {
+      "session": "48",
+      "topic": "Part 2: BiologyReading-Writing Connection: Understanding Extended Metaphor",
+      "learning_method": "Offline",
+      "lo": "CLO5CLO9, CLO10",
+      "itu": "ITU",
+      "student_materials": "Teacher's book, Teacher's Resource",
+      "s_download": "",
+      "student_tasks": "Class discussion, group work, pair work, games, exercises",
+      "urls": ""
+    },
+    {
+      "session": "49",
+      "topic": "Part 2: BiologyLanguage Skill: Identifying & Using Expressions of Function & Purpose",
+      "learning_method": "Offline",
+      "lo": "CLO5CLO9, CLO10",
+      "itu": "ITU",
+      "student_materials": "Teacher's book, Teacher's Resource",
+      "s_download": "",
+      "student_tasks": "Class discussion, group work, pair work, games, exercises",
+      "urls": ""
+    },
+    {
+      "session": "50",
+      "topic": "Part 2: BiologyApply Your Skills* Essay Writing: Opinion essay* Reflective writing* PROJECT PROGRESS CHECK & GUIDANCE: - Reflecting on ethical and responsible AI use (e.g., plagiarism, misinformation)- Checking AI accuracy",
+      "learning_method": "Offline",
+      "lo": "CLO5, CLO7CLO9, CLO10",
+      "itu": "ITU",
+      "student_materials": "Teacher's book, Teacher's Resource",
+      "s_download": "",
+      "student_tasks": "Class discussion, group work, pair work, games, exercises",
+      "urls": ""
+    },
+    {
+      "session": "51",
+      "topic": "Part 2: HumanitiesGetting Started & Critical Thinking Skill: Synthesizing Information from Several Sources",
+      "learning_method": "Offline",
+      "lo": "CLO5CLO9, CLO10",
+      "itu": "ITU",
+      "student_materials": "Teacher's book, Teacher's Resource",
+      "s_download": "",
+      "student_tasks": "Class discussion, group work, pair work, games, exercises",
+      "urls": ""
+    },
+    {
+      "session": "52",
+      "topic": "Part 2: HumanitiesSupporting Skill 1: Understanding Multiple Perspectives",
+      "learning_method": "Offline",
+      "lo": "CLO5CLO9, CLO10",
+      "itu": "ITU",
+      "student_materials": "Teacher's book, Teacher's Resource",
+      "s_download": "",
+      "student_tasks": "Class discussion, group work, pair work, games, exercises",
+      "urls": ""
+    },
+    {
+      "session": "53",
+      "topic": "Part 2: HumanitiesSupporting Skill 2: Evaluating the Credibility and Motives of Sources",
+      "learning_method": "Offline",
+      "lo": "CLO5CLO9, CLO10",
+      "itu": "ITU",
+      "student_materials": "Teacher's book, Teacher's Resource",
+      "s_download": "",
+      "student_tasks": "Class discussion, group work, pair work, games, exercises",
+      "urls": ""
+    },
+    {
+      "session": "54",
+      "topic": "Part 2: HumanitiesReading - Writing Connection: Understanding & Using Direct & Indirect Quotations",
+      "learning_method": "Offline",
+      "lo": "CLO5CLO9, CLO10",
+      "itu": "ITU",
+      "student_materials": "Teacher's book, Teacher's Resource",
+      "s_download": "",
+      "student_tasks": "Class discussion, group work, pair work, games, exercises",
+      "urls": ""
+    },
+    {
+      "session": "55",
+      "topic": "Part 2: HumanitiesLanguage Skill: Appreciating Hedging",
+      "learning_method": "Offline",
+      "lo": "CLO5CLO9, CLO10",
+      "itu": "ITU",
+      "student_materials": "Teacher's book, Teacher's Resource",
+      "s_download": "",
+      "student_tasks": "Class discussion, group work, pair work, games, exercises",
+      "urls": ""
+    },
+    {
+      "session": "56",
+      "topic": "Part 2: HumanitiesApply Your Skills* Essay Writing: Opinion essay* Reflective writing",
+      "learning_method": "Offline",
+      "lo": "CLO5, CLO7CLO9, CLO10",
+      "itu": "ITU",
+      "student_materials": "Teacher's book, Teacher's Resource",
+      "s_download": "",
+      "student_tasks": "Class discussion, group work, pair work, games, exercises",
+      "urls": ""
+    },
+    {
+      "session": "57",
+      "topic": "Part 2: Environmental EngineeringGetting Started & Critical Thinking Skill: Understanding Definitions & Classifications",
+      "learning_method": "Offline",
+      "lo": "CLO6CLO9, CLO10",
+      "itu": "ITU",
+      "student_materials": "Teacher's book, Teacher's Resource",
+      "s_download": "",
+      "student_tasks": "Class discussion, group work, pair work, games, exercises",
+      "urls": ""
+    },
+    {
+      "session": "58",
+      "topic": "Part 2: Environmental Engineering - Definitions & ClassificationsSupporting Skill 1: Recognizing & Understanding Definitions within a Text",
+      "learning_method": "Offline",
+      "lo": "CLO6CLO9, CLO10",
+      "itu": "ITU",
+      "student_materials": "Teacher's book, Teacher's Resource",
+      "s_download": "",
+      "student_tasks": "Class discussion, group work, pair work, games, exercises",
+      "urls": ""
+    },
+    {
+      "session": "59",
+      "topic": "Part 2: Environmental EngineeringSupporting Skill 2: Working with Classifications",
+      "learning_method": "Offline",
+      "lo": "CLO6CLO9, CLO10",
+      "itu": "ITU",
+      "student_materials": "Teacher's book, Teacher's Resource",
+      "s_download": "",
+      "student_tasks": "Class discussion, group work, pair work, games, exercises",
+      "urls": ""
+    },
+    {
+      "session": "60",
+      "topic": "Part 2: Environmental EngineeringReading - Writing Connection: Understanding & Producing References to Other Sources",
+      "learning_method": "Offline",
+      "lo": "CLO6CLO9, CLO10",
+      "itu": "ITU",
+      "student_materials": "Teacher's book, Teacher's Resource",
+      "s_download": "",
+      "student_tasks": "Class discussion, group work, pair work, games, exercises",
+      "urls": ""
+    },
+    {
+      "session": "61",
+      "topic": "Part 2: Environmental EngineeringLanguage Skill: Understanding & Using Clarifiers",
+      "learning_method": "Offline",
+      "lo": "CLO6CLO9, CLO10",
+      "itu": "ITU",
+      "student_materials": "Teacher's book, Teacher's Resource",
+      "s_download": "",
+      "student_tasks": "Class discussion, group work, pair work, games, exercises",
+      "urls": ""
+    },
+    {
+      "session": "62",
+      "topic": "Part 2: Environmental EngineeringApply Your Skills* Essay Writing: Opinion essay* Reflective writing* PROJECT SUBMISSION",
+      "learning_method": "Offline",
+      "lo": "CLO6, CLO7CLO9, CLO10",
+      "itu": "ITU",
+      "student_materials": "Teacher's book, Teacher's Resource",
+      "s_download": "",
+      "student_tasks": "Class discussion, group work, pair work, games, exercises",
+      "urls": ""
+    },
+    {
+      "session": "63",
+      "topic": "Review Part 2",
+      "learning_method": "Offline",
+      "lo": "CLO4-6, CLO7, CLO9, CLO10",
+      "itu": "ITU",
+      "student_materials": "Teacher's book, Teacher's Resource",
+      "s_download": "",
+      "student_tasks": "Class discussion, group work, pair work, games, exercises",
+      "urls": ""
+    },
+    {
+      "session": "64",
+      "topic": "Progress Test 2",
+      "learning_method": "Offline",
+      "lo": "CLO4-6, CLO7, CLO9, CLO10",
+      "itu": "ITU",
+      "student_materials": "EOS",
+      "s_download": "",
+      "student_tasks": "Do Test 2",
+      "urls": ""
+    },
+    {
+      "session": "65",
+      "topic": "Video shows + Presentation + Q&AReflecting on AI Use",
+      "learning_method": "Offline",
+      "lo": "CLO1-CLO10",
+      "itu": "ITU",
+      "student_materials": "Teacher's book, Teacher's Resource, students' scripts and PowerPoint slides",
+      "s_download": "",
+      "student_tasks": "Presentation, Games, Q&A activities",
+      "urls": ""
+    },
+    {
+      "session": "66",
+      "topic": "Video shows + Presentation + Q&AReflecting on AI Use",
+      "learning_method": "Offline",
+      "lo": "CLO1-CLO10",
+      "itu": "ITU",
+      "student_materials": "Teacher's book, Teacher's Resource, students' scripts and PowerPoint slides",
+      "s_download": "",
+      "student_tasks": "Presentation, Games, Q&A activities",
+      "urls": ""
+    },
+    {
+      "session": "67",
+      "topic": "Video shows + Presentation + Q&AReflecting on AI Use",
+      "learning_method": "Offline",
+      "lo": "CLO1-CLO10",
+      "itu": "ITU",
+      "student_materials": "Teacher's book, Teacher's Resource, students' scripts and PowerPoint slides",
+      "s_download": "",
+      "student_tasks": "Presentation, Games, Q&A activities",
+      "urls": ""
+    },
+    {
+      "session": "68",
+      "topic": "Video shows + Presentation + Q&AReflecting on AI Use",
+      "learning_method": "Offline",
+      "lo": "CLO1-CLO10",
+      "itu": "ITU",
+      "student_materials": "Teacher's book, Teacher's Resource, students' scripts and PowerPoint slides",
+      "s_download": "",
+      "student_tasks": "Presentation, Games, Q&A activities",
+      "urls": ""
+    },
+    {
+      "session": "69",
+      "topic": "Revision (Vocabulary + Reading Techniques + Essay Writing)",
+      "learning_method": "Offline",
+      "lo": "CLO1-CLO10",
+      "itu": "ITU",
+      "student_materials": "Teacher's book, Teacher's Resource",
+      "s_download": "",
+      "student_tasks": "Class discussion, group work, pair work, games, exercises, presentation",
+      "urls": ""
+    },
+    {
+      "session": "70",
+      "topic": "Revision (Vocabulary + Reading Techniques + Essay Writing)",
+      "learning_method": "Offline",
+      "lo": "CLO1-CLO10",
+      "itu": "ITU",
+      "student_materials": "Teacher's book, Teacher's Resource",
+      "s_download": "",
+      "student_tasks": "Class discussion, group work, pair work, games, exercises, presentation",
+      "urls": ""
+    }
+  ],
+  "constructive_questions": [
+    {
+      "session_no": "2",
+      "name": "HN_CQ1",
+      "details": "Think about sports in your home country or some other country you know well: Is there a sport that is considered the “national sport”? Why are so many people interested in that sport? Do people think the sport somehow relates to the strengths and virtues of that country?"
+    },
+    {
+      "session_no": "2",
+      "name": "HN_CQ2",
+      "details": "What is SKIMMING? What are some skimming techniques? Apply the skimming techniques, state the main idea of the reading \"Memories that define the self\"- SKILL 1, coursebook. In your opinion, what are contributing factors shaping the self of each person?"
+    },
+    {
+      "session_no": "3",
+      "name": "HN_CQ3",
+      "details": "What is SCANNING? What are some scanning techniques? Based on the reading \"NATIONLISM and SPORTS\"- SKILL 2, coursebook, state how you scan the answers for the given questions?"
+    },
+    {
+      "session_no": "3",
+      "name": "HN_CQ4",
+      "details": "In your opinion, how can sports buoy patriotism and nationalism?"
+    },
+    {
+      "session_no": "4",
+      "name": "HN_CQ5",
+      "details": "What is note-taking? What are some ways of note-taking? How useful is note-taking? Based on the reading \"Athletics in ancient time\", what and how key words and key information should be note-taken?"
+    },
+    {
+      "session_no": "4",
+      "name": "HN_CQ6",
+      "details": "How important were athletics in ancient Greece and the Roman world? What are some differences and similarities between the 2 cultures in the way citizens engaged in the games and how they viewed their purpose?"
+    },
+    {
+      "session_no": "6",
+      "name": "HN_CQ7",
+      "details": "Think of sports events you have watched in person, on TV, or online: What are some examples of warlike language used in sportscasting? What are some reasons such language is used in sports? Can you think of any situations in which an athlete used his or her role on the world stage to promote a personal political or nationalistic viewpoint?"
+    },
+    {
+      "session_no": "6",
+      "name": "HN_CQ8",
+      "details": "What are some similarities between sports and wars? How can sports used to reduce regional or international conflicts?"
+    },
+    {
+      "session_no": "7",
+      "name": "HN_CQ9",
+      "details": "Choose five countries that you know something about. What is each country’s strongest product or service? Does it trade that product or service internationally? Why or why not? Think of a country that is facing international competition. How should it respond to this situation?"
+    },
+    {
+      "session_no": "7",
+      "name": "HN_CQ10",
+      "details": "What is a paragraph? What functions do sentences in a paragraph perform? What are the features of each type? Find a paragraph and analyze the functions of its sentences."
+    },
+    {
+      "session_no": "7",
+      "name": "HN_CQ11",
+      "details": "Based on the reading \" Comparative Advantages Theory in a global economy\", what functions does each sentence carry? In your opinion, how important is it for an economy to recognize its comparative advantages?"
+    },
+    {
+      "session_no": "8",
+      "name": "HN_CQ12",
+      "details": "What is the topic of a text? How is it identified? What is the main idea of a paragraph? What are ways to identify its main idea? Choose a reading text and identify its topic and main idea."
+    },
+    {
+      "session_no": "8",
+      "name": "HN_CQ13",
+      "details": "Do a research on Patriotic Purchasing and some other protectionist measures: How is each measure defined? What are some of their features? What benefits and negative impact do the policies have on an economy? In your opinion, should people buy domestically manufactured products to show their patriotism?"
+    },
+    {
+      "session_no": "12",
+      "name": "HN_CQ14",
+      "details": "What is sanction? What are some reasons some countries threaten to other countries?"
+    },
+    {
+      "session_no": "12",
+      "name": "HN_CQ15",
+      "details": "Do a research on a sanctioned country and state specific reasons why this country has been sanctioned? What negative consequences does it suffer from? What has been done to deal with the problem? In your opinion, should the sanction be allowed?"
+    },
+    {
+      "session_no": "13",
+      "name": "HN_CQ16",
+      "details": "What is the difference between a virus and a bacteria? Which one is more dangerous? What is the difference between a viral infection and a bacterial infection?"
+    },
+    {
+      "session_no": "14",
+      "name": "HN_CQ17",
+      "details": "Do a research on cohesion and state its definition, its common patterns. How is each of the following patterns (cause-effect, compare-contrast, problem-solution) characterized? For each pattern, write a paragraph for illustration and analyze how the information in each paragraph pieced?"
+    },
+    {
+      "session_no": "14",
+      "name": "HN_CQ18",
+      "details": "What is vaccine? How does it work? Compare and contrast live attenuated vaccines and inactivated vaccines."
+    },
+    {
+      "session_no": "14",
+      "name": "HN_CQ19",
+      "details": "Should we test new vaccines, medicines and cosmetics on animals? If you think “yes” What animals should be used and what animals should not be used?"
+    },
+    {
+      "session_no": "15",
+      "name": "HN_CQ20",
+      "details": "Why do some people choose to be anti-vaxxers? Should the government force everyone to get vaccinated? If yes, why? What diseases should be vaccinated against? If not, why?"
+    },
+    {
+      "session_no": "16",
+      "name": "HN_CQ21",
+      "details": "Study the reading \"Poliovirus\" and state major polio-related events and facts within 1950s and 2016. What can be summarized about the oral polio vaccination? Compare and contrast nations with and without widespread cases of polio. What are modern attempts to eradicate the polio virus? Use outlines and graphic organizers to demonstrate your answers."
+    },
+    {
+      "session_no": "16",
+      "name": "HN_CQ22",
+      "details": "Some people think that vaccination and treatment for serious diseases like polio should be free of charge. What's your opinion?"
+    },
+    {
+      "session_no": "18",
+      "name": "HN_CQ23",
+      "details": "What are the main steps in creating DNA vaccines? What are some differences between DNA vaccines and attenuated vaccines? (components, safety, immunity) ? What is one reason why DNA vaccines remain in clinical trial?"
+    },
+    {
+      "session_no": "19",
+      "name": "HN_CQ24",
+      "details": "What is your personal definition of education? How has education been defined by different scholars? If you could change your current educational system, what would that entail?"
+    },
+    {
+      "session_no": "20",
+      "name": "HN_CQ25",
+      "details": "Who was Alexander the Great? By what he did in the past, what can you tell about his personalities?"
+    },
+    {
+      "session_no": "20",
+      "name": "HN_CQ26",
+      "details": "Who was Aristotle? What were the key features of his teaching? What was his relationship with Alexander the Great?"
+    },
+    {
+      "session_no": "21",
+      "name": "HN_CQ27",
+      "details": "Research about Plato's academy. What was it? What was so special about it?"
+    },
+    {
+      "session_no": "21",
+      "name": "HN_CQ28",
+      "details": "What is \"ambiguity\" in reading? What factors create \"ambiguity\"? Why do you have to \"tolerate\" it?"
+    },
+    {
+      "session_no": "24",
+      "name": "HN_CQ29",
+      "details": "Research about Confucius. Who was he? How did he influence Eastern culture?"
+    },
+    {
+      "session_no": "24",
+      "name": "HN_CQ30",
+      "details": "Who was Socrates? What were the key features of his teaching? Compare them with Confucius's."
+    },
+    {
+      "session_no": "24",
+      "name": "HN_CQ31",
+      "details": "Many argue that modern education should ignore traditional values. Do you agree or disagree?"
+    },
+    {
+      "session_no": "25",
+      "name": "HN_CQ32",
+      "details": "What is particle pollution? What are its effects? Search for information about programs aiming to decrease particle pollution. Choose one program. Has it been successful in reducing particle pollution?"
+    },
+    {
+      "session_no": "26",
+      "name": "HN_CQ33",
+      "details": "What negative impacts do internal combustion engines have on air quality and human health? What solutions should be recommended to deal with the problems?"
+    },
+    {
+      "session_no": "26",
+      "name": "HN_CQ34",
+      "details": "Research about a hybrid-electric vehicle and state how it is structured, how it works, what benefits it brings about, what problems the vehicle may cause.."
+    },
+    {
+      "session_no": "27",
+      "name": "HN_CQ35",
+      "details": "Why do locations of big sports events such as the Olympics tend to have poor air quality? What are the health risks that athletes may face due to the air quality? What can be some air quality control measures during sports events?"
+    },
+    {
+      "session_no": "33",
+      "name": "HN_CQ36",
+      "details": "Consider your own personal identity: student, friend, waitress, churchgoer, and so forth. How have your experiences and relationships shaped this identity? If you were to work with others to achieve a goal you believe in, what impact do you think your identity could have on this work?"
+    },
+    {
+      "session_no": "34",
+      "name": "HN_CQ37",
+      "details": "What is the differences between statements of opinion and those of fact? What are the features of a statement of opinion? What are the features of a statement of fact?"
+    },
+    {
+      "session_no": "35",
+      "name": "HN_CQ38",
+      "details": "Who was Gandhi? What is his Civil Disobedience style? What were the two Civil Disobedience campaigns that Gandhi led which contributed to the Independence of India? How did Gandhi's Civil Disobedience style affect the Civil Right Movement of the American?"
+    },
+    {
+      "session_no": "36",
+      "name": "HN_CQ39",
+      "details": "What is a critique? Are critique and criticism the same? What is the difference between them? What are the characteristics of a critique? What are some signpost expressions that limit or define to introduce the criteria of a critique?"
+    },
+    {
+      "session_no": "39",
+      "name": "HN_CQ40",
+      "details": "Think of a country you know well. Does the government impose any extra taxes on items brought in from other countries? Why or why not? Do the taxes work as the government intends?"
+    },
+    {
+      "session_no": "40",
+      "name": "HN_CQ41",
+      "details": "What is the difference between \"inference\" and \"implication\" ? What are some reasons authors use implication in their writing? Find a paragraph and analyze the implications the author use and state what you can infer from those implications?"
+    },
+    {
+      "session_no": "40",
+      "name": "HN_CQ42",
+      "details": "What is tariff? What are the positive effects of tariff on national economy? Discuss the negative impacts of tariff on research and development for long term national economy growth."
+    },
+    {
+      "session_no": "41",
+      "name": "HN_CQ43",
+      "details": "What are sin taxes? What are the examples of sin taxes? Why is sin tax implemented? Do sin taxes really change the consumer behavior?"
+    },
+    {
+      "session_no": "44",
+      "name": "HN_CQ44",
+      "details": "What are public goods? What are some features of public goods. What are the main differences between public goods and private goods?"
+    },
+    {
+      "session_no": "45",
+      "name": "HN_CQ45",
+      "details": "How does cancer develop? Is cancer incidence rate rising or falling? Are some people more susceptible to cancer than others? What are the causes of cancer?"
+    },
+    {
+      "session_no": "45",
+      "name": "HN_CQ46",
+      "details": "What are the advancements in the diagnosis and treatment of cancer? What types of advances do you think will be made in the future, both in the prevention and the treatment of cancer?"
+    },
+    {
+      "session_no": "47",
+      "name": "HN_CQ47",
+      "details": "What does faulty rhetoric mean? Can you provide some examples of faulty rhetoric? List out some common rhetoric faults and find one example for each of the type listed."
+    },
+    {
+      "session_no": "47",
+      "name": "HN_CQ48",
+      "details": "What are the causes and symptoms of mad cow disease? When and where did the epidemic first break out? How was the epidemic stopped then?"
+    },
+    {
+      "session_no": "50",
+      "name": "HN_CQ49",
+      "details": "Vaccines against some cancer-causing viruses are currently in development. Do you know of any cancer-causing viruses? What could be the benefits of being able to use vaccines to fight against cancer?"
+    },
+    {
+      "session_no": "50",
+      "name": "HN_CQ50",
+      "details": "Why are vaccines against HPV of special importance? What are the recent advances in the field of cancer-prevention vaccines? What is your opinion on the use of vaccines to fight against cancer?"
+    },
+    {
+      "session_no": "51",
+      "name": "HN_CQ51",
+      "details": "How do different cultures view the underworld? Research some sources and synthesize your information."
+    },
+    {
+      "session_no": "51",
+      "name": "HN_CQ52",
+      "details": "Does superstition play an important role in your culture? Do you believe in life after death? Do your beliefs about death and underworld affect how you live your life?"
+    },
+    {
+      "session_no": "53",
+      "name": "HN_CQ53",
+      "details": "What are some criteria to evaluate the credibility of sources? Explain each criterion and give examples for illustration. State the sources you consider credible or incredible in the reading text \" Greek and Roman Funeral Belief\"- Skill 2- Unit 4- Part 2."
+    },
+    {
+      "session_no": "53",
+      "name": "HN_CQ54",
+      "details": "Why do some cultures mourn death and others celebrate it? What are some funeral customs in your country?"
+    },
+    {
+      "session_no": "56",
+      "name": "HN_CQ55",
+      "details": "Consider the seven stages of a hero's journey, choose a real hero and describe how he/she experienced each stage. Did he/she experienced all the 7 stages? If not, explain why."
+    },
+    {
+      "session_no": "56",
+      "name": "HN_CQ56",
+      "details": "What do you think the qualities of a hero are? What do you think of this quote: “We can all be heroes in our virtues, in our homes, in our lives”?"
+    },
+    {
+      "session_no": "58",
+      "name": "HN_CQ57",
+      "details": "How has air- conditioning changed over the years? What are the advantages and disadvantages of air conditioners?"
+    },
+    {
+      "session_no": "58",
+      "name": "HN_CQ58",
+      "details": "Is air-conditioning necessary? Why or why not?"
+    },
+    {
+      "session_no": "59",
+      "name": "HN_CQ59",
+      "details": "What is CLASSIFICATION? What are some characteristics of a good classification? What is a basis of classification? Read the text \" Indoor Air Pollutants and Health\" (p. 245) - How are indoor air pollutants classified? What is its basis?"
+    },
+    {
+      "session_no": "59",
+      "name": "HN_CQ60",
+      "details": "What are the common causes of indoor air pollution? What are the effects on human health?"
+    },
+    {
+      "session_no": "60",
+      "name": "HN_CQ61",
+      "details": "What is the sick building syndrome? What are the symptoms, causes and how to prevent it?"
+    },
+    {
+      "session_no": "65",
+      "name": "HN_CQ62",
+      "details": "Do a research on one of the topics covered in the course book and present your findings"
+    },
+    {
+      "session_no": "65",
+      "name": "HN_CQ63",
+      "details": "Design and host a gameshow/ or an online game to review the vocabulary of the unit you are assigned"
+    },
+    {
+      "session_no": "66",
+      "name": "HN_CQ64",
+      "details": "Do a research on one of the topics covered in the course book and present your findings"
+    },
+    {
+      "session_no": "66",
+      "name": "HN_CQ65",
+      "details": "Design and host a gameshow/ or an online game to review the vocabulary of the unit you are assigned"
+    },
+    {
+      "session_no": "67",
+      "name": "HN_CQ66",
+      "details": "Do a research on one of the topics covered in the course book and present your findings"
+    },
+    {
+      "session_no": "67",
+      "name": "HN_CQ67",
+      "details": "Design and host a gameshow/ or an online game to review the vocabulary of the unit you are assigned"
+    },
+    {
+      "session_no": "68",
+      "name": "HN_CQ68",
+      "details": "Do a research on one of the topics covered in the course book and present your findings"
+    },
+    {
+      "session_no": "68",
+      "name": "HN_CQ69",
+      "details": "Design and host a gameshow/ or an online game to review the vocabulary of the unit you are assigned"
+    }
+  ],
+  "assessment_scheme": [
+    {
+      "category": "Progress Test 1",
+      "type": "on-going",
+      "part": "1",
+      "weight": "20.0%",
+      "completion_criteria": ">0",
+      "duration": "Reading : 25 minutesVocabulary : 30 minutesWriting : 40 minutes",
+      "clo": "CLO1,2,3,7,9,10",
+      "question_type": "OP1: - Reading: MC, Multi response, Matching, Completion, Critical thinking- Vocabulary: MC, Multi response, Matching, Completion, Making sentences- Writing: essayOP2: (For Constructivism Approach only): Follow lecturer's proposal",
+      "no_question": "- 10 comprehension questions + Thinking Critically or Thinking Visually questions- 30 Vocabulary questions- 1 essay question",
+      "knowledge_and_skill": "Knowledge and skills in studied unit(s): Unit 1-5 Part 1, CLO1-CLO3",
+      "grading_guide": "in classroom using computer",
+      "note": ""
+    },
+    {
+      "category": "Progress Test 2",
+      "type": "on-going",
+      "part": "1",
+      "weight": "20.0%",
+      "completion_criteria": ">0",
+      "duration": "Reading : 25 minutesVocabulary : 30 minutesWriting : 40 minutes",
+      "clo": "CLO4,5,6,7,9,10",
+      "question_type": "OP1: - Reading: MC, Multi response, Matching, Completion, Critical thinking- Vocabulary: MC, Multi response, Matching, Completion, Making sentences- Writing: essayOP2: (For Constructivism Approach only): Follow lecturer's proposal",
+      "no_question": "- 10 comprehension questions + Thinking Critically or Thinking Visually questions- 30 Vocabulary questions- 1 essay question",
+      "knowledge_and_skill": "Knowledge and skills in studied unit(s): Unit 1-5 Part 2, CLO4-6",
+      "grading_guide": "in classroom using computer",
+      "note": ""
+    },
+    {
+      "category": "Project",
+      "type": "on-going",
+      "part": "1",
+      "weight": "20.0%",
+      "completion_criteria": ">0",
+      "duration": "4-5 weeks",
+      "clo": "CLO1-CL10",
+      "question_type": "Mini-research paper + Documentary-style Video + Presentation",
+      "no_question": "",
+      "knowledge_and_skill": "Knowledge and skills in studied unit(s): Unit 1-5 Part 1, CLO1-3Knowledge and skills in studied unit(s): Unit 1-5 Part 2, CLO4-6\"",
+      "grading_guide": "*Students work in group of 4-5*Students submit their product/artifact (soft copy) at least 3 days before the presentation day.",
+      "note": ""
+    },
+    {
+      "category": "Final exam",
+      "type": "Final exam",
+      "part": "3",
+      "weight": "40.0%",
+      "completion_criteria": "4",
+      "duration": "Reading : 55 minutesVocabulary : 20 minutesWriting : 40 minutes",
+      "clo": "CLO1-CL10",
+      "question_type": "MCQ, matching, fill in blank, writing",
+      "no_question": "1. Reading Comprehension: 10 MCQs + writing a reflective paragraph of 200 words2. Vocabulary: 20 MCQs3. Essay writing: 250 words",
+      "knowledge_and_skill": "Knowledge and skills in studied unit(s): Unit 1-5 Part 1, CLO1-3Knowledge and skills in studied unit(s): Unit 1-5 Part 2, CLO4-6",
+      "grading_guide": "by Exam Board",
+      "note": "The final exam includes 3 parts: 1. Reading Comprehension (55') 20% Part 1.1: Reading Comprehension (25') [50%] 01 800-900-word text, B2 level 10 MCQs: 4 options ABCD Part 1.2: Reflective Writing (30') a paragraph of 200 words [50%] 2. Writing (40') 10% Types: Opinion Essay - 250 words 3. Vocabulary (20') 10% 20 MCQs (B2 level)"
+    }
+  ],
+  "references": [
+    "- Attend at least 80% of contact hours in order to be accepted to the final examination - Actively participate in class activities - Fulfil tasks given by the instructor after class - Use their own laptop in class only for learning purposes - Use the Student Access Code provided with the textbook - Access the course website for up-to-date information and material of the course, for online support from teachers and other students, and for practicing and assessment.",
+    "1318/QĐ-ĐHFPT dated 11/27/2025",
+    "MaterialDescriptionAuthorPublisherPublishedDateEditionISBNIsMainMaterialIsHardCopyIsOnlineNote English Newspapers• Advertisements• Magazines• English Teaching/Learning Websites University Success - Transition level - Reading, Pearson Package, including:For Student and Teacher:1) ST: Student’s Book2) MyEnglishLab: www.MyEnglishLab.com/Register3) http://cms.fpt.edu.vnFor Teacher: 4) Student’s Book5) MyEnglishLab:Lawrence Zwier and Maggie VostersPearson. 978-0-13-440078-5",
+    "Study the reading \"Poliovirus\" and state major polio-related events and facts within 1950s and 2016. What can be summarized about the oral polio vaccination? Compare and contrast nations with and without widespread cases of polio. What are modern attempts to eradicate the polio virus? Use outlines and graphic organizers to demonstrate your answers."
+  ]
+}

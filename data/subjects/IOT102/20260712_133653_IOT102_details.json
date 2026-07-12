@@ -1,0 +1,928 @@
+{
+  "metadata": {
+    "syllabus_id": "12400",
+    "syllabus_name": "Internet of Things_Internet vạn vật",
+    "syllabus_name_english": "Internet of Things",
+    "subject_code": "IOT102",
+    "credits": "3",
+    "degree_level": "Bachelor",
+    "time_allocation": "Study hour (150h) = 22.5h contact hours + 22.5h online hours + 4.5h final project presentation + 1h final exam + 99.5h self-study",
+    "prerequisites": "",
+    "description": "This is a 3-credit course. This course has two parts: online and offline.\nThe content includes basic concepts and applications of IoT and practical exercises on learning KIT.\nStudents are taught how to learn online and practice some parts at home. Q&A sessions, Guidance for important issues, and performance assessments will be conducted in the classroom.",
+    "student_tasks": "- Students must attend at least 80% of contact sessions in order to be accepted to the final examination.\n- Student is responsible to learn all VIDEOs (theory) online given by instructor on Syllabus at home.\n- Student is responsible to do all LABs given by instructor on Syllabus at home.\n- Constantly follow https://flm.fpt.edu.vn/ for up-to-date course information.",
+    "tools": "",
+    "scoring_scale": "10",
+    "decision_no": "1363/QĐ-ĐHFPT dated 12/06/2024",
+    "is_approved": "True",
+    "note": "",
+    "min_avg_mark_to_pass": "5",
+    "is_active": "True",
+    "approved_date": "12/6/2024"
+  },
+  "materials": [
+    {
+      "description": "Course from Edx",
+      "author": "",
+      "publisher": "",
+      "published_date": "",
+      "edition": "",
+      "isbn": "",
+      "is_main_material": "",
+      "is_hard_copy": "",
+      "is_online": "",
+      "note": "https://learning.edx.org/course/course-v1:CurtinX+IOT1x+2T2018/home"
+    },
+    {
+      "description": "Course from Edx",
+      "author": "",
+      "publisher": "",
+      "published_date": "",
+      "edition": "",
+      "isbn": "",
+      "is_main_material": "",
+      "is_hard_copy": "",
+      "is_online": "",
+      "note": "https://learning.edx.org/course/course-v1:CurtinX+IOT2x+2T2018/home"
+    },
+    {
+      "description": "Free Hardware and IoT Ebooks_ OReilly Media",
+      "author": "",
+      "publisher": "",
+      "published_date": "",
+      "edition": "",
+      "isbn": "",
+      "is_main_material": "",
+      "is_hard_copy": "",
+      "is_online": "",
+      "note": "soft copy"
+    },
+    {
+      "description": "Introduction to Arduino: A piece of cake! by Alan G. Smith, September 30, 2011",
+      "author": "",
+      "publisher": "",
+      "published_date": "",
+      "edition": "",
+      "isbn": "",
+      "is_main_material": "",
+      "is_hard_copy": "",
+      "is_online": "",
+      "note": "http://www.introtoarduino.com"
+    },
+    {
+      "description": "Arduino Documents",
+      "author": "",
+      "publisher": "",
+      "published_date": "",
+      "edition": "",
+      "isbn": "",
+      "is_main_material": "",
+      "is_hard_copy": "",
+      "is_online": "",
+      "note": "https://www.arduino.cc/"
+    },
+    {
+      "description": "Instructables.com - 20 Unbelievable Arduino Projects",
+      "author": "",
+      "publisher": "",
+      "published_date": "",
+      "edition": "",
+      "isbn": "",
+      "is_main_material": "",
+      "is_hard_copy": "",
+      "is_online": "",
+      "note": "soft copy"
+    },
+    {
+      "description": "IOT102 guide documents (Project guide, Project topics, Rubrics, KITs (basic and advanced)…)",
+      "author": "",
+      "publisher": "",
+      "published_date": "",
+      "edition": "",
+      "isbn": "",
+      "is_main_material": "",
+      "is_hard_copy": "",
+      "is_online": "",
+      "note": "soft copy"
+    }
+  ],
+  "clos": [
+    {
+      "clo_name": "1",
+      "clo_details": "CLO1",
+      "lo_details": "Understand the concept of IoT and applications."
+    },
+    {
+      "clo_name": "2",
+      "clo_details": "CLO10",
+      "lo_details": "Concept planning, Draw and Install simple IoT circuits"
+    },
+    {
+      "clo_name": "3",
+      "clo_details": "CLO11",
+      "lo_details": "Understand the Arduino UNO and Atmega328 microcontroller architecture."
+    },
+    {
+      "clo_name": "4",
+      "clo_details": "CLO12",
+      "lo_details": "Know how to use the Simulation Software."
+    },
+    {
+      "clo_name": "5",
+      "clo_details": "CLO13",
+      "lo_details": "Understand the interrupts on Arduino UNO."
+    },
+    {
+      "clo_name": "6",
+      "clo_details": "CLO2",
+      "lo_details": "Understand the concept of things in IoT."
+    },
+    {
+      "clo_name": "7",
+      "clo_details": "CLO3",
+      "lo_details": "Understand the Networking in IoT."
+    },
+    {
+      "clo_name": "8",
+      "clo_details": "CLO4",
+      "lo_details": "Understand the Securing in IoT."
+    },
+    {
+      "clo_name": "9",
+      "clo_details": "CLO5",
+      "lo_details": "Select and calculate the electronics components, IoT Programming."
+    },
+    {
+      "clo_name": "10",
+      "clo_details": "CLO6",
+      "lo_details": "Program IN/OUT Digital with Arduino UNO."
+    },
+    {
+      "clo_name": "11",
+      "clo_details": "CLO7",
+      "lo_details": "Program Analog Input/Output with Arduino UNO."
+    },
+    {
+      "clo_name": "12",
+      "clo_details": "CLO8",
+      "lo_details": "Program Sensors/Actuators with Arduino UNO."
+    },
+    {
+      "clo_name": "13",
+      "clo_details": "CLO9",
+      "lo_details": "Program Communication with Arduino UNO."
+    }
+  ],
+  "schedule": [
+    {
+      "session": "1",
+      "topic": "Introduction of IoT courseWhat in the world is the Internet of Things?",
+      "learning_method": "Offline",
+      "lo": "CLO01",
+      "itu": "",
+      "student_materials": "SlideVideoGUIDE Of Create an Account_Explore Courses_Quiz on edX.pdf",
+      "s_download": "IOT102",
+      "student_tasks": "Borrow theLearning KIT at the library.Enroll course: https://learning.edx.org/course/course-v1:CurtinX+IOT1x+2T2018/home",
+      "urls": ""
+    },
+    {
+      "session": "2",
+      "topic": "Arduino (ATmega328p) Architecture",
+      "learning_method": "Offline",
+      "lo": "CLO01",
+      "itu": "",
+      "student_materials": "SlideVideo GUIDE Of Create an Account_Explore Courses_Quiz on edX.pdf",
+      "s_download": "",
+      "student_tasks": "Borrow theLearning KIT at the library.Enroll course: https://learning.edx.org/course/course-v1:CurtinX+IOT1x+2T2018/home",
+      "urls": ""
+    },
+    {
+      "session": "3",
+      "topic": "Lab: - Getting Started with Arduino and Genuino UNO - Fritzing_building_circuit",
+      "learning_method": "Offline",
+      "lo": "CLO10, CLO12",
+      "itu": "",
+      "student_materials": "TutorialLearning KIT",
+      "s_download": "",
+      "student_tasks": "Discuss with your instructor the lessons learned online and the new lesson.",
+      "urls": ""
+    },
+    {
+      "session": "4",
+      "topic": "The ‘things’ of the Internet of Things?",
+      "learning_method": "Online",
+      "lo": "CLO02",
+      "itu": "",
+      "student_materials": "SlideVideo",
+      "s_download": "",
+      "student_tasks": "Enroll course: https://learning.edx.org/course/course-v1:CurtinX+IOT1x+2T2018/homeFollow the lessons online",
+      "urls": ""
+    },
+    {
+      "session": "5",
+      "topic": "Networking IoT",
+      "learning_method": "Online",
+      "lo": "CLO03",
+      "itu": "",
+      "student_materials": "SlideVideo",
+      "s_download": "",
+      "student_tasks": "Enroll course: https://learning.edx.org/course/course-v1:CurtinX+IOT1x+2T2018/homeFollow the lessons online",
+      "urls": ""
+    },
+    {
+      "session": "6",
+      "topic": "Networking IoT (cnt)",
+      "learning_method": "Online",
+      "lo": "CLO03",
+      "itu": "",
+      "student_materials": "SlideVideo",
+      "s_download": "",
+      "student_tasks": "Enroll course: https://learning.edx.org/course/course-v1:CurtinX+IOT1x+2T2018/homeFollow the lessons online",
+      "urls": ""
+    },
+    {
+      "session": "7",
+      "topic": "Lab: - Tinkercad arduino simulator tutorial",
+      "learning_method": "Offline",
+      "lo": "CLO10, CLO12",
+      "itu": "",
+      "student_materials": "TutorialLearning KIT",
+      "s_download": "",
+      "student_tasks": "Discuss with your instructor the lessons learned online and the new lesson.",
+      "urls": ""
+    },
+    {
+      "session": "8",
+      "topic": "Lab: - Blink an LED - Digital Write - Analog Input - Analog Read",
+      "learning_method": "Offline",
+      "lo": "CLO06, CLO07",
+      "itu": "",
+      "student_materials": "TutorialLearning KIT",
+      "s_download": "",
+      "student_tasks": "Discuss with your instructor the lessons learned online and the new lesson.",
+      "urls": ""
+    },
+    {
+      "session": "9",
+      "topic": "Lab: - Fading - Analog WriteProject Topic Introduction",
+      "learning_method": "Offline",
+      "lo": "CLO06, CLO07",
+      "itu": "",
+      "student_materials": "TutorialLearning KIT",
+      "s_download": "",
+      "student_tasks": "Discuss with your instructor the lessons learned online and the new lesson.",
+      "urls": ""
+    },
+    {
+      "session": "10",
+      "topic": "Programming IoT",
+      "learning_method": "Online",
+      "lo": "CLO01",
+      "itu": "",
+      "student_materials": "SlideVideo",
+      "s_download": "",
+      "student_tasks": "Enroll course: https://learning.edx.org/course/course-v1:CurtinX+IOT1x+2T2018/homeFollow the lessons online",
+      "urls": ""
+    },
+    {
+      "session": "11",
+      "topic": "Programming IoT (cnt)",
+      "learning_method": "Online",
+      "lo": "CLO01",
+      "itu": "",
+      "student_materials": "SlideVideo",
+      "s_download": "",
+      "student_tasks": "Enroll course: https://learning.edx.org/course/course-v1:CurtinX+IOT1x+2T2018/homeFollow the lessons online",
+      "urls": ""
+    },
+    {
+      "session": "12",
+      "topic": "Lab: Practice at home by the tutorial: Led array effect.",
+      "learning_method": "Online",
+      "lo": "CLO06",
+      "itu": "",
+      "student_materials": "TutorialLearning KIT",
+      "s_download": "",
+      "student_tasks": "Follow the practice guide",
+      "urls": ""
+    },
+    {
+      "session": "13",
+      "topic": "Practice at home EvaluationLab: - Buttton - Digital Read",
+      "learning_method": "Offline",
+      "lo": "CLO06, CLO09",
+      "itu": "",
+      "student_materials": "TutorialLearning KIT",
+      "s_download": "",
+      "student_tasks": "Discuss with your instructor the lessons learned online and the new lesson.",
+      "urls": ""
+    },
+    {
+      "session": "14",
+      "topic": "Practice at home EvaluationLab: - Input Pullup - Serial - State Change Detection for push buttons",
+      "learning_method": "Offline",
+      "lo": "CLO06, CLO09",
+      "itu": "",
+      "student_materials": "TutorialLearning KIT",
+      "s_download": "",
+      "student_tasks": "Discuss with your instructor the lessons learned online and the new lesson.",
+      "urls": ""
+    },
+    {
+      "session": "15",
+      "topic": "Lab: - Analog In, Out Serial - Photoresistor - Analog InputProject Topic Resgistration",
+      "learning_method": "Offline",
+      "lo": "CLO05, CLO06, CLO08, CLO09",
+      "itu": "",
+      "student_materials": "TutorialLearning KIT",
+      "s_download": "",
+      "student_tasks": "Discuss with your instructor the lessons learned online and the new lesson.",
+      "urls": ""
+    },
+    {
+      "session": "16",
+      "topic": "Securing IoT",
+      "learning_method": "Online",
+      "lo": "CLO04",
+      "itu": "",
+      "student_materials": "SlideVideo",
+      "s_download": "",
+      "student_tasks": "Enroll course: https://learning.edx.org/course/course-v1:CurtinX+IOT1x+2T2018/homeFollow the lessons online",
+      "urls": ""
+    },
+    {
+      "session": "17",
+      "topic": "Securing IoT (cnt)",
+      "learning_method": "Online",
+      "lo": "CLO04",
+      "itu": "",
+      "student_materials": "SlideVideo",
+      "s_download": "",
+      "student_tasks": "Enroll course: https://learning.edx.org/course/course-v1:CurtinX+IOT1x+2T2018/homeFollow the lessons online",
+      "urls": ""
+    },
+    {
+      "session": "18",
+      "topic": "Lab: - Practice at home by the tutorial: Photoresistor - States of lights",
+      "learning_method": "Online",
+      "lo": "CLO05, CLO06, CLO09",
+      "itu": "",
+      "student_materials": "TutorialLearning KIT",
+      "s_download": "",
+      "student_tasks": "Follow the practice guide",
+      "urls": ""
+    },
+    {
+      "session": "19",
+      "topic": "Lab: - Photoresistor - while loop interation",
+      "learning_method": "Offline",
+      "lo": "CLO05, CLO06, CLO08, CLO09",
+      "itu": "",
+      "student_materials": "TutorialLearning KIT",
+      "s_download": "",
+      "student_tasks": "Discuss with your instructor the lessons learned online and the new lesson.",
+      "urls": ""
+    },
+    {
+      "session": "20",
+      "topic": "Lab: - Ping Ultrasonic Range Finder",
+      "learning_method": "Offline",
+      "lo": "CLO05, CLO06, CLO08, CLO09",
+      "itu": "",
+      "student_materials": "TutorialLearning KIT",
+      "s_download": "",
+      "student_tasks": "Discuss with your instructor the lessons learned online and the new lesson.",
+      "urls": ""
+    },
+    {
+      "session": "21",
+      "topic": "Lab: - Servo Motor - Sweep - Servo Motor - Knob",
+      "learning_method": "Offline",
+      "lo": "CLO06, CLO07, CLO08",
+      "itu": "",
+      "student_materials": "TutorialLearning KIT",
+      "s_download": "",
+      "student_tasks": "Discuss with your instructor the lessons learned online and the new lesson.",
+      "urls": ""
+    },
+    {
+      "session": "22",
+      "topic": "Electrical circuits and electronics",
+      "learning_method": "Online",
+      "lo": "CLO05",
+      "itu": "",
+      "student_materials": "SlideVideo",
+      "s_download": "",
+      "student_tasks": "Enroll course: https://learning.edx.org/course/course-v1:CurtinX+IOT2x+2T2018/homeFollow the lessons online",
+      "urls": ""
+    },
+    {
+      "session": "23",
+      "topic": "Electrical circuits and electronics (cnt)",
+      "learning_method": "Online",
+      "lo": "CLO05",
+      "itu": "",
+      "student_materials": "SlideVideo",
+      "s_download": "",
+      "student_tasks": "Enroll course: https://learning.edx.org/course/course-v1:CurtinX+IOT2x+2T2018/homeFollow the lessons online",
+      "urls": ""
+    },
+    {
+      "session": "24",
+      "topic": "Project concept planning",
+      "learning_method": "Online",
+      "lo": "CLO05, CLO10",
+      "itu": "",
+      "student_materials": "SlideVideo",
+      "s_download": "",
+      "student_tasks": "Enroll course: https://learning.edx.org/course/course-v1:CurtinX+IOT2x+2T2018/homeFollow the lesson online",
+      "urls": ""
+    },
+    {
+      "session": "25",
+      "topic": "Project concept planning (cnt)",
+      "learning_method": "Online",
+      "lo": "CLO05, CLO10",
+      "itu": "",
+      "student_materials": "SlideVideo",
+      "s_download": "",
+      "student_tasks": "Enroll course: https://learning.edx.org/course/course-v1:CurtinX+IOT2x+2T2018/homeFollow the lesson online",
+      "urls": ""
+    },
+    {
+      "session": "26",
+      "topic": "Presentation",
+      "learning_method": "Offline",
+      "lo": "CLO01, CLO02, CLO03, CLO04, CLO05, CLO10",
+      "itu": "",
+      "student_materials": "",
+      "s_download": "",
+      "student_tasks": "Presentation about Final Project Planning",
+      "urls": ""
+    },
+    {
+      "session": "27",
+      "topic": "Presentation",
+      "learning_method": "Offline",
+      "lo": "CLO01, CLO02, CLO03, CLO04, CLO05, CLO10",
+      "itu": "",
+      "student_materials": "",
+      "s_download": "",
+      "student_tasks": "Presentation about Final Project Planning",
+      "urls": ""
+    },
+    {
+      "session": "28",
+      "topic": "Practice at home EvaluationLab: - IR Remote",
+      "learning_method": "Offline",
+      "lo": "CLO06, CLO07, CLO08",
+      "itu": "",
+      "student_materials": "TutorialLearning KIT",
+      "s_download": "",
+      "student_tasks": "Discuss with your instructor the lessons learned online and the new lesson.",
+      "urls": ""
+    },
+    {
+      "session": "29",
+      "topic": "Lab: - Practice at home by the tutorial: Digital Read - Out Serial",
+      "learning_method": "Online",
+      "lo": "CLO05, CLO06, CLO09",
+      "itu": "",
+      "student_materials": "TutorialLearning KIT",
+      "s_download": "",
+      "student_tasks": "Follow the practice guide",
+      "urls": ""
+    },
+    {
+      "session": "30",
+      "topic": "Lab: - Practice at home by the tutorial: RGB LED Color Mixing (use tinkercad simulator)",
+      "learning_method": "Online",
+      "lo": "CLO06, CLO07, CLO09",
+      "itu": "",
+      "student_materials": "TutorialLearning KIT",
+      "s_download": "",
+      "student_tasks": "Follow the practice guide",
+      "urls": ""
+    },
+    {
+      "session": "31",
+      "topic": "Lab: Practice at home: Advanced Labs related to the Final Project",
+      "learning_method": "Online",
+      "lo": "CLO05, CLO06, CLO07, CLO08, CLO09",
+      "itu": "",
+      "student_materials": "TutorialLearning KIT, Advanced components",
+      "s_download": "",
+      "student_tasks": "Follow the Advanced Lab guide",
+      "urls": ""
+    },
+    {
+      "session": "32",
+      "topic": "Practice at home EvaluationLab: - Led-7-segment-display",
+      "learning_method": "Offline",
+      "lo": "CLO05, CLO06",
+      "itu": "",
+      "student_materials": "TutorialLearning KIT",
+      "s_download": "",
+      "student_tasks": "Discuss with your instructor the lessons learned online and the new lesson.",
+      "urls": ""
+    },
+    {
+      "session": "33",
+      "topic": "Practice at home EvaluationLab: - Temperature sensor LM35",
+      "learning_method": "Offline",
+      "lo": "CLO05, CLO07, CLO08, CLO09",
+      "itu": "",
+      "student_materials": "TutorialLearning KIT",
+      "s_download": "",
+      "student_tasks": "Discuss with your instructor the lessons learned online and the new lesson.",
+      "urls": ""
+    },
+    {
+      "session": "34",
+      "topic": "Progress test 1",
+      "learning_method": "Offline",
+      "lo": "CLO05, CLO06, CLO07, CLO08, CLO09",
+      "itu": "",
+      "student_materials": "",
+      "s_download": "",
+      "student_tasks": "",
+      "urls": ""
+    },
+    {
+      "session": "35",
+      "topic": "Lab: - Practice at home by the tutorial: Read ASCII String (use RGB led to indicator)",
+      "learning_method": "Online",
+      "lo": "CLO06, CLO07, CLO09",
+      "itu": "",
+      "student_materials": "TutorialLearning KIT",
+      "s_download": "",
+      "student_tasks": "Follow the practice guide",
+      "urls": ""
+    },
+    {
+      "session": "36",
+      "topic": "Lab: - Practice at home by the tutorial: Smoothing Graph: Send data to the computer and graph it in Processing.",
+      "learning_method": "Online",
+      "lo": "CLO07, CLO09, CLO12",
+      "itu": "",
+      "student_materials": "TutorialLearning KIT",
+      "s_download": "",
+      "student_tasks": "Follow the practice guide",
+      "urls": ""
+    },
+    {
+      "session": "37",
+      "topic": "Lab: Practice at home: Advanced Labs related to the Final Project",
+      "learning_method": "Online",
+      "lo": "CLO05, CLO06, CLO07, CLO08, CLO09",
+      "itu": "",
+      "student_materials": "TutorialLearning KIT, Advanced components",
+      "s_download": "",
+      "student_tasks": "Follow the Advanced Lab guide",
+      "urls": ""
+    },
+    {
+      "session": "38",
+      "topic": "Practice at home EvaluationLab: - LCD Display 1602",
+      "learning_method": "Offline",
+      "lo": "CLO05, CLO07, CLO08, CLO09",
+      "itu": "",
+      "student_materials": "TutorialLearning KIT",
+      "s_download": "",
+      "student_tasks": "Discuss with your instructor the lessons learned online and the new lesson.",
+      "urls": ""
+    },
+    {
+      "session": "39",
+      "topic": "Practice at home EvaluationLab: - SerialEvent",
+      "learning_method": "Offline",
+      "lo": "CLO13",
+      "itu": "",
+      "student_materials": "TutorialLearning KIT",
+      "s_download": "",
+      "student_tasks": "Discuss with your instructor the lessons learned online and the new lesson.",
+      "urls": ""
+    },
+    {
+      "session": "40",
+      "topic": "Practice at home EvaluationLab: - External Interrupts",
+      "learning_method": "Offline",
+      "lo": "CLO13",
+      "itu": "",
+      "student_materials": "TutorialLearning KIT",
+      "s_download": "",
+      "student_tasks": "Discuss with your instructor the lessons learned online and the new lesson.",
+      "urls": ""
+    },
+    {
+      "session": "41",
+      "topic": "Lab: Practice at home by the tutorial: Blink Without Delay",
+      "learning_method": "Online",
+      "lo": "CLO06",
+      "itu": "",
+      "student_materials": "TutorialLearning KIT",
+      "s_download": "",
+      "student_tasks": "Follow the practice guide",
+      "urls": ""
+    },
+    {
+      "session": "42",
+      "topic": "Lab: Practice at home by the tutorial: ASCII Table",
+      "learning_method": "Online",
+      "lo": "CLO09",
+      "itu": "",
+      "student_materials": "TutorialLearning KIT",
+      "s_download": "",
+      "student_tasks": "Follow the practice guide",
+      "urls": ""
+    },
+    {
+      "session": "43",
+      "topic": "Lab: Practice at home: Advanced Labs related to the Final Project",
+      "learning_method": "Online",
+      "lo": "CLO05, CLO06, CLO07, CLO08, CLO09",
+      "itu": "",
+      "student_materials": "TutorialLearning KIT, Advanced components",
+      "s_download": "",
+      "student_tasks": "Follow the Advanced Lab guide",
+      "urls": ""
+    },
+    {
+      "session": "44",
+      "topic": "Block diagram and Flowchart of Final Project",
+      "learning_method": "Online",
+      "lo": "CLO05, CLO06, CLO07, CLO08, CLO09, CLO10, CLO12",
+      "itu": "",
+      "student_materials": "",
+      "s_download": "",
+      "student_tasks": "Draw block diagramCreate circuit schematic/Hardware inferace/wiring diagramDraw flowchart",
+      "urls": ""
+    },
+    {
+      "session": "45",
+      "topic": "Practice at home EvaluationLab: - Timer Interrupts",
+      "learning_method": "Offline",
+      "lo": "CLO13",
+      "itu": "",
+      "student_materials": "TutorialLearning KIT",
+      "s_download": "",
+      "student_tasks": "Discuss with your instructor the lessons learned online and the new lesson.",
+      "urls": ""
+    },
+    {
+      "session": "46",
+      "topic": "On-going project assessment 1",
+      "learning_method": "Offline",
+      "lo": "CLO05, CLO06, CLO07, CLO08, CLO09, CLO10, CLO12",
+      "itu": "",
+      "student_materials": "",
+      "s_download": "",
+      "student_tasks": "Present Block diagram, Flowchart",
+      "urls": ""
+    },
+    {
+      "session": "47",
+      "topic": "On-going project assessment 1 (cnt)",
+      "learning_method": "Offline",
+      "lo": "CLO05, CLO06, CLO07, CLO08, CLO09, CLO10, CLO12",
+      "itu": "",
+      "student_materials": "",
+      "s_download": "",
+      "student_tasks": "Present Block diagram, Flowchart",
+      "urls": ""
+    },
+    {
+      "session": "48",
+      "topic": "Lab: Practice at home by the tutorial: Serial Input",
+      "learning_method": "Online",
+      "lo": "CLO09",
+      "itu": "",
+      "student_materials": "TutorialLearning KIT",
+      "s_download": "",
+      "student_tasks": "Follow the practice guide",
+      "urls": ""
+    },
+    {
+      "session": "49",
+      "topic": "Lab: Practice at home by the tutorial: Debounce",
+      "learning_method": "Online",
+      "lo": "CLO06",
+      "itu": "",
+      "student_materials": "TutorialLearning KIT",
+      "s_download": "",
+      "student_tasks": "Follow the practice guide",
+      "urls": ""
+    },
+    {
+      "session": "50",
+      "topic": "Practice at home EvaluationLab: - Keypad 4x4",
+      "learning_method": "Offline",
+      "lo": "CLO06, CLO09, CLO11",
+      "itu": "",
+      "student_materials": "TutorialLearning KIT",
+      "s_download": "",
+      "student_tasks": "Discuss with your instructor the lessons learned online and the new lesson.",
+      "urls": ""
+    },
+    {
+      "session": "51",
+      "topic": "Practice at home EvaluationLab: - EEPROM read / write",
+      "learning_method": "Offline",
+      "lo": "CLO06, CLO09, CLO11",
+      "itu": "",
+      "student_materials": "TutorialLearning KIT",
+      "s_download": "",
+      "student_tasks": "Discuss with your instructor the lessons learned online and the new lesson.",
+      "urls": ""
+    },
+    {
+      "session": "52",
+      "topic": "Progress test 2",
+      "learning_method": "Offline",
+      "lo": "CLO01-13",
+      "itu": "",
+      "student_materials": "",
+      "s_download": "",
+      "student_tasks": "",
+      "urls": ""
+    },
+    {
+      "session": "53",
+      "topic": "Lab: Practice at home: Advanced Labs related to the Final Project",
+      "learning_method": "Online",
+      "lo": "CLO05, CLO06, CLO07, CLO08, CLO09",
+      "itu": "",
+      "student_materials": "TutorialLearning KIT, Advanced components",
+      "s_download": "",
+      "student_tasks": "Follow the Advanced Lab guide",
+      "urls": ""
+    },
+    {
+      "session": "54",
+      "topic": "Final project report preparation",
+      "learning_method": "Online",
+      "lo": "CLO05, CLO06, CLO07, CLO08, CLO09, CLO12",
+      "itu": "",
+      "student_materials": "Latex/Overleaf Tutorial online or Report template and guildeline provided by instructor",
+      "s_download": "",
+      "student_tasks": "Prepare Final Report using Latex/Overleaf orDiscuss with your instructor for the guidance",
+      "urls": ""
+    },
+    {
+      "session": "55",
+      "topic": "Practice at home EvaluationLab: - 8x8 LED Matrix",
+      "learning_method": "Offline",
+      "lo": "CLO06, CLO07",
+      "itu": "",
+      "student_materials": "TutorialLearning KIT",
+      "s_download": "",
+      "student_tasks": "Discuss with your instructor the lessons learned online and the new lesson.",
+      "urls": ""
+    },
+    {
+      "session": "56",
+      "topic": "On-going project assessment 2",
+      "learning_method": "Offline",
+      "lo": "CLO1, CLO10",
+      "itu": "",
+      "student_materials": "",
+      "s_download": "",
+      "student_tasks": "Prepare for final project presentation",
+      "urls": ""
+    },
+    {
+      "session": "57",
+      "topic": "On-going project assessment 2 (cnt)",
+      "learning_method": "Offline",
+      "lo": "CLO1, CLO10",
+      "itu": "",
+      "student_materials": "",
+      "s_download": "",
+      "student_tasks": "Prepare for final project presentation",
+      "urls": ""
+    },
+    {
+      "session": "58",
+      "topic": "All labs Self review: Practice at home by the tutorial: Team work prepares for the final project",
+      "learning_method": "Online",
+      "lo": "",
+      "itu": "",
+      "student_materials": "TutorialLearning KIT",
+      "s_download": "",
+      "student_tasks": "Follow the practice guide",
+      "urls": ""
+    },
+    {
+      "session": "59",
+      "topic": "All labs Self review: (cnt) Practice at home by the tutorial: Team work prepares for the final project",
+      "learning_method": "Online",
+      "lo": "",
+      "itu": "",
+      "student_materials": "TutorialLearning KIT",
+      "s_download": "",
+      "student_tasks": "Follow the practice guide",
+      "urls": ""
+    },
+    {
+      "session": "60",
+      "topic": "All labs Self review: Practice at home by the tutorial: Team work prepares for the final project",
+      "learning_method": "Online",
+      "lo": "",
+      "itu": "",
+      "student_materials": "TutorialLearning KIT",
+      "s_download": "",
+      "student_tasks": "Follow the practice guide",
+      "urls": ""
+    }
+  ],
+  "constructive_questions": [],
+  "assessment_scheme": [
+    {
+      "category": "Active learning",
+      "type": "on-going",
+      "part": "1",
+      "weight": "10.0%",
+      "completion_criteria": ">0",
+      "duration": "From start to finish in schedule",
+      "clo": "CLO11, CLO12, CLO13",
+      "question_type": "Private",
+      "no_question": "N/A",
+      "knowledge_and_skill": "Students ask good questions, hard work, self study online.",
+      "grading_guide": "by instructor",
+      "note": ""
+    },
+    {
+      "category": "Final Project Presentation",
+      "type": "on-going",
+      "part": "1",
+      "weight": "20.0%",
+      "completion_criteria": "4",
+      "duration": "30'/groups",
+      "clo": "CLO05, CLO06, CLO07, CLO08, CLO09, CLO10, CLO12",
+      "question_type": "Oral",
+      "no_question": "Committee's comments and questions",
+      "knowledge_and_skill": "All chapters; knowledge and skills",
+      "grading_guide": "The examination is conducted by the exam board. A minimum of two teachers is required for grading the Final Project. Each team is allocated 30 minutes for the presentation of their project followed by a Q&A session. Evaluation of the final presentation is based on the final report, project demonstration, and Q&A interaction. The grade is determined by averaging the grades given by the two teachers.",
+      "note": "Based on Rubrics"
+    },
+    {
+      "category": "On-Going Project Assessment",
+      "type": "on-going",
+      "part": "2",
+      "weight": "30.0%",
+      "completion_criteria": ">0",
+      "duration": "From start to finish in schedule.",
+      "clo": "CLO05, CLO06, CLO07, CLO08, CLO09, CLO10, CLO12",
+      "question_type": "Follow lecturer's proposal",
+      "no_question": "Follow lecturer's proposal",
+      "knowledge_and_skill": "knowledge and skills",
+      "grading_guide": "by instructor",
+      "note": ""
+    },
+    {
+      "category": "Presentation",
+      "type": "on-going",
+      "part": "1",
+      "weight": "10.0%",
+      "completion_criteria": ">0",
+      "duration": "Option 1: Group. Option 2 (For Constructivism Approach only): Follow lecturer's proposal",
+      "clo": "CLO01, CLO05",
+      "question_type": "Option 1: N/A. Option 2 (For Constructivism Approach only): Follow lecturer's proposal",
+      "no_question": "Option 1: N/A. Option 2 (For Constructivism Approach only): Follow lecturer's proposal",
+      "knowledge_and_skill": "IoT idea/theory",
+      "grading_guide": "by instructor",
+      "note": ""
+    },
+    {
+      "category": "Progress test (Check Practice at home, Exercises, Quiz)",
+      "type": "on-going",
+      "part": "2",
+      "weight": "10.0%",
+      "completion_criteria": ">0",
+      "duration": "Option 1: 30'. Option 2 (For Constructivism Approach only): Follow lecturer's proposal",
+      "clo": "CLO01, CLO13",
+      "question_type": "Option 1: Private. Option 2 (For Constructivism Approach only): Follow lecturer's proposal",
+      "no_question": "Option 1: N/A. Option 2 (For Constructivism Approach only): Follow lecturer's proposal",
+      "knowledge_and_skill": "studied chapters knowledge and skills",
+      "grading_guide": "by instructor",
+      "note": ""
+    },
+    {
+      "category": "Final exam",
+      "type": "Final exam",
+      "part": "1",
+      "weight": "20.0%",
+      "completion_criteria": "4",
+      "duration": "60'",
+      "clo": "CLO01, CLO13",
+      "question_type": "Computer gradable",
+      "no_question": "50",
+      "knowledge_and_skill": "All chapters; knowledge and skills",
+      "grading_guide": "by Exam board",
+      "note": ""
+    }
+  ],
+  "references": [
+    "1363/QĐ-ĐHFPT dated 12/06/2024",
+    "Introduction to Arduino: A piece of cake! by Alan G. Smith, September 30, 2011"
+  ]
+}

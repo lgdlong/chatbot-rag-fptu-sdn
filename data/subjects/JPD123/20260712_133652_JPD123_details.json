@@ -1,0 +1,1188 @@
+{
+  "metadata": {
+    "syllabus_id": "14233",
+    "syllabus_name": "Elementary Japanese 1-A1.2_Tiếng Nhật sơ cấp 1-A1.2",
+    "syllabus_name_english": "Elementary Japanese 1-A1.2",
+    "subject_code": "JPD123",
+    "credits": "3",
+    "degree_level": "Cử nhân (bachelor)",
+    "time_allocation": "Thời gian học tập: 150 giờ\nTrong đó: 45 giờ trên lớp (20 sessions, 1 session=135p) +1 giờ thi+ 104 giờ tự học",
+    "prerequisites": "JPD113",
+    "description": "I. Yêu cầu định hướng triển khai của môn học: Môn học cung cấp kiến thức, kỹ năng cơ bản của tiếng Nhật ở trình độ sơ cấp 1 (tương đương với trình độ A1.2) cho đối tượng sinh viên học tiếng Nhật là ngoại ngữ 2 tại trường Đại học. Môn học là học phần tiếp theo môn JPD113.\nII. Mục tiêu của môn học:\nSau khi hoàn thành xong môn học này, sinh viên có thể:\n1. Giới thiệu được về nơi xuất thân của mình : như đặc điểm của quê hương mình, món ăn, khí hậu, những nơi nổi tiếng của quê mình.\n2. Nói chuyện được với bạn bè mình về những dự định hay công việc thường làm.\n3. Có thể mời, rủ bạn tham gia 1 hoạt động nào đó; trao đổi thông tin và thảo luận để thống nhất được địa điểm và lịch hẹn.\n4. Truyền đạt đến người khác 1 cách đơn giản tình hình xung quanh. Ngoài ra có thể nhờ vả, đề xuất cùng nhau làm việc gì đó.\n5. Có thể nắm được khoảng gần 300 từ vựng cơ bản, cách viết và đọc của khoảng hơn 40 chữ Hán, khoảng gần 30 cấu trúc ngữ pháp cơ bản dùng trong hội thoại sơ cấp.\n6. Rèn luyện kỹ năng làm việc nhóm, phát triển bản thân thông qua các hoạt động nhóm trong lớp (role play..) và các hoạt động ngoại khóa.",
+    "student_tasks": "- Tham dự tối thiểu 80% số giờ học trên lớp mới đủ điều kiện tham gia thi kì thi cuối môn.\n- Học từ vựng và tìm hiểu trước bài học, làm các bài tập và nhiệm vụ do GV giao.\n- Ôn tập bài giảng, đối chiếu với giáo trình để nắm vững các kiến thức.\n- Trên lớp tích cực tham gia trao đổi, xây dựng bài.",
+    "tools": "- Sử dụng Giáo trình chính và GT bổ trợ bằng tiếng Nhật.\n- Sử dụng ppt cho bài giảng của giảng viên.\n- Tra cứu, tham khảo các nội dung có liên quan đến môn học trên mạng hoặc giáo trình tham khảo được giới thiệu trong môn học.\n- Sử dụng AI (ChatGPT, Copilot, v.v.) để tra cứu cách dùng từ vựng, ứng dụng của ngữ pháp, và các từ ghép Hán tự ngoài các từ đã được học.",
+    "scoring_scale": "10",
+    "decision_no": "444/QĐ-ĐHFPT dated 04/23/2026",
+    "is_approved": "True",
+    "note": "",
+    "min_avg_mark_to_pass": "5",
+    "is_active": "True",
+    "approved_date": "4/23/2026"
+  },
+  "materials": [
+    {
+      "description": "できる日本語 初級 本冊",
+      "author": "嶋田和子",
+      "publisher": "アルク",
+      "published_date": "2011",
+      "edition": "",
+      "isbn": "ISBN-10 : 4757419775ISBN-13 : 978-4757419773",
+      "is_main_material": "",
+      "is_hard_copy": "",
+      "is_online": "",
+      "note": "Giáo trình Dekiru quyển đỏ (Tiếng Nhật trong tầm tay)"
+    },
+    {
+      "description": "わたしのことばノート 初級 (できる日本語)",
+      "author": "嶋田 和子",
+      "publisher": "凡人社",
+      "published_date": "2012",
+      "edition": "",
+      "isbn": "ISBN-10 : 4893588117ISBN-13 : 978-4893588111",
+      "is_main_material": "",
+      "is_hard_copy": "",
+      "is_online": "",
+      "note": ""
+    },
+    {
+      "description": "わたしの文法ノート 初級 (できる日本語)",
+      "author": "嶋田和子",
+      "publisher": "凡人社",
+      "published_date": "2011",
+      "edition": "",
+      "isbn": "ISBN-10 : 489358801XISBN-13 : 978-4893588012",
+      "is_main_material": "",
+      "is_hard_copy": "",
+      "is_online": "",
+      "note": ""
+    },
+    {
+      "description": "漢字たまご 初級",
+      "author": "有山優樹 (著), 落合知春 (著), 立原雅子 (著), 林英子 (著), 山口知才子 (著), 酒井弘美 (イラスト), 嶋田和子 (監修)",
+      "publisher": "凡人社",
+      "published_date": "2012",
+      "edition": "",
+      "isbn": "ISBN-10 : 4893588311ISBN-13 : 978-4893588319",
+      "is_main_material": "",
+      "is_hard_copy": "",
+      "is_online": "",
+      "note": ""
+    }
+  ],
+  "clos": [
+    {
+      "clo_name": "1",
+      "clo_details": "CLO1",
+      "lo_details": "Ghi nhớ được gần 300 từ vựng, hơn 40 chữ Hán, gần 30 cấu trúc ngữ pháp cơ bản liên quan đến các chủ đề được học."
+    },
+    {
+      "clo_name": "2",
+      "clo_details": "CLO2",
+      "lo_details": "Vận dụng từ vựng, ngữ pháp, chữ Hán đã học để (1) giới thiệu với bạn bè và người xung quanh về nơi xuất thân của mình 1 cách đơn giản; (2) nói về dự định của bản thân hay những việc bản thân hay làm vào ngày nghỉ; (3) rủ bạn cùng đi đâu đó hoặc cùng làm việc gì đó; (4) truyền đạt đến người khác một cách đơn giản về tình hình của bản thân và nhờ vả hoặc đề xuất người khác giúp mình."
+    },
+    {
+      "clo_name": "3",
+      "clo_details": "CLO3",
+      "lo_details": "Đọc hiểu được đoạn văn ngắn trình độ sơ cấp bằng tiếng Nhật."
+    },
+    {
+      "clo_name": "4",
+      "clo_details": "CLO4",
+      "lo_details": "Rèn luyện kỹ năng làm việc nhóm, phát triển bản thân thông qua các hoạt động nhóm trong lớp (role play..)"
+    }
+  ],
+  "schedule": [
+    {
+      "session": "1",
+      "topic": "Tiết 1:Giới thiệu môn học JPD123第4課 - Small topic 1 (ST1): +話してみよう（P67）+聞いてみよう（P67 CD A49）+チャレンジ1（P68 CDA50）+ 語彙確認言ってみよう1（P70 ）-- 文法説明［国］の［方角・位置］",
+      "learning_method": "Offline",
+      "lo": "CLO1,CLO2, CLO4",
+      "itu": "ITU",
+      "student_materials": "Giáo trình chínhSlides của slot 1 (tiết 1)",
+      "s_download": "",
+      "student_tasks": "1) Tham gia luyện tập, thảo luận về các vấn đề đặt ra 話してみよう（P67）.2) Sử dụng AI (ChatGPT, Copilot, v.v.) để tra cứu cách dùng từ vựng phần 1 bài 4.3) Nghe hiểu thông tin liên quan tới bài học チャレンジ1.4) Luyện tập đặt câu với mẫu ngữ pháp ［国］の［方角・位置］.5) Đặt câu hỏi cho nội dung chưa rõ.",
+      "urls": ""
+    },
+    {
+      "session": "2",
+      "topic": "Tiết 2:第4課 - Small topic 1 (ST1): +チャレンジ2,3（P69 CDA51,52）言ってみよう2,3（P70 ）-- 文法説明［場所］から［場所］までどのくらいですか ～時間［交通手段］で - 応用会話練習",
+      "learning_method": "Offline",
+      "lo": "CLO1,CLO2, CLO4",
+      "itu": "ITU",
+      "student_materials": "Giáo trình chínhSlides của slot 1 (tiết 2)",
+      "s_download": "JPD123",
+      "student_tasks": "1) Nghe hiểu thông tin liên quan tới bài học チャレンジ2,3.2) Sử dụng AI (ChatGPT, Copilot, v.v.) để tra cứu cách dùng và đặt câu với mẫu ngữ pháp mới ［場所］から［場所］までどのくらいですか ～時間［交通手段］で3) Luyện tập nói 言ってみよう2,3; Luyện hội thoại",
+      "urls": ""
+    },
+    {
+      "session": "3",
+      "topic": "Tiết 3:第4課 - ST1 （続き）+ やってみよう（P71 CD A53 ）",
+      "learning_method": "Offline",
+      "lo": "CLO1,CLO2, CLO4",
+      "itu": "I, T,U",
+      "student_materials": "Giáo trình chính",
+      "s_download": "",
+      "student_tasks": "1) Luyện tập nghe hiểu thông tin liên quan tới bài học P71.",
+      "urls": ""
+    },
+    {
+      "session": "4",
+      "topic": "Tiết 1:第4課 : 漢字",
+      "learning_method": "Offline",
+      "lo": "CLO1",
+      "itu": "I, T,U",
+      "student_materials": "Slide slot 2: chữ Hán Bài 4",
+      "s_download": "",
+      "student_tasks": "1) Học CH bài 4.2) Dùng AI tra cứu thêm các từ ghép của các chữ Hán đã học.",
+      "urls": ""
+    },
+    {
+      "session": "5",
+      "topic": "Tiết 2:第4課 - ST2: +チャレンジ1（P72 CD A54）+ 語彙確認+言ってみよう1（P74 ）-- 文法説明～はAです- 応用会話練習",
+      "learning_method": "Offline",
+      "lo": "CLO1,CLO2, CLO4",
+      "itu": "ITU",
+      "student_materials": "Giáo trình chínhSlides của slot 3 (tiết 1)",
+      "s_download": "",
+      "student_tasks": "1) Tham gia luyện tập, thảo luận về các vấn đề đặt ra.2) Nghe hiểu thông tin liên quan tới bài học チャレンジ1.3) Sử dụng AI (ChatGPT, Copilot, v.v.) để tra cứu cách dùng từ vựng phần 2 bài 4.4) Luyện tập đặt câu với mẫu ngữ pháp ～はAです.5) Luyện tập hội thoại.",
+      "urls": ""
+    },
+    {
+      "session": "6",
+      "topic": "Tiết 3:第4課 - ST2: +チャレンジ2,3,4（P72 CD A55-57）+言ってみよう2,3,4（P74,75 ）-- 文法説明イAくないです ナAじゃありません～はA＋Nです どんなN- 応用会話練習",
+      "learning_method": "Offline",
+      "lo": "CLO1,CLO2, CLO4",
+      "itu": "ITU",
+      "student_materials": "Giáo trình chínhSlides của slot 3 (tiết 2)",
+      "s_download": "",
+      "student_tasks": "1) Nghe hiểu thông tin liên quan tới bài học チャレンジ2,3,4.2) Sử dụng AI (ChatGPT, Copilot, v.v.) để tra cứu cách dùng và đặt câu với mẫu ngữ pháp mớiイAくないです ナAじゃありません～はA＋Nです どんなN3) Luyện tập nói 言ってみよう2,3,4; luyện hội thoại4) Đặt câu hỏi cho nội dung chưa rõ",
+      "urls": ""
+    },
+    {
+      "session": "7",
+      "topic": "Tiết 1:第4課 - ST2: （続き）+チャレンジ5,6（P73 CD A58,59）+言ってみよう5,6（P75 ）-- 文法説明［場所］に～がありますそして",
+      "learning_method": "Offline",
+      "lo": "CLO1,CLO2, CLO4",
+      "itu": "I, T,U",
+      "student_materials": "Giáo trình chínhSlides của slot 4 (tiết 1)",
+      "s_download": "",
+      "student_tasks": "1) Nghe hiểu thông tin liên quan tới bài học チャレンジ5,6.2) Luyện tập đặt câu với mẫu ngữ pháp ［場所］に～がありますそして3) Luyện tập nói 言ってみよう5,6; luyện hội thoại4) Đặt câu hỏi cho nội dung chưa rõ",
+      "urls": ""
+    },
+    {
+      "session": "8",
+      "topic": "Tiết 2:第4課 - ST2: （続き）+チャレンジ7（P73 CD A60）+言ってみよう7（P75 ）-- 文法説明～が、～- 応用会話練習 + やってみよう（P75 CD A61 ）",
+      "learning_method": "Offline",
+      "lo": "CLO1,CLO2, CLO4",
+      "itu": "ITU",
+      "student_materials": "Giáo trình chínhSlides của slot 4 (tiết 2)",
+      "s_download": "",
+      "student_tasks": "1) Nghe hiểu thông tin liên quan tới bài học チャレンジ72) Luyện tập đặt câu với mẫu ngữ pháp :～が、～3) Luyện tập nói 言ってみよう7; luyện hội thoại4) Luyện bài tập nghe P75",
+      "urls": ""
+    },
+    {
+      "session": "9",
+      "topic": "Tiết 3:第4課 - ST3: +チャレンジ1,2,3（P76 CD A62-64）+ 語彙確認+言ってみよう1,2,3（P78）-- 文法説明～ね（共感）～は［春・○月・一年中……］、Aですとても あまり～ない",
+      "learning_method": "Offline",
+      "lo": "CLO1,CLO2, CLO4",
+      "itu": "ITU",
+      "student_materials": "Giáo trình chínhSlides của slot 5 (tiết 1)",
+      "s_download": "",
+      "student_tasks": "1) Sử dụng AI (ChatGPT, Copilot, v.v.) để tra cứu cách dùng từ vựng phần 3 bài 4.2) Nghe hiểu thông tin liên quan tới bài học チャレンジ1,2,3.3) Luyện tập đặt câu với mẫu ngữ pháp:～ね（共感）～は［春・○月・一年中……］、Aですとても あまり～ない4) Luyện tập nói 言ってみよう1,2,3; luyện hội thoại.",
+      "urls": ""
+    },
+    {
+      "session": "10",
+      "topic": "Tiết 1:第4課 - ST3: +チャレンジ4,5（77 CD A65,66）+言ってみよう4,5（79 ）-- 文法説明～はどうですか- 応用会話練習",
+      "learning_method": "Offline",
+      "lo": "CLO1,CLO2, CLO4",
+      "itu": "I, T,U",
+      "student_materials": "Giáo trình chínhSlides của slot 5 (tiết 2)",
+      "s_download": "",
+      "student_tasks": "1) Nghe hiểu thông tin liên quan tới bài học チャレンジ4,5.2) Luyện tập đặt câu với mẫu ngữ pháp:～はどうですか3) Luyện tập nói 言ってみよう4,5; luyện hội thoại4) Đặt câu hỏi cho nội dung chưa rõ",
+      "urls": ""
+    },
+    {
+      "session": "11",
+      "topic": "Tiết 2:第4課 - ST3: （続き） + やってみよう（P79 CD A67 ） ‐もう一度聞こう",
+      "learning_method": "Offline",
+      "lo": "CLO1,CLO2, CLO4",
+      "itu": "I, T,U",
+      "student_materials": "Giáo trình chính",
+      "s_download": "",
+      "student_tasks": "1) Luyện bài tập nghe hiểu P792) Nghe bài nghe もう一度聞こう",
+      "urls": ""
+    },
+    {
+      "session": "12",
+      "topic": "Tiết 3:第4課 - ST3: （続き） ‐宿題確認＋読解（P80）",
+      "learning_method": "Offline",
+      "lo": "CLO1,CLO2, CLO3, CLO4",
+      "itu": "I, T,U",
+      "student_materials": "Giáo trình chính",
+      "s_download": "",
+      "student_tasks": "1) Luyện tập ngữ pháp, từ vựng2) Đặt câu hỏi với nội dung chưa rõ",
+      "urls": ""
+    },
+    {
+      "session": "13",
+      "topic": "Tiết 1:＋第4課復習 ‐宿題確認",
+      "learning_method": "Offline",
+      "lo": "CLO1,CLO2, CLO3, CLO4",
+      "itu": "I, T,U",
+      "student_materials": "Giáo trình chính",
+      "s_download": "",
+      "student_tasks": "1) Luyện tập từ vựng và ngữ pháp2) Đặt câu hỏi với nội dung chưa rõ",
+      "urls": ""
+    },
+    {
+      "session": "14",
+      "topic": "Tiết 2:第5課 - ST1: +話してみよう（P83）+聞いてみよう（P83 CD A68）+チャレンジ1（P84 CDA69）+ 語彙確認言ってみよう1（P86 ）-- 文法説明Vました Vませんでした",
+      "learning_method": "Offline",
+      "lo": "CLO1,CLO2, CLO4",
+      "itu": "ITU",
+      "student_materials": "Giáo trình chínhSlides của slot 8 (tiết 1)",
+      "s_download": "",
+      "student_tasks": "1) Tham gia luyện tập, thảo luận về các vấn đề đặt ra 話してみよう.2) Sử dụng AI (ChatGPT, Copilot, v.v.) để tra cứu cách dùng từ vựng phần 1 bài 5.3) Nghe hiểu thông tin liên quan tới bài học: 聞いてみよう；チャレンジ1.4) Luyện tập đặt câu với mẫu ngữ pháp:Vました Vませんでした.5) Luyện đặt câu, luyện nói 言ってみよう1.",
+      "urls": ""
+    },
+    {
+      "session": "15",
+      "topic": "Tiết 3:第5課 - ST1: +チャレンジ2,3（P84,85 CDA70, 71）言ってみよう2,3（P86 ）-- 文法説明どこかへ行きましたか［人］と - 応用会話練習",
+      "learning_method": "Offline",
+      "lo": "CLO1,CLO2, CLO4",
+      "itu": "I, T,U",
+      "student_materials": "Giáo trình chínhSlides của slot 8 (tiết 2)",
+      "s_download": "",
+      "student_tasks": "1) Nghe hiểu thông tin liên quan tới bài học チャレンジ2,3.2) Luyện tập đặt câu với mẫu ngữ pháp:どこかへ行きましたか［人］と3) Luyện tập nói 言ってみよう2,3; luyện hội thoại",
+      "urls": ""
+    },
+    {
+      "session": "16",
+      "topic": "Tiết 1:第5課 - ST1 （続き）+チャレンジ4（P85 CDA72）+ 語彙確認言ってみよう4（P87 ）-- 文法説明それから",
+      "learning_method": "Offline",
+      "lo": "CLO1,CLO2, CLO4",
+      "itu": "I, T,U",
+      "student_materials": "Giáo trình chínhSlides của slot 9 (tiết 1)",
+      "s_download": "",
+      "student_tasks": "1) Ôn tập từ vựng phần 1 bài 52) Nghe hiểu thông tin liên quan tới bài học チャレンジ4.3) Luyện tập đặt câu với mẫu ngữ pháp:それから4) Luyện tập nói 言ってみよう4",
+      "urls": ""
+    },
+    {
+      "session": "17",
+      "topic": "Tiết 2: 第5課 - ST1 （続き）- 応用会話練習+ やってみよう（P87 CD A73 ）",
+      "learning_method": "Offline",
+      "lo": "CLO1,CLO2, CLO4",
+      "itu": "I, T,U",
+      "student_materials": "Giáo trình chínhSlides của slot 9 (tiết 2)",
+      "s_download": "",
+      "student_tasks": "1) Luyện bài tập nghe P872) Luyện hội thoại ứng dụng3) Đặt câu hỏi với nội dung chưa rõ",
+      "urls": ""
+    },
+    {
+      "session": "18",
+      "topic": "Tiết 3:第5課 - ST2: +チャレンジ1.1（P88 CD A74）+ 語彙確認+言ってみよう1.1（P90 ）-- 文法説明イAかったです イAくなかったですナA・Nでした ナA・Nじゃありませんでした",
+      "learning_method": "Offline",
+      "lo": "CLO1,CLO2, CLO4",
+      "itu": "ITU",
+      "student_materials": "Giáo trình chínhSlides của slot 10 (tiết 1)",
+      "s_download": "",
+      "student_tasks": "1) Sử dụng AI (ChatGPT, Copilot, v.v.) để tra cứu cách dùng từ vựng phần 2 bài 5.2) Nghe hiểu thông tin liên quan tới bài học: 聞いてみよう；チャレンジ1.1.3) Luyện tập đặt câu với mẫu ngữ pháp:イAかったです イAくなかったですナA・Nでした ナA・Nじゃありませんでした.4) Luyện đặt câu, luyện nói 言ってみよう1.1.",
+      "urls": ""
+    },
+    {
+      "session": "19",
+      "topic": "Tiết 1:第5課 - ST2: +チャレンジ1.2; 1.3（P89 CD A74, 75）+言ってみよう1.2, 1.3（91 ）-- 文法説明どうでしたか- 応用会話練習",
+      "learning_method": "Offline",
+      "lo": "CLO1,CLO2, CLO4",
+      "itu": "ITU",
+      "student_materials": "Giáo trình chínhSlides của slot 10 (tiết 2)",
+      "s_download": "",
+      "student_tasks": "1) Nghe hiểu thông tin liên quan tới bài học チャレンジ1.2; 1.3.2) Luyện tập đặt câu với mẫu ngữ pháp:どうでしたか.3) Luyện tập nói 言ってみよう1.2; 1.3.",
+      "urls": ""
+    },
+    {
+      "session": "20",
+      "topic": "Tiết 2:第5課 - ST2: （続き）+チャレンジ2（P89 CD A77）+ 語彙確認+言ってみよう2（P92 ）-- 文法説明どうして ～から",
+      "learning_method": "Offline",
+      "lo": "CLO1,CLO2, CLO4",
+      "itu": "ITU",
+      "student_materials": "Giáo trình chínhSlides của slot 11 (tiết 1)",
+      "s_download": "",
+      "student_tasks": "1) Luyện tập từ vựng phần 2 bài 5 theo slide.2) Nghe hiểu thông tin liên quan tới bài học チャレンジ2.3) Luyện tập đặt câu với mẫu ngữ pháp:どうして ～から.4) Luyện tập nói 言ってみよう2.",
+      "urls": ""
+    },
+    {
+      "session": "21",
+      "topic": "Tiết 3:第5課 - ST2: （続き）- 応用会話練習 + やってみよう（P93 CD A78 ）",
+      "learning_method": "Offline",
+      "lo": "CLO1,CLO2, CLO4",
+      "itu": "I, T,U",
+      "student_materials": "Giáo trình chínhSlides của slot 11 (tiết 2)",
+      "s_download": "",
+      "student_tasks": "1) Nghe hiểu thông tin liên quan tới bài học P93.2) Đặt câu hỏi với nội dung chưa rõ",
+      "urls": ""
+    },
+    {
+      "session": "22",
+      "topic": "Tiết 1:第5課 - ST3: +チャレンジ1（P94 CD A79）+ 語彙確認+言ってみよう1（P96 ）-- 文法説明Nがほしいです",
+      "learning_method": "Offline",
+      "lo": "CLO1,CLO2, CLO4",
+      "itu": "ITU",
+      "student_materials": "Giáo trình chínhSlides của slot 12 (tiết 1)",
+      "s_download": "",
+      "student_tasks": "1) Sử dụng AI (ChatGPT, Copilot, v.v.) để tra cứu cách dùng từ vựng phần 3 bài 5.2) Nghe hiểu thông tin liên quan tới bài học: チャレンジ1.3) Luyện tập đặt câu với mẫu ngữ pháp:Nがほしいです.4) Luyện đặt câu, luyện nói 言ってみよう1.",
+      "urls": ""
+    },
+    {
+      "session": "23",
+      "topic": "Tiết 2:第5課 - ST3: +チャレンジ2,3（P95 CD A80,81）+言ってみよう2,3（P96 ）-- 文法説明Nが好きです Nが嫌いですVたいです- 応用会話練習",
+      "learning_method": "Offline",
+      "lo": "CLO1,CLO2, CLO4",
+      "itu": "ITU",
+      "student_materials": "Giáo trình chínhSlides của slot 12 (tiết 2)",
+      "s_download": "",
+      "student_tasks": "1) Nghe hiểu thông tin liên quan tới bài học: チャレンジ2,32) Sử dụng AI (ChatGPT, Copilot, v.v.) để tra cứu cách dùng và đặt câu với mẫu ngữ pháp mới:Nが好きです Nが嫌いですVたいです3) Luyện đặt câu, luyện nói 言ってみよう2,3",
+      "urls": ""
+    },
+    {
+      "session": "24",
+      "topic": "Tiết 3:第5課 - ST3: （続き）+チャレンジ4（P95 CD A82）+ 語彙確認+言ってみよう4（P97 ）-- 文法説明～へ～に行きます",
+      "learning_method": "Offline",
+      "lo": "CLO1,CLO2, CLO4",
+      "itu": "ITU",
+      "student_materials": "Giáo trình chínhSlides của slot 13 (tiết 1)",
+      "s_download": "",
+      "student_tasks": "1) Luyện tập từ vựng phần 3 bài 5 theo slide.2) Nghe hiểu thông tin liên quan tới bài học チャレンジ4.3) Luyện tập đặt câu với mẫu ngữ pháp:～へ～に行きます.4) Luyện tập nói 言ってみよう4.",
+      "urls": ""
+    },
+    {
+      "session": "25",
+      "topic": "Tiết 1:第5課 - ST3: （続き）- 応用会話練習 + やってみよう（P97 CD A83 ）",
+      "learning_method": "Offline",
+      "lo": "CLO1,CLO2, CLO4",
+      "itu": "ITU",
+      "student_materials": "Giáo trình chínhSlides của slot 13 (tiết 2)",
+      "s_download": "",
+      "student_tasks": "1) Nghe hiểu thông tin liên quan tới bài học P97.2) Luyện tập hội thoại ứng dụng.3) Đặt câu hỏi với nội dung chưa rõ.",
+      "urls": ""
+    },
+    {
+      "session": "26",
+      "topic": "Tiết 2:＋第5課復習 ‐もう一度聞こう A68 ‐宿題確認",
+      "learning_method": "Offline",
+      "lo": "CLO1,CLO2, CLO3, CLO4",
+      "itu": "I, T,U",
+      "student_materials": "Giáo trình chính",
+      "s_download": "",
+      "student_tasks": "1) Luyện lại bài nghe hiểu CDA682) Làm các bài tập trong sách BT từ vựng và ngữ pháp",
+      "urls": ""
+    },
+    {
+      "session": "27",
+      "topic": "Tiết 3:＋第5課復習＋読解（P98）第5課 漢字：第5課",
+      "learning_method": "Offline",
+      "lo": "CLO1,CLO3, CLO4",
+      "itu": "I, T,U",
+      "student_materials": "Giáo trình chínhSlide của slot 14: Chữ Hán bài 5",
+      "s_download": "",
+      "student_tasks": "1) Làm bài đọc P982) Luyện tập ngữ pháp, từ vựng3) Học chữ Hán bài 54) Dùng AI tra cứu thêm các từ ghép của các chữ Hán đã học",
+      "urls": ""
+    },
+    {
+      "session": "28",
+      "topic": "Tiết 1: Ôn tập small test 1 (từ vựng, chữ Hán, ngữ pháp bài 4,5)",
+      "learning_method": "Offline",
+      "lo": "CLO1, CLO2",
+      "itu": "",
+      "student_materials": "Bài ôn tập do GV biên soạn",
+      "s_download": "",
+      "student_tasks": "Làm bài ôn tập theo hướng dẫn của Giảng viên",
+      "urls": ""
+    },
+    {
+      "session": "29",
+      "topic": "Tiết 2:第6課 - ST1: +話してみよう（P101）+聞いてみよう（P101 CD B01）+チャレンジ1（P103 CDB02）+ 語彙確認+ 言ってみよう1（P104 ）-- 文法説明Vませんか Vましょう ～はちょっと…",
+      "learning_method": "Offline",
+      "lo": "CLO1,CLO2, CLO4",
+      "itu": "ITU",
+      "student_materials": "Giáo trình chínhSlides của slot 16 (tiết 1)",
+      "s_download": "",
+      "student_tasks": "1) Tham gia luyện tập, thảo luận về các vấn đề đặt ra 話してみよう2) Sử dụng AI (ChatGPT, Copilot, v.v.) để tra cứu cách dùng từ vựng phần 1 bài 63) Nghe hiểu thông tin liên quan tới bài học: 聞いてみよう；チャレンジ14) Luyện tập đặt câu với mẫu ngữ pháp:Vませんか Vましょう ～はちょっと…5) Luyện đặt câu, luyện nói 言ってみよう16) Đặt câu hỏi cho nội dung chưa rõ",
+      "urls": ""
+    },
+    {
+      "session": "30",
+      "topic": "Tiết 3:第6課 - ST1: +チャレンジ2（P103 CDB03）+ 言ってみよう2（P104 ）-- 文法説明～があります - 応用会話練習",
+      "learning_method": "Offline",
+      "lo": "CLO1,CLO2, CLO4",
+      "itu": "I, T,U",
+      "student_materials": "Giáo trình chínhSlides của slot 16 (tiết 2)",
+      "s_download": "",
+      "student_tasks": "1) Nghe hiểu thông tin liên quan tới bài học: チャレンジ22) Luyện tập đặt câu với mẫu ngữ pháp:～があります3) Luyện đặt câu, luyện nói 言ってみよう2",
+      "urls": ""
+    },
+    {
+      "session": "31",
+      "topic": "Tiết 1: Test 1: Trắc nghiệm (từ vựng, chữ Hán, ngữ pháp bài 4,5)",
+      "learning_method": "Offline",
+      "lo": "CLO1, CLO2",
+      "itu": "",
+      "student_materials": "Đề kiểm tra do GV biên soạn",
+      "s_download": "",
+      "student_tasks": "Làm bài thi trắc nghiệm trên phần mềm",
+      "urls": ""
+    },
+    {
+      "session": "32",
+      "topic": "Tiết 2: 第6課 - ST1 （続き）+チャレンジ3,4（P103 CD B04-05）+ 語彙確認言ってみよう3,4（P105 ）-- 文法説明［場所］で～があります～が（～枚）あります",
+      "learning_method": "Offline",
+      "lo": "CLO1,CLO2, CLO4",
+      "itu": "I, T,U",
+      "student_materials": "Giáo trình chínhSlides của slot 17 (tiết 1)",
+      "s_download": "",
+      "student_tasks": "1) Ôn tập từ vựng phần 1 bài 62) Nghe hiểu thông tin liên quan tới bài học チャレンジ3,4.3) Luyện tập đặt câu với mẫu ngữ pháp:［場所］で～があります～が（～枚）あります4) Luyện tập nói 言ってみよう3,4",
+      "urls": ""
+    },
+    {
+      "session": "33",
+      "topic": "Tiết 3: 第6課 - ST1 （続き） - 応用会話練習+ やってみよう（P105 CD B06 ）",
+      "learning_method": "Offline",
+      "lo": "CLO1,CLO2, CLO4",
+      "itu": "ITU",
+      "student_materials": "Giáo trình chínhSlides của slot 17 (tiết 2)",
+      "s_download": "",
+      "student_tasks": "1) Luyện hội thoại ứng dụng2) Nghe hiểu thông tin liên quan tới bài học P1053) Đặt câu hỏi với nội dung chưa rõ",
+      "urls": ""
+    },
+    {
+      "session": "34",
+      "topic": "Tiết 1:第6課 - ST2: +チャレンジ1（P106 CD B07）+ 語彙確認+言ってみよう1（P108 ）-- 文法説明～で～がいちばんAです- 応用会話練習",
+      "learning_method": "Offline",
+      "lo": "CLO1,CLO2, CLO4",
+      "itu": "ITU",
+      "student_materials": "Giáo trình chínhSlides của slot 18 (tiết 1)",
+      "s_download": "",
+      "student_tasks": "1) Sử dụng AI (ChatGPT, Copilot, v.v.) để tra cứu cách dùng từ vựng phần 2 bài 62) Nghe hiểu thông tin liên quan tới bài học: チャレンジ13) Luyện tập đặt câu với mẫu ngữ pháp:～で～がいちばんAです4) Luyện đặt câu, luyện nói 言ってみよう1",
+      "urls": ""
+    },
+    {
+      "session": "35",
+      "topic": "Tiết 2:第6課 - ST2: +チャレンジ2（P107 CD B08）+言ってみよう2（P108 ）-- 文法説明～と～とどちらがAですか ～のほうがAです- 応用会話練習",
+      "learning_method": "Offline",
+      "lo": "CLO1,CLO2, CLO4",
+      "itu": "I, T,U",
+      "student_materials": "Giáo trình chínhSlides của slot 18 (tiết 2)",
+      "s_download": "",
+      "student_tasks": "1) Nghe hiểu thông tin liên quan tới bài học: チャレンジ22) Luyện tập đặt câu với mẫu ngữ pháp:～と～とどちらがAですか ～のほうがAです3) Luyện đặt câu, luyện nói 言ってみよう2",
+      "urls": ""
+    },
+    {
+      "session": "36",
+      "topic": "Tiết 3:第6課 - ST2: （続き）+チャレンジ3（P107 CD B09）+ 語彙確認+言ってみよう3（P109 ）-- 文法説明～は～よりAです",
+      "learning_method": "Offline",
+      "lo": "CLO1,CLO2, CLO4",
+      "itu": "I, T,U",
+      "student_materials": "Giáo trình chínhSlides của slot 19 (tiết 1)",
+      "s_download": "",
+      "student_tasks": "1) Ôn tập từ vựng phần 2 bài 62) Nghe hiểu thông tin liên quan tới bài học チャレンジ33) Luyện tập đặt câu với mẫu ngữ pháp:～は～よりAです4) Luyện tập nói 言ってみよう3",
+      "urls": ""
+    },
+    {
+      "session": "37",
+      "topic": "Tiết 1:第6課 - ST2: （続き）- 応用会話練習 + やってみよう（P109 CD B10 ）",
+      "learning_method": "Offline",
+      "lo": "CLO1,CLO2, CLO4",
+      "itu": "I, T,U",
+      "student_materials": "Giáo trình chínhSlides của slot 19 (tiết 2)",
+      "s_download": "",
+      "student_tasks": "1) Luyện hội thoại ứng dụng2) Nghe hiểu thông tin liên quan tới bài học P109.3) Đặt câu hỏi với nội dung chưa rõ",
+      "urls": ""
+    },
+    {
+      "session": "38",
+      "topic": "Tiết 2:第6課 - ST3: +チャレンジ1,2（P110 CD B11, 12）+ 語彙確認+言ってみよう1,2（P112)-- 文法説明もうVましたか（経験） まだです～よ- 応用会話練習",
+      "learning_method": "Offline",
+      "lo": "CLO1,CLO2, CLO4",
+      "itu": "ITU",
+      "student_materials": "Giáo trình chínhSlides của slot 20 (tiết 1)",
+      "s_download": "",
+      "student_tasks": "1) Sử dụng AI (ChatGPT, Copilot, v.v.) để tra cứu cách dùng từ vựng phần 3 bài 6.2) Nghe hiểu thông tin liên quan tới bài học: チャレンジ1,2.3) Luyện tập đặt câu với mẫu ngữ pháp:もうVましたか（経験） まだです～よ4) Luyện đặt câu, luyện nói 言ってみよう1,2.",
+      "urls": ""
+    },
+    {
+      "session": "39",
+      "topic": "Tiết 3:第6課 - ST3: +チャレンジ3,4（P111 CD B13,14）+言ってみよう3,4（P113）-- 文法説明～はどうですか～ね（確認）- 応用会話練習",
+      "learning_method": "Offline",
+      "lo": "CLO1,CLO2, CLO4",
+      "itu": "ITU",
+      "student_materials": "Giáo trình chínhSlides của slot 20 (tiết 2)",
+      "s_download": "",
+      "student_tasks": "1) Nghe hiểu thông tin liên quan tới bài học: チャレンジ3,42) Sử dụng AI (ChatGPT, Copilot, v.v.) để tra cứu cách dùng và đặt câu với mẫu ngữ pháp mới:～はどうですか～ね（確認）3) Luyện đặt câu, luyện nói 言ってみよう3,4",
+      "urls": ""
+    },
+    {
+      "session": "40",
+      "topic": "Tiết 1:第6課 - ST3: （続き） + やってみよう（P113 CD B15 ）＋読解（P114）",
+      "learning_method": "Offline",
+      "lo": "CLO1,CLO2, CLO3, CLO4",
+      "itu": "I, T,U",
+      "student_materials": "Giáo trình chính",
+      "s_download": "",
+      "student_tasks": "1) Luyện bài tập nghe2) Luyện bài đọc P114",
+      "urls": ""
+    },
+    {
+      "session": "41",
+      "topic": "Tiết 2:第6課 :漢字",
+      "learning_method": "Offline",
+      "lo": "CLO1",
+      "itu": "I, T,U",
+      "student_materials": "Slide slot 21: chữ Hán Bài 6",
+      "s_download": "",
+      "student_tasks": "1) Học CH bài 6.2) Dùng AI tra cứu thêm các từ ghép của các chữ Hán đã học.",
+      "urls": ""
+    },
+    {
+      "session": "42",
+      "topic": "Tiết 3:＋第6課復習 ‐もう一度聞こう ‐宿題確認",
+      "learning_method": "Offline",
+      "lo": "CLO1,CLO2, CLO3, CLO4",
+      "itu": "I, T,U",
+      "student_materials": "Giáo trình chính",
+      "s_download": "",
+      "student_tasks": "1) Luyện tập từ vựng và ngữ pháp2) Đặt câu hỏi với nội dung chưa rõ",
+      "urls": ""
+    },
+    {
+      "session": "43",
+      "topic": "Tiết 1:第7課 - ST1: +話してみよう（P117）+聞いてみよう（P117 CD B16）+チャレンジ1（P118 CDB17）+ 語彙確認+ 言ってみよう1（P120 ）-- 文法説明～は～にあります - 応用会話練習",
+      "learning_method": "Offline",
+      "lo": "CLO1,CLO2, CLO4",
+      "itu": "ITU",
+      "student_materials": "Giáo trình chínhSlides của slot 23 (tiết 1)",
+      "s_download": "",
+      "student_tasks": "1) Tham gia luyện tập, thảo luận về các vấn đề đặt ra 話してみよう2) Sử dụng AI (ChatGPT, Copilot, v.v.) để tra cứu cách dùng từ vựng phần 1 bài 73) Nghe hiểu thông tin liên quan tới bài học: 聞いてみよう；チャレンジ14) Luyện tập đặt câu với mẫu ngữ pháp:～は～にあります5) Luyện đặt câu, luyện nói 言ってみよう16) Đặt câu hỏi cho nội dung chưa rõ",
+      "urls": ""
+    },
+    {
+      "session": "44",
+      "topic": "Tiết 2:第7課 - ST1: +チャレンジ2（P119 CDB18）+ 言ってみよう2（P120 ）-- 文法説明～は～にいます - 応用会話練習",
+      "learning_method": "Offline",
+      "lo": "CLO1,CLO2, CLO4",
+      "itu": "I, T,U",
+      "student_materials": "Giáo trình chínhSlides của slot 23 (tiết 2)",
+      "s_download": "",
+      "student_tasks": "1) Nghe hiểu thông tin liên quan tới bài học: チャレンジ22) Luyện tập đặt câu với mẫu ngữ pháp:～は～にいます3) Luyện đặt câu, luyện nói 言ってみよう2",
+      "urls": ""
+    },
+    {
+      "session": "45",
+      "topic": "Tiết 3:第7課 - ST1 （続き）+チャレンジ3（P119 CDB19）+ 語彙確認言ってみよう3（P121 ）-- 文法説明～が（～枚）あります",
+      "learning_method": "Offline",
+      "lo": "CLO1,CLO2, CLO4",
+      "itu": "I, T,U",
+      "student_materials": "Giáo trình chínhSlides của slot 24 (tiết 1)",
+      "s_download": "",
+      "student_tasks": "1) Ôn tập từ vựng phần 1 bài 72) Nghe hiểu thông tin liên quan tới bài học チャレンジ33) Luyện tập đặt câu với mẫu ngữ pháp:～が（～枚）あります4) Luyện tập nói 言ってみよう3",
+      "urls": ""
+    },
+    {
+      "session": "46",
+      "topic": "Tiết 1:第7課 - ST1 （続き） - 応用会話練習+ やってみよう（P121 CD B20 ）",
+      "learning_method": "Offline",
+      "lo": "CLO1,CLO2, CLO4",
+      "itu": "I, T,U",
+      "student_materials": "Giáo trình chínhSlides của slot 24 (tiết 2)",
+      "s_download": "",
+      "student_tasks": "1) Luyện hội thoại ứng dụng2) Nghe hiểu thông tin liên quan tới bài học P121.3) Đặt câu hỏi với nội dung chưa rõ",
+      "urls": ""
+    },
+    {
+      "session": "47",
+      "topic": "Tiết 2:第7課 - ST2: +チャレンジ1（P122 CD B21）+ 語彙確認+言ってみよう1（P124 ）-- 文法説明Các nhóm động từ và cách chia động từ thể TE",
+      "learning_method": "Offline",
+      "lo": "CLO1,CLO2, CLO4",
+      "itu": "ITU",
+      "student_materials": "Giáo trình chínhSlides của slot 25 (tiết 1)",
+      "s_download": "",
+      "student_tasks": "1) Sử dụng AI (ChatGPT, Copilot, v.v.) để tra cứu cách dùng từ vựng phần 2 bài 72) Nghe hiểu thông tin liên quan tới bài học: チャレンジ13) Luyện tập cách chia động từ thể TE4) Luyện đặt câu, luyện nói 言ってみよう1",
+      "urls": ""
+    },
+    {
+      "session": "48",
+      "topic": "Tiết 3:第7課 - ST2: +チャレンジ2（P122 CD B22）+言ってみよう2（P124 ）-- 文法説明 Vてください ［道具］で- 応用会話練習",
+      "learning_method": "Offline",
+      "lo": "CLO1,CLO2, CLO4",
+      "itu": "I, T,U",
+      "student_materials": "Giáo trình chínhSlides của slot 25 (tiết 2)",
+      "s_download": "",
+      "student_tasks": "1) Nghe hiểu thông tin liên quan tới bài học: チャレンジ22) Luyện tập đặt câu với mẫu ngữ pháp:Vてください ［道具］で3) Luyện đặt câu, luyện nói 言ってみよう2",
+      "urls": ""
+    },
+    {
+      "session": "49",
+      "topic": "Tiết 1:第7課 - ST2: （続き）+チャレンジ3,4（P123 CD B23, 24）+ 語彙確認+言ってみよう3,4（P125,126 ）-- 文法説明（Nの）V方どの- 応用会話練習",
+      "learning_method": "Offline",
+      "lo": "CLO1,CLO2, CLO4",
+      "itu": "I, T,U",
+      "student_materials": "Giáo trình chínhSlides của slot 26 (tiết 1)",
+      "s_download": "",
+      "student_tasks": "1) Ôn tập từ vựng phần 2 bài 72) Nghe hiểu thông tin liên quan tới bài học チャレンジ3,43) Luyện tập đặt câu với mẫu ngữ pháp:（Nの）V方どの4) Luyện tập nói 言ってみよう3, 4",
+      "urls": ""
+    },
+    {
+      "session": "50",
+      "topic": "Tiết 2:第7課 - ST2: （続き）+チャレンジ5（P123 CD B25）+言ってみよう5（P125,126 ）-- 文法説明どれ- 応用会話練習 + やってみよう（P127 CD B26 ）",
+      "learning_method": "Offline",
+      "lo": "CLO1,CLO2, CLO4",
+      "itu": "I, T,U",
+      "student_materials": "Giáo trình chínhSlides của slot 26 (tiết 2)",
+      "s_download": "",
+      "student_tasks": "1) Nghe hiểu thông tin liên quan tới bài học チャレンジ52) Luyện tập đặt câu với mẫu ngữ pháp どれ3) Luyện tập nói 言ってみよう5, luyện hội thoại4) Đặt câu hỏi cho nội dung chưa rõ",
+      "urls": ""
+    },
+    {
+      "session": "51",
+      "topic": "Tiết 3:第7課 - ST3: +チャレンジ1（P128 CD B27）+ 語彙確認+言ってみよう1（P130）-- 文法説明Vています（動作の進行）- 応用会話練習",
+      "learning_method": "Offline",
+      "lo": "CLO1,CLO2, CLO4",
+      "itu": "ITU",
+      "student_materials": "Giáo trình chínhSlides của slot 27 (tiết 1)",
+      "s_download": "",
+      "student_tasks": "1) Sử dụng AI (ChatGPT, Copilot, v.v.) để tra cứu cách dùng từ vựng phần 3 bài 72) Nghe hiểu thông tin liên quan tới bài học: チャレンジ13) Luyện tập ngữ pháp Vています（動作の進行）4) Luyện đặt câu, luyện nói 言ってみよう1",
+      "urls": ""
+    },
+    {
+      "session": "52",
+      "topic": "Tiết 1:第7課 - ST3: +チャレンジ2,3,4（P128,129 CD B28-30）+言ってみよう2,3,4（P131,132）-- 文法説明Vましょうか誰がまだあります もうありません- 応用会話練習",
+      "learning_method": "Offline",
+      "lo": "CLO1,CLO2, CLO4",
+      "itu": "ITU",
+      "student_materials": "Giáo trình chínhSlides của slot 27 (tiết 2)",
+      "s_download": "",
+      "student_tasks": "1) Nghe hiểu thông tin liên quan tới bài học: チャレンジ2,3,42) Sử dụng AI (ChatGPT, Copilot, v.v.) để tra cứu cách dùng và đặt câu với mẫu ngữ pháp mới:Vましょうか誰がまだあります もうありません3) Luyện đặt câu, luyện nói 言ってみよう2,3,4",
+      "urls": ""
+    },
+    {
+      "session": "53",
+      "topic": "Tiết 2:第7課 - ST3: （続き）＋ やってみよう（P133 CD B31 ）",
+      "learning_method": "Offline",
+      "lo": "CLO1,CLO2, CLO4",
+      "itu": "I, T,U",
+      "student_materials": "Giáo trình chính",
+      "s_download": "",
+      "student_tasks": "1) Luyện tập nghe hiểu thông tin liên quan tới bài học P133.",
+      "urls": ""
+    },
+    {
+      "session": "54",
+      "topic": "Tiết 3:＋漢字：第7課",
+      "learning_method": "Offline",
+      "lo": "CLO1",
+      "itu": "I, T,U",
+      "student_materials": "Slide slot 28: chữ Hán Bài 7",
+      "s_download": "",
+      "student_tasks": "1) Học CH bài 72) Dùng AI tra cứu thêm các từ ghép của các chữ Hán đã học",
+      "urls": ""
+    },
+    {
+      "session": "55",
+      "topic": "Tiết 1:＋第7課復習 ‐もう一度聞こう ‐読解（P134）",
+      "learning_method": "Offline",
+      "lo": "CLO1,CLO3, CLO4",
+      "itu": "ITU",
+      "student_materials": "Giáo trình chính",
+      "s_download": "",
+      "student_tasks": "1) Luyện tập nghe hiểu もう一度聞こう .2) Làm bài tập đọc P134.",
+      "urls": ""
+    },
+    {
+      "session": "56",
+      "topic": "Tiết 2:＋第7課復習 ‐宿題確認",
+      "learning_method": "Offline",
+      "lo": "CLO1,CLO3, CLO4",
+      "itu": "",
+      "student_materials": "",
+      "s_download": "",
+      "student_tasks": "1) Luyện tập ngữ pháp, từ vựng2) Đặt câu hỏi với nội dung chưa rõ",
+      "urls": ""
+    },
+    {
+      "session": "57",
+      "topic": "Tiết 3: Ôn tập small test 2 (từ vựng, chữ Hán, ngữ pháp bài 6,7)",
+      "learning_method": "Offline",
+      "lo": "CLO1, CLO2",
+      "itu": "",
+      "student_materials": "Bài ôn tập do GV biên soạn",
+      "s_download": "",
+      "student_tasks": "Làm bài ôn tập theo hướng dẫn của Giảng viên",
+      "urls": ""
+    },
+    {
+      "session": "58",
+      "topic": "Tiết 1: Test 2: Trắc nghiệm (từ vựng, chữ Hán, ngữ pháp bài 6,7)",
+      "learning_method": "Offline",
+      "lo": "CLO1, CLO2",
+      "itu": "",
+      "student_materials": "Đề kiểm tra do GV biên soạn",
+      "s_download": "",
+      "student_tasks": "Làm bài thi trắc nghiệm trên phần mềm",
+      "urls": ""
+    },
+    {
+      "session": "59",
+      "topic": "Tiết 2: 期末試験の復習(1)",
+      "learning_method": "Offline",
+      "lo": "CLO1, CLO2, CLO3, CLO4",
+      "itu": "ITU",
+      "student_materials": "Giáo trình chính Slide của slot 30 (Tiết 1)",
+      "s_download": "",
+      "student_tasks": "1) Tham gia thảo luận về các vấn đề đặt ra 2) Ôn tập tổng hợp từ bài 4 đến 7",
+      "urls": ""
+    },
+    {
+      "session": "60",
+      "topic": "Tiết 3: 期末試験の復習(2)",
+      "learning_method": "Offline",
+      "lo": "CLO1, CLO2, CLO3, CLO4",
+      "itu": "ITU",
+      "student_materials": "Giáo trình chính Slide của slot 30 (Tiết 2)",
+      "s_download": "",
+      "student_tasks": "1) Tham gia thảo luận về các vấn đề đặt ra 2) Ôn tập tổng hợp từ bài 4 đến 7",
+      "urls": ""
+    }
+  ],
+  "constructive_questions": [
+    {
+      "session_no": "1",
+      "name": "CQ1.1",
+      "details": "Khi giới thiệu về thành phố hay đất nước mình, em sẽ giới thiệu những gì? (câu trả lời bằng tiếng Việt hoặc tiếng Nhật)"
+    },
+    {
+      "session_no": "2",
+      "name": "CQ1.2",
+      "details": "A:Khi muốn biết thông tin về thành phố của một người bạn (tên thành phố, vị trí, thời gian di chuyển từ một thành phố lớn nào đó đến thành phố của B), em sẽ hỏi bạn đó như thế nào bằng tiếng Nhật? B: Khi có người bạn muốn biết thông tin về thành phố của mình (tên, vị trí, thời gian di chuyển từ một thành phố lớn nào đó đến thành phố của bạn), em sẽ trả lời thế nào bằng tiếng Nhật?"
+    },
+    {
+      "session_no": "3",
+      "name": "CQ1.3",
+      "details": "Khi phải viết bài giới thiệu về vị trí thành phố của mình, em sẽ viết những gì?"
+    },
+    {
+      "session_no": "4",
+      "name": "CQ2.1",
+      "details": "A: Trong tiếng Nhật có mấy cách hỏi về đặc điểm của một nơi nào đó (đất nước/thành phố/trường học,etc)? B: Trong tiếng Nhật, khi nói về sự đối lập hay bổ sung thông tin, người ta dùng ngữ pháp gì?"
+    },
+    {
+      "session_no": "5",
+      "name": "CQ2.2",
+      "details": "Khi viết bài giới thiệu đặc điểm chung của thành phố mình bằng tiếng Nhật mà phải sử dụng các từ nối そして、が, em phải nói như thế nào?"
+    },
+    {
+      "session_no": "6",
+      "name": "CQ2.3",
+      "details": "Các chữ Hán trong bài 4 có cách đọc Hán Việt là gì? Ý nghĩa ra sao? Các hình ảnh liên tưởng để có thể nhớ được các chữ Hán đó?"
+    },
+    {
+      "session_no": "7",
+      "name": "CQ3.1",
+      "details": "A: Muốn biết về các địa danh ở thành phố của B và đặc điểm của các địa danh đó, phải hỏi thế nào bằng tiếng Nhật? B: Phải dùng cấu trúc gì để trả lời cho câu hỏi của A?"
+    },
+    {
+      "session_no": "8",
+      "name": "CQ3.2",
+      "details": "A: Muốn hỏi về đặc điểm thời tiết và các món ăn nổi tiếng của thành phố của B, phải dùng cấu trúc gì trong tiếng Nhật? B: Phải dùng cấu trúc gì để trả lời cho câu hỏi của A? *Câu hỏi của tiết 8,9,10"
+    },
+    {
+      "session_no": "11",
+      "name": "CQ3.3",
+      "details": "Khi phải viết bài giới thiệu bằng tiếng Nhật về thành phố của mình với các thông tin như tên, vị trí, đặc điểm, địa danh, món ăn, thời tiết, bạn viết gì?"
+    },
+    {
+      "session_no": "19",
+      "name": "CQ6.1",
+      "details": "Nội dung câu hỏi CQ 6.1 Trong kì nghỉ tới, em sẽ làm gì? Cách diễn tả hành động mà em sẽ thực hiện trong tiếng Nhật?"
+    },
+    {
+      "session_no": "19",
+      "name": "CQ6.2",
+      "details": "Nội dung câu hỏi CQ 6.2 どこか khác gì どこへ・どこで？何か khác gì 何が・何を？Nêu ví dụ minh họa."
+    },
+    {
+      "session_no": "20",
+      "name": "CQ6.3",
+      "details": "Nội dung câu hỏi CQ 6.3 Khi nói về các hành động đã diễn ra hoặc đã không xảy ra trong quá khứ, các bạn nói như thế nào?"
+    },
+    {
+      "session_no": "20",
+      "name": "CQ7.4",
+      "details": "Nội dung câu hỏi CQ6.4 Cuối tuần vừa qua, bạn đã làm gì? Tham gia vào các hoạt động gì? Kể lại cho các bạn biết ( bằng tiếng Nhật)"
+    },
+    {
+      "session_no": "22",
+      "name": "CQ7.1",
+      "details": "Nội dung câu CQ 7.1 Tính từ đuôi na, đuôi I chia thời hiện tại, hiện tại phủ định; quá khứ, quá khứ phủ định ra sao?"
+    },
+    {
+      "session_no": "23",
+      "name": "CQ7.2",
+      "details": "Nội dung câu CQ 7.2 Tính từ trong tiếng Nhật có mấy loại? Đặc điểm của từng loại? Lấy ví dụ. Hãy chỉ ra cách kết hợp trạng từ với tính từ trong tiếng Nhật."
+    },
+    {
+      "session_no": "24",
+      "name": "CQ7.3",
+      "details": "Nội dung câu CQ 7.3 A: Trong tiếng Nhật, khi muốn hỏi B về một trải nghiệm tuần vừa qua, em sẽ bắt đầu câu chuyện như thế nào? Cần hỏi tiếp gì để có thể tiếp tục câu chuyện? B:Phải dùng cấu trúc gì để trả lời các câu hỏi cảu A bằng tiếng Nhật?"
+    },
+    {
+      "session_no": "24",
+      "name": "CQ7.4",
+      "details": "Nội dung câu CQ 7.4 Muốn sử dụng mẫu hội thoại \"Tại sao…?\" - \"Vì lý do….\" thì chúng ta sử dụng mẫu câu như thế nào?"
+    },
+    {
+      "session_no": "25",
+      "name": "CQ8.1",
+      "details": "Nội dung câu CQ 8.1 Em thích hay ghét cái gì? Cách nói đó trong tiếng Nhật ra sao?"
+    },
+    {
+      "session_no": "26",
+      "name": "CQ8.2",
+      "details": "Nội dung câu CQ 8.2 Hiện tại em đang muốn có cái gì ? Cách nói này trong tiếng Nhật ra sao? Cần chú ý gì với mẫu câu này?"
+    },
+    {
+      "session_no": "26",
+      "name": "CQ8.3",
+      "details": "Nội dung câu CQ 8.3 Thể たい được thành lập như thế nào? Cần chú ý gì khi sử dụng mẫu câu này? Lập một đoạn hội thoại 2 người có dùng ngữ pháp たい."
+    },
+    {
+      "session_no": "27",
+      "name": "CQ8.4",
+      "details": "Nội dung câu CQ 8.4 'Bạn sẽ đi Nhật chứ? Đi Nhật để làm gì?' ….Cách diễn tả ý nghĩa: \"đi đâu để làm gì\" trong tiếng Nhật ra sao?"
+    },
+    {
+      "session_no": "31",
+      "name": "CQ11.1",
+      "details": "Nội dung câu CQ11.1 Khi muốn mời gọi, rủ rê người khác cùng mình làm gì đó, sử dụng cấu trúc ngữ pháp gì trong Tiếng Nhật?"
+    },
+    {
+      "session_no": "31",
+      "name": "CQ11.2",
+      "details": "Nội dung câu CQ11 .2 Khi muốn mời gọi, rủ rê hay đáp lại những lời mời gọi, rủ rê của ai đó sử dụng cấu trúc ngữ pháp gì trong tiếng Nhật? Sự khác nhau giữa cấu trúc Vませんかvà Vましょうlà gì?"
+    },
+    {
+      "session_no": "32",
+      "name": "CQ11.3",
+      "details": "Nội dung câu CQ11.3 Khi được ai đó rủ rê, nếu đồng ý tham gia sẽ trả lời như thế nào? Nếu không đồng ý tham gia sẽ trả lời như thế nào?"
+    },
+    {
+      "session_no": "32",
+      "name": "CQ11.4",
+      "details": "Nội dung câu CQ11.4 Khi được ai đó mời mọc, nhưng mình đã có hẹn hoặc đã có việc riêng khác... nói như thế nào để thể hiện lý do?"
+    },
+    {
+      "session_no": "33",
+      "name": "CQ11.5",
+      "details": "Nội dung câu CQ11.5 Khi muốn diễn tả một sự kiện (lớn) được tổ chức hoặc xảy ra ở nơi nào đó, sử dụng cấu trúc ngữ pháp gì?"
+    },
+    {
+      "session_no": "34",
+      "name": "CQ12.1",
+      "details": "Nội dung câu CQ12.1 Khi muốn diễn đạt mình có bao nhiêu tờ vé xem phim, hoặc đã mua bao nhiêu con tem... sử dụng cấu trúc ngữ pháp gì để diễn đạt?"
+    },
+    {
+      "session_no": "34",
+      "name": "CQ12.2",
+      "details": "Nội dung câu CQ12.2 Có những loại so sánh gì? Những từ vựng nào có thể sử dụng cho các câu so sánh?"
+    },
+    {
+      "session_no": "35",
+      "name": "CQ12.3",
+      "details": "Nội dung câu CQ12.3 Khi muốn yêu cầu người nghe lựa chọn 1 đối tượng nào đó có nội dung được biểu thị qua tính từ ở mức độ cao nhất, sử dụng cấu trúc ngữ pháp gì?Cách trả lời cho loại câu hỏi này như thế nào?"
+    },
+    {
+      "session_no": "36",
+      "name": "CQ12.4",
+      "details": "Nội dung câu CQ12.4 Sử dụng cấu trúc ngữ pháp gì để hỏi lựa chọn giữa 2 phương án A và B? Cách để trả lời khi chọn 1 trong 2 phương án là gì?"
+    },
+    {
+      "session_no": "37",
+      "name": "CQ13.1",
+      "details": "Nội dung câu CQ13.1 Những từ vựng nào liên quan đến món ăn, phương tiện giao thông? Những tính từ nào có thể sử dụng để diễn đạt so sánh giữa 2 đối tượng với nhau?"
+    },
+    {
+      "session_no": "37",
+      "name": "CQ13.2",
+      "details": "Nội dung câu CQ13.2 Khi muốn nói: \"Món ăn Thái Lan cay hơn món ăn của Nhật Bản\" thì sẽ sử dụng cấu trúc ngữ pháp nào?"
+    },
+    {
+      "session_no": "38",
+      "name": "CQ13.3",
+      "details": "Nội dung câu CQ13.3 So sánh sự khác nhau giữa các biện pháp so sánh. 1: N1で N２が いちばんAです 2: Ｎ１と Ｎ２と どちらが Ａですか 3: Ｎ１は Ｎ２より Aです"
+    },
+    {
+      "session_no": "39",
+      "name": "CQ13.4",
+      "details": "Nội dung câu CQ13.4 Khi muốn hỏi bạn bè rằng: Bạn đã ăn cơm chưa hay đã thực hiện xong hành động nào đó chưa? Sẽ sử dụng cấu trúc ngữ pháp nào để hỏi?"
+    },
+    {
+      "session_no": "39",
+      "name": "CQ13.5",
+      "details": "Nội dung câu CQ13.5 Khi được hỏi: Bạn đã ....chưa? Sẽ trả lời như thế nào nếu mình đã thực hiện hành động đó? Trả lời như thế nào nếu chưa thực hiện hành động đó?"
+    },
+    {
+      "session_no": "40",
+      "name": "CQ14.1",
+      "details": "Nội dung câu CQ14.1 Khi muốn thông báo một nội dung mới mà mình nghĩ rằng người nghe chưa biết. Ví dụ: \"Việt Nam đẹp lắm đấy\", hoặc \"Anh Yamada chuẩn bị kết hôn đó\",.... Từ \" đấy, đó\" sẽ được nói như thế nào trong tiếng Nhật?"
+    },
+    {
+      "session_no": "41",
+      "name": "CQ14.2",
+      "details": "Nội dung câu CQ14.2 Khi bạn rủ đi chơi hay đi xem phim mà chưa chốt đi đâu? Xem phim gì?. Trong trường hợp này, muốn đưa ra một phương án (gợi ý) của mình thì mình sẽ biểu đạt như thế nào?"
+    },
+    {
+      "session_no": "42",
+      "name": "CQ14.3",
+      "details": "Nội dung câu CQ14.3 Cách đọc của những chữ hán tự này sang âm ON, KUN như thế nào? Từ ghép của những chữ Hán tự này đọc như thế nào? Ý nghĩa của từ ghép là gì?"
+    },
+    {
+      "session_no": "44",
+      "name": "CQ15.1",
+      "details": "Nội dung câu CQ15.1 Khi muốn nói vị trí của 1 vật ta có thể dùng những cấu trúc câu như thế nào?"
+    },
+    {
+      "session_no": "44",
+      "name": "CQ15.2",
+      "details": "Nội dung câu CQ15.2 Những từ chỉ vị trí cụ thể được liệt kê trong bài 7 là gì?"
+    },
+    {
+      "session_no": "45",
+      "name": "CQ15.3",
+      "details": "Nội dung câu CQ15.3 Sự khác nhau giữa 2 từ chỉ vị trí là となり vàよこ là gì?"
+    },
+    {
+      "session_no": "45",
+      "name": "CQ15.4",
+      "details": "Nội dung câu CQ15.4 Cách tạo nên 1 danh từ chỉ vị trí trong đó có bao gồm từ chỉ vị trí cụ thể như trong, ngoài…là gì?"
+    },
+    {
+      "session_no": "45",
+      "name": "CQ15.5",
+      "details": "Nội dung câu CQ15.5 Khi muốn đặt câu hỏi về vị trí của 1 vật ta dùng các câu như thế nào?"
+    },
+    {
+      "session_no": "46",
+      "name": "CQ16.1",
+      "details": "Nội dung câu CQ16.1 Khi muốn nói vị trí của 1 người hoặc con vật ta có thể dùng những cấu trúc câu như thế nào?"
+    },
+    {
+      "session_no": "46",
+      "name": "CQ16.2",
+      "details": "Nội dung câu CQ16.2 Khi muốn đặt câu hỏi về vị trí của người hoặc con vật ta dùng các câu như thế nào?"
+    },
+    {
+      "session_no": "47",
+      "name": "CQ16.3",
+      "details": "Nội dung câu CQ16.3 Khi ta muốn mô tả vị trí mình đang đứng thì ta thường nói những thông tin như thế nào?"
+    },
+    {
+      "session_no": "48",
+      "name": "CQ16.4",
+      "details": "Nội dung câu CQ16.4 Muốn trình bày thông tin ở đâu đó có ai, cái gì trong tiếng Nhật thì nói như thế nào?"
+    },
+    {
+      "session_no": "48",
+      "name": "CQ16.5",
+      "details": "Nội dung câu CQ16.5 Khi muốn hỏi đặt câu hỏi cho loại câu ở đâu có cái gì, có ai thì nói như thế nào?"
+    },
+    {
+      "session_no": "49",
+      "name": "CQ17.1",
+      "details": "Nội dung câu CQ17.1 Động từ thể Te trong tiếng Nhật được chia từ động từ thể Masu như thế nào?"
+    },
+    {
+      "session_no": "50",
+      "name": "CQ17.2",
+      "details": "Nội dung câu CQ17.2 Khi muốn yêu cầu, ra lệnh, nhờ vả ai đó làm gì cho mình thì nói như thế nào?"
+    },
+    {
+      "session_no": "51",
+      "name": "CQ17.3",
+      "details": "Nội dung câu CQ17.3 Trợ từ để chỉ phương tiện, cách thức làm gì đó là gì? Trợ từ này có cách dùng khác là gì? Hãy phân biệt các cách dùng này."
+    },
+    {
+      "session_no": "51",
+      "name": "CQ17.4",
+      "details": "Nội dung câu CQ17.4 Khi muốn nói cách thức làm việc gì đó thì sẽ chia động từ như thế nào? Lấy ví dụ minh họa với từ vựng đã học."
+    },
+    {
+      "session_no": "51",
+      "name": "CQ17.5",
+      "details": "Nội dung câu CQ17.5 Cách sử dụng của từ để hỏi どの là gì? Dùng trong tình huống như thế nào?"
+    },
+    {
+      "session_no": "52",
+      "name": "CQ18.1",
+      "details": "Nội dung câu CQ18.1 Cách sử dụng của từ để hỏi どれ là gì? Dùng trong tình huống như thế nào?"
+    },
+    {
+      "session_no": "53",
+      "name": "CQ18.2",
+      "details": "Nội dung câu CQ18.2 Khi muốn nói mình hoặc ai đó đang làm gì thì sử dụng cấu trúc gì? Lấy ví dụ minh họa với các từ vựng đã học."
+    },
+    {
+      "session_no": "54",
+      "name": "CQ18.3",
+      "details": "Nội dung câu CQ18.3 Khi muốn đề nghị làm việc gì đó cho người khác thì nói như thế nào trong tiếng Nhật?"
+    },
+    {
+      "session_no": "54",
+      "name": "CQ18.4",
+      "details": "Nội dung câu CQ18.4 Khi muốn nhấn mạnh rằng chính mình hoặc ai đó đã hoặc sẽ làm việc gì đó thì nói như thế nào?"
+    },
+    {
+      "session_no": "54",
+      "name": "CQ18.5",
+      "details": "Nội dung câu CQ18.5 Khi muốn thông báo cái gì đó vẫn còn hoặc đã hết rồi thì dùng cấu trúc nào? Phân biệt với cách dùng khác của các cấu trúc này."
+    },
+    {
+      "session_no": "56",
+      "name": "CQ19.1",
+      "details": "Nội dung câu CQ19.1 3 chữ Hán đầu tiên của bài 7 có cách đọc âm On, Kun như thế nào? Các từ ghép đọc là gì? Ý nghĩa của các từ ghép đó?"
+    },
+    {
+      "session_no": "56",
+      "name": "CQ19.2",
+      "details": "Nội dung câu CQ19.2 4 chữ Hán cuối của bài 7 có cách đọc âm Ôn, Kun như thế nào? Các từ ghép đọc là gì? Ý nghĩa của các từ ghép đó?"
+    },
+    {
+      "session_no": "57",
+      "name": "CQ19.3",
+      "details": "Nội dung câu CQ19.3 Câu hỏi trong bài đọc hiểu T134 có câu trả lời là gì?"
+    }
+  ],
+  "assessment_scheme": [
+    {
+      "category": "Kiểm tra nhỏ (small test)",
+      "type": "on-going",
+      "part": "2",
+      "weight": "40.0%",
+      "completion_criteria": ">0",
+      "duration": "35'",
+      "clo": "CLO1,2",
+      "question_type": "Small test 1: Trắc nghiệm Small test 2: Trắc nghiệm",
+      "no_question": "30~35 câu",
+      "knowledge_and_skill": "1) Small test 1: từ vựng, ngữ pháp, chữ Hán bài 4,5 Small test 2: từ vựng, ngữ pháp, chữ Hán bài 6,7 2) Kỹ năng: đọc",
+      "grading_guide": "Trực tiếp trên lớp",
+      "note": "1) Giảng viên phụ trách tự chủ ra đề, chấm bài và tổng hợp điểm.2) Tỷ trọng cụ thể 2 phần như sau:Small test 1: 20%, Small test 2: 20%"
+    },
+    {
+      "category": "Tham gia giờ học tại giảng đường",
+      "type": "on-going",
+      "part": "1",
+      "weight": "15.0%",
+      "completion_criteria": ">0",
+      "duration": "135'",
+      "clo": "CLO5",
+      "question_type": "",
+      "no_question": "",
+      "knowledge_and_skill": "",
+      "grading_guide": "Trực tiếp trên lớp",
+      "note": "Tiêu chí đánh giá: 1) Chuyên cần (Đi học đầy đủ): 5% 2) Thái độ, ý thức trên lớp+ Sự tích cực, hăng hái tham gia bài giảng: 10%"
+    },
+    {
+      "category": "Thi cuối kỳ",
+      "type": "Final exam",
+      "part": "2",
+      "weight": "45.0%",
+      "completion_criteria": "4",
+      "duration": "40'",
+      "clo": "CLO1~CLO4",
+      "question_type": "Trắc nghiệm+ Speaking",
+      "no_question": "Phần MC (từ vựng, ngữ pháp, chữ Hán, đọc hiểu): 30 câu; Speaking: 1 đoạn văn+ 3~5 câu hỏi đáp",
+      "knowledge_and_skill": "1) Từ vựng, ngữ pháp, chữ Hán bài 4~bài 7 2) Kỹ năng: nghe, nói, đọc",
+      "grading_guide": "Thi trên trường",
+      "note": "1.Thi đề chung2. Điều kiện hoàn thành môn học: thỏa mãn đồng thời 2 điều kiện dưới đây:a) Điểm đánh giá quá trình >0; Điểm thi cuối kì >=4/10; Tổng điểm chung cho toàn bộ môn học >=5/10;b) Thi cuối kỳ không có kỹ năng nào bị 0."
+    },
+    {
+      "category": "Thi cuối kỳ: Nói",
+      "type": "Final exam phần nói",
+      "part": "1",
+      "weight": "30.0%",
+      "completion_criteria": ">0",
+      "duration": "8'/SV",
+      "clo": "CLO1~CLO4",
+      "question_type": "Speaking: Đọc đoạn văn+ trả lời câu hỏi",
+      "no_question": "1 đoạn văn+ 3~5 câu hỏi",
+      "knowledge_and_skill": "1) Từ vựng, ngữ pháp, chữ Hán bài 4~bài 7 2) Kỹ năng: nghe, nói, đọc",
+      "grading_guide": "Thi trên trường",
+      "note": ""
+    },
+    {
+      "category": "Thi cuối kỳ: Từ vựng, ngữ pháp, chữ Hán, đọc hiểu",
+      "type": "Final exam phần từ vựng, ngữ pháp, chữ Hán, đọc hiểu",
+      "part": "1",
+      "weight": "15.0%",
+      "completion_criteria": ">0",
+      "duration": "30'",
+      "clo": "CLO1,2,4",
+      "question_type": "Trắc nghiệm: từ vựng, ngữ pháp, chữ Hán, đọc hiểu",
+      "no_question": "30 câu",
+      "knowledge_and_skill": "1) Từ vựng, ngữ pháp, chữ Hán bài 4~bài 7 2) Kỹ năng: đọc",
+      "grading_guide": "Thi trên trường",
+      "note": ""
+    }
+  ],
+  "references": [
+    "- Tham dự tối thiểu 80% số giờ học trên lớp mới đủ điều kiện tham gia thi kì thi cuối môn. - Học từ vựng và tìm hiểu trước bài học, làm các bài tập và nhiệm vụ do GV giao. - Ôn tập bài giảng, đối chiếu với giáo trình để nắm vững các kiến thức. - Trên lớp tích cực tham gia trao đổi, xây dựng bài.",
+    "- Sử dụng Giáo trình chính và GT bổ trợ bằng tiếng Nhật. - Sử dụng ppt cho bài giảng của giảng viên. - Tra cứu, tham khảo các nội dung có liên quan đến môn học trên mạng hoặc giáo trình tham khảo được giới thiệu trong môn học. - Sử dụng AI (ChatGPT, Copilot, v.v.) để tra cứu cách dùng từ vựng, ứng dụng của ngữ pháp, và các từ ghép Hán tự ngoài các từ đã được học.",
+    "444/QĐ-ĐHFPT dated 04/23/2026",
+    "ISBN-10 : 4757419775ISBN-13 : 978-4757419773",
+    "Giáo trình Dekiru quyển đỏ (Tiếng Nhật trong tầm tay)",
+    "ISBN-10 : 4893588117ISBN-13 : 978-4893588111",
+    "ISBN-10 : 489358801XISBN-13 : 978-4893588012",
+    "ISBN-10 : 4893588311ISBN-13 : 978-4893588319",
+    "Giáo trình chínhSlides của slot 1 (tiết 1)",
+    "Giáo trình chínhSlides của slot 1 (tiết 2)",
+    "Giáo trình chínhSlides của slot 3 (tiết 1)",
+    "Giáo trình chínhSlides của slot 3 (tiết 2)",
+    "Giáo trình chínhSlides của slot 4 (tiết 1)",
+    "Giáo trình chínhSlides của slot 4 (tiết 2)",
+    "Giáo trình chínhSlides của slot 5 (tiết 1)",
+    "Giáo trình chínhSlides của slot 5 (tiết 2)",
+    "Giáo trình chínhSlides của slot 8 (tiết 1)",
+    "Giáo trình chínhSlides của slot 8 (tiết 2)",
+    "Giáo trình chínhSlides của slot 9 (tiết 1)",
+    "Giáo trình chínhSlides của slot 9 (tiết 2)",
+    "Giáo trình chínhSlides của slot 10 (tiết 1)",
+    "Giáo trình chínhSlides của slot 10 (tiết 2)",
+    "Giáo trình chínhSlides của slot 11 (tiết 1)",
+    "Giáo trình chínhSlides của slot 11 (tiết 2)",
+    "Giáo trình chínhSlides của slot 12 (tiết 1)",
+    "Giáo trình chínhSlides của slot 12 (tiết 2)",
+    "Giáo trình chínhSlides của slot 13 (tiết 1)",
+    "Giáo trình chínhSlides của slot 13 (tiết 2)",
+    "Giáo trình chínhSlide của slot 14: Chữ Hán bài 5",
+    "Giáo trình chínhSlides của slot 16 (tiết 1)",
+    "Giáo trình chínhSlides của slot 16 (tiết 2)",
+    "Giáo trình chínhSlides của slot 17 (tiết 1)",
+    "Giáo trình chínhSlides của slot 17 (tiết 2)",
+    "Giáo trình chínhSlides của slot 18 (tiết 1)",
+    "Giáo trình chínhSlides của slot 18 (tiết 2)",
+    "Giáo trình chínhSlides của slot 19 (tiết 1)",
+    "Giáo trình chínhSlides của slot 19 (tiết 2)",
+    "Giáo trình chínhSlides của slot 20 (tiết 1)",
+    "Giáo trình chínhSlides của slot 20 (tiết 2)",
+    "Giáo trình chínhSlides của slot 23 (tiết 1)",
+    "Giáo trình chínhSlides của slot 23 (tiết 2)",
+    "Giáo trình chínhSlides của slot 24 (tiết 1)",
+    "Giáo trình chínhSlides của slot 24 (tiết 2)",
+    "Giáo trình chínhSlides của slot 25 (tiết 1)",
+    "Giáo trình chínhSlides của slot 25 (tiết 2)",
+    "Giáo trình chínhSlides của slot 26 (tiết 1)",
+    "Giáo trình chínhSlides của slot 26 (tiết 2)",
+    "Giáo trình chínhSlides của slot 27 (tiết 1)",
+    "Giáo trình chínhSlides của slot 27 (tiết 2)",
+    "Giáo trình chính Slide của slot 30 (Tiết 1)",
+    "Giáo trình chính Slide của slot 30 (Tiết 2)"
+  ]
+}

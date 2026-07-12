@@ -1,0 +1,357 @@
+{
+  "metadata": {
+    "syllabus_id": "13164",
+    "syllabus_name": "UI/UX Design_Thiết kế trải nghiệm người dùng",
+    "syllabus_name_english": "UI/UX Design",
+    "subject_code": "WDU203c",
+    "credits": "3",
+    "degree_level": "Bachelor",
+    "time_allocation": "Study hour (150h) = 84h online + 3h offline + 1h TE + 62 h self-study",
+    "prerequisites": "",
+    "description": "Integrate UX Research and UX Design to create great products through understanding user needs, rapidly generating prototypes, and evaluating design concepts. Students will gain hands-on experience with taking a product from initial concept, through user research, ideation and refinement, formal analysis, prototyping, and user testing, applying perspectives and methods to ensure a great user experience at every step. This course concludes with a capstone project, in which learners will incorporate UX Research and Design principles to design a complete product, taking it from an initial concept to an interactive prototype.",
+    "student_tasks": "1. Complete the online courses and get all specialization certifications to be allowed to take Final Exam\n2. Final Exam included Final Theory Exam (TE):  100%\n3. Students who complete all MOOCs before the course deadline will receive 1 bonus point; otherwise, no bonus point will be awarded.\n4. Completion Criteria:  Final TE Score  >=4 & (Final TE Score + bonus) >= 5",
+    "tools": "- Internet",
+    "scoring_scale": "10",
+    "decision_no": "932/QĐ-ĐHFPT dated 08/22/2025",
+    "is_approved": "True",
+    "note": "",
+    "min_avg_mark_to_pass": "5",
+    "is_active": "True",
+    "approved_date": "8/22/2025"
+  },
+  "materials": [
+    {
+      "description": "https://learner.coursera.help/hc/en-us/articles/208280036-Coursera-Code-of-Conduct",
+      "author": "",
+      "publisher": "Coursera",
+      "published_date": "",
+      "edition": "",
+      "isbn": "",
+      "is_main_material": "",
+      "is_hard_copy": "",
+      "is_online": "",
+      "note": ""
+    },
+    {
+      "description": "https://www.coursera.org/learn/introtoux-principles-and-processes",
+      "author": "",
+      "publisher": "",
+      "published_date": "",
+      "edition": "",
+      "isbn": "",
+      "is_main_material": "",
+      "is_hard_copy": "",
+      "is_online": "",
+      "note": "MOOC 1: Introduction to User Experience Principles and Processes"
+    },
+    {
+      "description": "https://www.coursera.org/learn/understanding-user-needs",
+      "author": "",
+      "publisher": "",
+      "published_date": "",
+      "edition": "",
+      "isbn": "",
+      "is_main_material": "",
+      "is_hard_copy": "",
+      "is_online": "",
+      "note": "MOOC 2: Understanding User Needs"
+    },
+    {
+      "description": "https://www.coursera.org/learn/evaluating-designs-with-users",
+      "author": "",
+      "publisher": "",
+      "published_date": "",
+      "edition": "",
+      "isbn": "",
+      "is_main_material": "",
+      "is_hard_copy": "",
+      "is_online": "",
+      "note": "MOOC 3: Evaluating Designs with Users"
+    },
+    {
+      "description": "https://www.coursera.org/learn/ux-design-concept-wireframe",
+      "author": "",
+      "publisher": "",
+      "published_date": "",
+      "edition": "",
+      "isbn": "",
+      "is_main_material": "",
+      "is_hard_copy": "",
+      "is_online": "",
+      "note": "MOOC 4: UX Design: From Concept to Prototype"
+    },
+    {
+      "description": "https://www.coursera.org/learn/ux-research-at-scale",
+      "author": "",
+      "publisher": "",
+      "published_date": "",
+      "edition": "",
+      "isbn": "",
+      "is_main_material": "",
+      "is_hard_copy": "",
+      "is_online": "",
+      "note": "MOOC 5: UX Research at Scale: Surveys, Analytics, Online Testing"
+    },
+    {
+      "description": "https://www.coursera.org/learn/user-experience-capstone",
+      "author": "",
+      "publisher": "",
+      "published_date": "",
+      "edition": "",
+      "isbn": "",
+      "is_main_material": "",
+      "is_hard_copy": "",
+      "is_online": "",
+      "note": "MOOC 6: UX (User Experience) Capstone"
+    },
+    {
+      "description": "https://www.coursera.org/specializations/michiganux",
+      "author": "",
+      "publisher": "",
+      "published_date": "",
+      "edition": "",
+      "isbn": "",
+      "is_main_material": "",
+      "is_hard_copy": "",
+      "is_online": "",
+      "note": "SPEC: User Experience Research and Design"
+    }
+  ],
+  "clos": [
+    {
+      "clo_name": "1",
+      "clo_details": "CLO1",
+      "lo_details": "Be able to explain what is involved in UX research, including conducting interviews, evaluating systems, and analyzing systems using principles of good design"
+    },
+    {
+      "clo_name": "2",
+      "clo_details": "CLO2",
+      "lo_details": "Be able to describe about the work involved in UX Design, including the generation of promising design solutions and the creation of prototypes at multiple levels of fidelity"
+    },
+    {
+      "clo_name": "3",
+      "clo_details": "CLO3",
+      "lo_details": "Be able to describe numerous techniques to gather data from and about users"
+    },
+    {
+      "clo_name": "4",
+      "clo_details": "CLO4",
+      "lo_details": "Know how to design and conduct tests with users"
+    },
+    {
+      "clo_name": "5",
+      "clo_details": "CLO5",
+      "lo_details": "Be able to apply techniques such as sketching, scenario development, storyboarding, and wireframing"
+    },
+    {
+      "clo_name": "6",
+      "clo_details": "CLO6",
+      "lo_details": "Know how to turn wireframes and interaction architecture into interactive prototypes that can be tested with prospective users and iteratively refined into a high quality design"
+    },
+    {
+      "clo_name": "7",
+      "clo_details": "CLO7",
+      "lo_details": "Be able to describe techniques for gaining UX insights from large numbers of users, including web analytics, A/B testing, and remote unmoderated studies"
+    },
+    {
+      "clo_name": "8",
+      "clo_details": "CLO8",
+      "lo_details": "Know how to design and carry out an integrated multi-phase user experience research and design project"
+    }
+  ],
+  "schedule": [
+    {
+      "session": "1",
+      "topic": "Introduction to User Experience Principles and Processes- What is UX? What are UX Research and Design?- UX Design Overview- How Do People Perceive Information?Offline 1: Introduction to the online course WDU203c",
+      "learning_method": "Offline,Online",
+      "lo": "LO1, LO2",
+      "itu": "ITU",
+      "student_materials": "",
+      "s_download": "",
+      "student_tasks": "- Watch all videos, read all materials in the MOOC- Finish quizzes, self-assessment, assignments and take part in discussion boards (if needed)All students should participate in offline slot (if any question)",
+      "urls": ""
+    },
+    {
+      "session": "2",
+      "topic": "- How Do People Act in the World?- Design Heuristics- Heuristic Evaluation and Course Wrap-up",
+      "learning_method": "Online",
+      "lo": "LO1, LO2",
+      "itu": "TU",
+      "student_materials": "",
+      "s_download": "",
+      "student_tasks": "- Watch all videos, read all materials in the MOOC- Finish quizzes, self-assessment, assignments and take part in discussion boards (if needed)",
+      "urls": ""
+    },
+    {
+      "session": "3",
+      "topic": "Understanding User Needs- Introduction and Qualitative Research Overview- Interview Protocols",
+      "learning_method": "Online",
+      "lo": "LO3",
+      "itu": "ITU",
+      "student_materials": "",
+      "s_download": "",
+      "student_tasks": "- Watch all videos, read all materials in the MOOC- Finish quizzes, self-assessment, assignments and take part in discussion boards (if needed)",
+      "urls": ""
+    },
+    {
+      "session": "4",
+      "topic": "- Interviews, Observation, and Data Extraction- Affinity Walls and Analysis- Conclusion",
+      "learning_method": "Online",
+      "lo": "LO3",
+      "itu": "TU",
+      "student_materials": "",
+      "s_download": "",
+      "student_tasks": "- Watch all videos, read all materials in the MOOC- Finish quizzes, self-assessment, assignments and take part in discussion boards (if needed)",
+      "urls": ""
+    },
+    {
+      "session": "5",
+      "topic": "Evaluating Designs with Users- What is User Testing?- User Test Basics- Getting More Out of User Testing- Analysis and Reporting- User Test Report",
+      "learning_method": "Online",
+      "lo": "LO3, LO4",
+      "itu": "ITU",
+      "student_materials": "",
+      "s_download": "",
+      "student_tasks": "- Watch all videos, read all materials in the MOOC- Finish quizzes, self-assessment, assignments and take part in discussion boards (if needed)",
+      "urls": ""
+    },
+    {
+      "session": "6",
+      "topic": "UX Design: From Concept to Prototype- Introduction to the Design Process- Ideation- Design Constraints and Making Choices",
+      "learning_method": "Online",
+      "lo": "LO5, LO6",
+      "itu": "ITU",
+      "student_materials": "",
+      "s_download": "",
+      "student_tasks": "- Watch all videos, read all materials in the MOOC- Finish quizzes, self-assessment, assignments and take part in discussion boards (if needed)",
+      "urls": ""
+    },
+    {
+      "session": "7",
+      "topic": "- Building Blocks of User Interaction- Low to Hi-Fidelity Prototyping- Conceptual Issues in Prototyping and Design",
+      "learning_method": "Online",
+      "lo": "LO5, LO6",
+      "itu": "TU",
+      "student_materials": "",
+      "s_download": "",
+      "student_tasks": "- Watch all videos, read all materials in the MOOC- Finish quizzes, self-assessment, assignments and take part in discussion boards (if needed)",
+      "urls": ""
+    },
+    {
+      "session": "8",
+      "topic": "UX Research at Scale: Surveys, Analytics, Online Testing- When and How to Use Surveys- Asking the Right People (Coverage Error)- Getting Answers (Nonresponse error)- Writing Questions (Measurement Error)",
+      "learning_method": "Online",
+      "lo": "LO7",
+      "itu": "ITU",
+      "student_materials": "",
+      "s_download": "",
+      "student_tasks": "- Watch all videos, read all materials in the MOOC- Finish quizzes, self-assessment, assignments and take part in discussion boards (if needed)",
+      "urls": ""
+    },
+    {
+      "session": "9",
+      "topic": "- About Research at Scale- Behavioral Analytics- Remote Testing- A/B Testing and Preference Testing",
+      "learning_method": "Online",
+      "lo": "LO7",
+      "itu": "TU",
+      "student_materials": "",
+      "s_download": "",
+      "student_tasks": "- Watch all videos, read all materials in the MOOC- Finish quizzes, self-assessment, assignments and take part in discussion boards (if needed)",
+      "urls": ""
+    },
+    {
+      "session": "10",
+      "topic": "UX (User Experience) Capstone- Introduction & Milestone 1- MILESTONE 2- MILESTONE 3- MILESTONE 4- MILESTONE 5",
+      "learning_method": "Online",
+      "lo": "LO8",
+      "itu": "ITU",
+      "student_materials": "",
+      "s_download": "",
+      "student_tasks": "- Watch all videos, read all materials in the MOOC- Finish quizzes, self-assessment, assignments and take part in discussion boards (if needed)",
+      "urls": ""
+    },
+    {
+      "session": "11",
+      "topic": "- FINAL REPORT",
+      "learning_method": "Online",
+      "lo": "LO8",
+      "itu": "TU",
+      "student_materials": "",
+      "s_download": "",
+      "student_tasks": "- Watch all videos, read all materials in the MOOC- Finish quizzes, self-assessment, assignments and take part in discussion boards (if needed)",
+      "urls": ""
+    },
+    {
+      "session": "12",
+      "topic": "- FINAL REPORT (cont.)Offline 2: Review User Experience Research and Design Specialization (Spec)",
+      "learning_method": "Offline,Online",
+      "lo": "LO8",
+      "itu": "TU",
+      "student_materials": "",
+      "s_download": "",
+      "student_tasks": "- Watch all videos, read all materials in the MOOC- Finish quizzes, self-assessment, assignments and take part in discussion boards (if needed)Deadline of Coursera completion: End of Friday of the week.All students should participate in review slot (if any question)",
+      "urls": ""
+    }
+  ],
+  "constructive_questions": [
+    {
+      "session_no": "1",
+      "name": "CQ1",
+      "details": "Manipulate logical expressions and use logic for inference"
+    },
+    {
+      "session_no": "1",
+      "name": "CQ2",
+      "details": "Perform basic operations on sets, functions and sequences"
+    },
+    {
+      "session_no": "2",
+      "name": "CQ1",
+      "details": "Analyze basic algorithms written in pseudo codes and determine theirs complexities"
+    },
+    {
+      "session_no": "3",
+      "name": "CQ1",
+      "details": "Discuss applications of modular arithmetic and analyze algorithms on integers"
+    },
+    {
+      "session_no": "4",
+      "name": "CQ1",
+      "details": "Use induction and recursive definition to prove a statement or to describe an object, and write recursive algorithms"
+    },
+    {
+      "session_no": "4",
+      "name": "CQ2",
+      "details": "Solve counting problems"
+    },
+    {
+      "session_no": "4",
+      "name": "CQ3",
+      "details": "Analyze the structure of a graph and find shortest paths in a weighted graph"
+    },
+    {
+      "session_no": "4",
+      "name": "CQ4",
+      "details": "Analyze the structure of a tree and describe algorithms using trees"
+    }
+  ],
+  "assessment_scheme": [
+    {
+      "category": "TE",
+      "type": "Final exam",
+      "part": "1",
+      "weight": "100.0%",
+      "completion_criteria": "4",
+      "duration": "60'",
+      "clo": "All LOs",
+      "question_type": "Multiple choicesMarked by Computer",
+      "no_question": "50",
+      "knowledge_and_skill": "All studied courses. Each module of course contributes 3-5 questions.",
+      "grading_guide": "by exam board, using computer",
+      "note": "Customized from the quizzes of this specialization."
+    }
+  ],
+  "references": [
+    "932/QĐ-ĐHFPT dated 08/22/2025"
+  ]
+}

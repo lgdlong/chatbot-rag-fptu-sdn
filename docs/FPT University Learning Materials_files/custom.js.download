@@ -1,0 +1,47 @@
+(function () {
+    var $body = $('body');
+
+    var maxChar = 255;
+    var delimiter = '<span class="delimiter">...</span>';
+
+    $('.curricilum-description').each(function () {
+        var $description = $(this);
+
+        if ($description.text().length > maxChar) {
+            var shortDescription = $description.text().substring(0, maxChar);
+            var exDescription = $description.text().substring(maxChar, $description.text().length);
+
+            var description = shortDescription + delimiter
+                + '<span style="display: none; white-space: break-spaces;">' + exDescription + '</span>'
+                + '<div href="#" class="des-collapse-btn expand-icon"></div>';
+
+            $description.html(description);
+        }
+    });
+
+    $body.on('click', '.expand-icon', function () {
+        var $description = $(this).closest('.curricilum-description');
+
+        if ($description) {
+            $description.find('span').show();
+            $description.find('span.delimiter').hide();
+
+            var $icon = $description.find('.expand-icon');
+            $icon.removeClass('expand-icon');
+            $icon.addClass('collapse-icon');
+        }
+    });
+
+    $body.on('click', '.collapse-icon', function () {
+        var $description = $(this).closest('.curricilum-description');
+
+        if ($description) {
+            $description.find('span').hide();
+            $description.find('span.delimiter').show();
+
+            var $icon = $description.find('.collapse-icon');
+            $icon.removeClass('collapse-icon');
+            $icon.addClass('expand-icon');
+        }
+    });
+})();
