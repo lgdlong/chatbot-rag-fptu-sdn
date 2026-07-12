@@ -51,7 +51,7 @@ export type SearchSyllabusInput = {
 
 export type UpdateSyllabusInput = {
   id: number;
-  syllabusName: string;
+  syllabusName?: string;
   syllabusNameEnglish?: string;
   credits?: number;
   prerequisites?: string;
@@ -305,22 +305,21 @@ export class SyllabusService {
     }
 
     const updated = await prisma.$transaction(async (tx) => {
+      const updateData: Record<string, unknown> = {};
+      if (typeof input.syllabusName === "string" && input.syllabusName) updateData.syllabusName = input.syllabusName.trim();
+      if (input.syllabusNameEnglish !== undefined) updateData.syllabusNameEnglish = input.syllabusNameEnglish;
+      if (input.credits !== undefined) updateData.credits = input.credits;
+      if (input.prerequisites !== undefined) updateData.prerequisites = input.prerequisites;
+      if (input.description !== undefined) updateData.description = input.description;
+      if (input.studentTasks !== undefined) updateData.studentTasks = input.studentTasks;
+      if (input.tools !== undefined) updateData.tools = input.tools;
+      if (input.minAvgMarkToPass !== undefined) updateData.minAvgMarkToPass = new Prisma.Decimal(input.minAvgMarkToPass);
+      if (input.decisionNo !== undefined) updateData.decisionNo = input.decisionNo;
+      if (input.note !== undefined) updateData.note = input.note;
+
       const updatedSyl = await SyllabusRepository.update(
         input.id,
-        {
-          syllabusName: input.syllabusName,
-          syllabusNameEnglish: input.syllabusNameEnglish,
-          credits: input.credits,
-          prerequisites: input.prerequisites,
-          description: input.description,
-          studentTasks: input.studentTasks,
-          tools: input.tools,
-          ...(input.minAvgMarkToPass !== undefined
-            ? { minAvgMarkToPass: new Prisma.Decimal(input.minAvgMarkToPass) }
-            : {}),
-          decisionNo: input.decisionNo,
-          note: input.note,
-        },
+        updateData as Prisma.SyllabusUpdateInput,
         { tx },
       );
 

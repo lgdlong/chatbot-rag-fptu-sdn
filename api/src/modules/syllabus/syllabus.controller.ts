@@ -88,7 +88,6 @@ syllabusRouter.post("/", async (c) => {
   try {
     const body = await c.req.json();
     const syllabus = await SyllabusService.createSyllabus({
-      syllabusId: typeof body.id === "number" ? body.id : 0,
       courseId: typeof body.courseId === "string" ? body.courseId : "",
       syllabusName: typeof body.syllabusName === "string" ? body.syllabusName.trim() : "",
       syllabusNameEnglish: typeof body.syllabusNameEnglish === "string" ? body.syllabusNameEnglish.trim() : undefined,
@@ -125,8 +124,8 @@ syllabusRouter.put("/:id", async (c) => {
     const syllabus = await SyllabusService.updateSyllabus(
       {
         id,
-        syllabusName: typeof body.syllabusName === "string" ? body.syllabusName.trim() : "",
-        syllabusNameEnglish: typeof body.syllabusNameEnglish === "string" ? body.syllabusNameEnglish.trim() : undefined,
+        syllabusName: body.syllabusName,
+        syllabusNameEnglish: body.syllabusNameEnglish,
         credits: typeof body.credits === "number" ? body.credits : undefined,
         prerequisites: typeof body.prerequisites === "string" ? body.prerequisites.trim() : undefined,
         description: typeof body.description === "string" ? body.description.trim() : undefined,

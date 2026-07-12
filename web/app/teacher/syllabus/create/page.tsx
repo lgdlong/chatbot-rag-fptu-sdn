@@ -22,6 +22,10 @@ import {
   Select,
   LoadingOverlay,
   Box,
+  Badge,
+  Progress,
+  Tooltip,
+  Collapse,
 } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import {
@@ -31,6 +35,9 @@ import {
   IconPlus,
   IconTrash,
   IconRocket,
+  IconChevronDown,
+  IconChevronUp,
+  IconCopy,
 } from "@tabler/icons-react";
 import {
   createSyllabus,
@@ -80,6 +87,10 @@ export default function CreateSyllabusPage() {
   const [coursesLoading, setCoursesLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [demoKey, setDemoKey] = useState<DemoDatasetKey>("FER202");
+  const [expandedAssessments, setExpandedAssessments] = useState<Record<number, boolean>>({});
+  const [expandedSchedules, setExpandedSchedules] = useState<Record<number, boolean>>({});
+  const [expandedClos, setExpandedClos] = useState<Record<number, boolean>>({});
+  const [expandedMaterials, setExpandedMaterials] = useState<Record<number, boolean>>({});
 
   useEffect(() => {
     getCourses()
@@ -150,6 +161,8 @@ export default function CreateSyllabusPage() {
         const { syllabus } = await createSyllabus(step1);
 
         await updateSyllabusFull(syllabus.id, {
+          syllabusName: value.syllabusName,
+          syllabusNameEnglish: value.syllabusNameEnglish || undefined,
           clos: value.clos.filter((c) => c.cloName || c.cloDetails).map((c) => ({
             cloName: c.cloName,
             cloDetails: c.cloDetails,
@@ -249,25 +262,198 @@ export default function CreateSyllabusPage() {
   const prevStep = () => setActiveStep((prev) => Math.max(prev - 1, 0));
 
   // --- Array mutation helpers ---
-  const addClo = () => form.setFieldValue("clos", [...values.clos, emptyClo()]);
-  const removeClo = (i: number) => form.setFieldValue("clos", values.clos.filter((_, idx) => idx !== i));
+  const addClo = () => {
+    const nextIdx = values.clos.length;
+    form.setFieldValue("clos", [...values.clos, emptyClo()]);
+    setExpandedClos((prev) => ({ ...prev, [nextIdx]: true }));
+  };
+
+  const removeClo = (i: number) => {
+    form.setFieldValue("clos", values.clos.filter((_, idx) => idx !== i));
+    setExpandedClos((prev) => {
+      const next: Record<number, boolean> = {};
+      Object.keys(prev).forEach((k) => {
+        const idx = parseInt(k, 10);
+        if (idx < i) {
+          next[idx] = prev[idx];
+        } else if (idx > i) {
+          next[idx - 1] = prev[idx];
+        }
+      });
+      return next;
+    });
+  };
+
+  const toggleExpandClo = (i: number) => {
+    setExpandedClos((prev) => ({
+      ...prev,
+      [i]: prev[i] === false ? true : false,
+    }));
+  };
+
+  const expandAllClos = () => {
+    const next: Record<number, boolean> = {};
+    values.clos.forEach((_, idx) => {
+      next[idx] = true;
+    });
+    setExpandedClos(next);
+  };
+
+  const collapseAllClos = () => {
+    const next: Record<number, boolean> = {};
+    values.clos.forEach((_, idx) => {
+      next[idx] = false;
+    });
+    setExpandedClos(next);
+  };
 
   const addSchedule = () => {
     const next = values.schedules.length + 1;
+    const nextIdx = values.schedules.length;
     form.setFieldValue("schedules", [...values.schedules, emptySchedule(next)]);
+    setExpandedSchedules((prev) => ({ ...prev, [nextIdx]: true }));
   };
-  const removeSchedule = (i: number) =>
+
+  const removeSchedule = (i: number) => {
     form.setFieldValue("schedules", values.schedules.filter((_, idx) => idx !== i));
+    setExpandedSchedules((prev) => {
+      const next: Record<number, boolean> = {};
+      Object.keys(prev).forEach((k) => {
+        const idx = parseInt(k, 10);
+        if (idx < i) {
+          next[idx] = prev[idx];
+        } else if (idx > i) {
+          next[idx - 1] = prev[idx];
+        }
+      });
+      return next;
+    });
+  };
 
-  const addAssessment = () =>
+  const toggleExpandSchedule = (i: number) => {
+    setExpandedSchedules((prev) => ({
+      ...prev,
+      [i]: prev[i] === false ? true : false,
+    }));
+  };
+
+  const expandAllSchedules = () => {
+    const next: Record<number, boolean> = {};
+    values.schedules.forEach((_, idx) => {
+      next[idx] = true;
+    });
+    setExpandedSchedules(next);
+  };
+
+  const collapseAllSchedules = () => {
+    const next: Record<number, boolean> = {};
+    values.schedules.forEach((_, idx) => {
+      next[idx] = false;
+    });
+    setExpandedSchedules(next);
+  };
+
+  const addAssessment = () => {
+    const nextIdx = values.assessments.length;
     form.setFieldValue("assessments", [...values.assessments, emptyAssessment()]);
-  const removeAssessment = (i: number) =>
-    form.setFieldValue("assessments", values.assessments.filter((_, idx) => idx !== i));
+    setExpandedAssessments((prev) => ({ ...prev, [nextIdx]: true }));
+  };
 
-  const addMaterial = () =>
+  const removeAssessment = (i: number) => {
+    form.setFieldValue("assessments", values.assessments.filter((_, idx) => idx !== i));
+    setExpandedAssessments((prev) => {
+      const next: Record<number, boolean> = {};
+      Object.keys(prev).forEach((k) => {
+        const idx = parseInt(k, 10);
+        if (idx < i) {
+          next[idx] = prev[idx];
+        } else if (idx > i) {
+          next[idx - 1] = prev[idx];
+        }
+      });
+      return next;
+    });
+  };
+
+  const duplicateAssessment = (i: number) => {
+    const copy = { ...values.assessments[i] };
+    const nextIdx = values.assessments.length;
+    form.setFieldValue("assessments", [...values.assessments, copy]);
+    setExpandedAssessments((prev) => ({ ...prev, [nextIdx]: true }));
+    notifications.show({
+      title: "Đã sao chép",
+      message: `Đã nhân bản thành phần "${copy.category || "Chưa đặt tên"}"`,
+      color: "blue",
+    });
+  };
+
+  const toggleExpand = (i: number) => {
+    setExpandedAssessments((prev) => ({
+      ...prev,
+      [i]: prev[i] === false ? true : false,
+    }));
+  };
+
+  const expandAll = () => {
+    const next: Record<number, boolean> = {};
+    values.assessments.forEach((_, idx) => {
+      next[idx] = true;
+    });
+    setExpandedAssessments(next);
+  };
+
+  const collapseAll = () => {
+    const next: Record<number, boolean> = {};
+    values.assessments.forEach((_, idx) => {
+      next[idx] = false;
+    });
+    setExpandedAssessments(next);
+  };
+
+  const addMaterial = () => {
+    const nextIdx = values.materials.length;
     form.setFieldValue("materials", [...values.materials, emptyMaterial()]);
-  const removeMaterial = (i: number) =>
+    setExpandedMaterials((prev) => ({ ...prev, [nextIdx]: true }));
+  };
+
+  const removeMaterial = (i: number) => {
     form.setFieldValue("materials", values.materials.filter((_, idx) => idx !== i));
+    setExpandedMaterials((prev) => {
+      const next: Record<number, boolean> = {};
+      Object.keys(prev).forEach((k) => {
+        const idx = parseInt(k, 10);
+        if (idx < i) {
+          next[idx] = prev[idx];
+        } else if (idx > i) {
+          next[idx - 1] = prev[idx];
+        }
+      });
+      return next;
+    });
+  };
+
+  const toggleExpandMaterial = (i: number) => {
+    setExpandedMaterials((prev) => ({
+      ...prev,
+      [i]: prev[i] === false ? true : false,
+    }));
+  };
+
+  const expandAllMaterials = () => {
+    const next: Record<number, boolean> = {};
+    values.materials.forEach((_, idx) => {
+      next[idx] = true;
+    });
+    setExpandedMaterials(next);
+  };
+
+  const collapseAllMaterials = () => {
+    const next: Record<number, boolean> = {};
+    values.materials.forEach((_, idx) => {
+      next[idx] = false;
+    });
+    setExpandedMaterials(next);
+  };
 
   // --- Submit handler ---
   const handleSave = () => {
@@ -306,12 +492,12 @@ export default function CreateSyllabusPage() {
     );
   }
 
-  function Farea(name: string, label: string, placeholder: string) {
+  function Farea(name: string, label: string, placeholder: string, rows: number = 3) {
     return (
       <form.Field name={name as any}>
         {(f: any) => (
           <Textarea
-            label={label} placeholder={placeholder} radius={0} rows={3}
+            label={label} placeholder={placeholder} radius={0} rows={rows}
             value={f.state.value ?? ""}
             onChange={(e) => f.handleChange(e.target.value)}
             error={f.state.meta.errors?.[0]}
@@ -349,13 +535,13 @@ export default function CreateSyllabusPage() {
         <SimpleGrid cols={{ base: 1, sm: 2 }} spacing="md">
           {Fselect("courseId", "Môn học", courses.map((c) => ({ value: c.id, label: `${c.code} - ${c.name}` })), "Chọn môn học...", true)}
           {Ftext("syllabusName", "Tên syllabus", "VD: Front-End Web Development with React", true)}
-          {Ftext("syllabusNameEnglish", "English Name", "VD: Front-End Web Development with React")}
+          {Ftext("syllabusNameEnglish", "Tên syllabus trong tiếng anh", "VD: Front-End Web Development with React")}
           {Fnum("credits", "Số tín chỉ (Credits)", 1, undefined, true)}
           {Ftext("prerequisites", "Điều kiện tiên quyết", "VD: WED201c")}
         </SimpleGrid>
-        {Farea("description", "Mô tả môn học", "Nhập mô tả chi tiết học phần...")}
+        {Farea("description", "Mô tả môn học", "Nhập mô tả chi tiết học phần...", 5)}
+        {Farea("studentTasks", "Nhiệm vụ sinh viên", "VD: Làm bài tập đầy đủ, tham gia thảo luận trên lớp...", 5)}
         <SimpleGrid cols={{ base: 1, sm: 2 }} spacing="md">
-          {Ftext("studentTasks", "Nhiệm vụ sinh viên", "VD: Làm bài tập, đi học đầy đủ")}
           {Ftext("tools", "Công cụ học tập", "VD: VS Code, Node.js")}
           {Fnum("minAvgMarkToPass", "Điểm qua môn tối thiểu", 1)}
           {Ftext("scoringScale", "Thang điểm", "10")}
@@ -366,350 +552,736 @@ export default function CreateSyllabusPage() {
           ])}
           {Ftext("decisionNo", "Số quyết định", "VD: 359/QĐ-ĐHFPT")}
         </SimpleGrid>
-        {Farea("timeAllocation", "Phân bổ thời gian", "VD: 150h = 30h lý thuyết + ...")}
+        {Farea("timeAllocation", "Phân bổ thời gian", "VD: 150h = 30h lý thuyết + ...", 5)}
         {Farea("note", "Ghi chú", "Nhập ghi chú...")}
       </Stack>
     </Card>,
 
     // Step 1: CLOs
     <Card key="step1" p="xl" radius={0} style={{ border: "1px solid #E2E8F0", backgroundColor: "white", marginTop: 24 }}>
-      <Stack gap="md">
-        <Group justify="space-between">
-          <Title order={2} style={{ fontSize: 16, fontWeight: 900, color: "#1A1A1A" }}>
-            Chuẩn đầu ra môn học (CLOs)
-          </Title>
-          <Button variant="subtle" color="#1A3A5C" onClick={addClo} leftSection={<IconPlus size={16} />} fw={700} size="xs">
-            Thêm CLO
-          </Button>
+      <Stack gap="lg">
+        {/* Toolbar */}
+        <Group justify="space-between" align="center">
+          <Group gap="xs">
+            <Title order={2} style={{ fontSize: 16, fontWeight: 900, color: "#1A1A1A" }}>
+              Chuẩn đầu ra môn học ({values.clos.length} CLO)
+            </Title>
+          </Group>
+          <Group gap="xs">
+            <Button variant="outline" color="gray" size="xs" radius={0} onClick={collapseAllClos} leftSection={<IconChevronDown size={14} />}>
+              Thu gọn tất cả
+            </Button>
+            <Button variant="outline" color="gray" size="xs" radius={0} onClick={expandAllClos} leftSection={<IconChevronUp size={14} />}>
+              Mở rộng tất cả
+            </Button>
+            <Button style={{ backgroundColor: "#1A3A5C" }} size="xs" radius={0} onClick={addClo} leftSection={<IconPlus size={14} />}>
+              Thêm CLO
+            </Button>
+          </Group>
         </Group>
-        {values.clos.length === 0 && <Text c="dimmed" size="sm">Chưa có CLO nào. Bấm "Thêm CLO" để bắt đầu.</Text>}
-        {values.clos.map((clo, i) => (
-          <Card key={i} p="sm" radius={0} withBorder style={{ borderColor: "#E2E8F0" }}>
-            <Stack gap="sm">
-              <Group justify="space-between">
-                <Text fw={700} size="sm">CLO #{i + 1}</Text>
-                <ActionIcon variant="subtle" color="red" size="sm" onClick={() => removeClo(i)}>
-                  <IconTrash size={14} />
-                </ActionIcon>
-              </Group>
-              <SimpleGrid cols={{ base: 1, sm: 2 }} spacing="sm">
-                {Ftext(`clos[${i}].cloName`, "Mã CLO", `VD: CLO${i + 1}`)}
-                {Farea(`clos[${i}].cloDetails`, "Mô tả CLO", "Mô tả chi tiết...")}
-              </SimpleGrid>
-              {Ftext(`clos[${i}].loDetails`, "Ánh xạ LO", "VD: LO1, LO2,...")}
-            </Stack>
+
+        {/* List of CLOs */}
+        {values.clos.length === 0 ? (
+          <Card p="xl" radius={0} withBorder style={{ borderStyle: "dashed", textAlign: "center" }}>
+            <Text c="dimmed" size="sm">Chưa có chuẩn đầu ra (CLO) nào. Bấm nút "Thêm CLO" để bắt đầu.</Text>
           </Card>
-        ))}
+        ) : (
+          <Stack gap="md">
+            {values.clos.map((clo, i) => {
+              const isExpanded = !!expandedClos[i];
+              return (
+                <Card 
+                  key={i} 
+                  p={0} 
+                  radius={0} 
+                  withBorder 
+                  style={{ 
+                    borderColor: isExpanded ? "#1A3A5C" : "#E2E8F0",
+                    boxShadow: isExpanded ? "0 4px 12px rgba(26, 58, 92, 0.05)" : "none",
+                    transition: "all 0.2s ease"
+                  }}
+                >
+                  {/* Card Header (Click to Toggle) */}
+                  <Box 
+                    p="md" 
+                    onClick={() => toggleExpandClo(i)}
+                    style={{ 
+                      backgroundColor: isExpanded ? "#F1F5F9" : "#FAFBFC", 
+                      borderBottom: isExpanded ? "1px solid #E2E8F0" : "none",
+                      cursor: "pointer",
+                      userSelect: "none"
+                    }}
+                  >
+                    <Group justify="space-between">
+                      <Group gap="sm" style={{ flex: 1 }}>
+                        <Badge variant="filled" color="gray" radius={0} styles={{ root: { height: 22, minWidth: 26, padding: 0 } }}>
+                          #{i + 1}
+                        </Badge>
+                        <Text fw={700} size="sm" c={isExpanded ? "#1A3A5C" : "#334155"} style={{ flex: 1, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                          {clo.cloName || <span style={{ fontStyle: "italic", color: "#94A3B8" }}>(Mã CLO trống)</span>}
+                        </Text>
+                        <Group gap="xs">
+                          {clo.loDetails && (
+                            <Badge variant="outline" color="teal" radius={0}>
+                              LO: {clo.loDetails}
+                            </Badge>
+                          )}
+                        </Group>
+                      </Group>
+                      
+                      <Group gap="xs" onClick={(e) => e.stopPropagation()}>
+                        <Tooltip label="Xóa">
+                          <ActionIcon variant="subtle" color="red" onClick={() => removeClo(i)}>
+                            <IconTrash size={16} />
+                          </ActionIcon>
+                        </Tooltip>
+
+                        <ActionIcon variant="subtle" color="gray" onClick={() => toggleExpandClo(i)}>
+                          {isExpanded ? <IconChevronUp size={16} /> : <IconChevronDown size={16} />}
+                        </ActionIcon>
+                      </Group>
+                    </Group>
+                  </Box>
+
+                  {/* Card Body */}
+                  <Collapse expanded={isExpanded}>
+                    <Box p="md">
+                      <Stack gap="md">
+                        <SimpleGrid cols={{ base: 1, sm: 2 }} spacing="md">
+                          {Ftext(`clos[${i}].cloName`, "Mã CLO", `VD: CLO${i + 1}`, true)}
+                          {Ftext(`clos[${i}].loDetails`, "Ánh xạ LO", "VD: LO1, LO2,...")}
+                        </SimpleGrid>
+                        {Farea(`clos[${i}].cloDetails`, "Mô tả CLO", "Mô tả chi tiết...", 4)}
+                      </Stack>
+                    </Box>
+                  </Collapse>
+                </Card>
+              );
+            })}
+          </Stack>
+        )}
       </Stack>
     </Card>,
 
     // Step 2: Schedule
     <Card key="step2" p="xl" radius={0} style={{ border: "1px solid #E2E8F0", backgroundColor: "white", marginTop: 24 }}>
-      <Stack gap="md">
-        <Group justify="space-between">
-          <Title order={2} style={{ fontSize: 16, fontWeight: 900, color: "#1A1A1A" }}>
-            Lịch trình học tập (Schedule)
-          </Title>
-          <Button variant="subtle" color="#1A3A5C" onClick={addSchedule} leftSection={<IconPlus size={16} />} fw={700} size="xs">
-            Thêm buổi học
-          </Button>
+      <Stack gap="lg">
+        {/* Toolbar */}
+        <Group justify="space-between" align="center">
+          <Group gap="xs">
+            <Title order={2} style={{ fontSize: 16, fontWeight: 900, color: "#1A1A1A" }}>
+              Lịch trình học tập ({values.schedules.length} buổi học)
+            </Title>
+          </Group>
+          <Group gap="xs">
+            <Button variant="outline" color="gray" size="xs" radius={0} onClick={collapseAllSchedules} leftSection={<IconChevronDown size={14} />}>
+              Thu gọn tất cả
+            </Button>
+            <Button variant="outline" color="gray" size="xs" radius={0} onClick={expandAllSchedules} leftSection={<IconChevronUp size={14} />}>
+              Mở rộng tất cả
+            </Button>
+            <Button style={{ backgroundColor: "#1A3A5C" }} size="xs" radius={0} onClick={addSchedule} leftSection={<IconPlus size={14} />}>
+              Thêm buổi học
+            </Button>
+          </Group>
         </Group>
-        {values.schedules.length === 0 && <Text c="dimmed" size="sm">Chưa có lịch trình. Bấm "Thêm buổi học" để bắt đầu.</Text>}
-        {values.schedules.map((s, i) => (
-          <Card key={i} p="sm" radius={0} withBorder style={{ borderColor: "#E2E8F0" }}>
-            <Stack gap="sm">
-              <Group justify="space-between">
-                <Text fw={700} size="sm">Buổi {s.session}</Text>
-                <ActionIcon variant="subtle" color="red" size="sm" onClick={() => removeSchedule(i)}>
-                  <IconTrash size={14} />
-                </ActionIcon>
-              </Group>
-              <SimpleGrid cols={{ base: 1, sm: 2 }} spacing="sm">
-                {Ftext(`schedules[${i}].topic`, "Chủ đề", "Nhập chủ đề buổi học...")}
-                {Ftext(`schedules[${i}].learningMethod`, "Hình thức", "VD: Online, Offline")}
-              </SimpleGrid>
-              <SimpleGrid cols={{ base: 1, sm: 2 }} spacing="sm">
-                {Ftext(`schedules[${i}].lo`, "Đáp ứng CLO", "VD: CLO1")}
-                {Ftext(`schedules[${i}].studentTasks`, "Nhiệm vụ SV", "VD: Đọc slide...")}
-              </SimpleGrid>
-              <SimpleGrid cols={{ base: 1, sm: 2 }} spacing="sm">
-                {Fselect(`schedules[${i}].itu`, "Mức độ giảng dạy (ITU)", [
-                  { value: "I", label: "I - Introduce" },
-                  { value: "T", label: "T - Teach" },
-                  { value: "U", label: "U - Utilize" },
-                  { value: "IT", label: "IT (Combo)" },
-                  { value: "T,U", label: "T,U (Combo)" },
-                ])}
-                {Ftext(`schedules[${i}].sDownload`, "Tài liệu download", "Link hoặc mô tả...")}
-              </SimpleGrid>
-              {Farea(`schedules[${i}].studentMaterials`, "Học liệu cho SV", "Mô tả tài liệu sinh viên cần xem...")}
-              {Farea(`schedules[${i}].urls`, "URLs tham khảo", "Link video, slide...")}
-            </Stack>
+
+        {/* List of Sessions */}
+        {values.schedules.length === 0 ? (
+          <Card p="xl" radius={0} withBorder style={{ borderStyle: "dashed", textAlign: "center" }}>
+            <Text c="dimmed" size="sm">Chưa có lịch trình học tập nào. Bấm nút "Thêm buổi học" để bắt đầu.</Text>
           </Card>
-        ))}
+        ) : (
+          <Stack gap="md">
+            {values.schedules.map((s, i) => {
+              const isExpanded = !!expandedSchedules[i];
+              return (
+                <Card 
+                  key={i} 
+                  p={0} 
+                  radius={0} 
+                  withBorder 
+                  style={{ 
+                    borderColor: isExpanded ? "#1A3A5C" : "#E2E8F0",
+                    boxShadow: isExpanded ? "0 4px 12px rgba(26, 58, 92, 0.05)" : "none",
+                    transition: "all 0.2s ease"
+                  }}
+                >
+                  {/* Card Header (Click to Toggle) */}
+                  <Box 
+                    p="md" 
+                    onClick={() => toggleExpandSchedule(i)}
+                    style={{ 
+                      backgroundColor: isExpanded ? "#F1F5F9" : "#FAFBFC", 
+                      borderBottom: isExpanded ? "1px solid #E2E8F0" : "none",
+                      cursor: "pointer",
+                      userSelect: "none"
+                    }}
+                  >
+                    <Group justify="space-between">
+                      <Group gap="sm" style={{ flex: 1 }}>
+                        <Badge variant="filled" color="gray" radius={0} styles={{ root: { height: 22, minWidth: 50, padding: "0 6px" } }}>
+                          Buổi {s.session}
+                        </Badge>
+                        <Text fw={700} size="sm" c={isExpanded ? "#1A3A5C" : "#334155"} style={{ flex: 1, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                          {s.topic || <span style={{ fontStyle: "italic", color: "#94A3B8" }}>(Chưa đặt chủ đề buổi học)</span>}
+                        </Text>
+                        <Group gap="xs">
+                          {s.learningMethod && (
+                            <Badge variant="outline" color="blue" radius={0}>
+                              {s.learningMethod}
+                            </Badge>
+                          )}
+                          {s.lo && (
+                            <Badge variant="outline" color="teal" radius={0}>
+                              CLO: {s.lo}
+                            </Badge>
+                          )}
+                          {s.itu && (
+                            <Badge variant="outline" color="violet" radius={0}>
+                              ITU: {s.itu}
+                            </Badge>
+                          )}
+                        </Group>
+                      </Group>
+                      
+                      <Group gap="xs" onClick={(e) => e.stopPropagation()}>
+                        <Tooltip label="Xóa">
+                          <ActionIcon variant="subtle" color="red" onClick={() => removeSchedule(i)}>
+                            <IconTrash size={16} />
+                          </ActionIcon>
+                        </Tooltip>
+
+                        <ActionIcon variant="subtle" color="gray" onClick={() => toggleExpandSchedule(i)}>
+                          {isExpanded ? <IconChevronUp size={16} /> : <IconChevronDown size={16} />}
+                        </ActionIcon>
+                      </Group>
+                    </Group>
+                  </Box>
+
+                  {/* Card Body */}
+                  <Collapse expanded={isExpanded}>
+                    <Box p="md">
+                      <Stack gap="md">
+                        {/* Row 1: Core Fields */}
+                        <SimpleGrid cols={{ base: 1, sm: 4 }} spacing="md">
+                          {Ftext(`schedules[${i}].topic`, "Chủ đề", "Nhập chủ đề buổi học...", true)}
+                          {Ftext(`schedules[${i}].learningMethod`, "Hình thức giảng dạy", "VD: Online, Offline")}
+                          {Ftext(`schedules[${i}].lo`, "Đáp ứng CLO", "VD: CLO1")}
+                          
+                          <form.Field name={`schedules[${i}].itu`}>
+                            {(f: any) => (
+                              <Select
+                                label="Mức độ giảng dạy (ITU)"
+                                placeholder="Chọn mức độ..."
+                                radius={0}
+                                data={[
+                                  { value: "I", label: "I - Introduce" },
+                                  { value: "T", label: "T - Teach" },
+                                  { value: "U", label: "U - Utilize" },
+                                  { value: "IT", label: "IT (Combo)" },
+                                  { value: "T,U", label: "T,U (Combo)" },
+                                ]}
+                                value={f.state.value ?? ""}
+                                onChange={(val) => f.handleChange(val ?? "")}
+                                error={f.state.meta.errors?.[0]}
+                              />
+                            )}
+                          </form.Field>
+                        </SimpleGrid>
+
+                        {/* Row 2: Secondary Fields */}
+                        <SimpleGrid cols={{ base: 1, sm: 2 }} spacing="md">
+                          {Ftext(`schedules[${i}].studentTasks`, "Nhiệm vụ sinh viên", "VD: Đọc trước bài, làm quiz...")}
+                          {Ftext(`schedules[${i}].sDownload`, "Tài liệu cần download", "Link hoặc mô tả...")}
+                        </SimpleGrid>
+
+                        {/* Row 3: Textareas for Materials & Reference URLs */}
+                        <SimpleGrid cols={{ base: 1, sm: 2 }} spacing="md">
+                          {Farea(`schedules[${i}].studentMaterials`, "Học liệu chi tiết cho SV", "Mô tả cụ thể sách, slide, hoặc chương cần đọc...")}
+                          {Farea(`schedules[${i}].urls`, "URLs tham khảo", "Link video bài giảng, tài liệu bổ sung...")}
+                        </SimpleGrid>
+                      </Stack>
+                    </Box>
+                  </Collapse>
+                </Card>
+              );
+            })}
+          </Stack>
+        )}
       </Stack>
     </Card>,
 
     // Step 3: Assessment
     <Card key="step3" p="xl" radius={0} style={{ border: "1px solid #E2E8F0", backgroundColor: "white", marginTop: 24 }}>
-      <Stack gap="md">
-        <Group justify="space-between">
-          <Title order={2} style={{ fontSize: 16, fontWeight: 900, color: "#1A1A1A" }}>
-            Cơ cấu đánh giá (Assessment)
-          </Title>
-          <Button variant="subtle" color="#1A3A5C" onClick={addAssessment} leftSection={<IconPlus size={16} />} fw={700} size="xs">
-            Thêm cột điểm
-          </Button>
+      <Stack gap="lg">
+        {/* Weight Allocation Status Panel */}
+        <Card p="md" radius={0} style={{ backgroundColor: "#F8FAFC", border: "1px solid #E2E8F0" }}>
+          <Stack gap="xs">
+            <Group justify="space-between" align="center">
+              <div>
+                <Text size="sm" fw={700} c="#475569">Trạng thái trọng số phân bổ</Text>
+                <Text size="lg" fw={900} c="#1A1A1A">
+                  Tổng trọng số: <span style={{ color: totalWeight === 100 ? "#16A34A" : totalWeight > 100 ? "#DC2626" : "#F26F21" }}>{totalWeight}%</span> / 100%
+                </Text>
+              </div>
+              <Badge 
+                size="lg" 
+                radius={0}
+                variant="filled"
+                color={totalWeight === 100 ? "green" : totalWeight > 100 ? "red" : "orange"}
+              >
+                {totalWeight === 100 
+                  ? "Hợp lệ" 
+                  : totalWeight > 100 
+                    ? `Thừa ${totalWeight - 100}%` 
+                    : `Thiếu ${100 - totalWeight}%`}
+              </Badge>
+            </Group>
+            <Progress 
+              value={totalWeight} 
+              color={totalWeight === 100 ? "green" : totalWeight > 100 ? "red" : "orange"} 
+              size="md" 
+              radius={0}
+              striped={totalWeight !== 100}
+              animated={totalWeight !== 100}
+            />
+          </Stack>
+        </Card>
+
+        {/* Toolbar */}
+        <Group justify="space-between" align="center">
+          <Group gap="xs">
+            <Title order={2} style={{ fontSize: 16, fontWeight: 900, color: "#1A1A1A" }}>
+              Cơ cấu đánh giá ({values.assessments.length} thành phần)
+            </Title>
+          </Group>
+          <Group gap="xs">
+            <Button variant="outline" color="gray" size="xs" radius={0} onClick={collapseAll} leftSection={<IconChevronDown size={14} />}>
+              Thu gọn tất cả
+            </Button>
+            <Button variant="outline" color="gray" size="xs" radius={0} onClick={expandAll} leftSection={<IconChevronUp size={14} />}>
+              Mở rộng tất cả
+            </Button>
+            <Button style={{ backgroundColor: "#1A3A5C" }} size="xs" radius={0} onClick={addAssessment} leftSection={<IconPlus size={14} />}>
+              Thêm thành phần
+            </Button>
+          </Group>
         </Group>
 
-        {totalWeight !== 100 && (
-          <Alert icon={<IconAlertCircle size={18} />} title="Cảnh báo trọng số" color="yellow" radius={0}>
-            Tổng trọng số {totalWeight}%. Cần đúng 100% để lưu.
-          </Alert>
-        )}
+        {/* List of Assessments */}
+        {values.assessments.length === 0 ? (
+          <Card p="xl" radius={0} withBorder style={{ borderStyle: "dashed", textAlign: "center" }}>
+            <Text c="dimmed" size="sm">Chưa có thành phần đánh giá nào. Bấm nút "Thêm thành phần" để bắt đầu.</Text>
+          </Card>
+        ) : (
+          <Stack gap="md">
+            {values.assessments.map((a, i) => {
+              const isExpanded = !!expandedAssessments[i];
+              return (
+                <Card 
+                  key={i} 
+                  p={0} 
+                  radius={0} 
+                  withBorder 
+                  style={{ 
+                    borderColor: isExpanded ? "#1A3A5C" : "#E2E8F0",
+                    boxShadow: isExpanded ? "0 4px 12px rgba(26, 58, 92, 0.05)" : "none",
+                    transition: "all 0.2s ease"
+                  }}
+                >
+                  {/* Card Header (Click to Toggle) */}
+                  <Box 
+                    p="md" 
+                    onClick={() => toggleExpand(i)}
+                    style={{ 
+                      backgroundColor: isExpanded ? "#F1F5F9" : "#FAFBFC", 
+                      borderBottom: isExpanded ? "1px solid #E2E8F0" : "none",
+                      cursor: "pointer",
+                      userSelect: "none"
+                    }}
+                  >
+                    <Group justify="space-between">
+                      <Group gap="sm" style={{ flex: 1 }}>
+                        <Badge variant="filled" color="gray" radius={0} styles={{ root: { height: 22, minWidth: 26, padding: 0 } }}>
+                          #{i + 1}
+                        </Badge>
+                        <Text fw={700} size="sm" c={isExpanded ? "#1A3A5C" : "#334155"} style={{ flex: 1, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                          {a.category || <span style={{ fontStyle: "italic", color: "#94A3B8" }}>(Chưa đặt tên thành phần)</span>}
+                        </Text>
+                        <Group gap="xs">
+                          {a.weight > 0 && (
+                            <Badge variant="outline" color="blue" radius={0}>
+                              Trọng số: {a.weight}%
+                            </Badge>
+                          )}
+                          {a.clo && (
+                            <Badge variant="outline" color="teal" radius={0}>
+                              CLO: {a.clo}
+                            </Badge>
+                          )}
+                        </Group>
+                      </Group>
+                      
+                      <Group gap="xs" onClick={(e) => e.stopPropagation()}>
+                        <Badge 
+                          variant="light" 
+                          color={a.type === "final exam" ? "orange" : "blue"}
+                          radius={0}
+                        >
+                          {a.type === "final exam" ? "Final Exam" : "Ongoing"}
+                        </Badge>
+                        
+                        <Tooltip label="Nhân bản">
+                          <ActionIcon variant="subtle" color="blue" onClick={() => duplicateAssessment(i)}>
+                            <IconCopy size={16} />
+                          </ActionIcon>
+                        </Tooltip>
 
-        <Box style={{ overflowX: "auto" }}>
-        <Table highlightOnHover striped withTableBorder>
-          <Table.Thead style={{ backgroundColor: "#F8FAFC" }}>
-            <Table.Tr>
-              <Table.Th style={{ fontWeight: 700, fontSize: 11, color: "#475569", whiteSpace: "nowrap" }}>Thành phần</Table.Th>
-              <Table.Th style={{ fontWeight: 700, fontSize: 11, color: "#475569", whiteSpace: "nowrap" }}>Loại</Table.Th>
-              <Table.Th style={{ width: 60, fontWeight: 700, fontSize: 11, color: "#475569", whiteSpace: "nowrap" }}>Part</Table.Th>
-              <Table.Th style={{ width: 90, fontWeight: 700, fontSize: 11, color: "#475569", whiteSpace: "nowrap" }}>Trọng số (%)</Table.Th>
-              <Table.Th style={{ width: 80, fontWeight: 700, fontSize: 11, color: "#475569", whiteSpace: "nowrap" }}>CLO</Table.Th>
-              <Table.Th style={{ width: 150, fontWeight: 700, fontSize: 11, color: "#475569", whiteSpace: "nowrap" }}>Tiêu chí hoàn thành</Table.Th>
-              <Table.Th style={{ width: 80, fontWeight: 700, fontSize: 11, color: "#475569", whiteSpace: "nowrap" }}>Duration</Table.Th>
-              <Table.Th style={{ width: 100, fontWeight: 700, fontSize: 11, color: "#475569", whiteSpace: "nowrap" }}>Question Type</Table.Th>
-              <Table.Th style={{ width: 60, fontWeight: 700, fontSize: 11, color: "#475569", whiteSpace: "nowrap" }}>No.</Table.Th>
-              <Table.Th style={{ width: 120, fontWeight: 700, fontSize: 11, color: "#475569", whiteSpace: "nowrap" }}>Grading Guide</Table.Th>
-              <Table.Th style={{ width: 100, fontWeight: 700, fontSize: 11, color: "#475569", whiteSpace: "nowrap" }}>Note</Table.Th>
-              <Table.Th style={{ width: 50, fontWeight: 700, fontSize: 11, color: "#475569", whiteSpace: "nowrap" }}>Xóa</Table.Th>
-            </Table.Tr>
-          </Table.Thead>
-          <Table.Tbody>
-            {values.assessments.map((a, i) => (
-              <Table.Tr key={i}>
-                <Table.Td>
-                  <form.Field name={`assessments[${i}].category`}>
-                    {(f: any) => (
-                      <TextInput
-                        value={f.state.value}
-                        onChange={(e) => f.handleChange(e.target.value)}
-                        radius={0}
-                        styles={{ input: { border: "1px solid transparent", fontSize: 12, padding: "4px 6px", "&:focus": { borderColor: "#1A3A5C" } } }}
-                      />
-                    )}
-                  </form.Field>
-                </Table.Td>
-                <Table.Td>
-                  <form.Field name={`assessments[${i}].type`}>
-                    {(f: any) => (
-                      <Select
-                        data={[
-                          { value: "on-going", label: "On-going" },
-                          { value: "final exam", label: "Final Exam" },
-                        ]}
-                        value={f.state.value}
-                        onChange={(val) => f.handleChange(val ?? "on-going")}
-                        radius={0}
-                        styles={{ input: { border: "1px solid transparent", fontSize: 12, padding: "4px 6px", "&:focus": { borderColor: "#1A3A5C" } } }}
-                      />
-                    )}
-                  </form.Field>
-                </Table.Td>
-                <Table.Td>
-                  <form.Field name={`assessments[${i}].part`}>
-                    {(f: any) => (
-                      <TextInput
-                        value={f.state.value || ""}
-                        onChange={(e) => f.handleChange(e.target.value)}
-                        radius={0}
-                        styles={{ input: { border: "1px solid transparent", fontSize: 12, padding: "4px 6px", minWidth: 50, "&:focus": { borderColor: "#1A3A5C" } } }}
-                      />
-                    )}
-                  </form.Field>
-                </Table.Td>
-                <Table.Td>
-                  <form.Field name={`assessments[${i}].weight`}>
-                    {(f: any) => (
-                      <NumberInput
-                        value={f.state.value}
-                        onChange={(val) => f.handleChange(val as number)}
-                        radius={0}
-                        min={0}
-                        max={100}
-                        styles={{ input: { fontSize: 12, padding: "4px 6px" } }}
-                      />
-                    )}
-                  </form.Field>
-                </Table.Td>
-                <Table.Td>
-                  <form.Field name={`assessments[${i}].clo`}>
-                    {(f: any) => (
-                      <TextInput
-                        value={f.state.value}
-                        onChange={(e) => f.handleChange(e.target.value)}
-                        radius={0}
-                        styles={{ input: { border: "1px solid transparent", fontSize: 12, padding: "4px 6px", minWidth: 60, "&:focus": { borderColor: "#1A3A5C" } } }}
-                      />
-                    )}
-                  </form.Field>
-                </Table.Td>
-                <Table.Td>
-                  <form.Field name={`assessments[${i}].completionCriteria`}>
-                    {(f: any) => (
-                      <TextInput
-                        value={f.state.value || ""}
-                        onChange={(e) => f.handleChange(e.target.value)}
-                        radius={0}
-                        styles={{ input: { border: "1px solid transparent", fontSize: 12, padding: "4px 6px", minWidth: 120, "&:focus": { borderColor: "#1A3A5C" } } }}
-                      />
-                    )}
-                  </form.Field>
-                </Table.Td>
-                <Table.Td>
-                  <form.Field name={`assessments[${i}].duration`}>
-                    {(f: any) => (
-                      <TextInput
-                        value={f.state.value || ""}
-                        onChange={(e) => f.handleChange(e.target.value)}
-                        radius={0}
-                        styles={{ input: { border: "1px solid transparent", fontSize: 12, padding: "4px 6px", minWidth: 60, "&:focus": { borderColor: "#1A3A5C" } } }}
-                      />
-                    )}
-                  </form.Field>
-                </Table.Td>
-                <Table.Td>
-                  <form.Field name={`assessments[${i}].questionType`}>
-                    {(f: any) => (
-                      <TextInput
-                        value={f.state.value || ""}
-                        onChange={(e) => f.handleChange(e.target.value)}
-                        radius={0}
-                        styles={{ input: { border: "1px solid transparent", fontSize: 12, padding: "4px 6px", minWidth: 80, "&:focus": { borderColor: "#1A3A5C" } } }}
-                      />
-                    )}
-                  </form.Field>
-                </Table.Td>
-                <Table.Td>
-                  <form.Field name={`assessments[${i}].noQuestion`}>
-                    {(f: any) => (
-                      <TextInput
-                        value={f.state.value || ""}
-                        onChange={(e) => f.handleChange(e.target.value)}
-                        radius={0}
-                        styles={{ input: { border: "1px solid transparent", fontSize: 12, padding: "4px 6px", minWidth: 40, "&:focus": { borderColor: "#1A3A5C" } } }}
-                      />
-                    )}
-                  </form.Field>
-                </Table.Td>
-                <Table.Td>
-                  <form.Field name={`assessments[${i}].gradingGuide`}>
-                    {(f: any) => (
-                      <TextInput
-                        value={f.state.value || ""}
-                        onChange={(e) => f.handleChange(e.target.value)}
-                        radius={0}
-                        styles={{ input: { border: "1px solid transparent", fontSize: 12, padding: "4px 6px", minWidth: 100, "&:focus": { borderColor: "#1A3A5C" } } }}
-                      />
-                    )}
-                  </form.Field>
-                </Table.Td>
-                <Table.Td>
-                  <form.Field name={`assessments[${i}].note`}>
-                    {(f: any) => (
-                      <TextInput
-                        value={f.state.value || ""}
-                        onChange={(e) => f.handleChange(e.target.value)}
-                        radius={0}
-                        styles={{ input: { border: "1px solid transparent", fontSize: 12, padding: "4px 6px", minWidth: 80, "&:focus": { borderColor: "#1A3A5C" } } }}
-                      />
-                    )}
-                  </form.Field>
-                </Table.Td>
-                <Table.Td style={{ textAlign: "center" }}>
-                  <ActionIcon variant="subtle" color="red" onClick={() => removeAssessment(i)}>
-                    <IconTrash size={14} />
-                  </ActionIcon>
-                </Table.Td>
-              </Table.Tr>
-            ))}
-            <Table.Tr style={{ backgroundColor: "#F1F5F9", fontWeight: "bold" }}>
-              <Table.Td style={{ fontSize: 13, textAlign: "right" }} colSpan={3}>Tổng cộng:</Table.Td>
-              <Table.Td style={{ fontSize: 13, color: totalWeight === 100 ? "#16A34A" : "#DC2626", fontWeight: 800 }}>
-                {totalWeight}%
-              </Table.Td>
-              <Table.Td></Table.Td>
-              <Table.Td></Table.Td>
-              <Table.Td></Table.Td>
-              <Table.Td></Table.Td>
-              <Table.Td></Table.Td>
-              <Table.Td></Table.Td>
-              <Table.Td></Table.Td>
-              <Table.Td></Table.Td>
-              <Table.Td></Table.Td>
-            </Table.Tr>
-          </Table.Tbody>
-        </Table>
-        </Box>
+                        <Tooltip label="Xóa">
+                          <ActionIcon variant="subtle" color="red" onClick={() => removeAssessment(i)}>
+                            <IconTrash size={16} />
+                          </ActionIcon>
+                        </Tooltip>
+
+                        <ActionIcon variant="subtle" color="gray" onClick={() => toggleExpand(i)}>
+                          {isExpanded ? <IconChevronUp size={16} /> : <IconChevronDown size={16} />}
+                        </ActionIcon>
+                      </Group>
+                    </Group>
+                  </Box>
+
+                  {/* Card Body */}
+                  <Collapse expanded={isExpanded}>
+                    <Box p="md">
+                      <Stack gap="md">
+                        {/* Row 1: Basic Info */}
+                        <SimpleGrid cols={{ base: 1, sm: 4 }} spacing="md">
+                          <form.Field name={`assessments[${i}].category`}>
+                            {(f: any) => (
+                              <TextInput
+                                label="Tên thành phần"
+                                placeholder="VD: Progress Test 1"
+                                required
+                                radius={0}
+                                value={f.state.value ?? ""}
+                                onChange={(e) => f.handleChange(e.target.value)}
+                                error={f.state.meta.errors?.[0]}
+                              />
+                            )}
+                          </form.Field>
+
+                          <form.Field name={`assessments[${i}].type`}>
+                            {(f: any) => (
+                              <Select
+                                label="Loại đánh giá"
+                                data={[
+                                  { value: "on-going", label: "On-going" },
+                                  { value: "final exam", label: "Final Exam" },
+                                ]}
+                                required
+                                radius={0}
+                                value={f.state.value ?? "on-going"}
+                                onChange={(val) => f.handleChange(val ?? "on-going")}
+                                error={f.state.meta.errors?.[0]}
+                              />
+                            )}
+                          </form.Field>
+
+                          <form.Field name={`assessments[${i}].weight`}>
+                            {(f: any) => (
+                              <NumberInput
+                                label="Trọng số (%)"
+                                required
+                                radius={0}
+                                min={0}
+                                max={100}
+                                value={f.state.value ?? 0}
+                                onChange={(val) => f.handleChange(val ?? 0)}
+                                error={f.state.meta.errors?.[0]}
+                              />
+                            )}
+                          </form.Field>
+
+                          <form.Field name={`assessments[${i}].clo`}>
+                            {(f: any) => (
+                              <TextInput
+                                label="Đáp ứng CLO"
+                                placeholder="VD: CLO1, CLO2"
+                                radius={0}
+                                value={f.state.value ?? ""}
+                                onChange={(e) => f.handleChange(e.target.value)}
+                                error={f.state.meta.errors?.[0]}
+                              />
+                            )}
+                          </form.Field>
+                        </SimpleGrid>
+
+                        {/* Row 2: Secondary Specs */}
+                        <SimpleGrid cols={{ base: 1, sm: 4 }} spacing="md">
+                          <form.Field name={`assessments[${i}].part`}>
+                            {(f: any) => (
+                              <TextInput
+                                label="Part"
+                                placeholder="VD: 1"
+                                radius={0}
+                                value={f.state.value ?? ""}
+                                onChange={(e) => f.handleChange(e.target.value)}
+                                error={f.state.meta.errors?.[0]}
+                              />
+                            )}
+                          </form.Field>
+
+                          <form.Field name={`assessments[${i}].completionCriteria`}>
+                            {(f: any) => (
+                              <TextInput
+                                label="Tiêu chí hoàn thành"
+                                placeholder="VD: 5"
+                                radius={0}
+                                value={f.state.value ?? ""}
+                                onChange={(e) => f.handleChange(e.target.value)}
+                                error={f.state.meta.errors?.[0]}
+                              />
+                            )}
+                          </form.Field>
+
+                          <form.Field name={`assessments[${i}].duration`}>
+                            {(f: any) => (
+                              <TextInput
+                                label="Thời lượng"
+                                placeholder="VD: 15' hoặc 10'-30'"
+                                radius={0}
+                                value={f.state.value ?? ""}
+                                onChange={(e) => f.handleChange(e.target.value)}
+                                error={f.state.meta.errors?.[0]}
+                              />
+                            )}
+                          </form.Field>
+
+                          <form.Field name={`assessments[${i}].noQuestion`}>
+                            {(f: any) => (
+                              <TextInput
+                                label="Số câu hỏi"
+                                placeholder="VD: 40 hoặc -"
+                                radius={0}
+                                value={f.state.value ?? ""}
+                                onChange={(e) => f.handleChange(e.target.value)}
+                                error={f.state.meta.errors?.[0]}
+                              />
+                            )}
+                          </form.Field>
+                        </SimpleGrid>
+
+                        {/* Row 3: Question Type and Knowledge & Skill */}
+                        <SimpleGrid cols={{ base: 1, sm: 2 }} spacing="md">
+                          <form.Field name={`assessments[${i}].questionType`}>
+                            {(f: any) => (
+                              <TextInput
+                                label="Dạng câu hỏi / Hình thức thi"
+                                placeholder="VD: Oral Presentation, Multiple Choice"
+                                radius={0}
+                                value={f.state.value ?? ""}
+                                onChange={(e) => f.handleChange(e.target.value)}
+                                error={f.state.meta.errors?.[0]}
+                              />
+                            )}
+                          </form.Field>
+
+                          <form.Field name={`assessments[${i}].knowledgeAndSkill`}>
+                            {(f: any) => (
+                              <Textarea
+                                label="Kiến thức & Kỹ năng đánh giá"
+                                placeholder="VD: Topic from video lectures, class discussion activities."
+                                radius={0}
+                                rows={2}
+                                value={f.state.value ?? ""}
+                                onChange={(e) => f.handleChange(e.target.value)}
+                                error={f.state.meta.errors?.[0]}
+                              />
+                            )}
+                          </form.Field>
+                        </SimpleGrid>
+
+                        {/* Row 4 & 5: Detailed Guides & Notes (Spacious) */}
+                        <form.Field name={`assessments[${i}].gradingGuide`}>
+                          {(f: any) => (
+                            <Textarea
+                              label="Hướng dẫn chấm điểm (Grading Guide)"
+                              placeholder="Nhập tiêu chí chấm điểm chi tiết (ví dụ: chia theo các tiêu chí nhỏ, chấm theo thang điểm, vai trò nhóm...). Có thể sử dụng dấu gạch đầu dòng."
+                              radius={0}
+                              rows={5}
+                              value={f.state.value ?? ""}
+                              onChange={(e) => f.handleChange(e.target.value)}
+                              error={f.state.meta.errors?.[0]}
+                            />
+                          )}
+                        </form.Field>
+
+                        <form.Field name={`assessments[${i}].note`}>
+                          {(f: any) => (
+                            <Textarea
+                              label="Ghi chú thêm (Note)"
+                              placeholder="Nhập ghi chú hoặc trách nhiệm của giảng viên sau khi chấm..."
+                              radius={0}
+                              rows={3}
+                              value={f.state.value ?? ""}
+                              onChange={(e) => f.handleChange(e.target.value)}
+                              error={f.state.meta.errors?.[0]}
+                            />
+                          )}
+                        </form.Field>
+                      </Stack>
+                    </Box>
+                  </Collapse>
+                </Card>
+              );
+            })}
+          </Stack>
+        )}
       </Stack>
     </Card>,
 
     // Step 4: Materials
     <Card key="step4" p="xl" radius={0} style={{ border: "1px solid #E2E8F0", backgroundColor: "white", marginTop: 24 }}>
-      <Stack gap="md">
-        <Group justify="space-between">
-          <Title order={2} style={{ fontSize: 16, fontWeight: 900, color: "#1A1A1A" }}>
-            Tài liệu học tập (Materials)
-          </Title>
-          <Button variant="subtle" color="#1A3A5C" onClick={addMaterial} leftSection={<IconPlus size={16} />} fw={700} size="xs">
-            Thêm tài liệu
-          </Button>
+      <Stack gap="lg">
+        {/* Toolbar */}
+        <Group justify="space-between" align="center">
+          <Group gap="xs">
+            <Title order={2} style={{ fontSize: 16, fontWeight: 900, color: "#1A1A1A" }}>
+              Tài liệu học tập ({values.materials.length} tài liệu)
+            </Title>
+          </Group>
+          <Group gap="xs">
+            <Button variant="outline" color="gray" size="xs" radius={0} onClick={collapseAllMaterials} leftSection={<IconChevronDown size={14} />}>
+              Thu gọn tất cả
+            </Button>
+            <Button variant="outline" color="gray" size="xs" radius={0} onClick={expandAllMaterials} leftSection={<IconChevronUp size={14} />}>
+              Mở rộng tất cả
+            </Button>
+            <Button style={{ backgroundColor: "#1A3A5C" }} size="xs" radius={0} onClick={addMaterial} leftSection={<IconPlus size={14} />}>
+              Thêm tài liệu
+            </Button>
+          </Group>
         </Group>
-        {values.materials.length === 0 && <Text c="dimmed" size="sm">Chưa có tài liệu. Bấm "Thêm tài liệu" để bắt đầu.</Text>}
-        {values.materials.map((m, i) => (
-          <Card key={i} p="sm" radius={0} withBorder style={{ borderColor: "#E2E8F0" }}>
-            <Stack gap="sm">
-              <Group justify="space-between">
-                <Text fw={700} size="sm">Tài liệu #{i + 1}</Text>
-                <ActionIcon variant="subtle" color="red" size="sm" onClick={() => removeMaterial(i)}>
-                  <IconTrash size={14} />
-                </ActionIcon>
-              </Group>
-              {Ftext(`materials[${i}].description`, "Mô tả tài liệu", "VD: Textbook name", true)}
-              <SimpleGrid cols={{ base: 1, sm: 2 }} spacing="sm">
-                {Ftext(`materials[${i}].author`, "Tác giả", "VD: John Doe")}
-                {Ftext(`materials[${i}].publisher`, "Nhà xuất bản", "VD: NXB Giáo dục")}
-              </SimpleGrid>
-              {Fselect(`materials[${i}].isMainMaterial`, "Loại", [
-                { value: "Main", label: "Giáo trình chính (Main)" },
-                { value: "Reference", label: "Tài liệu tham khảo (Reference)" },
-              ])}
-              <SimpleGrid cols={{ base: 1, sm: 3 }} spacing="sm">
-                {Ftext(`materials[${i}].publishedDate`, "Ngày xuất bản", "VD: 2021")}
-                {Ftext(`materials[${i}].edition`, "Phiên bản", "VD: 4th Edition")}
-                {Ftext(`materials[${i}].isbn`, "ISBN", "VD: 978-0136886099")}
-              </SimpleGrid>
-              <SimpleGrid cols={{ base: 1, sm: 3 }} spacing="sm">
-                {Fselect(`materials[${i}].isHardCopy`, "Bản cứng", [
-                  { value: "Có", label: "Có" },
-                  { value: "Không", label: "Không" },
-                ])}
-                {Fselect(`materials[${i}].isOnline`, "Online", [
-                  { value: "Có", label: "Có" },
-                  { value: "Không", label: "Không" },
-                ])}
-              </SimpleGrid>
-              {Ftext(`materials[${i}].note`, "Ghi chú", "Ghi chú thêm...")}
-            </Stack>
+
+        {/* List of Materials */}
+        {values.materials.length === 0 ? (
+          <Card p="xl" radius={0} withBorder style={{ borderStyle: "dashed", textAlign: "center" }}>
+            <Text c="dimmed" size="sm">Chưa có tài liệu học tập nào. Bấm nút "Thêm tài liệu" để bắt đầu.</Text>
           </Card>
-        ))}
+        ) : (
+          <Stack gap="md">
+            {values.materials.map((m, i) => {
+              const isExpanded = !!expandedMaterials[i];
+              return (
+                <Card 
+                  key={i} 
+                  p={0} 
+                  radius={0} 
+                  withBorder 
+                  style={{ 
+                    borderColor: isExpanded ? "#1A3A5C" : "#E2E8F0",
+                    boxShadow: isExpanded ? "0 4px 12px rgba(26, 58, 92, 0.05)" : "none",
+                    transition: "all 0.2s ease"
+                  }}
+                >
+                  {/* Card Header (Click to Toggle) */}
+                  <Box 
+                    p="md" 
+                    onClick={() => toggleExpandMaterial(i)}
+                    style={{ 
+                      backgroundColor: isExpanded ? "#F1F5F9" : "#FAFBFC", 
+                      borderBottom: isExpanded ? "1px solid #E2E8F0" : "none",
+                      cursor: "pointer",
+                      userSelect: "none"
+                    }}
+                  >
+                    <Group justify="space-between">
+                      <Group gap="sm" style={{ flex: 1 }}>
+                        <Badge variant="filled" color="gray" radius={0} styles={{ root: { height: 22, minWidth: 26, padding: 0 } }}>
+                          #{i + 1}
+                        </Badge>
+                        <Text fw={700} size="sm" c={isExpanded ? "#1A3A5C" : "#334155"} style={{ flex: 1, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                          {m.description || <span style={{ fontStyle: "italic", color: "#94A3B8" }}>(Mô tả tài liệu trống)</span>}
+                        </Text>
+                        <Group gap="xs">
+                          {m.isMainMaterial && (
+                            <Badge variant="outline" color={m.isMainMaterial === "Main" ? "blue" : "gray"} radius={0}>
+                              {m.isMainMaterial === "Main" ? "Chính" : "Tham khảo"}
+                            </Badge>
+                          )}
+                          <Badge variant="light" color={m.isOnline === "Có" ? "green" : "red"} radius={0}>
+                            Online: {m.isOnline}
+                          </Badge>
+                          <Badge variant="light" color={m.isHardCopy === "Có" ? "green" : "red"} radius={0}>
+                            Bản cứng: {m.isHardCopy}
+                          </Badge>
+                        </Group>
+                      </Group>
+                      
+                      <Group gap="xs" onClick={(e) => e.stopPropagation()}>
+                        <Tooltip label="Xóa">
+                          <ActionIcon variant="subtle" color="red" onClick={() => removeMaterial(i)}>
+                            <IconTrash size={16} />
+                          </ActionIcon>
+                        </Tooltip>
+
+                        <ActionIcon variant="subtle" color="gray" onClick={() => toggleExpandMaterial(i)}>
+                          {isExpanded ? <IconChevronUp size={16} /> : <IconChevronDown size={16} />}
+                        </ActionIcon>
+                      </Group>
+                    </Group>
+                  </Box>
+
+                  {/* Card Body */}
+                  <Collapse expanded={isExpanded}>
+                    <Box p="md">
+                      <Stack gap="md">
+                        {/* Row 1: Core details */}
+                        {Ftext(`materials[${i}].description`, "Mô tả tài liệu (Tên sách/Tài liệu)", "VD: Textbook name", true)}
+                        
+                        <SimpleGrid cols={{ base: 1, sm: 3 }} spacing="md">
+                          {Ftext(`materials[${i}].author`, "Tác giả", "VD: John Doe")}
+                          {Ftext(`materials[${i}].publisher`, "Nhà xuất bản", "VD: NXB Giáo dục")}
+                          {Fselect(`materials[${i}].isMainMaterial`, "Loại tài liệu", [
+                            { value: "Main", label: "Giáo trình chính (Main)" },
+                            { value: "Reference", label: "Tài liệu tham khảo (Reference)" },
+                          ])}
+                        </SimpleGrid>
+
+                        {/* Row 2: Secondary details */}
+                        <SimpleGrid cols={{ base: 1, sm: 3 }} spacing="md">
+                          {Ftext(`materials[${i}].publishedDate`, "Năm xuất bản", "VD: 2021")}
+                          {Ftext(`materials[${i}].edition`, "Phiên bản", "VD: 4th Edition")}
+                          {Ftext(`materials[${i}].isbn`, "ISBN", "VD: 978-0136886099")}
+                        </SimpleGrid>
+
+                        {/* Row 3: Copies and notes */}
+                        <SimpleGrid cols={{ base: 1, sm: 2 }} spacing="md">
+                          {Fselect(`materials[${i}].isHardCopy`, "Có bản cứng không?", [
+                            { value: "Có", label: "Có" },
+                            { value: "Không", label: "Không" },
+                          ])}
+                          {Fselect(`materials[${i}].isOnline`, "Có bản online không?", [
+                            { value: "Có", label: "Có" },
+                            { value: "Không", label: "Không" },
+                          ])}
+                        </SimpleGrid>
+                        {Ftext(`materials[${i}].note`, "Ghi chú thêm", "Ghi chú về học liệu...")}
+                      </Stack>
+                    </Box>
+                  </Collapse>
+                </Card>
+              );
+            })}
+          </Stack>
+        )}
       </Stack>
     </Card>,
   ];
 
   return (
-    <Stack gap="xl" style={{ maxWidth: 1000, margin: "0 auto" }}>
+    <Stack gap="xl">
       {/* Header */}
       <Group gap="md">
         <ActionIcon component={Link} href="/teacher/syllabus" variant="subtle" color="gray" size="lg">
