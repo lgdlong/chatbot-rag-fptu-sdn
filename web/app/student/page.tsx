@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useInfiniteQuery } from "@tanstack/react-query";
 import {
   Title,
   Text,
@@ -24,7 +24,6 @@ import {
 } from "@tabler/icons-react";
 
 import { Subject, ALL_SUBJECTS, mapSyllabusToSubject } from "@/components/student/subjectsData";
-import { SubjectCard } from "@/components/student/SubjectCard";
 import { SearchResultRow } from "@/components/student/SearchResultRow";
 import * as api from "@/lib/api";
 
@@ -32,10 +31,15 @@ export default function StudentDashboard() {
   const [searchTerm, setSearchTerm] = useState("");
   const [dismissedError, setDismissedError] = useState(false);
 
-  // Load all syllabuses on mount
-  const initialQuery = useQuery({
-    queryKey: ["student-syllabuses", ""],
-    queryFn: () => api.searchSyllabus(),
+  // Load all syllabuses — infinite scroll pagination
+  const initialQuery = useInfiniteQuery({
+    queryKey: ["student-syllabuses"],
+    queryFn: ({ pageParam = 1 }) => api.searchSyllabus(undefined, pageParam),
+    getNextPageParam: (lastPage) => {
+      const totalPages = Math.ceil(lastPage.total / lastPage.limit);
+      return lastPage.page < totalPages ? lastPage.page + 1 : undefined;
+    },
+    initialPageParam: 1,
   });
 
   // Search when user types 2+ characters
@@ -45,10 +49,10 @@ export default function StudentDashboard() {
     enabled: searchTerm.length >= 2,
   });
 
-  // Derived state
-  const initialRaw = initialQuery.data?.syllabuses;
-  const allSubjects = initialRaw
-    ? initialRaw.map((s, i) => mapSyllabusToSubject(s, i))
+  // Derived state — flatten all loaded pages
+  const allSyllabuses = initialQuery.data?.pages.flatMap((p) => p.syllabuses) ?? [];
+  const allSubjects = allSyllabuses.length > 0
+    ? allSyllabuses.map((s, i) => mapSyllabusToSubject(s, i))
     : ALL_SUBJECTS;
 
   const searchRaw = searchQuery.data?.syllabuses;
@@ -58,6 +62,7 @@ export default function StudentDashboard() {
 
   const isSearching = searchTerm.length >= 2 ? searchQuery.isLoading : false;
   const isLoadingSubjects = initialQuery.isLoading;
+  const { fetchNextPage, hasNextPage, isFetchingNextPage } = initialQuery;
   const hasSearched = searchTerm.length >= 2;
 
   const apiError = !dismissedError && (
@@ -69,11 +74,6 @@ export default function StudentDashboard() {
         ? "Không thể kết nối đến server. Đang hiển thị dữ liệu mẫu."
         : null
   );
-
-  // Featured: first 3 active+approved subjects
-  const featuredSubjects = allSubjects
-    .filter((s) => s.isActive && s.isApproved)
-    .slice(0, 3);
 
   const handleSearch = () => {
     if (searchTerm.trim().length < 2) return;
@@ -319,46 +319,9 @@ export default function StudentDashboard() {
           </Stack>
         )}
 
-        {/* ─── Featured Subjects ─── */}
+        {/* ─── All subjects grid ─── */}
         {!hasSearched && (
           <Stack gap="xl">
-            {/* Featured */}
-            {featuredSubjects.length > 0 && (
-              <Stack gap="md">
-                <Group justify="space-between" align="center">
-                  <Box>
-                    <Text size="xs" fw={700} c="dimmed" style={{ textTransform: "uppercase", letterSpacing: "1px" }}>
-                      Môn học nổi bật
-                    </Text>
-                    <Text fw={800} style={{ color: "#1A3A5C", fontSize: "18px" }}>
-                      Truy cập nhanh Syllabus
-                    </Text>
-                  </Box>
-                  <Badge
-                    size="sm"
-                    radius="xl"
-                    style={{ background: "#F37021", color: "white" }}
-                    leftSection={<IconSparkles size={10} />}
-                  >
-                    Phổ biến
-                  </Badge>
-                </Group>
-
-                <Box
-                  style={{
-                    display: "grid",
-                    gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))",
-                    gap: "16px",
-                  }}
-                >
-                  {featuredSubjects.map((subject) => (
-                    <SubjectCard key={`${subject.code}-${subject.syllabusId}`} subject={subject} />
-                  ))}
-                </Box>
-              </Stack>
-            )}
-
-            {/* All subjects grid */}
             <Stack gap="md">
               <Group justify="space-between" align="center">
                 <Box>
@@ -382,6 +345,24 @@ export default function StudentDashboard() {
                   {allSubjects.map((subject) => (
                     <SearchResultRow key={`${subject.code}-${subject.syllabusId}`} subject={subject} />
                   ))}
+
+                  {/* Load more button */}
+                  {hasNextPage && (
+                    <Group justify="center" mt="md">
+                      <Button
+                        variant="outline"
+                        color="#1A3A5C"
+                        radius="md"
+                        size="sm"
+                        fw={700}
+                        loading={isFetchingNextPage}
+                        onClick={() => fetchNextPage()}
+                        style={{ borderColor: "#CBD5E1" }}
+                      >
+                        {isFetchingNextPage ? "Đang tải..." : "Tải thêm 20 môn"}
+                      </Button>
+                    </Group>
+                  )}
                 </Stack>
               )}
             </Stack>
