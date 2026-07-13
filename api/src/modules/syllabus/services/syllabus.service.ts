@@ -47,6 +47,8 @@ export type UploadDocumentResult = {
 export type SearchSyllabusInput = {
   subjectCode?: string;
   role?: string | null;
+  page?: number;
+  limit?: number;
 };
 
 export type UpdateSyllabusInput = {
@@ -145,10 +147,12 @@ export class SyllabusService {
    */
   static async searchSyllabuses(
     input: SearchSyllabusInput,
-  ): Promise<unknown[]> {
+  ): Promise<{ rows: unknown[]; total: number; page: number; limit: number }> {
     return SyllabusRepository.findMany({
       subjectCode: input.subjectCode,
       role: input.role,
+      page: input.page,
+      limit: input.limit,
     });
   }
 

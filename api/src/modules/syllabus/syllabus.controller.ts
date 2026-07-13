@@ -43,14 +43,23 @@ syllabusRouter.get("/", async (c) => {
   if (!session?.user) return c.json({ error: "Unauthorized" }, 401);
 
   const subjectCode = c.req.query("subject_code")?.trim().toUpperCase() || "";
+  const page = Math.max(1, parseInt(c.req.query("page") ?? "1", 10));
+  const limit = Math.min(100, Math.max(1, parseInt(c.req.query("limit") ?? "20", 10)));
   const role = session.user.role;
 
   try {
-    const syllabuses = await SyllabusService.searchSyllabuses({
+    const result = await SyllabusService.searchSyllabuses({
       subjectCode,
       role,
+      page,
+      limit,
     });
-    return c.json({ syllabuses });
+    return c.json({
+      syllabuses: result.rows,
+      total: result.total,
+      page: result.page,
+      limit: result.limit,
+    });
   } catch (err: unknown) {
     return respondWithServiceError(c, err);
   }

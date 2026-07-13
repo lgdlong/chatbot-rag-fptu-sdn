@@ -21,7 +21,7 @@ export class SyllabusRepository {
    * Mirrors the pre-refactor `whereClause` build in the GET / handler.
    */
   static async findMany(
-    filter: { subjectCode?: string; role?: string | null },
+    filter: { subjectCode?: string; role?: string | null; page?: number; limit?: number },
     options?: { tx?: Prisma.TransactionClient },
   ) {
     const client = options?.tx || prisma;
@@ -38,16 +38,27 @@ export class SyllabusRepository {
       where.isApproved = true;
     }
 
-    return client.syllabus.findMany({
-      where,
-      include: {
-        course: { select: { code: true, name: true } },
-        ragWorkspace: {
-          select: { syncStatus: true, syncError: true, lastSyncedAt: true },
+    const page = filter.page ?? 1;
+    const limit = filter.limit ?? 20;
+    const skip = (page - 1) * limit;
+
+    const [rows, total] = await Promise.all([
+      client.syllabus.findMany({
+        where,
+        include: {
+          course: { select: { code: true, name: true } },
+          ragWorkspace: {
+            select: { syncStatus: true, syncError: true, lastSyncedAt: true },
+          },
         },
-      },
-      orderBy: { id: "desc" },
-    });
+        orderBy: { id: "desc" },
+        skip,
+        take: limit,
+      }),
+      client.syllabus.count({ where }),
+    ]);
+
+    return { rows, total, page, limit };
   }
 
   /**
@@ -156,6 +167,7 @@ export class SyllabusRepository {
           ? {}
           : { isApproved: options.isApproved }),
       },
+      orderBy: { id: "desc" }, // newest active syllabus first
       ...(options?.select ? { select: options.select } : {}),
     }) as Prisma.SyllabusGetPayload<{ select: S }> | null;
   }

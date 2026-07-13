@@ -244,10 +244,14 @@ export async function signInEmail(
 // ─── Syllabus APIs ───
 
 export async function searchSyllabus(
-  subjectCode?: string
-): Promise<{ syllabuses: ApiSyllabusSummary[] }> {
-  const params = subjectCode ? `?subject_code=${encodeURIComponent(subjectCode)}` : "";
-  return fetchApi(`/api/syllabus${params}`);
+  subjectCode?: string,
+  page?: number,
+): Promise<{ syllabuses: ApiSyllabusSummary[]; total: number; page: number; limit: number }> {
+  const searchParams = new URLSearchParams();
+  if (subjectCode) searchParams.set("subject_code", subjectCode);
+  if (page && page > 1) searchParams.set("page", String(page));
+  const qs = searchParams.toString();
+  return fetchApi(`/api/syllabus${qs ? `?${qs}` : ""}`);
 }
 
 export async function getSyllabusDetail(
