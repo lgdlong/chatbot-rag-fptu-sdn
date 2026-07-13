@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
 import Link from "next/link";
@@ -27,10 +27,12 @@ import {
   IconX,
   IconBulb,
   IconInfoCircle,
-  IconSchool,
   IconClock,
   IconCertificate,
+  IconSchool,
   IconAlertCircle,
+  IconUpload,
+  IconFileText,
 } from "@tabler/icons-react";
 import { ChatbotWidget } from "@/components/chatbot/ChatbotWidget";
 import * as api from "@/lib/api";
@@ -138,6 +140,20 @@ export default function SyllabusViewerPage() {
 
   const syllabusData = queryResult?.adapted ?? null;
   const courseId = queryResult?.courseId ?? null;
+  const syllabusId = syllabusData ? parseInt(syllabusData.metadata.syllabus_id, 10) : null;
+
+  const documentsQuery = useQuery({
+    queryKey: ["syllabus-documents", syllabusId],
+    queryFn: () => api.getSyllabusDocuments(syllabusId!),
+    enabled: !!syllabusId,
+  });
+
+  const uploadDocs = useMemo(() =>
+    (documentsQuery.data?.documents ?? []).filter(
+      (doc) => !doc.name.startsWith("syllabus_") || !doc.name.endsWith("_snapshot.md")
+    ),
+    [documentsQuery.data]
+  );
   const error = queryError
     ? queryError.message === "NOT_FOUND"
       ? "NOT_FOUND"
@@ -404,6 +420,12 @@ export default function SyllabusViewerPage() {
                   {materials?.length || 0}
                 </Badge>
               </Tabs.Tab>
+              <Tabs.Tab value="uploaded" leftSection={<IconUpload size={14} />}>
+                Tài liệu upload
+                <Badge size="xs" ml={6} style={{ background: "#2563EB", color: "white" }}>
+                  {uploadDocs.length}
+                </Badge>
+              </Tabs.Tab>
               <Tabs.Tab value="clos" leftSection={<IconBulb size={14} />}>
                 CLOs / LOs
                 <Badge size="xs" ml={6} style={{ background: "#23AC68", color: "white" }}>
@@ -431,6 +453,52 @@ export default function SyllabusViewerPage() {
       <Container fluid py="xl">
         {activeTab === "overview" && <SyllabusOverviewTab metadata={metadata} />}
         {activeTab === "materials" && <SyllabusMaterialsTab materials={materials} />}
+        {activeTab === "uploaded" && (
+          <Stack gap="md">
+            {uploadDocs.length === 0 ? (
+              <Card p="xl" radius="lg" style={{ border: "1px dashed #CBD5E1", textAlign: "center" }}>
+                <Text c="dimmed" size="sm">Chưa có tài liệu nào được upload cho môn học này.</Text>
+              </Card>
+            ) : (
+              <Stack gap="sm">
+                {uploadDocs.map((doc) => {
+                  const ext = doc.name.split(".").pop()?.toLowerCase() || "";
+                  const isPdf = ext === "pdf";
+                  return (
+                    <Card key={doc.id} p="sm" radius={0} style={{ border: "1px solid #E2E8F0" }}>
+                      <Group justify="space-between" wrap="nowrap">
+                        <Group gap="sm" wrap="nowrap" style={{ flex: 1, minWidth: 0 }}>
+                          {isPdf ? <IconFileText size={20} color="#DC2626" /> : <IconFileText size={20} color="#64748B" />}
+                          <Box style={{ minWidth: 0 }}>
+                            <Text size="sm" fw={600} truncate>{doc.name}</Text>
+                            <Text size="xs" c="dimmed">
+                              {new Date(doc.createdAt).toLocaleDateString("vi-VN")}
+                              {" · "}
+                              {doc.fileType?.toUpperCase() || ext.toUpperCase()}
+                            </Text>
+                          </Box>
+                        </Group>
+                        <Button
+                          component="a"
+                          href={doc.fileUrl}
+                          target="_blank"
+                          variant="outline"
+                          color="gray"
+                          size="xs"
+                          radius={0}
+                          fw={600}
+                          leftSection={<IconDownload size={14} />}
+                        >
+                          Tải xuống
+                        </Button>
+                      </Group>
+                    </Card>
+                  );
+                })}
+              </Stack>
+            )}
+          </Stack>
+        )}
         {activeTab === "clos" && <SyllabusCLOsTab clos={clos} metadata={metadata} />}
         {activeTab === "schedule" && <SyllabusScheduleTab schedule={schedule} metadata={metadata} />}
         {activeTab === "assessment" && <SyllabusAssessmentTab assessment_scheme={assessment_scheme} />}
