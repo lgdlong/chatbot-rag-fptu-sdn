@@ -1,0 +1,871 @@
+{
+  "metadata": {
+    "syllabus_id": "14176",
+    "syllabus_name": "Software Requirement_Yêu cầu phần mềm",
+    "syllabus_name_english": "Software Requirement",
+    "subject_code": "SWR302",
+    "credits": "3",
+    "degree_level": "Bachelor",
+    "time_allocation": "Study hour (150h) = 45h contact hours + 145-minute final exam + 102,6h self-study",
+    "prerequisites": "SWE102 or SWE201c or SWE202c",
+    "description": "This course is a model-based introduction to RE, providing the conceptual background and terminology on RE, addressing a variety of techniques for  requirements  development including Analysis and Requirements Elicitation; Requirements Evaluation; Requirements Specification and Documentation; Requirements Quality Assurance. To implement these  frameworks, student will be learnt  how to find  appropriate customer representatives, elicit requirements from them, and  document user requirements, business rules, functional requirements, data requirements, and nonfunctional requirements.\nThe numerous visual models  that will be represented to illustrate the requirements from various perspectives to supplement natural-language text. Other contents recommend the most  effective  requirements approaches for various specific classes of projects: agile projects  developing products of any type, enhancement and replacement projects, projects that incorporate packaged solutions, outsourced projects, business process automation projects, business analytics projects, and embedded and other real-time systems.",
+    "student_tasks": "- Students must attend at least 80% of contact slots in order to be accepted to the final examination.\n- Student is responsible to do all exercises given by instructor in class or at home and submit on time\n- Promptly access to the https://flm.fpt.edu.vn/ for up-to-date course information",
+    "tools": "- Microsoft office for documents and presentation.\n- https://www.visual-paradigm.com/download/community.jsp students must install visual-paradigm for drawing UML (offline) before taking Final Practical Exam\n- BOUML (http://bouml.free.fr/) : UML Drawing software",
+    "scoring_scale": "10",
+    "decision_no": "377/QĐ-ĐHFPT dated 04/09/2026",
+    "is_approved": "True",
+    "note": "In the case: (5 > Final TE Score >=4) & (5 > Final PE Score >=4) & FR < 5, the student can choose to take the resit of both TE & PE OR just either TE or PE.",
+    "min_avg_mark_to_pass": "5",
+    "is_active": "True",
+    "approved_date": "4/9/2026"
+  },
+  "materials": [
+    {
+      "description": "Software Requirements",
+      "author": "Karl E. Wiegers",
+      "publisher": "Microsoft Press",
+      "published_date": "",
+      "edition": "Third Edition",
+      "isbn": "978-0-7356-7966-5",
+      "is_main_material": "",
+      "is_hard_copy": "",
+      "is_online": "",
+      "note": ""
+    },
+    {
+      "description": "More About Software Requirements: Thorny Issues and Practical Advice",
+      "author": "Karl E. Wiegers",
+      "publisher": "Microsoft Press",
+      "published_date": "",
+      "edition": "",
+      "isbn": "978-0-7356-2267-8",
+      "is_main_material": "",
+      "is_hard_copy": "",
+      "is_online": "",
+      "note": ""
+    },
+    {
+      "description": "The Software Requirements Memory Jogger: A Pocket Guide to Help Software And Business Teams Develop and Manage Requirements",
+      "author": "Ellen Gottesdiener",
+      "publisher": "GOAL/QPC",
+      "published_date": "",
+      "edition": "",
+      "isbn": "978-1-57681-060-6",
+      "is_main_material": "",
+      "is_hard_copy": "",
+      "is_online": "",
+      "note": ""
+    },
+    {
+      "description": "Requirements Engineering: Secure Software Specifications Specialization",
+      "author": "",
+      "publisher": "Coursera",
+      "published_date": "",
+      "edition": "",
+      "isbn": "",
+      "is_main_material": "",
+      "is_hard_copy": "",
+      "is_online": "",
+      "note": "https://www.coursera.org/specializations/requirements-engineering-secure-software"
+    }
+  ],
+  "clos": [
+    {
+      "clo_name": "1",
+      "clo_details": "CLO1",
+      "lo_details": "Develop a good understanding of principles and techniques for requirement enginneering (RE) regarding requirement inception, requirement development(elicitation, analysis, specification, validation) and requirement management; understand main characteristics of specific projects"
+    },
+    {
+      "clo_name": "2",
+      "clo_details": "CLO2",
+      "lo_details": "Identify the appropriate requirements elicitiation techniques to identify requirements"
+    },
+    {
+      "clo_name": "3",
+      "clo_details": "CLO3",
+      "lo_details": "Utilize various requirements validation techniques to critically evaluate their requirements to identify defects"
+    },
+    {
+      "clo_name": "4",
+      "clo_details": "CLO4",
+      "lo_details": "Analysis of system requirements and the production of system specifications"
+    },
+    {
+      "clo_name": "5",
+      "clo_details": "CLO5",
+      "lo_details": "Create models of requirements using a variety of notations and techniques, including domain and usage models"
+    },
+    {
+      "clo_name": "6",
+      "clo_details": "CLO6",
+      "lo_details": "Design and plan software solutions to problems using an object-oriented strategy"
+    },
+    {
+      "clo_name": "7",
+      "clo_details": "CLO7",
+      "lo_details": "Prepare and deliver coherent and structured verbal and written technical reports"
+    },
+    {
+      "clo_name": "8",
+      "clo_details": "CLO8",
+      "lo_details": "Understand how to reduce risks by prototyping."
+    },
+    {
+      "clo_name": "9",
+      "clo_details": "CLO9",
+      "lo_details": "Utilize the tactic of requirements management regarding changing, tracing and improving requirements"
+    }
+  ],
+  "schedule": [
+    {
+      "session": "1",
+      "topic": "Course Introduction The essential of software requirement - Software requirements defined",
+      "learning_method": "Offline",
+      "lo": "LO1",
+      "itu": "I",
+      "student_materials": "Chapter 1 + Slides",
+      "s_download": "SWR302",
+      "student_tasks": "",
+      "urls": ""
+    },
+    {
+      "session": "2",
+      "topic": "The essential of software requirement (cnt) - Requirements development and management - When bad requirements happen to good people - Benefits from a high-quality requirements process",
+      "learning_method": "Offline",
+      "lo": "LO1",
+      "itu": "I",
+      "student_materials": "Chapter 1 + Slides",
+      "s_download": "SWR302",
+      "student_tasks": "",
+      "urls": ""
+    },
+    {
+      "session": "3",
+      "topic": "Requirements from the customer’s perspective - Who is the customer? - The customer-development partnership - Creating a culture that respects requirement",
+      "learning_method": "Offline",
+      "lo": "LO1",
+      "itu": "I,T",
+      "student_materials": "Chapter 2 + Slides",
+      "s_download": "",
+      "student_tasks": "",
+      "urls": ""
+    },
+    {
+      "session": "4",
+      "topic": "Requirements from the customer’s perspective (cnt) - Identifying decision makers - Reaching agreement on requirements Assignment introduction",
+      "learning_method": "Offline",
+      "lo": "LO1",
+      "itu": "I,T",
+      "student_materials": "Chapter 2 + Slides",
+      "s_download": "",
+      "student_tasks": "do homework",
+      "urls": ""
+    },
+    {
+      "session": "5",
+      "topic": "Good practices for requirements engineering (introduce) - A requirements development process framework - Requirements elicitation - Requirements analysis - Requirements specification - Requirements validation - Requirements management",
+      "learning_method": "Offline",
+      "lo": "LO1, LO2",
+      "itu": "I,T",
+      "student_materials": "Chapter 3 +Slides",
+      "s_download": "",
+      "student_tasks": "",
+      "urls": ""
+    },
+    {
+      "session": "6",
+      "topic": "Good practices for requirements engineering (practice/apply)",
+      "learning_method": "Offline",
+      "lo": "LO1, LO2",
+      "itu": "I,T",
+      "student_materials": "Chapter 3 +Slides",
+      "s_download": "",
+      "student_tasks": "do homework",
+      "urls": ""
+    },
+    {
+      "session": "7",
+      "topic": "Group discussion Summary and Exercises (groups)",
+      "learning_method": "Offline",
+      "lo": "LO2, LO4, LO5",
+      "itu": "",
+      "student_materials": "Chapter 4+ Business Analyst Job Description.docx + Slides",
+      "s_download": "",
+      "student_tasks": "Discuss what students have to do in their Assignment",
+      "urls": ""
+    },
+    {
+      "session": "8",
+      "topic": "Group discussion Summary and Exercises (groups)",
+      "learning_method": "Offline",
+      "lo": "LO2, LO4, LO5",
+      "itu": "",
+      "student_materials": "Chapter 4+ Business Analyst Job Description.docx + Slides",
+      "s_download": "",
+      "student_tasks": "Discuss what students have to do in their Assignment",
+      "urls": ""
+    },
+    {
+      "session": "9",
+      "topic": "The business analyst - The business analyst role - The business analyst’s tasks - Essential analyst skills - Essential analyst knowledge - The making of a business analyst - The analyst role on agile projects",
+      "learning_method": "Offline",
+      "lo": "LO2, LO4, LO5",
+      "itu": "I,T, U",
+      "student_materials": "Chapter 4+ Business Analyst Job Description.docx + Slides",
+      "s_download": "",
+      "student_tasks": "Write Vision and Scope for Assignment",
+      "urls": ""
+    },
+    {
+      "session": "10",
+      "topic": "Establishing the business requirements - Defining business requirements - Vision and scope document - Scope representation techniques",
+      "learning_method": "Offline",
+      "lo": "LO2, LO4, LO5",
+      "itu": "I,T, U",
+      "student_materials": "Chapter 5 + Vision and Scope Template.docx + Slides",
+      "s_download": "",
+      "student_tasks": "Write Vision and Scope for Assignment",
+      "urls": ""
+    },
+    {
+      "session": "11",
+      "topic": "Establishing the business requirements (con't) - Keeping the scope in focus - Vision and scope on agile projects - Introduce LAB requirements: draw 1 context diagram, 1 swimlane diagram and 1 state diagram.",
+      "learning_method": "Offline",
+      "lo": "LO2, LO4, LO5",
+      "itu": "",
+      "student_materials": "Chapter 5 + Vision and Scope Template.docx + Slides",
+      "s_download": "",
+      "student_tasks": "Practice on first half of Assignment",
+      "urls": ""
+    },
+    {
+      "session": "12",
+      "topic": "Finding the voice of users - User classes - User personal - Connecting with user representatives - The product champion - User representation on agile project - Resolving conflicting requirements",
+      "learning_method": "Offline",
+      "lo": "LO2, LO4, LO5",
+      "itu": "",
+      "student_materials": "Chapter 6 + Product Champion Responsibilities.docx + Slides",
+      "s_download": "",
+      "student_tasks": "Practice on first half of Assignment",
+      "urls": ""
+    },
+    {
+      "session": "13",
+      "topic": "Requirements elicitation - Requirements elicitation techniques: Interviews, workshops, Focus groups, Observations, Questionaires, System interface analysis, User Interface Analysis, Document Analysis - Planning and Preparing for elicitation on your project - Performing elicitation activities - Follow up after elicitation",
+      "learning_method": "Offline",
+      "lo": "LO2, LO3",
+      "itu": "I,T, U",
+      "student_materials": "1. Use Case Template.docx 2. Chapter 7 + 8 +Slides",
+      "s_download": "",
+      "student_tasks": "Finish Use Case document",
+      "urls": ""
+    },
+    {
+      "session": "14",
+      "topic": "Requirements elicitation (cnt) - Classifying customer input - Some cautions about elicitation - Assumed and implied requirements - Finding missing requirements",
+      "learning_method": "Offline",
+      "lo": "LO2, LO3",
+      "itu": "I,T, U",
+      "student_materials": "1. Use Case Template.docx 2. Chapter 7 + 8 +Slides",
+      "s_download": "",
+      "student_tasks": "Finish Use Case document",
+      "urls": ""
+    },
+    {
+      "session": "15",
+      "topic": "Understanding user requirements - Use cases and user stories",
+      "learning_method": "Offline",
+      "lo": "LO5, LO6",
+      "itu": "T,U",
+      "student_materials": "1. Use Case Template.docx 2. Chapter 7 + 8 +Slides",
+      "s_download": "",
+      "student_tasks": "Finish Use Case document",
+      "urls": ""
+    },
+    {
+      "session": "16",
+      "topic": "Understanding user requirements (cnt) - The use case approach - Benefits of usage-centric requirements",
+      "learning_method": "Offline",
+      "lo": "LO5, LO6",
+      "itu": "T,U",
+      "student_materials": "1. Use Case Template.docx 2. Chapter 7 + 8 +Slides",
+      "s_download": "",
+      "student_tasks": "Finish Use Case document",
+      "urls": ""
+    },
+    {
+      "session": "17",
+      "topic": "Playing by the rules - A business rules taxonomy - Documenting business rules - Discovering business rules - Business rules and requirements - Tying everything together",
+      "learning_method": "Offline",
+      "lo": "LO4, LO5",
+      "itu": "T,U",
+      "student_materials": "1.Software Requirements Specification Template.docx 2. Chapter 9 + 10 +Slides",
+      "s_download": "",
+      "student_tasks": "Preparing the structure of SRS document (based on student's assignment)",
+      "urls": ""
+    },
+    {
+      "session": "18",
+      "topic": "Progress test 1 and Review",
+      "learning_method": "Offline",
+      "lo": "LO1,LO2,LO3,LO4,LO5,LO6",
+      "itu": "",
+      "student_materials": "LSM questions",
+      "s_download": "",
+      "student_tasks": "Quiz test",
+      "urls": ""
+    },
+    {
+      "session": "19",
+      "topic": "Documenting the requirements - The software requirements specification",
+      "learning_method": "Offline",
+      "lo": "LO7",
+      "itu": "T,U",
+      "student_materials": "1.Software Requirements Specification Template.docx",
+      "s_download": "",
+      "student_tasks": "Preparing the structure of SRS document (based on student's assignment)",
+      "urls": ""
+    },
+    {
+      "session": "20",
+      "topic": "Documenting the requirements (cnt) - A software requirements specification template - Requirements specification on agile projects",
+      "learning_method": "Offline",
+      "lo": "LO7",
+      "itu": "T,U",
+      "student_materials": "2. Chapter 9 + 10 +Slides",
+      "s_download": "",
+      "student_tasks": "Preparing the structure of SRS document (based on student's assignment)",
+      "urls": ""
+    },
+    {
+      "session": "21",
+      "topic": "Writing excellent requirements - Characteristics of excellent requirements - Guidelines for writing requirements - Sample requirements, before and after",
+      "learning_method": "Offline",
+      "lo": "LO5",
+      "itu": "T,U",
+      "student_materials": "Chapter 11 + Slides",
+      "s_download": "",
+      "student_tasks": "Write SRS document based on guidelines",
+      "urls": ""
+    },
+    {
+      "session": "22",
+      "topic": "A picture is worth 1024 words - Data flow diagram; Swimlane diagram; State-transition diagram and state table ; Dialog map ;",
+      "learning_method": "Offline",
+      "lo": "LO5",
+      "itu": "T,U",
+      "student_materials": "Chapter 12 + Slides",
+      "s_download": "",
+      "student_tasks": "Write SRS document based on guidelines",
+      "urls": ""
+    },
+    {
+      "session": "23",
+      "topic": "A picture is worth 1024 words (con't) - Decision tables and decision trees;",
+      "learning_method": "Offline",
+      "lo": "LO5",
+      "itu": "T,U",
+      "student_materials": "Chapter 12 + Slides",
+      "s_download": "",
+      "student_tasks": "Write SRS document based on guidelines",
+      "urls": ""
+    },
+    {
+      "session": "24",
+      "topic": "A picture is worth 1024 words (con't) - Event-response tables ; Modeling on agile projects",
+      "learning_method": "Offline",
+      "lo": "LO5",
+      "itu": "T,U",
+      "student_materials": "Chapter 12 + Slides",
+      "s_download": "",
+      "student_tasks": "Write SRS document based on guidelines",
+      "urls": ""
+    },
+    {
+      "session": "25",
+      "topic": "Specifying data requirements - Modeling data relationships - The data dictionary",
+      "learning_method": "Offline",
+      "lo": "LO5",
+      "itu": "T,U",
+      "student_materials": "1.Guidance for Data Dictionaries.docx 2.Chapter 13 +Slides",
+      "s_download": "",
+      "student_tasks": "Finish Data Dictionaries of Assignment",
+      "urls": ""
+    },
+    {
+      "session": "26",
+      "topic": "Specifying data requirements (cnt) - Data analysis - Specifying reports",
+      "learning_method": "Offline",
+      "lo": "LO5",
+      "itu": "T,U",
+      "student_materials": "1.Guidance for Data Dictionaries.docx 2.Chapter 13 +Slides",
+      "s_download": "",
+      "student_tasks": "Finish Data Dictionaries of Assignment",
+      "urls": ""
+    },
+    {
+      "session": "27",
+      "topic": "Beyond functionality - Software quality attributes - Exploring quality attributes - Defining quality requirements - Specifying quality requirements with Planguage",
+      "learning_method": "Offline",
+      "lo": "LO5",
+      "itu": "T,U",
+      "student_materials": "Chapter 14 + Slides",
+      "s_download": "",
+      "student_tasks": "Finish Data Dictionaries of Assignment",
+      "urls": ""
+    },
+    {
+      "session": "28",
+      "topic": "Beyond functionality (cnt) - Quality attribute trade-offs - Implementing quality attribute requirements - Constraint - Handling quality attributes on agile projects",
+      "learning_method": "Offline",
+      "lo": "LO5",
+      "itu": "T,U",
+      "student_materials": "Chapter 14 + Slides",
+      "s_download": "",
+      "student_tasks": "Finish Data Dictionaries of Assignment",
+      "urls": ""
+    },
+    {
+      "session": "29",
+      "topic": "Risk reduction through prototyping - Prototyping: What and why - Mock-ups and proofs of concept - Throwaway and evolutionary prototypes - Paper and electronic prototypes",
+      "learning_method": "Offline",
+      "lo": "LO8",
+      "itu": "T,U",
+      "student_materials": "Chapter 15 + Slides",
+      "s_download": "",
+      "student_tasks": "Finish Requirements Prioritization worksheet",
+      "urls": ""
+    },
+    {
+      "session": "30",
+      "topic": "Risk reduction through prototyping (cnt) - Working with prototypes - Prototype evaluation - Risks of prototyping - Prototyping success factors",
+      "learning_method": "Offline",
+      "lo": "LO8",
+      "itu": "T,U",
+      "student_materials": "Chapter 15 + Slides",
+      "s_download": "",
+      "student_tasks": "Finish Requirements Prioritization worksheet",
+      "urls": ""
+    },
+    {
+      "session": "31",
+      "topic": "First things first: Setting requirement priorities - Why prioritize requirements? - Some prioritization pragmatics - Games people play with priorities",
+      "learning_method": "Offline",
+      "lo": "LO2",
+      "itu": "T,U",
+      "student_materials": "1. Requirements Prioritization Spreadsheet.docx 2. Chapter 16 + Slides",
+      "s_download": "",
+      "student_tasks": "Finish Requirements Prioritization worksheet",
+      "urls": ""
+    },
+    {
+      "session": "32",
+      "topic": "First things first: Setting requirement priorities (cnt) - Some prioritization techniques - Prioritization based on value, cost, and risk",
+      "learning_method": "Offline",
+      "lo": "LO2",
+      "itu": "T,U",
+      "student_materials": "1. Requirements Prioritization Spreadsheet.docx 2. Chapter 16 + Slides",
+      "s_download": "",
+      "student_tasks": "Finish Requirements Prioritization worksheet",
+      "urls": ""
+    },
+    {
+      "session": "33",
+      "topic": "Validating the requirements - Validation and verification - Reviewing requirements - Prototyping requirements",
+      "learning_method": "Offline",
+      "lo": "LO3",
+      "itu": "T",
+      "student_materials": "1. Requirements Review Checklist.docx 2. Chapter 17 +Slides",
+      "s_download": "",
+      "student_tasks": "Check progress of Assignment's requirements",
+      "urls": ""
+    },
+    {
+      "session": "34",
+      "topic": "Validating the requirements - Testing the requirements - Validating requirements with acceptance criteria",
+      "learning_method": "Offline",
+      "lo": "LO3",
+      "itu": "T",
+      "student_materials": "1. Requirements Review Checklist.docx 2. Chapter 17 +Slides",
+      "s_download": "",
+      "student_tasks": "Check progress of Assignment's requirements",
+      "urls": ""
+    },
+    {
+      "session": "35",
+      "topic": "Exercises (can be interspersed with the lecture)",
+      "learning_method": "Offline",
+      "lo": "LO3, LO5",
+      "itu": "I,T,U",
+      "student_materials": "1. Chapter 18 + 19 2. Requirements Estimation Tool.xlsx +Slides",
+      "s_download": "",
+      "student_tasks": "Do requirements estimation",
+      "urls": ""
+    },
+    {
+      "session": "36",
+      "topic": "Discuss and/or present on Chapter 6",
+      "learning_method": "Offline",
+      "lo": "LO3, LO5",
+      "itu": "I,T,U",
+      "student_materials": "1. Chapter 18 + 19 2. Requirements Estimation Tool.xlsx +Slides",
+      "s_download": "",
+      "student_tasks": "Do requirements estimation",
+      "urls": ""
+    },
+    {
+      "session": "37",
+      "topic": "Requirements reuse - Why reuse requirements? - Dimensions of requirements reuse - Types of requirements information to reuse - Common reuse scenarios - Requirement patterns - Tools to facilitate reuse - Making requirements reusable - Requirements reuse barriers and success factors",
+      "learning_method": "Offline",
+      "lo": "",
+      "itu": "",
+      "student_materials": "1. Chapter 18 2. Requirements Estimation Tool.xlsx +Slides",
+      "s_download": "",
+      "student_tasks": "",
+      "urls": ""
+    },
+    {
+      "session": "38",
+      "topic": "Beyond requirements development - Estimating requirements effort - From requirements to project plans,designs and code, tests, success Review the first half of assignment and evaluation",
+      "learning_method": "Offline",
+      "lo": "LO2,LO3,LO5,LO7,LO8",
+      "itu": "",
+      "student_materials": "1. Chapter 189 Assignment documents",
+      "s_download": "",
+      "student_tasks": "Oral test",
+      "urls": ""
+    },
+    {
+      "session": "39",
+      "topic": "Review the first half of assignment and evaluation",
+      "learning_method": "Offline",
+      "lo": "LO2,LO3,LO5,LO7,LO8",
+      "itu": "",
+      "student_materials": "Assignment documents Assignment document templates",
+      "s_download": "",
+      "student_tasks": "Oral test",
+      "urls": ""
+    },
+    {
+      "session": "40",
+      "topic": "Progress test 2 and Review - Review LAB",
+      "learning_method": "Offline",
+      "lo": "LO2,LO3,LO5,LO7,LO8",
+      "itu": "",
+      "student_materials": "LSM questions",
+      "s_download": "",
+      "student_tasks": "Quiz test",
+      "urls": ""
+    },
+    {
+      "session": "41",
+      "topic": "Agile projects - Limitations of the waterfall - The agile development approach - Essential aspects of an agile approach to requirements - Adapting requirements practices to agile projects - Transitioning to agile: Now what?",
+      "learning_method": "Offline",
+      "lo": "LO4",
+      "itu": "I,T,U",
+      "student_materials": "Chapter 20+Slides",
+      "s_download": "",
+      "student_tasks": "",
+      "urls": ""
+    },
+    {
+      "session": "42",
+      "topic": "Enhancement and replacement projects - Expected challenges - Requirements techniques when there is an existing system - Prioritizing by using business objectives - When old requirements don’t exist - Encouraging new system adoption",
+      "learning_method": "Offline",
+      "lo": "LO4",
+      "itu": "I,T,U",
+      "student_materials": "Chapter 21 +Slides",
+      "s_download": "",
+      "student_tasks": "",
+      "urls": ""
+    },
+    {
+      "session": "43",
+      "topic": "Packaged solution projects - Requirements for selecting packaged solutions - Requirements for implementing packaged solutions - Common challenges with packaged solution",
+      "learning_method": "Offline",
+      "lo": "LO4",
+      "itu": "I,T,U",
+      "student_materials": "1. Chapter 22 2. Request for Proposal Template.docx 3. Slides",
+      "s_download": "",
+      "student_tasks": "Read and understand the proposal template ( what are contents and the purpose of these ones)",
+      "urls": ""
+    },
+    {
+      "session": "44",
+      "topic": "Outsourced projects - Appropriate levels of requirements detail - Acquirer-supplier interactions - Change management - Acceptance criteria",
+      "learning_method": "Offline",
+      "lo": "LO4",
+      "itu": "I,T,U",
+      "student_materials": "1. Chapter 23 2. Request for Proposal Template.docx 3. Slides",
+      "s_download": "",
+      "student_tasks": "Read and understand the proposal template ( what are contents and the purpose of these ones)",
+      "urls": ""
+    },
+    {
+      "session": "45",
+      "topic": "Group discussion Summary and Exercises",
+      "learning_method": "Offline",
+      "lo": "",
+      "itu": "",
+      "student_materials": "1. Chapter 24 + 25 + Slides",
+      "s_download": "",
+      "student_tasks": "Read and understand the proposal template ( what are contents and the purpose of these ones)",
+      "urls": ""
+    },
+    {
+      "session": "46",
+      "topic": "Group discussion (cnt) Summary and Exercises (cnt)",
+      "learning_method": "Offline",
+      "lo": "",
+      "itu": "",
+      "student_materials": "1. Chapter 24 + 25 + Slides",
+      "s_download": "",
+      "student_tasks": "Read and understand the proposal template ( what are contents and the purpose of these ones)",
+      "urls": ""
+    },
+    {
+      "session": "47",
+      "topic": "Assignment supporting",
+      "learning_method": "Offline",
+      "lo": "",
+      "itu": "",
+      "student_materials": "1. Chapter 26 + Slides",
+      "s_download": "",
+      "student_tasks": "Checking SRS document",
+      "urls": ""
+    },
+    {
+      "session": "48",
+      "topic": "Assignment supporting (cnt)",
+      "learning_method": "Offline",
+      "lo": "",
+      "itu": "",
+      "student_materials": "1. Chapter 26 + Slides",
+      "s_download": "",
+      "student_tasks": "Checking SRS document",
+      "urls": ""
+    },
+    {
+      "session": "49",
+      "topic": "Requirements management practices - Requirements management process - The requirements baseline - Requirements version control - Requirement attributes",
+      "learning_method": "Offline",
+      "lo": "LO4",
+      "itu": "I,T,U",
+      "student_materials": "1. Chapter 25 + 26 + 27 2. a. CCB Charter Template.docx b. Change Control Process.docx c. Impact Analysis Checklist.docx 3. Slides",
+      "s_download": "",
+      "student_tasks": "Do assignment - based on guidelines",
+      "urls": ""
+    },
+    {
+      "session": "50",
+      "topic": "Requirements management practices (cnt) - Tracking requirements status - Resolving requirements issues - Measuring requirements effort - Managing requirements on agile projects",
+      "learning_method": "Offline",
+      "lo": "LO4",
+      "itu": "I,T,U",
+      "student_materials": "1. Chapter 25 + 26 + 27 2. a. CCB Charter Template.docx b. Change Control Process.docx c. Impact Analysis Checklist.docx 3. Slides",
+      "s_download": "",
+      "student_tasks": "Do assignment - based on guidelines",
+      "urls": ""
+    },
+    {
+      "session": "51",
+      "topic": "Change happens - Change control policy - Basic concepts of the change control process - A change control process description - The change control board",
+      "learning_method": "Offline",
+      "lo": "LO9",
+      "itu": "I,T,U",
+      "student_materials": "1. Chapter 25 + 26 + 27 2. a. CCB Charter Template.docx b. Change Control Process.docx c. Impact Analysis Checklist.docx 3. Slides",
+      "s_download": "",
+      "student_tasks": "Do assignment - based on guidelines",
+      "urls": ""
+    },
+    {
+      "session": "52",
+      "topic": "Change happens (cnt) - Change control tools - Measuring change activity - Change impact analysis - Change management on agile projects",
+      "learning_method": "Offline",
+      "lo": "LO9",
+      "itu": "I,T,U",
+      "student_materials": "1. Chapter 25 + 26 + 27 2. a. CCB Charter Template.docx b. Change Control Process.docx c. Impact Analysis Checklist.docx 3. Slides",
+      "s_download": "",
+      "student_tasks": "Do assignment - based on guidelines",
+      "urls": ""
+    },
+    {
+      "session": "53",
+      "topic": "Links in the requirements chain - Tracing requirements - Motivations for tracing requirements - The requirements traceability matrix",
+      "learning_method": "Offline",
+      "lo": "LO9",
+      "itu": "I,T,U",
+      "student_materials": "1. Chapter 25 + 26 + 27 2. a. CCB Charter Template.docx b. Change Control Process.docx c. Impact Analysis Checklist.docx 3. Slides",
+      "s_download": "",
+      "student_tasks": "Do assignment - based on guidelines",
+      "urls": ""
+    },
+    {
+      "session": "54",
+      "topic": "Links in the requirements chain (cnt) - Tools for requirements tracing - A requirements tracing procedure",
+      "learning_method": "Offline",
+      "lo": "LO9",
+      "itu": "I,T,U",
+      "student_materials": "1. Chapter 25 + 26 + 27 2. a. CCB Charter Template.docx b. Change Control Process.docx c. Impact Analysis Checklist.docx 3. Slides",
+      "s_download": "",
+      "student_tasks": "Do assignment - based on guidelines",
+      "urls": ""
+    },
+    {
+      "session": "55",
+      "topic": "Tools for requirements engineering (self-study) Improving your requirements processes - How requirements relate to other project processes - Requirements and various stakeholder groups - Gaining commitment to change - Fundamentals of software process improvement - Root cause analysis - The process improvement cycle - Requirements engineering process assets - Creating a requirements process improvement road map",
+      "learning_method": "Offline",
+      "lo": "LO8, LO9",
+      "itu": "ITU",
+      "student_materials": "1. Chapter 31 2. Action Plan Template.docx 3. Risk Management Plan Template.docx 4. Slides",
+      "s_download": "",
+      "student_tasks": "Finish assignment's documents",
+      "urls": ""
+    },
+    {
+      "session": "56",
+      "topic": "Software requirements and risk management - Fundamentals of software risk management - Requirements-related risks - Risk management is your friend",
+      "learning_method": "Offline",
+      "lo": "LO8, LO9",
+      "itu": "ITU",
+      "student_materials": "1. Chapter 32 2. Action Plan Template.docx 3. Risk Management Plan Template.docx 4. Slides",
+      "s_download": "",
+      "student_tasks": "Finish assignment 's documents",
+      "urls": ""
+    },
+    {
+      "session": "57",
+      "topic": "Progress test 3",
+      "learning_method": "Offline",
+      "lo": "LO4,LO8,LO9",
+      "itu": "",
+      "student_materials": "LSM questions",
+      "s_download": "",
+      "student_tasks": "Quiz test",
+      "urls": ""
+    },
+    {
+      "session": "58",
+      "topic": "Assignment evaluation",
+      "learning_method": "Offline",
+      "lo": "All LOs",
+      "itu": "",
+      "student_materials": "Assignment documents",
+      "s_download": "",
+      "student_tasks": "Oral test",
+      "urls": ""
+    },
+    {
+      "session": "59",
+      "topic": "Assignment evaluation",
+      "learning_method": "Offline",
+      "lo": "All LOs",
+      "itu": "",
+      "student_materials": "Assignment documents",
+      "s_download": "",
+      "student_tasks": "Oral test",
+      "urls": ""
+    },
+    {
+      "session": "60",
+      "topic": "Assignment evaluation",
+      "learning_method": "Offline",
+      "lo": "All LOs",
+      "itu": "",
+      "student_materials": "Assignment documents",
+      "s_download": "",
+      "student_tasks": "Oral test",
+      "urls": ""
+    }
+  ],
+  "constructive_questions": [],
+  "assessment_scheme": [
+    {
+      "category": "Assignment",
+      "type": "on-going",
+      "part": "1",
+      "weight": "20.0%",
+      "completion_criteria": ">0",
+      "duration": "Option 1: 26 slots ; Option 2 (For Constructivism Approach only): Follow lecturer's proposal",
+      "clo": "LO1, LO2, LO3, LO4, LO5, LO6, LO7, LO8",
+      "question_type": "Option 1: Teacher raise projects, students practice step by step to complete their assignments. Student could base on study guide COS_Document_Example to do assignments. Option 2 (For Constructivism Approach only): Follow lecturer's proposal",
+      "no_question": "Option 1: Depending on questions in assignment Option 2 (For Constructivism Approach only): Follow lecturer's proposal",
+      "knowledge_and_skill": "All subjects in syllabus",
+      "grading_guide": "in class, by teacher",
+      "note": ""
+    },
+    {
+      "category": "LAB",
+      "type": "on-going",
+      "part": "1",
+      "weight": "10.0%",
+      "completion_criteria": ">0",
+      "duration": "Option 1: 26slots/each Option 2 (For Constructivism Approach only): Follow lecturer's proposal",
+      "clo": "LO5",
+      "question_type": "1. Model 1 Context diagram based on the topic of assignment. 2. Model 1 Swimlane diagam based on the topic of assignment. 3. Model 1 State diagam based on the topic of assignment.",
+      "no_question": "Option 1: Depending on questions in assignment Option 2 (For Constructivism Approach only): Follow lecturer's proposal",
+      "knowledge_and_skill": "Chapter 5, Chapter 12",
+      "grading_guide": "In class, by teacher",
+      "note": "The output of LAB: draw 1 Context diagram, 1 Swimlane diagram and 1 State diagram. These diagrams will be drawn by individuals and will be presented by each student at week 7. After presenting LAB, the student will put these diagrams on his or her Assignment document."
+    },
+    {
+      "category": "Progress Test",
+      "type": "on-going",
+      "part": "3",
+      "weight": "20.0%",
+      "completion_criteria": ">0",
+      "duration": "Option 1: 30'/each; Option 2 (For Constructivism Approach only): Follow lecturer's proposal",
+      "clo": "LO1, LO2, LO3, LO4, LO5, LO6, LO7, LO8, LO9",
+      "question_type": "Option 1: Multiple choices Marked by Computer or a suitable format; Option 2 (For Constructivism Approach only): Follow lecturer's proposal",
+      "no_question": "Option 1: 30/each; Option 2 (For Constructivism Approach only): Follow lecturer's proposal",
+      "knowledge_and_skill": "Test 1: Chapter 1-> Chapter 9 Test 2: Chapter 10 ->20 Test 3: Chapter 21 -->32",
+      "grading_guide": "in class, by LMS system",
+      "note": ""
+    },
+    {
+      "category": "Final exam",
+      "type": "Final exam",
+      "part": "2",
+      "weight": "50.0%",
+      "completion_criteria": "4",
+      "duration": "145 minutes",
+      "clo": "All CLOs",
+      "question_type": "",
+      "no_question": "",
+      "knowledge_and_skill": "All subjects in syllabus",
+      "grading_guide": "By exam board Manual evaluating",
+      "note": "Each part of the final exam must be >=4/10 & Final Result >=5/10."
+    },
+    {
+      "category": "Practical Exam",
+      "type": "Final exam",
+      "part": "1",
+      "weight": "25.0%",
+      "completion_criteria": "4",
+      "duration": "85'",
+      "clo": "LO1, LO2, LO3, LO4, LO5, LO7, LO8, LO9",
+      "question_type": "",
+      "no_question": "",
+      "knowledge_and_skill": "All subjects in syllabus",
+      "grading_guide": "LSM system",
+      "note": "Customized from the Assignment or projects that students have learned"
+    },
+    {
+      "category": "Theory Exam",
+      "type": "Final exam",
+      "part": "1",
+      "weight": "25.0%",
+      "completion_criteria": "4",
+      "duration": "60'/each",
+      "clo": "LO1, LO2, LO3, LO4, LO5, LO6, LO7, LO8, LO9",
+      "question_type": "Multiple choicesMarked by Computer",
+      "no_question": "60",
+      "knowledge_and_skill": "All subjects in syllabus",
+      "grading_guide": "LSM system",
+      "note": ""
+    }
+  ],
+  "references": [
+    "377/QĐ-ĐHFPT dated 04/09/2026"
+  ]
+}

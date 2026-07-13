@@ -1,104 +1,18 @@
 import { Hono, type Context } from "hono";
-import { prisma } from "../auth/services/db.service.js";
+
 import { auth } from "../auth/auth.js";
-import { Prisma } from "@prisma/client";
-import { writeFile, mkdir, readdir, unlink } from "node:fs/promises";
-import { join } from "node:path";
-import { DocumentRepository } from "../documents/repositories/document.repository.js";
-import { applyIngestionCallback } from "../documents/services/ingestion-callback.service.js";
-import { ENV } from "../../config/env.js";
-import { AnythingLlmAdapter } from "../rag/services/anythingllm.adapter.js";
-import { DocumentStatus, IngestionJobStatus } from "@prisma/client";
-import { setTimeout as sleep } from "node:timers/promises";
+import { ValidationError } from "../courses/services/course.service.js";
+import { SyllabusService } from "./services/syllabus.service.js";
 import { SyllabusSyncService } from "./services/syllabus-sync.service.js";
+import { detectFileType, sanitizeFilename, SUPPORTED_TYPES } from "./utils/file-validation.utils.js";
 
 export const syllabusRouter = new Hono();
 
-// Helper functions for Document Management
-async function removeFileIfExists(filePath: string) {
-  try {
-    await unlink(filePath);
-  } catch (error) {
-    if ((error as NodeJS.ErrnoException).code !== "ENOENT") {
-      throw error;
-    }
-  }
-}
+type AuthResult =
+  | { error: Response; session: null }
+  | { error: null; session: typeof auth.$Infer.Session };
 
-type IngestionCallbackBody = {
-  status: DocumentStatus;
-  jobId?: string | null;
-  error?: string | null;
-  payload?: Prisma.InputJsonValue;
-  sourceLocation?: string | null;
-};
-
-async function notifyIngestionCallback(documentId: string, body: IngestionCallbackBody) {
-  const callbackUrl = `${ENV.INTERNAL_API_URL}/api/internal/documents/${documentId}`;
-
-  for (let attempt = 0; attempt < 3; attempt += 1) {
-    try {
-      const response = await fetch(callbackUrl, {
-        method: "PATCH",
-        headers: {
-          Authorization: `Bearer ${ENV.INTERNAL_API_KEY}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          status: body.status,
-          jobId: body.jobId,
-          error: body.error,
-          payload: body.payload,
-          sourceLocation: body.sourceLocation,
-        }),
-      });
-
-      if (response.ok) {
-        return;
-      }
-
-      throw new Error(`Internal callback failed with status ${response.status}`);
-    } catch (error) {
-      if (attempt === 2) {
-        await applyIngestionCallback({
-          documentId,
-          jobId: body.jobId ?? null,
-          status: body.status,
-          error: body.error ?? null,
-          payload: body.payload,
-          sourceLocation: body.sourceLocation ?? null,
-        });
-        return;
-      }
-
-      await sleep(250 * 2 ** attempt);
-    }
-  }
-}
-
-async function removeChunkFiles(documentId: string) {
-  const chunksDir = join(".", "uploads", "chunks");
-
-  try {
-    const files = await readdir(chunksDir);
-    const chunkFiles = files.filter(
-      (fileName) =>
-        fileName.startsWith(`${documentId}_page_`) && fileName.endsWith(".pdf"),
-    );
-
-    await Promise.all(
-      chunkFiles.map((fileName) =>
-        removeFileIfExists(join(chunksDir, fileName)),
-      ),
-    );
-  } catch (error) {
-    if ((error as NodeJS.ErrnoException).code !== "ENOENT") {
-      throw error;
-    }
-  }
-}
-
-async function requireLecturer(c: Context) {
+async function requireLecturer(c: Context): Promise<AuthResult> {
   const session = await auth.api.getSession({ headers: c.req.raw.headers });
   if (!session?.user) {
     return { error: c.json({ error: "Unauthorized" }, 401) as Response, session: null };
@@ -112,6 +26,14 @@ async function requireLecturer(c: Context) {
   return { error: null, session };
 }
 
+function respondWithServiceError(c: Context, err: unknown) {
+  if (err instanceof ValidationError) {
+    return c.json({ error: err.message }, err.statusCode as 400 | 403 | 404 | 409);
+  }
+  const message = err instanceof Error ? err.message : "Unexpected error";
+  return c.json({ error: message }, 500);
+}
+
 // ==========================================
 // 1. API TRA CỨU SYLLABUS (SEARCH)
 // ==========================================
@@ -121,41 +43,25 @@ syllabusRouter.get("/", async (c) => {
   if (!session?.user) return c.json({ error: "Unauthorized" }, 401);
 
   const subjectCode = c.req.query("subject_code")?.trim().toUpperCase() || "";
+  const page = Math.max(1, parseInt(c.req.query("page") ?? "1", 10));
+  const limit = Math.min(100, Math.max(1, parseInt(c.req.query("limit") ?? "20", 10)));
   const role = session.user.role;
 
   try {
-    let whereClause: any = {};
-
-    if (subjectCode) {
-      whereClause.course = {
-        code: {
-          contains: subjectCode,
-          mode: "insensitive"
-        }
-      };
-    }
-
-    // Nếu là sinh viên -> Chỉ cho xem syllabus Đã APPROVED + ACTIVE
-    if (role === "STUDENT") {
-      whereClause.isActive = true;
-      whereClause.isApproved = true;
-    }
-
-    const syllabuses = await prisma.syllabus.findMany({
-      where: whereClause,
-      include: {
-        course: {
-          select: { code: true, name: true }
-        }
-      },
-      orderBy: [
-        { id: "desc" }
-      ]
+    const result = await SyllabusService.searchSyllabuses({
+      subjectCode,
+      role,
+      page,
+      limit,
     });
-
-    return c.json({ syllabuses });
-  } catch (err: any) {
-    return c.json({ error: err.message }, 500);
+    return c.json({
+      syllabuses: result.rows,
+      total: result.total,
+      page: result.page,
+      limit: result.limit,
+    });
+  } catch (err: unknown) {
+    return respondWithServiceError(c, err);
   }
 });
 
@@ -171,36 +77,13 @@ syllabusRouter.get("/:id", async (c) => {
   if (isNaN(id)) return c.json({ error: "Invalid Syllabus ID" }, 400);
 
   try {
-    const syllabus = await prisma.syllabus.findUnique({
-      where: { id },
-      include: {
-        course: true,
-        materials: true,
-        clos: true,
-        schedules: {
-          orderBy: { session: "asc" }
-        },
-        questions: {
-          orderBy: { sessionNo: "asc" }
-        },
-        assessments: true,
-        references: true,
-        videoLinks: true,
-        documents: true
-      }
-    });
-
-    if (!syllabus) return c.json({ error: "Syllabus not found" }, 404);
-
-    // Quyền Sinh viên -> Chỉ xem được nếu Syllabus đó đã Active + Approved
-    const role = session.user.role;
-    if (role === "STUDENT" && (!syllabus.isActive || !syllabus.isApproved)) {
-      return c.json({ error: "Forbidden: Syllabus not published yet" }, 403);
-    }
-
+    const syllabus = await SyllabusService.getSyllabusDetail(
+      id,
+      session.user.role,
+    );
     return c.json({ syllabus });
-  } catch (err: any) {
-    return c.json({ error: err.message }, 500);
+  } catch (err: unknown) {
+    return respondWithServiceError(c, err);
   }
 });
 
@@ -214,62 +97,24 @@ syllabusRouter.post("/", async (c) => {
 
   try {
     const body = await c.req.json();
-    const syllabusId = typeof body.id === "number" ? body.id : null;
-    const courseId = typeof body.courseId === "string" ? body.courseId : "";
-    const syllabusName = typeof body.syllabusName === "string" ? body.syllabusName.trim() : "";
-    const syllabusNameEnglish = typeof body.syllabusNameEnglish === "string" ? body.syllabusNameEnglish.trim() : null;
-    const credits = typeof body.credits === "number" ? body.credits : 3;
-    const prerequisites = typeof body.prerequisites === "string" ? body.prerequisites.trim() : null;
-    const description = typeof body.description === "string" ? body.description.trim() : null;
-    const studentTasks = typeof body.studentTasks === "string" ? body.studentTasks.trim() : null;
-    const tools = typeof body.tools === "string" ? body.tools.trim() : null;
-    const minAvgMarkToPass = typeof body.minAvgMarkToPass === "number" ? body.minAvgMarkToPass : 5.00;
-    const decisionNo = typeof body.decisionNo === "string" ? body.decisionNo.trim() : null;
-    const note = typeof body.note === "string" ? body.note.trim() : null;
-
-    if (!syllabusId || !courseId || !syllabusName) {
-      return c.json({ error: "Syllabus ID (number), Course ID, and Syllabus Name are required" }, 400);
-    }
-
-    // Kiểm tra Course
-    const courseExists = await prisma.course.findUnique({ where: { id: courseId } });
-    if (!courseExists) return c.json({ error: "Course not found" }, 404);
-
-    // Kiểm tra trùng ID
-    const idExists = await prisma.syllabus.findUnique({ where: { id: syllabusId } });
-    if (idExists) return c.json({ error: "Syllabus ID already exists" }, 409);
-
-    const syllabus = await prisma.syllabus.create({
-      data: {
-        id: syllabusId,
-        courseId,
-        syllabusName,
-        syllabusNameEnglish,
-        credits,
-        prerequisites,
-        description,
-        studentTasks,
-        tools,
-        minAvgMarkToPass: new Prisma.Decimal(minAvgMarkToPass),
-        decisionNo,
-        note,
-        isApproved: false, // Mặc định Draft
-        isActive: false     // Mặc định Draft
-      }
-    });
-
-    // Sync to AnythingLLM in background
-    Promise.resolve().then(async () => {
-      try {
-        await SyllabusSyncService.syncSyllabusToAnythingLlm(syllabus.id);
-      } catch (syncErr) {
-        console.error(`[Syllabus Sync Error] Failed to sync syllabus ${syllabus.id} to AnythingLLM:`, syncErr);
-      }
+    const syllabus = await SyllabusService.createSyllabus({
+      courseId: typeof body.courseId === "string" ? body.courseId : "",
+      syllabusName: typeof body.syllabusName === "string" ? body.syllabusName.trim() : "",
+      syllabusNameEnglish: typeof body.syllabusNameEnglish === "string" ? body.syllabusNameEnglish.trim() : undefined,
+      credits: typeof body.credits === "number" ? body.credits : 3,
+      prerequisites: typeof body.prerequisites === "string" ? body.prerequisites.trim() : undefined,
+      description: typeof body.description === "string" ? body.description.trim() : undefined,
+      studentTasks: typeof body.studentTasks === "string" ? body.studentTasks.trim() : undefined,
+      tools: typeof body.tools === "string" ? body.tools.trim() : undefined,
+      minAvgMarkToPass: typeof body.minAvgMarkToPass === "number" ? body.minAvgMarkToPass : 5.0,
+      decisionNo: typeof body.decisionNo === "string" ? body.decisionNo.trim() : undefined,
+      note: typeof body.note === "string" ? body.note.trim() : undefined,
+      userId: authResult.session.user.id,
     });
 
     return c.json({ syllabus }, 201);
-  } catch (err: any) {
-    return c.json({ error: err.message }, 500);
+  } catch (err: unknown) {
+    return respondWithServiceError(c, err);
   }
 });
 
@@ -286,203 +131,33 @@ syllabusRouter.put("/:id", async (c) => {
 
   try {
     const body = await c.req.json();
-    const syllabusName = typeof body.syllabusName === "string" ? body.syllabusName.trim() : "";
-    const syllabusNameEnglish = typeof body.syllabusNameEnglish === "string" ? body.syllabusNameEnglish.trim() : undefined;
-    const credits = typeof body.credits === "number" ? body.credits : undefined;
-    const prerequisites = typeof body.prerequisites === "string" ? body.prerequisites.trim() : undefined;
-    const description = typeof body.description === "string" ? body.description.trim() : undefined;
-    const studentTasks = typeof body.studentTasks === "string" ? body.studentTasks.trim() : undefined;
-    const tools = typeof body.tools === "string" ? body.tools.trim() : undefined;
-    const minAvgMarkToPass = typeof body.minAvgMarkToPass === "number" ? body.minAvgMarkToPass : undefined;
-    const decisionNo = typeof body.decisionNo === "string" ? body.decisionNo.trim() : undefined;
-    const note = typeof body.note === "string" ? body.note.trim() : undefined;
+    const syllabus = await SyllabusService.updateSyllabus(
+      {
+        id,
+        syllabusName: body.syllabusName,
+        syllabusNameEnglish: body.syllabusNameEnglish,
+        credits: typeof body.credits === "number" ? body.credits : undefined,
+        prerequisites: typeof body.prerequisites === "string" ? body.prerequisites.trim() : undefined,
+        description: typeof body.description === "string" ? body.description.trim() : undefined,
+        studentTasks: typeof body.studentTasks === "string" ? body.studentTasks.trim() : undefined,
+        tools: typeof body.tools === "string" ? body.tools.trim() : undefined,
+        minAvgMarkToPass: typeof body.minAvgMarkToPass === "number" ? body.minAvgMarkToPass : undefined,
+        decisionNo: typeof body.decisionNo === "string" ? body.decisionNo.trim() : undefined,
+        note: typeof body.note === "string" ? body.note.trim() : undefined,
+        materials: body.materials,
+        clos: body.clos,
+        schedules: body.schedules,
+        questions: body.questions,
+        assessments: body.assessments,
+        references: body.references,
+        videoLinks: body.videoLinks,
+      },
+      authResult.session.user.id,
+    );
 
-    // Các bảng con chi tiết nhận vào
-    const assessments = body.assessments || [];
-    const clos = body.clos || [];
-    const schedules = body.schedules || [];
-    const questions = body.questions || [];
-    const materials = body.materials || [];
-    const references = body.references || [];
-    const videoLinks = body.videoLinks || [];
-
-    // [VALIDATION] BR-05 & EC-28: Tổng weight của Assessment Scheme phải bằng 100%
-    if (assessments.length > 0) {
-      let totalWeight = 0;
-      for (const item of assessments) {
-        const w = parseFloat(String(item.weight));
-        if (!isNaN(w)) {
-          totalWeight += w;
-        }
-      }
-      // Dùng epsilon nhỏ để chống sai số float
-      if (Math.abs(totalWeight - 100.00) > 0.01) {
-        return c.json({ error: `Tổng trọng số đánh giá phải bằng đúng 100%. Hiện tại: ${totalWeight.toFixed(2)}%` }, 400);
-      }
-    }
-
-    const syllabusExists = await prisma.syllabus.findUnique({ where: { id } });
-    if (!syllabusExists) return c.json({ error: "Syllabus not found" }, 404);
-
-    // Chạy transaction để cập nhật đồng bộ toàn bộ Syllabus và 7 bảng con
-    const result = await prisma.$transaction(async (tx) => {
-      // 1. Cập nhật metadata chính
-      const updatedSyl = await tx.syllabus.update({
-        where: { id },
-        data: {
-          syllabusName,
-          syllabusNameEnglish,
-          credits,
-          prerequisites,
-          description,
-          studentTasks,
-          tools,
-          minAvgMarkToPass: minAvgMarkToPass !== undefined ? new Prisma.Decimal(minAvgMarkToPass) : undefined,
-          decisionNo,
-          note
-        }
-      });
-
-      // 2. Cập nhật Materials
-      if (body.materials) {
-        await tx.syllabusMaterial.deleteMany({ where: { syllabusId: id } });
-        for (const m of materials) {
-          await tx.syllabusMaterial.create({
-            data: {
-              syllabusId: id,
-              description: m.description,
-              author: m.author,
-              publisher: m.publisher,
-              publishedDate: m.publishedDate,
-              edition: m.edition,
-              isbn: m.isbn,
-              isMainMaterial: m.isMainMaterial,
-              isHardCopy: m.isHardCopy,
-              isOnline: m.isOnline,
-              note: m.note
-            }
-          });
-        }
-      }
-
-      // 3. Cập nhật CLOs
-      if (body.clos) {
-        await tx.syllabusClo.deleteMany({ where: { syllabusId: id } });
-        for (const clo of clos) {
-          await tx.syllabusClo.create({
-            data: {
-              syllabusId: id,
-              cloName: clo.cloName,
-              cloDetails: clo.cloDetails,
-              loDetails: clo.loDetails
-            }
-          });
-        }
-      }
-
-      // 4. Cập nhật Weekly Schedules
-      if (body.schedules) {
-        await tx.syllabusSchedule.deleteMany({ where: { syllabusId: id } });
-        for (const s of schedules) {
-          await tx.syllabusSchedule.create({
-            data: {
-              syllabusId: id,
-              session: s.session,
-              topic: s.topic,
-              learningMethod: s.learningMethod,
-              lo: s.lo,
-              itu: s.itu,
-              studentMaterials: s.studentMaterials,
-              sDownload: s.sDownload,
-              studentTasks: s.studentTasks,
-              urls: s.urls
-            }
-          });
-        }
-      }
-
-      // 5. Cập nhật Edunext Constructive Questions
-      if (body.questions) {
-        await tx.constructiveQuestion.deleteMany({ where: { syllabusId: id } });
-        for (const q of questions) {
-          await tx.constructiveQuestion.create({
-            data: {
-              syllabusId: id,
-              sessionNo: q.sessionNo,
-              name: q.name,
-              details: q.details
-            }
-          });
-        }
-      }
-
-      // 6. Cập nhật Assessment Schemes
-      if (body.assessments) {
-        await tx.assessmentScheme.deleteMany({ where: { syllabusId: id } });
-        for (const a of assessments) {
-          await tx.assessmentScheme.create({
-            data: {
-              syllabusId: id,
-              category: a.category,
-              type: a.type,
-              part: a.part,
-              weight: new Prisma.Decimal(parseFloat(String(a.weight))),
-              completionCriteria: a.completionCriteria,
-              duration: a.duration,
-              clo: a.clo,
-              questionType: a.questionType,
-              noQuestion: a.noQuestion,
-              knowledgeAndSkill: a.knowledgeAndSkill,
-              gradingGuide: a.gradingGuide,
-              note: a.note
-            }
-          });
-        }
-      }
-
-      // 7. Cập nhật References
-      if (body.references) {
-        await tx.syllabusReference.deleteMany({ where: { syllabusId: id } });
-        for (const ref of references) {
-          await tx.syllabusReference.create({
-            data: {
-              syllabusId: id,
-              citation: ref.citation
-            }
-          });
-        }
-      }
-
-      // 8. Cập nhật Video links
-      if (body.videoLinks) {
-        await tx.videoLink.deleteMany({ where: { syllabusId: id } });
-        for (const v of videoLinks) {
-          await tx.videoLink.create({
-            data: {
-              syllabusId: id,
-              url: v.url,
-              title: v.title,
-              description: v.description
-            }
-          });
-        }
-      }
-
-      return updatedSyl;
-    });
-
-    // Sync to AnythingLLM in background
-    Promise.resolve().then(async () => {
-      try {
-        await SyllabusSyncService.syncSyllabusToAnythingLlm(id);
-      } catch (syncErr) {
-        console.error(`[Syllabus Sync Error] Failed to sync syllabus ${id} to AnythingLLM:`, syncErr);
-      }
-    });
-
-    return c.json({ success: true, syllabus: result });
-  } catch (err: any) {
-    return c.json({ error: err.message }, 500);
+    return c.json({ success: true, syllabus });
+  } catch (err: unknown) {
+    return respondWithServiceError(c, err);
   }
 });
 
@@ -498,26 +173,13 @@ syllabusRouter.patch("/:id/approve", async (c) => {
   if (isNaN(id)) return c.json({ error: "Invalid Syllabus ID" }, 400);
 
   try {
-    const exists = await prisma.syllabus.findUnique({ where: { id } });
-    if (!exists) return c.json({ error: "Syllabus not found" }, 404);
-
-    const syllabus = await prisma.syllabus.update({
-      where: { id },
-      data: { isApproved: true }
-    });
-
-    // Sync to AnythingLLM in background
-    Promise.resolve().then(async () => {
-      try {
-        await SyllabusSyncService.syncSyllabusToAnythingLlm(id);
-      } catch (syncErr) {
-        console.error(`[Syllabus Sync Error] Failed to sync syllabus ${id} to AnythingLLM:`, syncErr);
-      }
-    });
-
+    const syllabus = await SyllabusService.approveSyllabus(
+      id,
+      authResult.session.user.id,
+    );
     return c.json({ success: true, syllabus });
-  } catch (err: any) {
-    return c.json({ error: err.message }, 500);
+  } catch (err: unknown) {
+    return respondWithServiceError(c, err);
   }
 });
 
@@ -533,55 +195,40 @@ syllabusRouter.patch("/:id/activate", async (c) => {
   if (isNaN(id)) return c.json({ error: "Invalid Syllabus ID" }, 400);
 
   try {
-    const syllabus = await prisma.syllabus.findUnique({
-      where: { id },
-      select: { id: true, isApproved: true, courseId: true }
-    });
-
-    if (!syllabus) return c.json({ error: "Syllabus not found" }, 404);
-
-    // [VALIDATION] BR-09 & EC-25: Chỉ cho phép active khi isApproved = true!
-    if (!syllabus.isApproved) {
-      return c.json({ error: "Syllabus must be approved (is_approved=True) before activation." }, 400);
-    }
-
-    // Chạy transaction để kích hoạt bản mới và deactivate tất cả bản cũ cùng môn học (courseId)
-    const result = await prisma.$transaction(async (tx) => {
-      // 1. Deactivate toàn bộ bản ghi cũ của môn học đó
-      await tx.syllabus.updateMany({
-        where: {
-          courseId: syllabus.courseId,
-          id: { not: id }
-        },
-        data: { isActive: false }
-      });
-
-      // 2. Kích hoạt bản ghi hiện tại
-      const activatedSyl = await tx.syllabus.update({
-        where: { id },
-        data: { isActive: true }
-      });
-
-      return activatedSyl;
-    });
-
-    // Sync to AnythingLLM in background
-    Promise.resolve().then(async () => {
-      try {
-        await SyllabusSyncService.syncSyllabusToAnythingLlm(id);
-      } catch (syncErr) {
-        console.error(`[Syllabus Sync Error] Failed to sync syllabus ${id} to AnythingLLM:`, syncErr);
-      }
-    });
-
-    return c.json({ success: true, syllabus: result });
-  } catch (err: any) {
-    return c.json({ error: err.message }, 500);
+    const syllabus = await SyllabusService.activateSyllabus(
+      id,
+      authResult.session.user.id,
+    );
+    return c.json({ success: true, syllabus });
+  } catch (err: unknown) {
+    return respondWithServiceError(c, err);
   }
 });
 
 // ==========================================
-// 7. API XÓA SYLLABUS (DELETE)
+// 7. API HUỶ KÍCH HOẠT SYLLABUS (DEACTIVATE)
+// ==========================================
+// FR-03.6: Deactivate syllabus (set isActive = false)
+syllabusRouter.patch("/:id/deactivate", async (c) => {
+  const authResult = await requireLecturer(c);
+  if (authResult.error) return authResult.error;
+
+  const id = parseInt(c.req.param("id"));
+  if (isNaN(id)) return c.json({ error: "Invalid Syllabus ID" }, 400);
+
+  try {
+    const syllabus = await SyllabusService.deactivateSyllabus(
+      id,
+      authResult.session.user.id,
+    );
+    return c.json({ success: true, syllabus });
+  } catch (err: unknown) {
+    return respondWithServiceError(c, err);
+  }
+});
+
+// ==========================================
+// 8. API XÓA SYLLABUS (DELETE)
 // ==========================================
 // FR-02.6: Xóa vật lý (hard delete) khỏi database
 syllabusRouter.delete("/:id", async (c) => {
@@ -592,19 +239,34 @@ syllabusRouter.delete("/:id", async (c) => {
   if (isNaN(id)) return c.json({ error: "Invalid Syllabus ID" }, 400);
 
   try {
-    const exists = await prisma.syllabus.findUnique({ where: { id } });
-    if (!exists) return c.json({ error: "Syllabus not found" }, 404);
-
-    await prisma.syllabus.delete({ where: { id } });
+    await SyllabusService.deleteSyllabus(id, authResult.session.user.id);
     return c.json({ success: true });
-  } catch (err: any) {
-    return c.json({ error: err.message }, 500);
+  } catch (err: unknown) {
+    return respondWithServiceError(c, err);
   }
 });
 
 // ==========================================
-// 8. API QUẢN LÝ TÀI LIỆU CỦA SYLLABUS
+// 9. API QUẢN LÝ TÀI LIỆU CỦA SYLLABUS
 // ==========================================
+
+// GET /documents/all — all documents across all syllabuses (teacher document manager)
+syllabusRouter.get("/documents/all", async (c) => {
+  const session = await auth.api.getSession({ headers: c.req.raw.headers });
+  if (!session?.user) {
+    return c.json({ error: "Unauthorized" }, 401);
+  }
+
+  try {
+    const query = c.req.query();
+    const page = Math.max(1, parseInt(query.page || "1", 10));
+    const limit = Math.min(100, Math.max(1, parseInt(query.limit || "20", 10)));
+    const result = await SyllabusService.getAllDocuments(page, limit);
+    return c.json(result);
+  } catch (err: unknown) {
+    return respondWithServiceError(c, err);
+  }
+});
 
 // GET /:syllabusId/documents
 syllabusRouter.get("/:syllabusId/documents", async (c) => {
@@ -617,11 +279,10 @@ syllabusRouter.get("/:syllabusId/documents", async (c) => {
   if (isNaN(syllabusId)) return c.json({ error: "Invalid Syllabus ID" }, 400);
 
   try {
-    const documents = await DocumentRepository.findManyBySyllabus(syllabusId);
+    const documents = await SyllabusService.getDocuments(syllabusId);
     return c.json({ documents });
   } catch (err: unknown) {
-    const message = err instanceof Error ? err.message : "Failed to fetch documents";
-    return c.json({ error: message }, 500);
+    return respondWithServiceError(c, err);
   }
 });
 
@@ -632,12 +293,6 @@ syllabusRouter.post("/:syllabusId/documents", async (c) => {
 
   const syllabusId = parseInt(c.req.param("syllabusId"));
   if (isNaN(syllabusId)) return c.json({ error: "Invalid Syllabus ID" }, 400);
-
-  const syllabus = await prisma.syllabus.findUnique({
-    where: { id: syllabusId },
-    include: { course: true }
-  });
-  if (!syllabus) return c.json({ error: "Syllabus not found" }, 404);
 
   const body = await c.req.parseBody();
   const file = body.file;
@@ -651,134 +306,30 @@ syllabusRouter.post("/:syllabusId/documents", async (c) => {
     return c.json({ error: "File size exceeds the maximum limit of 50MB" }, 400);
   }
 
-  // Edge case: Kiểm tra định dạng file (chỉ PDF)
-  const fileExtension = file.name.split(".").pop()?.toLowerCase();
-  if (fileExtension !== "pdf") {
-    return c.json({ 
-      error: "Unsupported file format. Please export your slide or document to PDF format before uploading." 
+  // Kiểm tra định dạng file — extension + magic bytes
+  const headerBytes = Math.max(4, Math.min(512, file.size));
+  const headerBuffer = Buffer.from(await file.slice(0, headerBytes).arrayBuffer());
+  const detected = detectFileType(file.name, headerBuffer);
+  if (!detected) {
+    const supported = Object.values(SUPPORTED_TYPES).map((t) => t.label).join(", ");
+    return c.json({
+      error: `Định dạng file không được hỗ trợ. Các định dạng cho phép: ${supported}.`,
     }, 400);
   }
 
-  // Edge case: Kiểm tra tổng số lượng file của môn học (Course/Subject) <= 10 file
-  const existingDocsCount = await prisma.document.count({
-    where: {
-      syllabus: {
-        courseId: syllabus.courseId
-      }
-    }
-  });
+  try {
+    const result = await SyllabusService.uploadDocument({
+      syllabusId,
+      file,
+      filename: sanitizeFilename(file.name),
+      fileType: detected.ext,
+      userId: authResult.session.user.id,
+    });
 
-  if (existingDocsCount >= 10) {
-    return c.json({ error: "Giới hạn upload tối đa 10 tài liệu cho mỗi môn học đã bị vượt quá." }, 400);
+    return c.json({ success: true, document: result });
+  } catch (err: unknown) {
+    return respondWithServiceError(c, err);
   }
-
-  const arrayBuffer = await file.arrayBuffer();
-  const buffer = Buffer.from(arrayBuffer);
-  const workspaceSlug = `${syllabus.course.code.toLowerCase()}_${syllabusId}`;
-
-  // Lưu file vào disk
-  const fileName = `${Date.now()}_${file.name}`;
-  const fileDir = "./uploads";
-  await mkdir(fileDir, { recursive: true });
-
-  const filePath = `/uploads/${fileName}`;
-  await writeFile(`.${filePath}`, buffer);
-
-  const doc = await prisma.$transaction(async (tx) => {
-    const createdDocument = await tx.document.create({
-      data: {
-        name: file.name,
-        fileUrl: filePath,
-        fileType: "pdf",
-        status: DocumentStatus.PENDING,
-        syllabus: { connect: { id: syllabusId } },
-      },
-    });
-
-    const workspace = await tx.ragWorkspace.upsert({
-      where: { syllabusId },
-      update: {
-        workspaceSlug,
-        workspaceName: workspaceSlug,
-      },
-      create: {
-        syllabus: { connect: { id: syllabusId } },
-        workspaceSlug,
-        workspaceName: workspaceSlug,
-      },
-    });
-
-    const job = await tx.ingestionJob.create({
-      data: {
-        document: { connect: { id: createdDocument.id } },
-        workspace: { connect: { id: workspace.id } },
-        status: IngestionJobStatus.PENDING,
-      },
-    });
-
-    await tx.document.update({
-      where: { id: createdDocument.id },
-      data: { status: DocumentStatus.PROCESSING },
-    });
-
-    await tx.ingestionJob.update({
-      where: { id: job.id },
-      data: { status: IngestionJobStatus.PROCESSING },
-    });
-
-    return { ...createdDocument, status: DocumentStatus.PROCESSING, ingestionJob: job };
-  });
-
-  // Start background non-blocking ingestion task calling AnythingLLM API
-  Promise.resolve().then(async () => {
-    try {
-      // 1. Auto-create workspace in AnythingLLM (check if exists first)
-      console.log(`[Ingestion] Ensuring AnythingLLM workspace exists for: "${workspaceSlug}"`);
-      await AnythingLlmAdapter.ensureWorkspace(workspaceSlug);
-
-      // 2. Upload document file to AnythingLLM
-      console.log(`[Ingestion] Uploading file "${file.name}" to AnythingLLM...`);
-      const docLocation = await AnythingLlmAdapter.uploadPdf(file.name, buffer);
-
-      // 3. Embed document into workspace
-      console.log(`[Ingestion] Embedding document into AnythingLLM workspace "${workspaceSlug}"...`);
-      await AnythingLlmAdapter.updateWorkspaceEmbeddings(workspaceSlug, { adds: [docLocation] });
-
-      // 4. Final status flip through internal callback contract
-      await notifyIngestionCallback(doc.id, {
-        jobId: doc.ingestionJob?.id,
-        status: DocumentStatus.COMPLETED,
-        payload: {
-          workspaceSlug,
-          sourceLocation: docLocation,
-        },
-        sourceLocation: docLocation,
-      });
-      console.log(`[Ingestion] Document "${doc.name}" successfully embedded and marked COMPLETED!`);
-    } catch (error) {
-      console.error(`[Ingestion] Failed to ingest document "${doc.name}":`, error);
-      const errorMessage = error instanceof Error ? error.message : String(error);
-      await notifyIngestionCallback(doc.id, {
-        jobId: doc.ingestionJob?.id,
-        status: DocumentStatus.FAILED,
-        error: errorMessage,
-        payload: {
-          workspaceSlug,
-        },
-      }).catch((dbErr) => {
-        console.error("[Ingestion] Failed to mark document status as FAILED in DB:", dbErr);
-      });
-    }
-  });
-
-  return c.json({
-    success: true,
-    document: {
-      id: doc.id,
-      name: doc.name,
-      status: "PROCESSING",
-    },
-  });
 });
 
 // DELETE /:syllabusId/documents/:documentId
@@ -790,60 +341,41 @@ syllabusRouter.delete("/:syllabusId/documents/:documentId", async (c) => {
   const documentId = c.req.param("documentId");
   if (isNaN(syllabusId)) return c.json({ error: "Invalid Syllabus ID" }, 400);
 
-  const syllabus = await prisma.syllabus.findUnique({
-    where: { id: syllabusId },
-    include: { course: true }
-  });
-  if (!syllabus) return c.json({ error: "Syllabus not found" }, 404);
-
-  const document = await prisma.document.findFirst({
-    where: {
-      id: documentId,
+  try {
+    await SyllabusService.deleteDocument({
       syllabusId,
-    }
-  });
-
-  if (!document) {
+      documentId,
+      userId: authResult.session.user.id,
+    });
     return c.json({ success: true });
+  } catch (err: unknown) {
+    return respondWithServiceError(c, err);
   }
+});
 
-  if (document.status === "PENDING" || document.status === "PROCESSING") {
-    return c.json(
-      { error: "Document is still processing and cannot be deleted" },
-      409,
-    );
-  }
+// ==========================================
+// 10. API ĐỒNG BỘ SYLLABUS LÊN ANYTHINGLLM (SYNC)
+// ==========================================
+// POST /api/syllabus/:id/sync — manual sync trigger
+syllabusRouter.post("/:id/sync", async (c) => {
+  const authResult = await requireLecturer(c);
+  if (authResult.error) return authResult.error;
+
+  const id = parseInt(c.req.param("id"));
+  if (isNaN(id)) return c.json({ error: "Invalid Syllabus ID" }, 400);
 
   try {
-    const originalFilePath = join(".", document.fileUrl.replace(/^\/+/, ""));
-    await removeFileIfExists(originalFilePath);
-    await removeChunkFiles(documentId);
-    await DocumentRepository.delete(documentId);
+    // Fire-and-forget sync — consistent with existing pattern
+    Promise.resolve().then(async () => {
+      try {
+        await SyllabusSyncService.syncSyllabusToAnythingLlm(id);
+      } catch (syncErr) {
+        console.error(`[Sync Trigger Error] Failed to sync syllabus ${id}:`, syncErr);
+      }
+    });
 
-    // Sync delete with AnythingLLM
-    try {
-      const fileName = document.fileUrl.split("/").pop();
-      const anythingLLMLocation = `custom-documents/${fileName}`;
-      const workspaceSlug = `${syllabus.course.code.toLowerCase()}_${syllabusId}`;
-
-      // 1. Remove from workspace
-      console.log(`[Deletion] Syncing Document Deletion: Removing "${anythingLLMLocation}" from AnythingLLM workspace "${workspaceSlug}"...`);
-      await AnythingLlmAdapter.updateWorkspaceEmbeddings(workspaceSlug, { deletes: [anythingLLMLocation] });
-
-      // 2. Remove from system completely
-      console.log(`[Deletion] Syncing Document Deletion: Purging "${anythingLLMLocation}" from AnythingLLM system...`);
-      await AnythingLlmAdapter.purgeDocuments([anythingLLMLocation]);
-    } catch (llmError) {
-      console.error("[Deletion] Failed to sync document deletion with AnythingLLM:", llmError);
-    }
-
-    return c.json({ success: true });
-  } catch (error: any) {
-    if (error?.code === "P2025") {
-      return c.json({ success: true });
-    }
-
-    console.error("[SyllabusController] Failed to delete document:", error);
-    return c.json({ error: "Failed to delete document" }, 500);
+    return c.json({ success: true, message: "Sync triggered" });
+  } catch (err) {
+    return respondWithServiceError(c, err);
   }
 });

@@ -1,0 +1,431 @@
+{
+  "metadata": {
+    "syllabus_id": "10361",
+    "syllabus_name": "Experiential Entrepreneurship 2 - Trải nghiệm khởi nghiệp 2",
+    "syllabus_name_english": "Experiential Entrepreneurship 2",
+    "subject_code": "EXE201",
+    "credits": "3",
+    "degree_level": "Bachelor",
+    "time_allocation": "Study hour (150h) =\n'-Self-paced online learning: 15 hours\n- Learning face-to-face with an instructor: 10 sessions (1 session/week x 10 weeks; 2,25 hrs/session)\n- Guest speakers' Sharing - Seminars: 3 sessions (2,25 hrs/session)\n- Mentors' Mentoring: 2 (2,25hr/session). 1-3 additional sessions can be set up depending on the necessity and on the mentor's avaibility.\n- 102h self-study",
+    "prerequisites": "EXE101",
+    "description": "In Experiental Entrepreneurship 2, groups of students will develop product/service for their start-up ideas prepared from Experiental Entrepreneurship 1 and deploy sales and find real customers for their group's products/services.\nThere is no mandatory content for this course, just a list of suggested lectures/talks that students can view to get useful tips and experiences for project realization.\nIn addition, there will be seminars and workshops with related topics planned and implemented each semester according to actual needs and implementation situation.",
+    "student_tasks": "- Students must attend at least 80% of Instructor's Coaching sections, Seminars and Mentor's Mentoring.\n- Students are responsible for doing all exercises and assignments given by the instructor in class or at home and submitting them on time.\n- Students must meet all milestones' requirements.\n- Promplty access to the learning material platform https://flm.fpt.edu.vn/ for up to date course information.",
+    "tools": "- A hall for seminars has a capacity of at least 200 people",
+    "scoring_scale": "10",
+    "decision_no": "871/QĐ-ĐHFPT dated 08/25/2023",
+    "is_approved": "True",
+    "note": "",
+    "min_avg_mark_to_pass": "5",
+    "is_active": "True",
+    "approved_date": "8/25/2023"
+  },
+  "materials": [
+    {
+      "description": "Online material sources (video, documents)",
+      "author": "YCombinator (San Jose, CA)",
+      "publisher": "",
+      "published_date": "",
+      "edition": "",
+      "isbn": "",
+      "is_main_material": "",
+      "is_hard_copy": "",
+      "is_online": "",
+      "note": "www.StartupSchool.org"
+    },
+    {
+      "description": "Startup Directory sources",
+      "author": "Y Combinat or (San Jose, CA)",
+      "publisher": "",
+      "published_date": "",
+      "edition": "",
+      "isbn": "",
+      "is_main_material": "",
+      "is_hard_copy": "",
+      "is_online": "",
+      "note": "https://www.ycombinator.com/companies/"
+    },
+    {
+      "description": "Techstars",
+      "author": "Techstars (Boulder, Colorado)",
+      "publisher": "",
+      "published_date": "",
+      "edition": "",
+      "isbn": "",
+      "is_main_material": "",
+      "is_hard_copy": "",
+      "is_online": "",
+      "note": "https://www.techstars.com/portfolio"
+    },
+    {
+      "description": "500 Startups",
+      "author": "500 Startups",
+      "publisher": "",
+      "published_date": "",
+      "edition": "",
+      "isbn": "",
+      "is_main_material": "",
+      "is_hard_copy": "",
+      "is_online": "",
+      "note": "https://500.co/companies"
+    },
+    {
+      "description": "AngelPad (NYC)",
+      "author": "AngelPad (NYC)",
+      "publisher": "",
+      "published_date": "",
+      "edition": "",
+      "isbn": "",
+      "is_main_material": "",
+      "is_hard_copy": "",
+      "is_online": "",
+      "note": "https://angelpad.com/portfolio/"
+    },
+    {
+      "description": "Seed Accelerators database",
+      "author": "Seed Accelerat ors",
+      "publisher": "",
+      "published_date": "",
+      "edition": "",
+      "isbn": "",
+      "is_main_material": "",
+      "is_hard_copy": "",
+      "is_online": "",
+      "note": "https://www.seed-db.com/accelera tors"
+    },
+    {
+      "description": "The Lean Startup",
+      "author": "Eric Ries",
+      "publisher": "",
+      "published_date": "",
+      "edition": "",
+      "isbn": "",
+      "is_main_material": "",
+      "is_hard_copy": "",
+      "is_online": "",
+      "note": ""
+    },
+    {
+      "description": "How to Design a Better Pitch Deck",
+      "author": "Kevin Hale",
+      "publisher": "",
+      "published_date": "",
+      "edition": "",
+      "isbn": "",
+      "is_main_material": "",
+      "is_hard_copy": "",
+      "is_online": "",
+      "note": "https://www.ycombinator.com/library/4T-how-to-design-a-better-pitch-deck/"
+    },
+    {
+      "description": "A Guide to Seed Fundraising",
+      "author": "Geoff Ralston",
+      "publisher": "",
+      "published_date": "",
+      "edition": "",
+      "isbn": "",
+      "is_main_material": "",
+      "is_hard_copy": "",
+      "is_online": "",
+      "note": "https://www.ycombinator.com/library/4A- a-guide- to-seed- fundraisi ng"
+    },
+    {
+      "description": "A Guide to YC Demo Day Presentations",
+      "author": "Geoff Ralston",
+      "publisher": "",
+      "published_date": "",
+      "edition": "",
+      "isbn": "",
+      "is_main_material": "",
+      "is_hard_copy": "",
+      "is_online": "",
+      "note": "https://www.ycombinator.com/library/49-a-guide-to-yc-demo-day-present ations"
+    }
+  ],
+  "clos": [
+    {
+      "clo_name": "1",
+      "clo_details": "CLO1",
+      "lo_details": "Build physical product/service"
+    },
+    {
+      "clo_name": "2",
+      "clo_details": "CLO2",
+      "lo_details": "Be able to map out the customer acquisition plan"
+    },
+    {
+      "clo_name": "3",
+      "clo_details": "CLO3",
+      "lo_details": "Launch product on different channels"
+    },
+    {
+      "clo_name": "4",
+      "clo_details": "CLO4",
+      "lo_details": "Able to analyze feedback from the channels"
+    }
+  ],
+  "schedule": [
+    {
+      "session": "1",
+      "topic": "Week 1 Instructor's coaching Design for Startups - Part 1",
+      "learning_method": "Online",
+      "lo": "CLO1",
+      "itu": "IT",
+      "student_materials": "Watch video lectures below: https://www.ycombinator.com/library/7G-design-for-startups-part-1-sus-2018 - (Optional) Read book The Lean Startup",
+      "s_download": "EXE201",
+      "student_tasks": "Present the group's implementing plan and the project's progress compared to the plan",
+      "urls": ""
+    },
+    {
+      "session": "2",
+      "topic": "Week 1 Seminar 1 “Be Successful in Your Own Way” – Guest speaker",
+      "learning_method": "Offline",
+      "lo": "CLO1",
+      "itu": "T,U",
+      "student_materials": "",
+      "s_download": "",
+      "student_tasks": "- Attend the seminar During Seminar: - Prepare questions for Guest speakers",
+      "urls": ""
+    },
+    {
+      "session": "3",
+      "topic": "Week 2 Instructor's coaching Design for Startups, Part 2",
+      "learning_method": "Online",
+      "lo": "CLO1",
+      "itu": "TU",
+      "student_materials": "Watch video lectures below: https://www.ycombinator.com/library/7H-design-for-startups-part-2-sus-2018 - (Optional) Read book The Lean Startup",
+      "s_download": "",
+      "student_tasks": "- Follow the instructions and requirements of the Lecturer, review assigned video lectures - Present the progress of building product/service and demonstrate the result - Modify plan regarding lecturer's comments - Keep developing product/service",
+      "urls": ""
+    },
+    {
+      "session": "4",
+      "topic": "Week 3 Instructor's coaching Building Product",
+      "learning_method": "Online",
+      "lo": "CLO1",
+      "itu": "TU",
+      "student_materials": "Watch video lectures below: https://www.ycombinator.com/library/7s-building-product-sus-2018 - (Optional) Read book The Lean Startup",
+      "s_download": "",
+      "student_tasks": "- Preparing the list of posible channels for launching product/service",
+      "urls": ""
+    },
+    {
+      "session": "5",
+      "topic": "Week 3 Seminar 2 “Choosing a Startup Idea” – Guest Speaker",
+      "learning_method": "Offline",
+      "lo": "CLO1",
+      "itu": "I,T",
+      "student_materials": "",
+      "s_download": "",
+      "student_tasks": "- Attend the seminar During Seminar: - Prepare questions for Guest speakers",
+      "urls": ""
+    },
+    {
+      "session": "6",
+      "topic": "Week 3 Mentoring 1",
+      "learning_method": "Online",
+      "lo": "CLO1, CLO2",
+      "itu": "T,U",
+      "student_materials": "",
+      "s_download": "",
+      "student_tasks": "Before mentoring: Prepare questions During mentoring: discuss and require guidance from the mentor. After mentoring: Put into practice the knowledge and try to deepen it in the project.",
+      "urls": ""
+    },
+    {
+      "session": "7",
+      "topic": "Week 4 Instructor's coaching How to Launch (Again and Again)",
+      "learning_method": "Online",
+      "lo": "CLO2",
+      "itu": "TU",
+      "student_materials": "Watch video lectures below: https://www.ycombinator.com/library/6i-how-to-launch-again-and-again - (Optional) Read book The Lean Startup",
+      "s_download": "",
+      "student_tasks": "- Present market analysis and problem statement, give insign information from its market research - Present the selected channels for launching. - Improve the product/service if needed",
+      "urls": ""
+    },
+    {
+      "session": "8",
+      "topic": "Week 5 Instructor's coaching How to get your first ten customers? Oucome 2 presentation",
+      "learning_method": "Online",
+      "lo": "CLO1, CLO2",
+      "itu": "T,U",
+      "student_materials": "Watch video lectures below: https://www.ycombinator.com/library/9h-how-to-get-your-first-ten-customers - (Optional) Read book The Lean Startup",
+      "s_download": "",
+      "student_tasks": "Presents launching situation (channels, methods, cost, market fit, customer target, primilary feedback,…)",
+      "urls": ""
+    },
+    {
+      "session": "9",
+      "topic": "Week 5 Mentoring 2 (optional)",
+      "learning_method": "Online",
+      "lo": "CLO4",
+      "itu": "T,U",
+      "student_materials": "",
+      "s_download": "",
+      "student_tasks": "Acquire the guidance of the mentor and put it into practice.",
+      "urls": ""
+    },
+    {
+      "session": "10",
+      "topic": "Week 6 Instructor's coaching How to Get Users and Grow",
+      "learning_method": "Online",
+      "lo": "CLO2, CLO3",
+      "itu": "TU",
+      "student_materials": "Watch video lectures below: https://www.ycombinator.com/library/7K-how-to-get-users-and-grow-sus-2018 - (Optional) Read book The Lean Startup",
+      "s_download": "",
+      "student_tasks": "Keep improving product/service if needed Keep launching product/service on selected channels",
+      "urls": ""
+    },
+    {
+      "session": "11",
+      "topic": "Week 6 Mentoring 3 (optional)",
+      "learning_method": "Online",
+      "lo": "CLO4",
+      "itu": "T,U",
+      "student_materials": "",
+      "s_download": "",
+      "student_tasks": "Acquire the guidance of the mentor and put it into practice.",
+      "urls": ""
+    },
+    {
+      "session": "12",
+      "topic": "Week 7 Instructor's coaching How to Sell",
+      "learning_method": "Online",
+      "lo": "CLO3, CLO4",
+      "itu": "TU",
+      "student_materials": "Watch videos below: https://www.ycombinator.com/library/7f-how-to-sell-sus-2018",
+      "s_download": "",
+      "student_tasks": "Prepare the feedback form and send it to at least 20 people. Collect feedback answers and analyze them. Keep improving product/service if needed Keep launching product/service on selected channels",
+      "urls": ""
+    },
+    {
+      "session": "13",
+      "topic": "Week 8 Instructor's coaching How to Set KPIs and Goals",
+      "learning_method": "Online",
+      "lo": "CLO3, CLO4",
+      "itu": "TU",
+      "student_materials": "Watch videos below: https://www.ycombinator.com/library/6j-how-to-set-kpis-and-goals-sus-2019",
+      "s_download": "",
+      "student_tasks": "Present the feedback analysis and improvement plan if there is. Keep improving product/service if needed Keep launching product/service on selected channels",
+      "urls": ""
+    },
+    {
+      "session": "14",
+      "topic": "Week 8 Seminar 3 Recommended topics: How to do market research – Instructor or Guest speaker MVP and How to Shorten Time-To- Market – Guest speaker “Startup Fundraising & Venture Investment” – Guest speaker",
+      "learning_method": "Offline",
+      "lo": "CLO2, CLO3, CLO4",
+      "itu": "I,T",
+      "student_materials": "",
+      "s_download": "",
+      "student_tasks": "- Attend the seminar During Seminar: - Prepare questions for Guest speakers",
+      "urls": ""
+    },
+    {
+      "session": "15",
+      "topic": "Week 8 Mentoring 4 (optional)",
+      "learning_method": "Online",
+      "lo": "CLO5",
+      "itu": "T,U",
+      "student_materials": "",
+      "s_download": "",
+      "student_tasks": "Acquire the guidance of the mentor and put it into practice.",
+      "urls": ""
+    },
+    {
+      "session": "16",
+      "topic": "Week 9 Instructor's coaching Growth for Startups",
+      "learning_method": "Online",
+      "lo": "CLO3, CLO4",
+      "itu": "TU",
+      "student_materials": "Watch videos below: https://www.ycombinator.com/library/6k-growth-for-startups",
+      "s_download": "",
+      "student_tasks": "Present the feedback analysis, improvement plan if there is. Keep improving product/service if needed Keep launching product/service on selected channels Prepare the final report",
+      "urls": ""
+    },
+    {
+      "session": "17",
+      "topic": "Week 9 Mentoring 5",
+      "learning_method": "Online",
+      "lo": "CLO1, CLO2, CLO3, CLO4",
+      "itu": "T,U",
+      "student_materials": "",
+      "s_download": "",
+      "student_tasks": "Prepare the pitch deck",
+      "urls": ""
+    },
+    {
+      "session": "18",
+      "topic": "Week 10 Evaluate all the groups 1 session offline",
+      "learning_method": "Offline",
+      "lo": "CLO1, CLO2, CLO3, CLO4",
+      "itu": "TU",
+      "student_materials": "",
+      "s_download": "",
+      "student_tasks": "Present the startup project and results",
+      "urls": ""
+    },
+    {
+      "session": "19",
+      "topic": "Week 11-14 Relaunch & try to approach customers again if previously failed",
+      "learning_method": "Offline",
+      "lo": "CLO1, CLO2, CLO3, CLO4",
+      "itu": "",
+      "student_materials": "",
+      "s_download": "",
+      "student_tasks": "",
+      "urls": ""
+    }
+  ],
+  "constructive_questions": [],
+  "assessment_scheme": [
+    {
+      "category": "Outcome 1",
+      "type": "on- going",
+      "part": "1",
+      "weight": "40.0%",
+      "completion_criteria": ">0",
+      "duration": "no-limit",
+      "clo": "CLO1",
+      "question_type": "Product/service demonstration",
+      "no_question": "1",
+      "knowledge_and_skill": "",
+      "grading_guide": "- In class, by instructor - Students demonstrate the product/service to the class - Product/service should run well and be market- ready",
+      "note": "See rubric at Material link (Schedule sheet, line1) Instructor has resposibility to review the group's demonstration for students."
+    },
+    {
+      "category": "Outcome 2",
+      "type": "on- going",
+      "part": "1",
+      "weight": "20.0%",
+      "completion_criteria": ">0",
+      "duration": "no-limit",
+      "clo": "CLO2",
+      "question_type": "Presentation",
+      "no_question": "1",
+      "knowledge_and_skill": "",
+      "grading_guide": "- In class, by instructor - Students need to submit the required document, and do a presentation in class",
+      "note": "See rubric at Material link (Schedule sheet, line1) Instructor has resposibility to review the group's presentation for students."
+    },
+    {
+      "category": "Outcome 3",
+      "type": "on- going",
+      "part": "1",
+      "weight": "40.0%",
+      "completion_criteria": "4",
+      "duration": "no-limit",
+      "clo": "CLO3, CLO4",
+      "question_type": "Reports",
+      "no_question": "1",
+      "knowledge_and_skill": "",
+      "grading_guide": "- In class, by instructor and mentor - Students need to submit the sales results along with all needed proof to the instructor - Students will present their result in class",
+      "note": "See rubric at Material link (Schedule sheet, line1) Instructor has resposibility to review the group's presentation for students after graded."
+    }
+  ],
+  "references": [
+    "871/QĐ-ĐHFPT dated 08/25/2023",
+    "Watch video lectures below: https://www.ycombinator.com/library/7G-design-for-startups-part-1-sus-2018 - (Optional) Read book The Lean Startup",
+    "Watch video lectures below: https://www.ycombinator.com/library/7H-design-for-startups-part-2-sus-2018 - (Optional) Read book The Lean Startup",
+    "Watch video lectures below: https://www.ycombinator.com/library/7s-building-product-sus-2018 - (Optional) Read book The Lean Startup",
+    "Watch video lectures below: https://www.ycombinator.com/library/7K-how-to-get-users-and-grow-sus-2018 - (Optional) Read book The Lean Startup",
+    "Watch videos below: https://www.ycombinator.com/library/7f-how-to-sell-sus-2018",
+    "Watch videos below: https://www.ycombinator.com/library/6j-how-to-set-kpis-and-goals-sus-2019"
+  ]
+}

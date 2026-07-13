@@ -75,6 +75,19 @@ export class ChatRepository {
     })
   }
 
+  /**
+   * Update a session by id. Currently used by ChatService for title
+   * renaming (PATCH /api/chat/sessions/:id) and first-message title
+   * generation. The shape of `data` is a flat Pick so callers don't have
+   * to import Prisma types just to update a title.
+   */
+  static async updateSession(id: string, data: { title?: string }) {
+    return prisma.chatSession.update({
+      where: { id },
+      data,
+    })
+  }
+
   // ChatMessage Operations
   static async createMessage(data: Prisma.ChatMessageCreateInput) {
     return prisma.chatMessage.create({ data })

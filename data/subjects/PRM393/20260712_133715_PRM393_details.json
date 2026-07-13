@@ -1,0 +1,833 @@
+{
+  "metadata": {
+    "syllabus_id": "13822",
+    "syllabus_name": "Mobile Programming_Lập trình di động",
+    "syllabus_name_english": "Mobile Programming",
+    "subject_code": "PRM393",
+    "credits": "3",
+    "degree_level": "Bachelor",
+    "time_allocation": "Study hour (150h) = 45h contact hours + 1h final exam + 104h self-study",
+    "prerequisites": "PRO192",
+    "description": "1. Understand the fundamental concepts of mobile programming with Flutter and Dart.\n2. Experience using popular widgets and plugins to build cross-platform user interfaces.\n3. Knowledge of state management, form handling, and navigation between screens in mobile applications.\n4. Learn and apply asynchronous programming techniques with Future and async/await.\n5. Ability to integrate RESTful APIs to exchange data between mobile applications and servers, as well as store data locally using SharedPreferences and SQLite.\n6. Proficient in using Dart libraries and command-line tools to optimize the application development process.\n7. Knowledge of implementing mobile notification systems, including local and push notifications.",
+    "student_tasks": "- Students must attend more than 80% of contact sessions in order to be accepted to the final examination.\n- Student is responsible to do all assigned exercises given by instructor in class or at home and submit on time\n- Use laptop in class only for learning purpose\n- Promptly access to the FU LMS at http://lms.fpt.edu.vn for up-to-date course information",
+    "tools": "- Android Studio + Flutter SDK + Dart SDK (Latest Version)\n- Virtual device attached android studio (or other virtual device), android mobile (only for learning, not for exam - optional)\n- Laptop: 16GB RAM, 25GB free space before installing studio\nNote:\n- Install all neccessary tools before the first slot of the course",
+    "scoring_scale": "10",
+    "decision_no": "1402/QĐ-ĐHFPT dated 12/12/2025",
+    "is_approved": "True",
+    "note": "- Visual Studio Code (recommended, lightweight and supports many Flutter/Dart extensions).\n- Xcode (only needed if building & testing iOS, required on macOS).",
+    "min_avg_mark_to_pass": "5",
+    "is_active": "True",
+    "approved_date": "12/12/2025"
+  },
+  "materials": [
+    {
+      "description": "Mastering Flutter: Learn to Develop Flutter Apps for iOS, Android, Desktop and Web",
+      "author": "Kevin Moore",
+      "publisher": "BPB Publications",
+      "published_date": "2025",
+      "edition": "1st",
+      "isbn": "9789365899177",
+      "is_main_material": "",
+      "is_hard_copy": "",
+      "is_online": "",
+      "note": ""
+    },
+    {
+      "description": "Beginning App Development with Flutter: Create Cross-Platform Mobile Apps",
+      "author": "Rap Payne",
+      "publisher": "Apress",
+      "published_date": "2019",
+      "edition": "1st",
+      "isbn": "9781484251805",
+      "is_main_material": "",
+      "is_hard_copy": "",
+      "is_online": "",
+      "note": ""
+    },
+    {
+      "description": "Developing Mobile Apps with Flutter Specialization",
+      "author": "IBM Skills Network Team",
+      "publisher": "Coursera",
+      "published_date": "",
+      "edition": "",
+      "isbn": "",
+      "is_main_material": "",
+      "is_hard_copy": "",
+      "is_online": "",
+      "note": "https://www.coursera.org/specializations/developing-mobile-apps-with-flutter"
+    },
+    {
+      "description": "E-learning Platforms",
+      "author": "",
+      "publisher": "",
+      "published_date": "",
+      "edition": "",
+      "isbn": "",
+      "is_main_material": "",
+      "is_hard_copy": "",
+      "is_online": "",
+      "note": "https://flutter.dev https://docs.flutter.dev https://dart.dev/guides/language/language-tour https://github.com/flutter/samples"
+    }
+  ],
+  "clos": [
+    {
+      "clo_name": "1",
+      "clo_details": "CLO1",
+      "lo_details": "Understand the fundamental concepts of mobile programming with Flutter and Dart."
+    },
+    {
+      "clo_name": "2",
+      "clo_details": "CLO2",
+      "lo_details": "Experience using popular widgets and plugins to build cross-platform user interfaces."
+    },
+    {
+      "clo_name": "3",
+      "clo_details": "CLO3",
+      "lo_details": "Knowledge of state management, form handling, and navigation between screens in mobile applications."
+    },
+    {
+      "clo_name": "4",
+      "clo_details": "CLO4",
+      "lo_details": "Learn and apply asynchronous programming techniques with Future and async/await."
+    },
+    {
+      "clo_name": "5",
+      "clo_details": "CLO5",
+      "lo_details": "Ability to integrate RESTful APIs to exchange data between mobile applications and servers, as well as store data locally using SharedPreferences and SQLite."
+    },
+    {
+      "clo_name": "6",
+      "clo_details": "CLO6",
+      "lo_details": "Proficient in using Dart libraries and command-line tools to optimize the application development process."
+    },
+    {
+      "clo_name": "7",
+      "clo_details": "CLO7",
+      "lo_details": "Knowledge of implementing mobile notification systems, including local and push notifications."
+    }
+  ],
+  "schedule": [
+    {
+      "session": "1",
+      "topic": "Flutter Overview & Environment Setup",
+      "learning_method": "Offline",
+      "lo": "CLO1",
+      "itu": "ITU",
+      "student_materials": "M1 – Introduction to Flutter. Reference: Ch.1 Getting Started, tooling, project structure.",
+      "s_download": "PRM393",
+      "student_tasks": "Verify setups; troubleshoot common install issues; walk-through run configurations.",
+      "urls": ""
+    },
+    {
+      "session": "2",
+      "topic": "Project Structure & Tooling",
+      "learning_method": "Offline",
+      "lo": "CLO1, CLO6",
+      "itu": "TU",
+      "student_materials": "M1 – Introduction to Flutter. Reference: Ch.1 Getting Started, tooling, project structure",
+      "s_download": "",
+      "student_tasks": "Explain folder structure; demonstrate build flavors; answer Q&A.",
+      "urls": ""
+    },
+    {
+      "session": "3",
+      "topic": "Hot Reload/Restart & Widget Tree",
+      "learning_method": "Offline",
+      "lo": "CLO1, CLO6",
+      "itu": "TU",
+      "student_materials": "M1 – Introduction to Flutter. Reference: Ch.1 Getting Started, tooling, project structure.",
+      "s_download": "",
+      "student_tasks": "Demo hot reload/hot restart; show DevTools widget inspector.",
+      "urls": ""
+    },
+    {
+      "session": "4",
+      "topic": "Basic UI Composition with Scaffold",
+      "learning_method": "Offline",
+      "lo": "CLO1, CLO6",
+      "itu": "TU",
+      "student_materials": "M1 – Introduction to Flutter. Reference: Ch.1 Getting Started, tooling, project structure.",
+      "s_download": "",
+      "student_tasks": "Live-code scaffold customization; review students’ changes.",
+      "urls": ""
+    },
+    {
+      "session": "5",
+      "topic": "Summary & Setup Issues",
+      "learning_method": "Offline",
+      "lo": "CLO1, CLO6",
+      "itu": "TU",
+      "student_materials": "M1 – Introduction to Flutter. Reference: Ch.1 Getting Started, tooling, project structure.",
+      "s_download": "",
+      "student_tasks": "Summarize pitfalls; collect environment reports; set expectations.",
+      "urls": ""
+    },
+    {
+      "session": "6",
+      "topic": "Dart Types & Variables",
+      "learning_method": "Offline",
+      "lo": "CLO1, CLO4",
+      "itu": "TU",
+      "student_materials": "M2 – Dart Essentials. Reference: Ch.2–3 Dart syntax, types, functions, classes.",
+      "s_download": "",
+      "student_tasks": "Review type system & null safety; address common errors.",
+      "urls": ""
+    },
+    {
+      "session": "7",
+      "topic": "Functions & Functional Patterns",
+      "learning_method": "Offline",
+      "lo": "CLO1",
+      "itu": "TU",
+      "student_materials": "M2 – Dart Essentials. Reference: Ch.2–3 Dart syntax, types, functions, classes.",
+      "s_download": "",
+      "student_tasks": "Demonstrate function patterns; code review live.",
+      "urls": ""
+    },
+    {
+      "session": "8",
+      "topic": "Classes & Constructors",
+      "learning_method": "Offline",
+      "lo": "CLO1, CLO2",
+      "itu": "TU",
+      "student_materials": "M2 – Dart Essentials. Reference: Ch.2–3 Dart syntax, types, functions, classes.",
+      "s_download": "",
+      "student_tasks": "Explain class design; refactor student solutions.",
+      "urls": ""
+    },
+    {
+      "session": "9",
+      "topic": "Collections & Operations",
+      "learning_method": "Offline",
+      "lo": "CLO1, CLO2",
+      "itu": "TU",
+      "student_materials": "M2 – Dart Essentials. Reference: Ch.2–3 Dart syntax, types, functions, classes.",
+      "s_download": "",
+      "student_tasks": "Show idiomatic collection usage; performance tips.",
+      "urls": ""
+    },
+    {
+      "session": "10",
+      "topic": "Intro to Futures & Async",
+      "learning_method": "Offline",
+      "lo": "CLO2, CLO3",
+      "itu": "TU",
+      "student_materials": "M2 – Dart Essentials. Reference: Ch.2–3 Dart syntax, types, functions, classes.",
+      "s_download": "",
+      "student_tasks": "Introduce async model; clarify event loop concepts.",
+      "urls": ""
+    },
+    {
+      "session": "11",
+      "topic": "Future-based Async Programming",
+      "learning_method": "Offline",
+      "lo": "CLO1, CLO3",
+      "itu": "TU",
+      "student_materials": "M3 – OOP & Asynchronous. Reference: Ch.3–4 OOP patterns, Futures, Streams, async/await.",
+      "s_download": "",
+      "student_tasks": "Explain Future scheduling; demonstrate error propagation.",
+      "urls": ""
+    },
+    {
+      "session": "12",
+      "topic": "Streams & StreamController",
+      "learning_method": "Offline",
+      "lo": "CLO1, CLO3",
+      "itu": "TU",
+      "student_materials": "M3 – OOP & Asynchronous. Reference: Ch.3–4 OOP patterns, Futures, Streams, async/await.",
+      "s_download": "",
+      "student_tasks": "Show StreamController patterns; memory-safety notes.",
+      "urls": ""
+    },
+    {
+      "session": "13",
+      "topic": "StreamBuilder in Flutter",
+      "learning_method": "Offline",
+      "lo": "CLO1",
+      "itu": "TU",
+      "student_materials": "M3 – OOP & Asynchronous. Reference: Ch.3–4 OOP patterns, Futures, Streams, async/await.",
+      "s_download": "",
+      "student_tasks": "Live-code StreamBuilder; discuss rebuild behavior.",
+      "urls": ""
+    },
+    {
+      "session": "14",
+      "topic": "Repository Pattern",
+      "learning_method": "Offline",
+      "lo": "CLO1, CLO2",
+      "itu": "TU",
+      "student_materials": "M3 – OOP & Asynchronous. Reference: Ch.3–4 OOP patterns, Futures, Streams, async/await.",
+      "s_download": "",
+      "student_tasks": "Present repository abstraction; layering guidance.",
+      "urls": ""
+    },
+    {
+      "session": "15",
+      "topic": "Reactive Patterns (Concept)",
+      "learning_method": "Offline",
+      "lo": "CLO1, CLO2",
+      "itu": "TU",
+      "student_materials": "M3 – OOP & Asynchronous. Reference: Ch.3–4 OOP patterns, Futures, Streams, async/await.",
+      "s_download": "",
+      "student_tasks": "Discuss reactive patterns; pitfalls and best practices.",
+      "urls": ""
+    },
+    {
+      "session": "16",
+      "topic": "Progress Test 1",
+      "learning_method": "Offline",
+      "lo": "CLO1, CLO2, CLO3",
+      "itu": "U",
+      "student_materials": "Progress Test 1",
+      "s_download": "",
+      "student_tasks": "Progress Test 1",
+      "urls": ""
+    },
+    {
+      "session": "17",
+      "topic": "UI Basics – Scaffold LayoutListView & Card/ListTile",
+      "learning_method": "Offline",
+      "lo": "CLO1",
+      "itu": "TU",
+      "student_materials": "M4 – UI Fundamentals. Reference: Ch.4 Widgets, Layouts, MaterialApp, lists & pickers.",
+      "s_download": "",
+      "student_tasks": "Demonstrate composition; spacing best practices.Code-along list patterns; performance considerations.",
+      "urls": ""
+    },
+    {
+      "session": "18",
+      "topic": "Interactive Widgets",
+      "learning_method": "Offline",
+      "lo": "CLO1, CLO3",
+      "itu": "TU",
+      "student_materials": "M4 – UI Fundamentals. Reference: Ch.4 Widgets, Layouts, MaterialApp, lists & pickers.",
+      "s_download": "",
+      "student_tasks": "Handle onChanged; explain ephemeral vs app state.",
+      "urls": ""
+    },
+    {
+      "session": "19",
+      "topic": "Pickers – Date/Time",
+      "learning_method": "Offline",
+      "lo": "CLO3",
+      "itu": "TU",
+      "student_materials": "M4 – UI Fundamentals. Reference: Ch.4 Widgets, Layouts, MaterialApp, lists & pickers.",
+      "s_download": "",
+      "student_tasks": "Show pickers & result handling; UX guidance.",
+      "urls": ""
+    },
+    {
+      "session": "20",
+      "topic": "Theming & UI Polishing",
+      "learning_method": "Offline",
+      "lo": "CLO3",
+      "itu": "TU",
+      "student_materials": "M4 – UI Fundamentals. Reference: Ch.4 Widgets, Layouts, MaterialApp, lists & pickers.",
+      "s_download": "",
+      "student_tasks": "Review theming knobs; show common polish tips.",
+      "urls": ""
+    },
+    {
+      "session": "21",
+      "topic": "Navigator 1.0 – Push/Pop",
+      "learning_method": "Offline",
+      "lo": "CLO1",
+      "itu": "TU",
+      "student_materials": "M5 – Navigation & State Management. Reference: Ch.8 Navigator 1.0/2.0, named routes, deep links, basic state. Session focus: Part 1.",
+      "s_download": "",
+      "student_tasks": "Explain Navigator stack; demo simple flow.",
+      "urls": ""
+    },
+    {
+      "session": "22",
+      "topic": "Named Routes & Arguments",
+      "learning_method": "Offline",
+      "lo": "CLO1, CLO6",
+      "itu": "TU",
+      "student_materials": "M5 – Navigation & State Management. Reference: Ch.8 Navigator 1.0/2.0, named routes, deep links, basic state.",
+      "s_download": "",
+      "student_tasks": "Show RouteSettings & argument handling patterns.",
+      "urls": ""
+    },
+    {
+      "session": "23",
+      "topic": "Navigator 2.0 Concepts",
+      "learning_method": "Offline",
+      "lo": "CLO1, CLO7",
+      "itu": "TU",
+      "student_materials": "M5 – Navigation & State Management. Reference: Ch.8 Navigator 1.0/2.0, named routes, deep links, basic state.",
+      "s_download": "",
+      "student_tasks": "Present RouterDelegate/RouteInformationParser overview.",
+      "urls": ""
+    },
+    {
+      "session": "24",
+      "topic": "Android Deep Linking",
+      "learning_method": "Offline",
+      "lo": "CLO1, CLO5",
+      "itu": "TU",
+      "student_materials": "M5 – Navigation & State Management. Reference: Ch.8 Navigator 1.0/2.0, named routes, deep links, basic state.",
+      "s_download": "",
+      "student_tasks": "Walk-through manifest intent-filters; test live.",
+      "urls": ""
+    },
+    {
+      "session": "25",
+      "topic": "iOS URL Scheme Navigation",
+      "learning_method": "Offline",
+      "lo": "CLO1",
+      "itu": "TU",
+      "student_materials": "M5 – Navigation & State Management. Reference: Ch.8 Navigator 1.0/2.0, named routes, deep links, basic state.",
+      "s_download": "",
+      "student_tasks": "Guide Info.plist & associated domains; QA routing.Assign and confirm project topics",
+      "urls": ""
+    },
+    {
+      "session": "26",
+      "topic": "Flex Layout (Row/Column)",
+      "learning_method": "Offline",
+      "lo": "CLO1, CLO3",
+      "itu": "TU",
+      "student_materials": "M6 – Layout & Responsive Design. Reference: Ch.5–6 Advanced layouts (Grid/Stack/Flex), responsive patterns.",
+      "s_download": "",
+      "student_tasks": "Explain constraints; demonstrate Flex factors.",
+      "urls": ""
+    },
+    {
+      "session": "27",
+      "topic": "GridView & Stack",
+      "learning_method": "Offline",
+      "lo": "CLO1, CLO3",
+      "itu": "TU",
+      "student_materials": "M6 – Layout & Responsive Design. Reference: Ch.5–6 Advanced layouts (Grid/Stack/Flex), responsive patterns.",
+      "s_download": "",
+      "student_tasks": "Show grid/stack patterns; layering tips.",
+      "urls": ""
+    },
+    {
+      "session": "28",
+      "topic": "LayoutBuilder & MediaQuery",
+      "learning_method": "Offline",
+      "lo": "CLO5",
+      "itu": "TU",
+      "student_materials": "M6 – Layout & Responsive Design. Reference: Ch.5–6 Advanced layouts (Grid/Stack/Flex), responsive patterns.",
+      "s_download": "",
+      "student_tasks": "Introduce breakpoints; compute layout decisions.",
+      "urls": ""
+    },
+    {
+      "session": "29",
+      "topic": "Responsive UI Design",
+      "learning_method": "Offline",
+      "lo": "CLO7, CLO2",
+      "itu": "TU",
+      "student_materials": "M6 – Layout & Responsive Design. Reference: Ch.5–6 Advanced layouts (Grid/Stack/Flex), responsive patterns.",
+      "s_download": "",
+      "student_tasks": "Critique responsive solutions; UX considerations.",
+      "urls": ""
+    },
+    {
+      "session": "30",
+      "topic": "Responsive Refactor",
+      "learning_method": "Offline",
+      "lo": "CLO1, CLO5",
+      "itu": "TU",
+      "student_materials": "M6 – Layout & Responsive Design. Reference: Ch.5–6 Advanced layouts (Grid/Stack/Flex), responsive patterns.",
+      "s_download": "",
+      "student_tasks": "Refactor example; code review and feedback.",
+      "urls": ""
+    },
+    {
+      "session": "31",
+      "topic": "Progress Test 2",
+      "learning_method": "Offline",
+      "lo": "CLO3, CLO4, CLO5",
+      "itu": "U",
+      "student_materials": "Progress Test 2",
+      "s_download": "",
+      "student_tasks": "Progress Test 2",
+      "urls": ""
+    },
+    {
+      "session": "32",
+      "topic": "Forms & ControllersValidation & Errors",
+      "learning_method": "Offline",
+      "lo": "CLO1",
+      "itu": "TU",
+      "student_materials": "M7 – Forms & Validation. Reference: Chapter 4 (Basic Widgets) & Chapter 14 (User Input)Chapter 4 (Form Widgets) & Chapter 14 (Validation UX)",
+      "s_download": "",
+      "student_tasks": "Explain controllers lifecycle; disposal rules.Demonstrate validation patterns; UX for errors.",
+      "urls": ""
+    },
+    {
+      "session": "33",
+      "topic": "Submit Flow & Data",
+      "learning_method": "Offline",
+      "lo": "CLO1",
+      "itu": "TU",
+      "student_materials": "M7 – Forms & Validation. Reference: Chapter 14 (Input Flow), Chapter 6 (State Concepts)",
+      "s_download": "",
+      "student_tasks": "Show submit flow; data handling & confirmation.",
+      "urls": ""
+    },
+    {
+      "session": "34",
+      "topic": "Form Draft Save",
+      "learning_method": "Offline",
+      "lo": "CLO1",
+      "itu": "TU",
+      "student_materials": "M7 – Forms & Validation. Reference: Chapter 6 (State Basics) & Chapter 14 (Input Events)",
+      "s_download": "",
+      "student_tasks": "Discuss draft-saving approaches; data model notes.",
+      "urls": ""
+    },
+    {
+      "session": "35",
+      "topic": "Focus & Keyboard Actions",
+      "learning_method": "Offline",
+      "lo": "CLO1, CLO7",
+      "itu": "TU",
+      "student_materials": "M7 – Forms & Validation. Reference: Chapter 14 (Focus, Keyboard Actions)",
+      "s_download": "",
+      "student_tasks": "Show focus traversal; accessibility considerations.",
+      "urls": ""
+    },
+    {
+      "session": "36",
+      "topic": "HTTP Request & JSON Parsing",
+      "learning_method": "Offline",
+      "lo": "CLO2, CLO7",
+      "itu": "TU",
+      "student_materials": "M8 – Networking & JSON API. Reference: Ch.9 HTTP/REST, JSON parsing, FutureBuilder.",
+      "s_download": "",
+      "student_tasks": "Explain HTTP basics; JSON to model mapping.",
+      "urls": ""
+    },
+    {
+      "session": "37",
+      "topic": "FutureBuilder & List Rendering",
+      "learning_method": "Offline",
+      "lo": "CLO1, CLO2",
+      "itu": "TU",
+      "student_materials": "M8 – Networking & JSON API. Reference: Ch.9 HTTP/REST, JSON parsing, FutureBuilder.",
+      "s_download": "",
+      "student_tasks": "Live-code FutureBuilder; list rendering tips.",
+      "urls": ""
+    },
+    {
+      "session": "38",
+      "topic": "Error/Loading UI",
+      "learning_method": "Offline",
+      "lo": "CLO1, CLO2",
+      "itu": "TU",
+      "student_materials": "M8 – Networking & JSON API. Reference: Ch.9 HTTP/REST, JSON parsing, FutureBuilder.",
+      "s_download": "",
+      "student_tasks": "Error/empty/loading design; UX standards.",
+      "urls": ""
+    },
+    {
+      "session": "39",
+      "topic": "Detail Screen via API ID",
+      "learning_method": "Offline",
+      "lo": "CLO1, CLO6",
+      "itu": "TU",
+      "student_materials": "M8 – Networking & JSON API. Reference: Ch.9 HTTP/REST, JSON parsing, FutureBuilder.",
+      "s_download": "",
+      "student_tasks": "Route to detail by ID; data flow sanity checks.",
+      "urls": ""
+    },
+    {
+      "session": "40",
+      "topic": "Retry & Caching",
+      "learning_method": "Offline",
+      "lo": "CLO1",
+      "itu": "TU",
+      "student_materials": "M8 – Networking & JSON API. Reference: Ch.9 HTTP/REST, JSON parsing, FutureBuilde",
+      "s_download": "",
+      "student_tasks": "Discuss caching layers; avoiding redundant calls.",
+      "urls": ""
+    },
+    {
+      "session": "41",
+      "topic": "SharedPreferences Basics",
+      "learning_method": "Offline",
+      "lo": "CLO1",
+      "itu": "TU",
+      "student_materials": "M9 – Local Storage & Persistence. Reference: Ch.10 SharedPreferences, SQLite/Hive, caching..",
+      "s_download": "",
+      "student_tasks": "Contrast prefs vs database; data lifecycle.",
+      "urls": ""
+    },
+    {
+      "session": "42",
+      "topic": "Local DB (SQLite/Hive)",
+      "learning_method": "Offline",
+      "lo": "CLO1",
+      "itu": "TU",
+      "student_materials": "M9 – Local Storage & Persistence. Reference: Ch.10 SharedPreferences, SQLite/Hive, caching.",
+      "s_download": "",
+      "student_tasks": "Schema modeling; CRUD operations overview.",
+      "urls": ""
+    },
+    {
+      "session": "43",
+      "topic": "Persistent List Rendering",
+      "learning_method": "Offline",
+      "lo": "CLO3, CLO5",
+      "itu": "TU",
+      "student_materials": "M9 – Local Storage & Persistence. Reference: Ch.10 SharedPreferences, SQLite/Hive, caching.",
+      "s_download": "",
+      "student_tasks": "Render persisted data; integrity checks.",
+      "urls": ""
+    },
+    {
+      "session": "44",
+      "topic": "Sync-Up Concept",
+      "learning_method": "Offline",
+      "lo": "CLO1",
+      "itu": "TU",
+      "student_materials": "M9 – Local Storage & Persistence. Reference: Ch.10 SharedPreferences, SQLite/Hive, caching.",
+      "s_download": "",
+      "student_tasks": "Discuss sync patterns; conflict resolution basics.",
+      "urls": ""
+    },
+    {
+      "session": "45",
+      "topic": "Export/Backup JSON",
+      "learning_method": "Offline",
+      "lo": "CLO1",
+      "itu": "TU",
+      "student_materials": "M9 – Local Storage & Persistence. Reference: Ch.10 SharedPreferences, SQLite/Hive, caching.",
+      "s_download": "",
+      "student_tasks": "Show export concept; data portability discussion.",
+      "urls": ""
+    },
+    {
+      "session": "46",
+      "topic": "Login Form & Mock Auth",
+      "learning_method": "Offline",
+      "lo": "LO1, CLO2",
+      "itu": "TU",
+      "student_materials": "M10 – Authentication & User Management. Reference: Ch.11 Auth basics, session, guarded routes.",
+      "s_download": "",
+      "student_tasks": "Explain auth concepts; security caveats.",
+      "urls": ""
+    },
+    {
+      "session": "47",
+      "topic": "Session State Management",
+      "learning_method": "Offline",
+      "lo": "CLO3",
+      "itu": "TU",
+      "student_materials": "M10 – Authentication & User Management. Reference: Ch.11 Auth basics, session, guarded routes.",
+      "s_download": "",
+      "student_tasks": "Session/state handling; update UI accordingly.",
+      "urls": ""
+    },
+    {
+      "session": "48",
+      "topic": "Guarded Routes",
+      "learning_method": "Offline",
+      "lo": "CLO2",
+      "itu": "TU",
+      "student_materials": "M10 – Authentication & User Management. Reference: Ch.11 Auth basics, session, guarded routes.",
+      "s_download": "",
+      "student_tasks": "Route guarding patterns; navigation decisions.",
+      "urls": ""
+    },
+    {
+      "session": "49",
+      "topic": "Token Persistence (Mock)",
+      "learning_method": "Offline",
+      "lo": "CLO1",
+      "itu": "TU",
+      "student_materials": "M10 – Authentication & User Management. Reference: Ch.11 Auth basics, session, guarded routes.",
+      "s_download": "",
+      "student_tasks": "Persist token mock; discuss security limits.",
+      "urls": ""
+    },
+    {
+      "session": "50",
+      "topic": "Integrated Auth Flow",
+      "learning_method": "Offline",
+      "lo": "CLO1",
+      "itu": "TU",
+      "student_materials": "M10 – Authentication & User Management. Reference: Ch.11 Auth basics, session, guarded routes. Session focus: Part 5.",
+      "s_download": "",
+      "student_tasks": "End-to-end demo; troubleshooting common issues.",
+      "urls": ""
+    },
+    {
+      "session": "51",
+      "topic": "Unit Tests for Project Features",
+      "learning_method": "Offline",
+      "lo": "LO1, CLO2",
+      "itu": "TU",
+      "student_materials": "M11 – Testing & Debugging. Core concepts from Ch.12.",
+      "s_download": "",
+      "student_tasks": "Explain testing setup in project context; assist integration.",
+      "urls": ""
+    },
+    {
+      "session": "52",
+      "topic": "Widget Tests & Debugging",
+      "learning_method": "Offline",
+      "lo": "CLO7",
+      "itu": "TU",
+      "student_materials": "M11 – Testing & Debugging. Core debugging tools.",
+      "s_download": "",
+      "student_tasks": "Review test coverage; show debugging techniques.",
+      "urls": ""
+    },
+    {
+      "session": "53",
+      "topic": "Progress Test 3",
+      "learning_method": "Offline",
+      "lo": "CLO5, CLO6, CLO7",
+      "itu": "U",
+      "student_materials": "Progress Test 3",
+      "s_download": "",
+      "student_tasks": "Progress Test 3",
+      "urls": ""
+    },
+    {
+      "session": "54",
+      "topic": "Sprint 3 ReviewRefactoring & Polishing",
+      "learning_method": "Offline",
+      "lo": "CLO1, CLO6",
+      "itu": "TU",
+      "student_materials": "Project Work – Sprint 3 Review.Project Work – Polishing & Refactoring.",
+      "s_download": "",
+      "student_tasks": "Conduct sprint review; give improvement feedback.Provide code review session; guide refactoring priorities.",
+      "urls": ""
+    },
+    {
+      "session": "55",
+      "topic": "User Testing & Report",
+      "learning_method": "Offline",
+      "lo": "CLO1",
+      "itu": "TU",
+      "student_materials": "Project Work – User Testing.",
+      "s_download": "",
+      "student_tasks": "Supervise test execution; monitor report documentation.",
+      "urls": ""
+    },
+    {
+      "session": "56",
+      "topic": "Build & Release Config",
+      "learning_method": "Offline",
+      "lo": "CLO1",
+      "itu": "TU",
+      "student_materials": "M12 – Build & Release. Ch.13 (condensed).",
+      "s_download": "",
+      "student_tasks": "Demonstrate build process (debug/release).",
+      "urls": ""
+    },
+    {
+      "session": "57",
+      "topic": "Packaging & Release Build",
+      "learning_method": "Offline",
+      "lo": "CLO1",
+      "itu": "TU",
+      "student_materials": "Project Work – Packaging.",
+      "s_download": "",
+      "student_tasks": "Guide deployment process; validate final artifacts.",
+      "urls": ""
+    },
+    {
+      "session": "58",
+      "topic": "Presentation Rehearsal",
+      "learning_method": "Offline",
+      "lo": "CLO1",
+      "itu": "TU",
+      "student_materials": "Project Work – Presentation Rehearsal.",
+      "s_download": "",
+      "student_tasks": "Mentor on presentation skills; storytelling & flow.",
+      "urls": ""
+    },
+    {
+      "session": "59",
+      "topic": "Mock Defense",
+      "learning_method": "Offline",
+      "lo": "CLO1",
+      "itu": "TU",
+      "student_materials": "Final Evaluation – Mock Defense.",
+      "s_download": "",
+      "student_tasks": "Act as evaluator; simulate defense Q&A.",
+      "urls": ""
+    },
+    {
+      "session": "60",
+      "topic": "Final Project Submission",
+      "learning_method": "Offline",
+      "lo": "CLO1",
+      "itu": "U",
+      "student_materials": "Final Project Presentation",
+      "s_download": "",
+      "student_tasks": "Grade presentation; summarize learning outcomes.",
+      "urls": ""
+    }
+  ],
+  "constructive_questions": [],
+  "assessment_scheme": [
+    {
+      "category": "Practical Exam",
+      "type": "on-going",
+      "part": "1",
+      "weight": "25.0%",
+      "completion_criteria": "4",
+      "duration": "90'/each",
+      "clo": "All CLOs",
+      "question_type": "Write a program",
+      "no_question": "By instructor, in class",
+      "knowledge_and_skill": "studied chapters knowledge and skills",
+      "grading_guide": "Students prepare personal computer with Android studio and virtual machines installed. The exam proctor will monitor and grade exam directly in the exam room.",
+      "note": "1 x 25% =25% of total progress mark (each student write a small program)"
+    },
+    {
+      "category": "Progress Test",
+      "type": "on-going",
+      "part": "3",
+      "weight": "15.0%",
+      "completion_criteria": ">0",
+      "duration": "Option 1: 30'; Option 2 (For Constructivism Approach only): Follow lecturer's proposal",
+      "clo": "PT1: CLO1, CLO2, CLO3; PT2: CLO3, CLO4, CLO5;PT3: CLO5 CLO6,CLO7",
+      "question_type": "Option 1: Multi-choice Option 2 (For Constructivism Approach only): Follow lecturer's proposal",
+      "no_question": "Option 1:25; Option 2 (For Constructivism Approach only): Follow lecturer's proposal",
+      "knowledge_and_skill": "studied chapters knowledge and skills",
+      "grading_guide": "by instructor",
+      "note": "3 x 5% = 15% of total progress mark"
+    },
+    {
+      "category": "Project",
+      "type": "on-going",
+      "part": "1",
+      "weight": "30.0%",
+      "completion_criteria": ">0",
+      "duration": "Option 1: At home; Option 2 (For Constructivism Approach only): Follow lecturer's proposal",
+      "clo": "All CLOs",
+      "question_type": "Option 1: N/A; Option 2 (For Constructivism Approach only): Follow lecturer's proposal",
+      "no_question": "Option 1: N/A; Option 2 (For Constructivism Approach only): Follow lecturer's proposal",
+      "knowledge_and_skill": "All chapters; knowledge and skills of mobile programming",
+      "grading_guide": "by instructor",
+      "note": "(20% product, 10% presentation); each student chooses project by himself"
+    },
+    {
+      "category": "Final exam",
+      "type": "Final exam",
+      "part": "1",
+      "weight": "30.0%",
+      "completion_criteria": "4",
+      "duration": "60'",
+      "clo": "All CLOs",
+      "question_type": "Multi-Choice",
+      "no_question": "50",
+      "knowledge_and_skill": "All chapters; knowledge and skills of mobile programming",
+      "grading_guide": "by exam board",
+      "note": ""
+    }
+  ],
+  "references": [
+    "1402/QĐ-ĐHFPT dated 12/12/2025"
+  ]
+}

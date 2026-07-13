@@ -1,0 +1,630 @@
+{
+  "version": 1,
+  "updated_at": "2026-07-12T13:37:26+07:00",
+  "subjects": {
+    "10361": {
+      "syl_id": "10361",
+      "subject_code": "EXE201",
+      "status": "crawled",
+      "crawled_at": "2026-07-12T13:03:39",
+      "method": "migrated",
+      "files": {
+        "json": "data/subjects/EXE201/20260601_110248_EXE201_details.json",
+        "xlsx": "data/subjects/EXE201/20260601_110248_EXE201_details.xlsx"
+      },
+      "error": null
+    },
+    "12588": {
+      "syl_id": "12588",
+      "subject_code": "PRN232",
+      "status": "crawled",
+      "crawled_at": "2026-07-12T13:03:39",
+      "method": "migrated",
+      "files": {
+        "json": "data/subjects/PRN232/20260522_223218_PRN232_details.json",
+        "xlsx": "data/subjects/PRN232/20260522_223218_PRN232_details.xlsx"
+      },
+      "error": null
+    },
+    "10358": {
+      "syl_id": "10358",
+      "subject_code": "EXE101",
+      "status": "crawled",
+      "crawled_at": "2026-07-12T13:03:39",
+      "method": "migrated",
+      "files": {
+        "json": "data/subjects/EXE101/EXE101_details.json",
+        "xlsx": "data/subjects/EXE101/20260601_110246_EXE101_details.xlsx"
+      },
+      "error": null
+    },
+    "14185": {
+      "syl_id": "14185",
+      "subject_code": "EXE402",
+      "status": "crawled",
+      "crawled_at": "2026-07-12T13:22:08",
+      "method": "cookie",
+      "files": {
+        "json": "data/subjects/EXE402/20260712_132206_EXE402_details.json",
+        "xlsx": "data/subjects/EXE402/20260712_132206_EXE402_details.xlsx"
+      },
+      "error": null
+    },
+    "13592": {
+      "syl_id": "13592",
+      "subject_code": "EXE401",
+      "status": "crawled",
+      "crawled_at": "2026-07-12T13:22:08",
+      "method": "cookie",
+      "files": {
+        "json": "data/subjects/EXE401/20260712_132208_EXE401_details.json",
+        "xlsx": "data/subjects/EXE401/20260712_132208_EXE401_details.xlsx"
+      },
+      "error": null
+    },
+    "13540": {
+      "syl_id": "13540",
+      "subject_code": "VOV114",
+      "status": "crawled",
+      "crawled_at": "2026-07-12T13:36:28",
+      "method": "cookie",
+      "files": {
+        "json": "data/subjects/VOV114/20260712_133608_VOV114_details.json",
+        "xlsx": "data/subjects/VOV114/20260712_133608_VOV114_details.xlsx"
+      },
+      "error": null
+    },
+    "13539": {
+      "syl_id": "13539",
+      "subject_code": "VOV124",
+      "status": "crawled",
+      "crawled_at": "2026-07-12T13:36:28",
+      "method": "cookie",
+      "files": {
+        "json": "data/subjects/VOV124/20260712_133608_VOV124_details.json",
+        "xlsx": "data/subjects/VOV124/20260712_133608_VOV124_details.xlsx"
+      },
+      "error": null
+    },
+    "13537": {
+      "syl_id": "13537",
+      "subject_code": "VOV134",
+      "status": "crawled",
+      "crawled_at": "2026-07-12T13:36:28",
+      "method": "cookie",
+      "files": {
+        "json": "data/subjects/VOV134/20260712_133609_VOV134_details.json",
+        "xlsx": "data/subjects/VOV134/20260712_133609_VOV134_details.xlsx"
+      },
+      "error": null
+    },
+    "14010": {
+      "syl_id": "14010",
+      "subject_code": "TRS601",
+      "status": "crawled",
+      "crawled_at": "2026-07-12T13:36:28",
+      "method": "cookie",
+      "files": {
+        "json": "data/subjects/TRS601/20260712_133613_TRS601_details.json",
+        "xlsx": "data/subjects/TRS601/20260712_133613_TRS601_details.xlsx"
+      },
+      "error": null
+    },
+    "13151": {
+      "syl_id": "13151",
+      "subject_code": "OTP101",
+      "status": "crawled",
+      "crawled_at": "2026-07-12T13:36:28",
+      "method": "cookie",
+      "files": {
+        "json": "data/subjects/OTP101/20260712_133615_OTP101_details.json",
+        "xlsx": "data/subjects/OTP101/20260712_133615_OTP101_details.xlsx"
+      },
+      "error": null
+    },
+    "11585": {
+      "syl_id": "11585",
+      "subject_code": "CSI106",
+      "status": "crawled",
+      "crawled_at": "2026-07-12T13:36:28",
+      "method": "cookie",
+      "files": {
+        "json": "data/subjects/CSI106/20260712_133616_CSI106_details.json",
+        "xlsx": "data/subjects/CSI106/20260712_133616_CSI106_details.xlsx"
+      },
+      "error": null
+    },
+    "12594": {
+      "syl_id": "12594",
+      "subject_code": "SSL101C",
+      "status": "crawled",
+      "crawled_at": "2026-07-12T13:36:28",
+      "method": "cookie",
+      "files": {
+        "json": "data/subjects/SSL101C/20260712_133619_SSL101C_details.json",
+        "xlsx": "data/subjects/SSL101C/20260712_133619_SSL101C_details.xlsx"
+      },
+      "error": null
+    },
+    "12223": {
+      "syl_id": "12223",
+      "subject_code": "PRF192",
+      "status": "crawled",
+      "crawled_at": "2026-07-12T13:36:28",
+      "method": "cookie",
+      "files": {
+        "json": "data/subjects/PRF192/20260712_133619_PRF192_details.json",
+        "xlsx": "data/subjects/PRF192/20260712_133619_PRF192_details.xlsx"
+      },
+      "error": null
+    },
+    "13137": {
+      "syl_id": "13137",
+      "subject_code": "MAE101",
+      "status": "crawled",
+      "crawled_at": "2026-07-12T13:36:28",
+      "method": "cookie",
+      "files": {
+        "json": "data/subjects/MAE101/20260712_133622_MAE101_details.json",
+        "xlsx": "data/subjects/MAE101/20260712_133622_MAE101_details.xlsx"
+      },
+      "error": null
+    },
+    "13245": {
+      "syl_id": "13245",
+      "subject_code": "CEA201",
+      "status": "crawled",
+      "crawled_at": "2026-07-12T13:36:28",
+      "method": "cookie",
+      "files": {
+        "json": "data/subjects/CEA201/20260712_133623_CEA201_details.json",
+        "xlsx": "data/subjects/CEA201/20260712_133623_CEA201_details.xlsx"
+      },
+      "error": null
+    },
+    "12038": {
+      "syl_id": "12038",
+      "subject_code": "PRO192",
+      "status": "crawled",
+      "crawled_at": "2026-07-12T13:36:28",
+      "method": "cookie",
+      "files": {
+        "json": "data/subjects/PRO192/20260712_133623_PRO192_details.json",
+        "xlsx": "data/subjects/PRO192/20260712_133623_PRO192_details.xlsx"
+      },
+      "error": null
+    },
+    "13144": {
+      "syl_id": "13144",
+      "subject_code": "MAD101",
+      "status": "crawled",
+      "crawled_at": "2026-07-12T13:36:28",
+      "method": "cookie",
+      "files": {
+        "json": "data/subjects/MAD101/20260712_133624_MAD101_details.json",
+        "xlsx": "data/subjects/MAD101/20260712_133624_MAD101_details.xlsx"
+      },
+      "error": null
+    },
+    "13166": {
+      "syl_id": "13166",
+      "subject_code": "OSG202",
+      "status": "crawled",
+      "crawled_at": "2026-07-12T13:36:28",
+      "method": "cookie",
+      "files": {
+        "json": "data/subjects/OSG202/20260712_133626_OSG202_details.json",
+        "xlsx": "data/subjects/OSG202/20260712_133626_OSG202_details.xlsx"
+      },
+      "error": null
+    },
+    "13272": {
+      "syl_id": "13272",
+      "subject_code": "NWC204",
+      "status": "crawled",
+      "crawled_at": "2026-07-12T13:36:28",
+      "method": "cookie",
+      "files": {
+        "json": "data/subjects/NWC204/20260712_133628_NWC204_details.json",
+        "xlsx": "data/subjects/NWC204/20260712_133628_NWC204_details.xlsx"
+      },
+      "error": null
+    },
+    "11845": {
+      "syl_id": "11845",
+      "subject_code": "SSG104",
+      "status": "crawled",
+      "crawled_at": "2026-07-12T13:36:57",
+      "method": "cookie",
+      "files": {
+        "json": "data/subjects/SSG104/20260712_133643_SSG104_details.json",
+        "xlsx": "data/subjects/SSG104/20260712_133643_SSG104_details.xlsx"
+      },
+      "error": null
+    },
+    "10368": {
+      "syl_id": "10368",
+      "subject_code": "CSD201",
+      "status": "crawled",
+      "crawled_at": "2026-07-12T13:36:57",
+      "method": "cookie",
+      "files": {
+        "json": "data/subjects/CSD201/20260712_133644_CSD201_details.json",
+        "xlsx": "data/subjects/CSD201/20260712_133644_CSD201_details.xlsx"
+      },
+      "error": null
+    },
+    "10200": {
+      "syl_id": "10200",
+      "subject_code": "CSD301",
+      "status": "crawled",
+      "crawled_at": "2026-07-12T13:36:57",
+      "method": "cookie",
+      "files": {
+        "json": "data/subjects/CSD301/20260712_133645_CSD301_details.json",
+        "xlsx": "data/subjects/CSD301/20260712_133645_CSD301_details.xlsx"
+      },
+      "error": null
+    },
+    "12039": {
+      "syl_id": "12039",
+      "subject_code": "DBI202",
+      "status": "crawled",
+      "crawled_at": "2026-07-12T13:36:57",
+      "method": "cookie",
+      "files": {
+        "json": "data/subjects/DBI202/20260712_133646_DBI202_details.json",
+        "xlsx": "data/subjects/DBI202/20260712_133646_DBI202_details.xlsx"
+      },
+      "error": null
+    },
+    "13813": {
+      "syl_id": "13813",
+      "subject_code": "CSD203",
+      "status": "crawled",
+      "crawled_at": "2026-07-12T13:36:57",
+      "method": "cookie",
+      "files": {
+        "json": "data/subjects/CSD203/20260712_133646_CSD203_details.json",
+        "xlsx": "data/subjects/CSD203/20260712_133646_CSD203_details.xlsx"
+      },
+      "error": null
+    },
+    "10021": {
+      "syl_id": "10021",
+      "subject_code": "LAB211",
+      "status": "crawled",
+      "crawled_at": "2026-07-12T13:36:57",
+      "method": "cookie",
+      "files": {
+        "json": "data/subjects/LAB211/20260712_133647_LAB211_details.json",
+        "xlsx": "data/subjects/LAB211/20260712_133647_LAB211_details.xlsx"
+      },
+      "error": null
+    },
+    "14232": {
+      "syl_id": "14232",
+      "subject_code": "JPD113",
+      "status": "crawled",
+      "crawled_at": "2026-07-12T13:36:57",
+      "method": "cookie",
+      "files": {
+        "json": "data/subjects/JPD113/20260712_133648_JPD113_details.json",
+        "xlsx": "data/subjects/JPD113/20260712_133648_JPD113_details.xlsx"
+      },
+      "error": null
+    },
+    "13172": {
+      "syl_id": "13172",
+      "subject_code": "WED201C",
+      "status": "crawled",
+      "crawled_at": "2026-07-12T13:36:57",
+      "method": "cookie",
+      "files": {
+        "json": "data/subjects/WED201C/20260712_133649_WED201C_details.json",
+        "xlsx": "data/subjects/WED201C/20260712_133649_WED201C_details.xlsx"
+      },
+      "error": null
+    },
+    "14224": {
+      "syl_id": "14224",
+      "subject_code": "SWE201C",
+      "status": "crawled",
+      "crawled_at": "2026-07-12T13:36:57",
+      "method": "cookie",
+      "files": {
+        "json": "data/subjects/SWE201C/20260712_133650_SWE201C_details.json",
+        "xlsx": "data/subjects/SWE201C/20260712_133650_SWE201C_details.xlsx"
+      },
+      "error": null
+    },
+    "14233": {
+      "syl_id": "14233",
+      "subject_code": "JPD123",
+      "status": "crawled",
+      "crawled_at": "2026-07-12T13:36:57",
+      "method": "cookie",
+      "files": {
+        "json": "data/subjects/JPD123/20260712_133652_JPD123_details.json",
+        "xlsx": "data/subjects/JPD123/20260712_133652_JPD123_details.xlsx"
+      },
+      "error": null
+    },
+    "12400": {
+      "syl_id": "12400",
+      "subject_code": "IOT102",
+      "status": "crawled",
+      "crawled_at": "2026-07-12T13:36:57",
+      "method": "cookie",
+      "files": {
+        "json": "data/subjects/IOT102/20260712_133653_IOT102_details.json",
+        "xlsx": "data/subjects/IOT102/20260712_133653_IOT102_details.xlsx"
+      },
+      "error": null
+    },
+    "13165": {
+      "syl_id": "13165",
+      "subject_code": "PRJ301",
+      "status": "crawled",
+      "crawled_at": "2026-07-12T13:36:57",
+      "method": "cookie",
+      "files": {
+        "json": "data/subjects/PRJ301/20260712_133654_PRJ301_details.json",
+        "xlsx": "data/subjects/PRJ301/20260712_133654_PRJ301_details.xlsx"
+      },
+      "error": null
+    },
+    "13136": {
+      "syl_id": "13136",
+      "subject_code": "MAS291",
+      "status": "crawled",
+      "crawled_at": "2026-07-12T13:36:57",
+      "method": "cookie",
+      "files": {
+        "json": "data/subjects/MAS291/20260712_133656_MAS291_details.json",
+        "xlsx": "data/subjects/MAS291/20260712_133656_MAS291_details.xlsx"
+      },
+      "error": null
+    },
+    "14176": {
+      "syl_id": "14176",
+      "subject_code": "SWR302",
+      "status": "crawled",
+      "crawled_at": "2026-07-12T13:36:57",
+      "method": "cookie",
+      "files": {
+        "json": "data/subjects/SWR302/20260712_133657_SWR302_details.json",
+        "xlsx": "data/subjects/SWR302/20260712_133657_SWR302_details.xlsx"
+      },
+      "error": null
+    },
+    "14178": {
+      "syl_id": "14178",
+      "subject_code": "SWT301",
+      "status": "crawled",
+      "crawled_at": "2026-07-12T13:37:16",
+      "method": "cookie",
+      "files": {
+        "json": "data/subjects/SWT301/20260712_133706_SWT301_details.json",
+        "xlsx": "data/subjects/SWT301/20260712_133706_SWT301_details.xlsx"
+      },
+      "error": null
+    },
+    "14177": {
+      "syl_id": "14177",
+      "subject_code": "SWP391",
+      "status": "crawled",
+      "crawled_at": "2026-07-12T13:37:16",
+      "method": "cookie",
+      "files": {
+        "json": "data/subjects/SWP391/20260712_133707_SWP391_details.json",
+        "xlsx": "data/subjects/SWP391/20260712_133707_SWP391_details.xlsx"
+      },
+      "error": null
+    },
+    "13164": {
+      "syl_id": "13164",
+      "subject_code": "WDU203C",
+      "status": "crawled",
+      "crawled_at": "2026-07-12T13:37:16",
+      "method": "cookie",
+      "files": {
+        "json": "data/subjects/WDU203C/20260712_133707_WDU203C_details.json",
+        "xlsx": "data/subjects/WDU203C/20260712_133707_WDU203C_details.xlsx"
+      },
+      "error": null
+    },
+    "12580": {
+      "syl_id": "12580",
+      "subject_code": "FER202",
+      "status": "crawled",
+      "crawled_at": "2026-07-12T13:37:16",
+      "method": "cookie",
+      "files": {
+        "json": "data/subjects/FER202/20260712_133708_FER202_details.json",
+        "xlsx": "data/subjects/FER202/20260712_133708_FER202_details.xlsx"
+      },
+      "error": null
+    },
+    "12547": {
+      "syl_id": "12547",
+      "subject_code": "ENW493C",
+      "status": "crawled",
+      "crawled_at": "2026-07-12T13:37:16",
+      "method": "cookie",
+      "files": {
+        "json": "data/subjects/ENW493C/20260712_133709_ENW493C_details.json",
+        "xlsx": "data/subjects/ENW493C/20260712_133709_ENW493C_details.xlsx"
+      },
+      "error": null
+    },
+    "12016": {
+      "syl_id": "12016",
+      "subject_code": "OJT202",
+      "status": "crawled",
+      "crawled_at": "2026-07-12T13:37:16",
+      "method": "cookie",
+      "files": {
+        "json": "data/subjects/OJT202/20260712_133710_OJT202_details.json",
+        "xlsx": "data/subjects/OJT202/20260712_133710_OJT202_details.xlsx"
+      },
+      "error": null
+    },
+    "12548": {
+      "syl_id": "12548",
+      "subject_code": "PMG201C",
+      "status": "crawled",
+      "crawled_at": "2026-07-12T13:37:16",
+      "method": "cookie",
+      "files": {
+        "json": "data/subjects/PMG201C/20260712_133711_PMG201C_details.json",
+        "xlsx": "data/subjects/PMG201C/20260712_133711_PMG201C_details.xlsx"
+      },
+      "error": null
+    },
+    "14179": {
+      "syl_id": "14179",
+      "subject_code": "SWD392",
+      "status": "crawled",
+      "crawled_at": "2026-07-12T13:37:16",
+      "method": "cookie",
+      "files": {
+        "json": "data/subjects/SWD392/20260712_133712_SWD392_details.json",
+        "xlsx": "data/subjects/SWD392/20260712_133712_SWD392_details.xlsx"
+      },
+      "error": null
+    },
+    "12175": {
+      "syl_id": "12175",
+      "subject_code": "SDN302",
+      "status": "crawled",
+      "crawled_at": "2026-07-12T13:37:16",
+      "method": "cookie",
+      "files": {
+        "json": "data/subjects/SDN302/20260712_133713_SDN302_details.json",
+        "xlsx": "data/subjects/SDN302/20260712_133713_SDN302_details.xlsx"
+      },
+      "error": null
+    },
+    "12848": {
+      "syl_id": "12848",
+      "subject_code": "MMA301",
+      "status": "crawled",
+      "crawled_at": "2026-07-12T13:37:16",
+      "method": "cookie",
+      "files": {
+        "json": "data/subjects/MMA301/20260712_133714_MMA301_details.json",
+        "xlsx": "data/subjects/MMA301/20260712_133714_MMA301_details.xlsx"
+      },
+      "error": null
+    },
+    "12037": {
+      "syl_id": "12037",
+      "subject_code": "WDP301",
+      "status": "crawled",
+      "crawled_at": "2026-07-12T13:37:16",
+      "method": "cookie",
+      "files": {
+        "json": "data/subjects/WDP301/20260712_133715_WDP301_details.json",
+        "xlsx": "data/subjects/WDP301/20260712_133715_WDP301_details.xlsx"
+      },
+      "error": null
+    },
+    "13822": {
+      "syl_id": "13822",
+      "subject_code": "PRM393",
+      "status": "crawled",
+      "crawled_at": "2026-07-12T13:37:16",
+      "method": "cookie",
+      "files": {
+        "json": "data/subjects/PRM393/20260712_133715_PRM393_details.json",
+        "xlsx": "data/subjects/PRM393/20260712_133715_PRM393_details.xlsx"
+      },
+      "error": null
+    },
+    "12637": {
+      "syl_id": "12637",
+      "subject_code": "ITE302C",
+      "status": "crawled",
+      "crawled_at": "2026-07-12T13:37:16",
+      "method": "cookie",
+      "files": {
+        "json": "data/subjects/ITE302C/20260712_133716_ITE302C_details.json",
+        "xlsx": "data/subjects/ITE302C/20260712_133716_ITE302C_details.xlsx"
+      },
+      "error": null
+    },
+    "13304": {
+      "syl_id": "13304",
+      "subject_code": "MLN122",
+      "status": "crawled",
+      "crawled_at": "2026-07-12T13:37:16",
+      "method": "cookie",
+      "files": {
+        "json": "data/subjects/MLN122/20260712_133716_MLN122_details.json",
+        "xlsx": "data/subjects/MLN122/20260712_133716_MLN122_details.xlsx"
+      },
+      "error": null
+    },
+    "13303": {
+      "syl_id": "13303",
+      "subject_code": "MLN111",
+      "status": "crawled",
+      "crawled_at": "2026-07-12T13:37:26",
+      "method": "cookie",
+      "files": {
+        "json": "data/subjects/MLN111/20260712_133724_MLN111_details.json",
+        "xlsx": "data/subjects/MLN111/20260712_133724_MLN111_details.xlsx"
+      },
+      "error": null
+    },
+    "13307": {
+      "syl_id": "13307",
+      "subject_code": "MLN131",
+      "status": "crawled",
+      "crawled_at": "2026-07-12T13:37:26",
+      "method": "cookie",
+      "files": {
+        "json": "data/subjects/MLN131/20260712_133725_MLN131_details.json",
+        "xlsx": "data/subjects/MLN131/20260712_133725_MLN131_details.xlsx"
+      },
+      "error": null
+    },
+    "13686": {
+      "syl_id": "13686",
+      "subject_code": "VNR202",
+      "status": "crawled",
+      "crawled_at": "2026-07-12T13:37:26",
+      "method": "cookie",
+      "files": {
+        "json": "data/subjects/VNR202/20260712_133725_VNR202_details.json",
+        "xlsx": "data/subjects/VNR202/20260712_133725_VNR202_details.xlsx"
+      },
+      "error": null
+    },
+    "14332": {
+      "syl_id": "14332",
+      "subject_code": "HCM202",
+      "status": "crawled",
+      "crawled_at": "2026-07-12T13:37:26",
+      "method": "cookie",
+      "files": {
+        "json": "data/subjects/HCM202/20260712_133726_HCM202_details.json",
+        "xlsx": "data/subjects/HCM202/20260712_133726_HCM202_details.xlsx"
+      },
+      "error": null
+    },
+    "14065": {
+      "syl_id": "14065",
+      "subject_code": "SEP490",
+      "status": "crawled",
+      "crawled_at": "2026-07-12T13:37:26",
+      "method": "cookie",
+      "files": {
+        "json": "data/subjects/SEP490/20260712_133726_SEP490_details.json",
+        "xlsx": "data/subjects/SEP490/20260712_133726_SEP490_details.xlsx"
+      },
+      "error": null
+    }
+  }
+}

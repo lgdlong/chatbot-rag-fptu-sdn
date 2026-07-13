@@ -1,5 +1,11 @@
 ## Onboarding frontend cho người mới
 
+> Status: Current
+> Audience: Operations / Developer
+> Canonical: No — operational guidance
+> Owner: Technical
+>
+
 Tài liệu này dành cho thành viên mới vào team frontend. Mục tiêu là giúp bạn hiểu dự án đủ nhanh để có thể cài đặt, chạy local, biết code nằm ở đâu, và bắt đầu sửa feature mà không phải đọc toàn bộ repository.
 
 Nếu bạn cần runbook full-stack chi tiết hơn, xem thêm [`running_guide.md`](./running_guide.md). Tài liệu này chỉ tập trung vào góc nhìn frontend và rút ngắn thời gian bắt đầu.

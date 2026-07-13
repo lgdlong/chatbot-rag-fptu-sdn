@@ -1,5 +1,11 @@
 # Technical docs
 
+> Status: Current
+> Audience: Developer
+> Canonical: Yes — technical reference
+> Owner: Technical
+>
+
 Developer-facing implementation docs live here.
 
 ## Sections

@@ -1,5 +1,11 @@
 # Operations docs
 
+> Status: Current
+> Audience: Operations / Developer
+> Canonical: No — operational guidance
+> Owner: Technical
+>
+
 Runbooks, setup notes, and deployment guidance live here.
 
 ## Start here

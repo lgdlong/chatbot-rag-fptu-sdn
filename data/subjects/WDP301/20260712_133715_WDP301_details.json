@@ -1,0 +1,1001 @@
+{
+  "metadata": {
+    "syllabus_id": "12037",
+    "syllabus_name": "Web Development Project_Dự án phát triển Web",
+    "syllabus_name_english": "Web Development Project",
+    "subject_code": "WDP301",
+    "credits": "3",
+    "degree_level": "Bachelor",
+    "time_allocation": "Study hour (150h) = 45h contact hours + 105h self-study",
+    "prerequisites": "FER201m, SDN301m",
+    "description": "'This course focuses on designing, developing, and integrating the basic Web-based system/application using React, React Native, Node.js, Express technologies (with the system requirements, technical framework & NoSQL (MongoDB) as asigned/agreed by the teacher)\nStudents are required to build the system with other 3-5 team members as appointed by the teacher.\nAfter the course, students will be able to achieve Fullstack web development proficiency with the following skills by practising with other members of the assigned team.\n- Proficiency in common web techniques and React, Node.js, Express, React Native development skills\n- Proficiency in front end skills (React, Bootstrap) require for industry\n- Analyze & design the solution following the object oriented models\n- Coordinate with the team to complete the works in the form of a project",
+    "student_tasks": "'- Build the team & select/define the project topic with arrangement/guide from the teacher\n- Select the team leader and using the FPT account (@fpt.edu.vn account) to setup/configure the project managemernt environment (sources, tasks, issues, milestones) on the GitLab & project documents management on the OneDrive.\n- Get the detailed assignment from the teacher, plan the project tasks, and execute the project accordingly\n- Students must attend at least 80% of contact slots in order to be accepted to the final presentation.\n- Student is responsible to do all exercises given by the teacher in class or at home and submit on time\n- Constantly follow the teacher's guides/references for up-to-date course information regarding assignment submission and feedback on assignments and project work.\n- Using the GitLab to collaborate in every phase of the project by all the team members",
+    "tools": "- One Drive or Google Drive for document management\n- GitLab (https://gitlab.com/) for issue and code version management\n- Visual Studio Code (https://code.visualstudio.com)\n- Internet",
+    "scoring_scale": "10",
+    "decision_no": "1286/QĐ-ĐHFPT dated 11/22/2024",
+    "is_approved": "True",
+    "note": "",
+    "min_avg_mark_to_pass": "5",
+    "is_active": "True",
+    "approved_date": "11/22/2024"
+  },
+  "materials": [
+    {
+      "description": "Guides & Templates (for Students & Teachers)",
+      "author": "",
+      "publisher": "",
+      "published_date": "",
+      "edition": "",
+      "isbn": "",
+      "is_main_material": "",
+      "is_hard_copy": "",
+      "is_online": "",
+      "note": "Bản mềm do FU biên soạn"
+    },
+    {
+      "description": "React Native for Mobile Development",
+      "author": "Akshat Paul, Abhishek Nalwaya",
+      "publisher": "Apress",
+      "published_date": "",
+      "edition": "2nd Edition",
+      "isbn": "978-1-4842-4454-8",
+      "is_main_material": "",
+      "is_hard_copy": "",
+      "is_online": "",
+      "note": ""
+    },
+    {
+      "description": "Pro MERN Stack - Full Stack Web App Development with Mongo, Express, React, and Node",
+      "author": "Vasan Subramanian",
+      "publisher": "Apress",
+      "published_date": "2019",
+      "edition": "2nd Edition",
+      "isbn": "978-1484243909",
+      "is_main_material": "",
+      "is_hard_copy": "",
+      "is_online": "",
+      "note": ""
+    },
+    {
+      "description": "Mastering React Native",
+      "author": "Bin Uzayr, Sufyan",
+      "publisher": "CRC Press",
+      "published_date": "2023",
+      "edition": "1st edition",
+      "isbn": "9781032315898",
+      "is_main_material": "",
+      "is_hard_copy": "",
+      "is_online": "",
+      "note": ""
+    },
+    {
+      "description": "https://www.coursera.org/learn/react-native-course",
+      "author": "",
+      "publisher": "Cousera",
+      "published_date": "",
+      "edition": "",
+      "isbn": "",
+      "is_main_material": "",
+      "is_hard_copy": "",
+      "is_online": "",
+      "note": ""
+    }
+  ],
+  "clos": [
+    {
+      "clo_name": "1",
+      "clo_details": "CLO1",
+      "lo_details": "Can study & analyze to understand the project requirements, actively make questions if necessary"
+    },
+    {
+      "clo_name": "2",
+      "clo_details": "CLO2",
+      "lo_details": "Understand and applying MVC design pattern, knowledges of OOP in designing code modules as well as designing database based on designed UI"
+    },
+    {
+      "clo_name": "3",
+      "clo_details": "CLO3",
+      "lo_details": "Proficiency in Web programming skills, based on the Java/DotNet programming language"
+    },
+    {
+      "clo_name": "4",
+      "clo_details": "CLO4",
+      "lo_details": "Exhibit professional working attitudes"
+    },
+    {
+      "clo_name": "5",
+      "clo_details": "CLO5",
+      "lo_details": "Practice oral presentation and inter-personal communications."
+    }
+  ],
+  "schedule": [
+    {
+      "session": "1",
+      "topic": "INITIATION PHASE - Subject introduction",
+      "learning_method": "Offline",
+      "lo": "LO1, LO2, LO3",
+      "itu": "I",
+      "student_materials": "This Syllabus, Student Materials",
+      "s_download": "WDP301",
+      "student_tasks": "Study materials, Q&A",
+      "urls": ""
+    },
+    {
+      "session": "2",
+      "topic": "- Subject introduction",
+      "learning_method": "Offline",
+      "lo": "LO1, LO2, LO3",
+      "itu": "I",
+      "student_materials": "This Syllabus, Student Materials",
+      "s_download": "WDP301",
+      "student_tasks": "Study materials, Q&A",
+      "urls": ""
+    },
+    {
+      "session": "3",
+      "topic": "- Project environment preparation",
+      "learning_method": "Offline",
+      "lo": "LO1, LO2, LO4",
+      "itu": "TU",
+      "student_materials": "This Syllabus, Student Materials",
+      "s_download": "",
+      "student_tasks": "Setup/Configure working environemnt",
+      "urls": ""
+    },
+    {
+      "session": "4",
+      "topic": "- Project environment preparation",
+      "learning_method": "Offline",
+      "lo": "LO1,2,4",
+      "itu": "T, U",
+      "student_materials": "This Syllabus, Student Materials",
+      "s_download": "",
+      "student_tasks": "Setup/Configure working environemnt",
+      "urls": ""
+    },
+    {
+      "session": "5",
+      "topic": "- Requirement Introduction & Iteration 1 Planning",
+      "learning_method": "Offline",
+      "lo": "LO1,2,4",
+      "itu": "I, U",
+      "student_materials": "Project Tracking",
+      "s_download": "",
+      "student_tasks": "Study requirement, Q&A, plan",
+      "urls": ""
+    },
+    {
+      "session": "6",
+      "topic": "- Requirement Introduction & Iteration 1 Planning",
+      "learning_method": "Offline",
+      "lo": "LO1,2,4",
+      "itu": "I, U",
+      "student_materials": "Project Tracking",
+      "s_download": "",
+      "student_tasks": "Study requirement, Q&A, plan",
+      "urls": ""
+    },
+    {
+      "session": "7",
+      "topic": "CONSTRUCTION PHASE_Development Iteration 1 (Iter1) - Requirement clarification & software design",
+      "learning_method": "Offline",
+      "lo": "LO1,2,4,5",
+      "itu": "T, U",
+      "student_materials": "Template_SRS Document Template_SDS Document Reference Materials",
+      "s_download": "",
+      "student_tasks": "Present/demo iteration's work results Clarify/Confirm Requirements Prepare SRS Document Design Code Modules",
+      "urls": ""
+    },
+    {
+      "session": "8",
+      "topic": "- Requirement clarification & software design",
+      "learning_method": "Offline",
+      "lo": "LO1,2,4,5",
+      "itu": "T, U",
+      "student_materials": "Template_SRS Document Template_SDS Document Reference Materials",
+      "s_download": "",
+      "student_tasks": "Present/demo iteration's work results Clarify/Confirm Requirements Prepare SRS Document Design Code Modules",
+      "urls": ""
+    },
+    {
+      "session": "9",
+      "topic": "- Requirement clarification & software design",
+      "learning_method": "Offline",
+      "lo": "LO1,2,4,5",
+      "itu": "T, U",
+      "student_materials": "Template_SRS Document Template_SDS Document Reference Materials",
+      "s_download": "",
+      "student_tasks": "Present/demo iteration's work results Clarify/Confirm Requirements Prepare SRS Document Design Code Modules",
+      "urls": ""
+    },
+    {
+      "session": "10",
+      "topic": "- Requirement clarification & software design",
+      "learning_method": "Offline",
+      "lo": "LO1,2,4,5",
+      "itu": "T, U",
+      "student_materials": "Template_SRS Document Template_SDS Document Reference Materials",
+      "s_download": "",
+      "student_tasks": "Present/demo iteration's work results Clarify/Confirm Requirements Prepare SRS Document Design Code Modules",
+      "urls": ""
+    },
+    {
+      "session": "11",
+      "topic": "- Practice: design, code, self-test, integrate",
+      "learning_method": "Offline",
+      "lo": "LO2-5",
+      "itu": "U",
+      "student_materials": "Reference Materials, Coding Standards",
+      "s_download": "",
+      "student_tasks": "Present/demo iteration's work results Clarify/Confirm Requirements Prepare SDS Document Code, Self-Test, Integrate",
+      "urls": ""
+    },
+    {
+      "session": "12",
+      "topic": "- Practice: design, code, self-test, integrate",
+      "learning_method": "Offline",
+      "lo": "LO2-5",
+      "itu": "U",
+      "student_materials": "Reference Materials, Coding Standards",
+      "s_download": "",
+      "student_tasks": "Present/demo iteration's work results Clarify/Confirm Requirements Prepare SDS Document Code, Self-Test, Integrate",
+      "urls": ""
+    },
+    {
+      "session": "13",
+      "topic": "- Practice: design, code, self-test, integrate",
+      "learning_method": "Offline",
+      "lo": "LO2-5",
+      "itu": "U",
+      "student_materials": "Reference Materials, Coding Standards",
+      "s_download": "",
+      "student_tasks": "Present/demo iteration's work results Clarify/Confirm Requirements Prepare SDS Document Code, Self-Test, Integrate",
+      "urls": ""
+    },
+    {
+      "session": "14",
+      "topic": "- Practice: design, code, self-test, integrate",
+      "learning_method": "Offline",
+      "lo": "LO2-5",
+      "itu": "U",
+      "student_materials": "Reference Materials, Coding Standards",
+      "s_download": "",
+      "student_tasks": "Present/demo iteration's work results Clarify/Confirm Requirements Prepare SDS Document Code, Self-Test, Integrate",
+      "urls": ""
+    },
+    {
+      "session": "15",
+      "topic": "- Practice: design, code, self-test, integrate",
+      "learning_method": "Offline",
+      "lo": "LO2-5",
+      "itu": "U",
+      "student_materials": "Reference Materials, Coding Standards",
+      "s_download": "",
+      "student_tasks": "Present/demo iteration's work results Clarify/Confirm Requirements Prepare SDS Document Code, Self-Test, Integrate",
+      "urls": ""
+    },
+    {
+      "session": "16",
+      "topic": "- Practice: design, code, self-test, integrate",
+      "learning_method": "Offline",
+      "lo": "LO2-5",
+      "itu": "U",
+      "student_materials": "Reference Materials, Coding Standards",
+      "s_download": "",
+      "student_tasks": "Present/demo iteration's work results Clarify/Confirm Requirements Prepare SDS Document Code, Self-Test, Integrate",
+      "urls": ""
+    },
+    {
+      "session": "17",
+      "topic": "- Iteration1 Review & Iteration2 Planning",
+      "learning_method": "Offline",
+      "lo": "LO3,4,5",
+      "itu": "T, U",
+      "student_materials": "Project Tracking, Issue Report",
+      "s_download": "",
+      "student_tasks": "Track project information Complete the iteration's software package",
+      "urls": ""
+    },
+    {
+      "session": "18",
+      "topic": "- Iteration1 Review & Iteration2 Planning",
+      "learning_method": "Offline",
+      "lo": "LO3,4,5",
+      "itu": "T, U",
+      "student_materials": "Project Tracking, Issue Report",
+      "s_download": "",
+      "student_tasks": "Track project information Complete the iteration's software package",
+      "urls": ""
+    },
+    {
+      "session": "19",
+      "topic": "CONSTRUCTION PHASE_Development Iteration 2 (Iter2) - Requirement clarification & software design",
+      "learning_method": "Offline",
+      "lo": "LO1,2,4,5",
+      "itu": "T, U",
+      "student_materials": "Template_SRS Document Template_SDS Document Reference Materials",
+      "s_download": "",
+      "student_tasks": "Present/demo iteration's work results Clarify/Confirm Requirements Prepare SRS Document Design Code Modules",
+      "urls": ""
+    },
+    {
+      "session": "20",
+      "topic": "- Requirement clarification & software design",
+      "learning_method": "Offline",
+      "lo": "LO1,2,4,5",
+      "itu": "T, U",
+      "student_materials": "Template_SRS Document Template_SDS Document Reference Materials",
+      "s_download": "",
+      "student_tasks": "Present/demo iteration's work results Clarify/Confirm Requirements Prepare SRS Document Design Code Modules",
+      "urls": ""
+    },
+    {
+      "session": "21",
+      "topic": "- Requirement clarification & software design",
+      "learning_method": "Offline",
+      "lo": "LO1,2,4,5",
+      "itu": "T, U",
+      "student_materials": "Template_SRS Document Template_SDS Document Reference Materials",
+      "s_download": "",
+      "student_tasks": "Present/demo iteration's work results Clarify/Confirm Requirements Prepare SRS Document Design Code Modules",
+      "urls": ""
+    },
+    {
+      "session": "22",
+      "topic": "- Requirement clarification & software design",
+      "learning_method": "Offline",
+      "lo": "LO1,2,4,5",
+      "itu": "T, U",
+      "student_materials": "Template_SRS Document Template_SDS Document Reference Materials",
+      "s_download": "",
+      "student_tasks": "Present/demo iteration's work results Clarify/Confirm Requirements Prepare SRS Document Design Code Modules",
+      "urls": ""
+    },
+    {
+      "session": "23",
+      "topic": "- Practice: design, code, self-test, integrate",
+      "learning_method": "Offline",
+      "lo": "LO2-5",
+      "itu": "U",
+      "student_materials": "Reference Materials, Coding Standards",
+      "s_download": "",
+      "student_tasks": "Present/demo iteration's work results Clarify/Confirm Requirements Prepare SDS Document Code, Self-Test, Integrate",
+      "urls": ""
+    },
+    {
+      "session": "24",
+      "topic": "- Practice: design, code, self-test, integrate",
+      "learning_method": "Offline",
+      "lo": "LO2-5",
+      "itu": "U",
+      "student_materials": "Reference Materials, Coding Standards",
+      "s_download": "",
+      "student_tasks": "Present/demo iteration's work results Clarify/Confirm Requirements Prepare SDS Document Code, Self-Test, Integrate",
+      "urls": ""
+    },
+    {
+      "session": "25",
+      "topic": "- Practice: design, code, self-test, integrate",
+      "learning_method": "Offline",
+      "lo": "LO2-5",
+      "itu": "U",
+      "student_materials": "Reference Materials, Coding Standards",
+      "s_download": "",
+      "student_tasks": "Present/demo iteration's work results Clarify/Confirm Requirements Prepare SDS Document Code, Self-Test, Integrate",
+      "urls": ""
+    },
+    {
+      "session": "26",
+      "topic": "- Practice: design, code, self-test, integrate",
+      "learning_method": "Offline",
+      "lo": "LO2-5",
+      "itu": "U",
+      "student_materials": "Reference Materials, Coding Standards",
+      "s_download": "",
+      "student_tasks": "Present/demo iteration's work results Clarify/Confirm Requirements Prepare SDS Document Code, Self-Test, Integrate",
+      "urls": ""
+    },
+    {
+      "session": "27",
+      "topic": "- Practice: design, code, self-test, integrate",
+      "learning_method": "Offline",
+      "lo": "LO2-5",
+      "itu": "U",
+      "student_materials": "Reference Materials, Coding Standards",
+      "s_download": "",
+      "student_tasks": "Present/demo iteration's work results Clarify/Confirm Requirements Prepare SDS Document Code, Self-Test, Integrate",
+      "urls": ""
+    },
+    {
+      "session": "28",
+      "topic": "- Practice: design, code, self-test, integrate",
+      "learning_method": "Offline",
+      "lo": "LO2-5",
+      "itu": "U",
+      "student_materials": "Reference Materials, Coding Standards",
+      "s_download": "",
+      "student_tasks": "Present/demo iteration's work results Clarify/Confirm Requirements Prepare SDS Document Code, Self-Test, Integrate",
+      "urls": ""
+    },
+    {
+      "session": "29",
+      "topic": "- Iteration2 Review & Iteration3 Planning",
+      "learning_method": "Offline",
+      "lo": "LO3,4,5",
+      "itu": "T, U",
+      "student_materials": "Project Tracking, Issue Report",
+      "s_download": "",
+      "student_tasks": "Track project information Complete the iteration's software package",
+      "urls": ""
+    },
+    {
+      "session": "30",
+      "topic": "- Iteration2 Review & Iteration3 Planning",
+      "learning_method": "Offline",
+      "lo": "LO3,4,5",
+      "itu": "T, U",
+      "student_materials": "Project Tracking, Issue Report",
+      "s_download": "",
+      "student_tasks": "Track project information Complete the iteration's software package",
+      "urls": ""
+    },
+    {
+      "session": "31",
+      "topic": "CONSTRUCTION PHASE_Development Iteration 3 (Iter3) - Requirement clarification & software design",
+      "learning_method": "Offline",
+      "lo": "LO1,2,4,5",
+      "itu": "T, U",
+      "student_materials": "Template_SRS Document Template_SDS Document Reference Materials",
+      "s_download": "",
+      "student_tasks": "Present/demo iteration's work results Clarify/Confirm Requirements Prepare SRS Document Design Code Modules",
+      "urls": ""
+    },
+    {
+      "session": "32",
+      "topic": "- Requirement clarification & software design",
+      "learning_method": "Offline",
+      "lo": "LO1,2,4,5",
+      "itu": "T, U",
+      "student_materials": "Template_SRS Document Template_SDS Document Reference Materials",
+      "s_download": "",
+      "student_tasks": "Present/demo iteration's work results Clarify/Confirm Requirements Prepare SRS Document Design Code Modules",
+      "urls": ""
+    },
+    {
+      "session": "33",
+      "topic": "- Requirement clarification & software design",
+      "learning_method": "Offline",
+      "lo": "LO1,2,4,5",
+      "itu": "T, U",
+      "student_materials": "Template_SRS Document Template_SDS Document Reference Materials",
+      "s_download": "",
+      "student_tasks": "Present/demo iteration's work results Clarify/Confirm Requirements Prepare SRS Document Design Code Modules",
+      "urls": ""
+    },
+    {
+      "session": "34",
+      "topic": "- Requirement clarification & software design",
+      "learning_method": "Offline",
+      "lo": "LO1,2,4,5",
+      "itu": "T, U",
+      "student_materials": "Template_SRS Document Template_SDS Document Reference Materials",
+      "s_download": "",
+      "student_tasks": "Present/demo iteration's work results Clarify/Confirm Requirements Prepare SRS Document Design Code Modules",
+      "urls": ""
+    },
+    {
+      "session": "35",
+      "topic": "- Practice: design, code, self-test, integrate",
+      "learning_method": "Offline",
+      "lo": "LO2-5",
+      "itu": "U",
+      "student_materials": "Reference Materials, Coding Standards",
+      "s_download": "",
+      "student_tasks": "Present/demo iteration's work results Clarify/Confirm Requirements Prepare SDS Document Code, Self-Test, Integrate",
+      "urls": ""
+    },
+    {
+      "session": "36",
+      "topic": "- Practice: design, code, self-test, integrate",
+      "learning_method": "Offline",
+      "lo": "LO2-5",
+      "itu": "U",
+      "student_materials": "Reference Materials, Coding Standards",
+      "s_download": "",
+      "student_tasks": "Present/demo iteration's work results Clarify/Confirm Requirements Prepare SDS Document Code, Self-Test, Integrate",
+      "urls": ""
+    },
+    {
+      "session": "37",
+      "topic": "- Practice: design, code, self-test, integrate",
+      "learning_method": "Offline",
+      "lo": "LO2-5",
+      "itu": "U",
+      "student_materials": "Reference Materials, Coding Standards",
+      "s_download": "",
+      "student_tasks": "Present/demo iteration's work results Clarify/Confirm Requirements Prepare SDS Document Code, Self-Test, Integrate",
+      "urls": ""
+    },
+    {
+      "session": "38",
+      "topic": "- Practice: design, code, self-test, integrate",
+      "learning_method": "Offline",
+      "lo": "LO2-5",
+      "itu": "U",
+      "student_materials": "Reference Materials, Coding Standards",
+      "s_download": "",
+      "student_tasks": "Present/demo iteration's work results Clarify/Confirm Requirements Prepare SDS Document Code, Self-Test, Integrate",
+      "urls": ""
+    },
+    {
+      "session": "39",
+      "topic": "- Practice: design, code, self-test, integrate",
+      "learning_method": "Offline",
+      "lo": "LO2-5",
+      "itu": "U",
+      "student_materials": "Reference Materials, Coding Standards",
+      "s_download": "",
+      "student_tasks": "Present/demo iteration's work results Clarify/Confirm Requirements Prepare SDS Document Code, Self-Test, Integrate",
+      "urls": ""
+    },
+    {
+      "session": "40",
+      "topic": "- Practice: design, code, self-test, integrate",
+      "learning_method": "Offline",
+      "lo": "LO2-5",
+      "itu": "U",
+      "student_materials": "Reference Materials, Coding Standards",
+      "s_download": "",
+      "student_tasks": "Present/demo iteration's work results Clarify/Confirm Requirements Prepare SDS Document Code, Self-Test, Integrate",
+      "urls": ""
+    },
+    {
+      "session": "41",
+      "topic": "- Iteration3 Review & Final Iteration Planning",
+      "learning_method": "Offline",
+      "lo": "LO3,4,5",
+      "itu": "T, U",
+      "student_materials": "Project Tracking, Issue Report",
+      "s_download": "",
+      "student_tasks": "Track project information Complete the iteration's software package",
+      "urls": ""
+    },
+    {
+      "session": "42",
+      "topic": "- Iteration3 Review & Final Iteration Planning",
+      "learning_method": "Offline",
+      "lo": "LO3,4,5",
+      "itu": "T, U",
+      "student_materials": "Project Tracking, Issue Report",
+      "s_download": "",
+      "student_tasks": "Track project information Complete the iteration's software package",
+      "urls": ""
+    },
+    {
+      "session": "43",
+      "topic": "CLOSING PHASE_Final Iteration (Iter4) - Requirement clarification & software design",
+      "learning_method": "Offline",
+      "lo": "LO1,2,4,5",
+      "itu": "T, U",
+      "student_materials": "Template_SRS Document Template_SDS Document Reference Materials",
+      "s_download": "",
+      "student_tasks": "Present/demo iteration's work results Clarify/Confirm Requirements Prepare SRS Document Design Code Modules",
+      "urls": ""
+    },
+    {
+      "session": "44",
+      "topic": "- Requirement clarification & software design",
+      "learning_method": "Offline",
+      "lo": "LO1,2,4,5",
+      "itu": "T, U",
+      "student_materials": "Template_SRS Document Template_SDS Document Reference Materials",
+      "s_download": "",
+      "student_tasks": "Present/demo iteration's work results Clarify/Confirm Requirements Prepare SRS Document Design Code Modules",
+      "urls": ""
+    },
+    {
+      "session": "45",
+      "topic": "- Requirement clarification & software design",
+      "learning_method": "Offline",
+      "lo": "LO1,2,4,5",
+      "itu": "T, U",
+      "student_materials": "Template_SRS Document Template_SDS Document Reference Materials",
+      "s_download": "",
+      "student_tasks": "Present/demo iteration's work results Clarify/Confirm Requirements Prepare SRS Document Design Code Modules",
+      "urls": ""
+    },
+    {
+      "session": "46",
+      "topic": "- Requirement clarification & software design",
+      "learning_method": "Offline",
+      "lo": "LO1,2,4,5",
+      "itu": "T, U",
+      "student_materials": "Template_SRS Document Template_SDS Document Reference Materials",
+      "s_download": "",
+      "student_tasks": "Present/demo iteration's work results Clarify/Confirm Requirements Prepare SRS Document Design Code Modules",
+      "urls": ""
+    },
+    {
+      "session": "47",
+      "topic": "- Practice: design, code, self-test, integrate",
+      "learning_method": "Offline",
+      "lo": "LO2-5",
+      "itu": "U",
+      "student_materials": "Reference Materials, Coding Standards",
+      "s_download": "",
+      "student_tasks": "Present/demo iteration's work results Clarify/Confirm Requirements Prepare SDS Document Code, Self-Test, Integrate",
+      "urls": ""
+    },
+    {
+      "session": "48",
+      "topic": "- Practice: design, code, self-test, integrate",
+      "learning_method": "Offline",
+      "lo": "LO2-5",
+      "itu": "U",
+      "student_materials": "Reference Materials, Coding Standards",
+      "s_download": "",
+      "student_tasks": "Present/demo iteration's work results Clarify/Confirm Requirements Prepare SDS Document Code, Self-Test, Integrate",
+      "urls": ""
+    },
+    {
+      "session": "49",
+      "topic": "- Practice: design, code, self-test, integrate",
+      "learning_method": "Offline",
+      "lo": "LO2-5",
+      "itu": "U",
+      "student_materials": "Reference Materials, Coding Standards",
+      "s_download": "",
+      "student_tasks": "Present/demo iteration's work results Clarify/Confirm Requirements Prepare SDS Document Code, Self-Test, Integrate",
+      "urls": ""
+    },
+    {
+      "session": "50",
+      "topic": "- Practice: design, code, self-test, integrate",
+      "learning_method": "Offline",
+      "lo": "LO2-5",
+      "itu": "U",
+      "student_materials": "Reference Materials, Coding Standards",
+      "s_download": "",
+      "student_tasks": "Present/demo iteration's work results Clarify/Confirm Requirements Prepare SDS Document Code, Self-Test, Integrate",
+      "urls": ""
+    },
+    {
+      "session": "51",
+      "topic": "- Practice: design, code, self-test, integrate",
+      "learning_method": "Offline",
+      "lo": "LO2-5",
+      "itu": "U",
+      "student_materials": "Reference Materials, Coding Standards",
+      "s_download": "",
+      "student_tasks": "Present/demo iteration's work results Clarify/Confirm Requirements Prepare SDS Document Code, Self-Test, Integrate",
+      "urls": ""
+    },
+    {
+      "session": "52",
+      "topic": "- Practice: design, code, self-test, integrate",
+      "learning_method": "Offline",
+      "lo": "LO2-5",
+      "itu": "U",
+      "student_materials": "Reference Materials, Coding Standards",
+      "s_download": "",
+      "student_tasks": "Present/demo iteration's work results Clarify/Confirm Requirements Prepare SDS Document Code, Self-Test, Integrate",
+      "urls": ""
+    },
+    {
+      "session": "53",
+      "topic": "- Final Project Preparation",
+      "learning_method": "Offline",
+      "lo": "LO3,4,5",
+      "itu": "T, U",
+      "student_materials": "Final Release Document, Project Tracking, Issue Report",
+      "s_download": "",
+      "student_tasks": "Present/demo iteration's work results",
+      "urls": ""
+    },
+    {
+      "session": "54",
+      "topic": "- Final Project Preparation",
+      "learning_method": "Offline",
+      "lo": "LO3,4,5",
+      "itu": "TU",
+      "student_materials": "Student's submitted materials",
+      "s_download": "",
+      "student_tasks": "Present/demo iteration's work results",
+      "urls": ""
+    },
+    {
+      "session": "55",
+      "topic": "Review",
+      "learning_method": "Offline",
+      "lo": "LO1-5",
+      "itu": "TU",
+      "student_materials": "",
+      "s_download": "",
+      "student_tasks": "",
+      "urls": ""
+    },
+    {
+      "session": "56",
+      "topic": "Review",
+      "learning_method": "Offline",
+      "lo": "LO1-5",
+      "itu": "TU",
+      "student_materials": "",
+      "s_download": "",
+      "student_tasks": "",
+      "urls": ""
+    },
+    {
+      "session": "57",
+      "topic": "Review",
+      "learning_method": "Offline",
+      "lo": "LO1-5",
+      "itu": "TU",
+      "student_materials": "",
+      "s_download": "",
+      "student_tasks": "",
+      "urls": ""
+    },
+    {
+      "session": "58",
+      "topic": "Review",
+      "learning_method": "Offline",
+      "lo": "LO1-5",
+      "itu": "TU",
+      "student_materials": "",
+      "s_download": "",
+      "student_tasks": "",
+      "urls": ""
+    },
+    {
+      "session": "59",
+      "topic": "Review",
+      "learning_method": "Offline",
+      "lo": "LO1-5",
+      "itu": "TU",
+      "student_materials": "",
+      "s_download": "",
+      "student_tasks": "",
+      "urls": ""
+    },
+    {
+      "session": "60",
+      "topic": "Review",
+      "learning_method": "Offline",
+      "lo": "LO1-5",
+      "itu": "TU",
+      "student_materials": "",
+      "s_download": "",
+      "student_tasks": "",
+      "urls": ""
+    }
+  ],
+  "constructive_questions": [
+    {
+      "session_no": "1",
+      "name": "CQ1.1",
+      "details": "Who will interact with your system? List actors with detailed functions of each actor."
+    },
+    {
+      "session_no": "2",
+      "name": "CQ1.2",
+      "details": "What are differences between your intended output product and other similar products in the market?"
+    },
+    {
+      "session_no": "3",
+      "name": "CQ1.3",
+      "details": "How to assign & tracking tasks among your team?"
+    },
+    {
+      "session_no": "4",
+      "name": "CQ2.1",
+      "details": "How do you collect, clarify, and define the requirements for the function/screens that you are in charged?"
+    },
+    {
+      "session_no": "5",
+      "name": "CQ2.2",
+      "details": "What screens/functions would you have in the project output product? What are the purpose of each function/screen and the relationships with others?"
+    },
+    {
+      "session_no": "6",
+      "name": "CQ2.3",
+      "details": "Your plan for the iteration 1? - What are the functions/screens that you would choose? Why? - Is there any unclear things that need to clarify or concerning you?"
+    },
+    {
+      "session_no": "7",
+      "name": "CQ3.1",
+      "details": "What are the tasks or outputs that you have completed last week? What are still in progress or pending? Are there any issues or difficulties so far?"
+    },
+    {
+      "session_no": "8",
+      "name": "CQ3.2",
+      "details": "What are the tables you should have to store your application data in the database?"
+    },
+    {
+      "session_no": "9",
+      "name": "CQ3.3",
+      "details": "What are the Git commands that you would use to manage source codes in your project? How do you use each of those?"
+    },
+    {
+      "session_no": "10",
+      "name": "CQ4.1",
+      "details": "What UI themes/templates do you suggest to use in UI/Front-End design for your project screens? What are the common/share components that your team would write once and include multiple times into your application screens?"
+    },
+    {
+      "session_no": "11",
+      "name": "CQ4.2",
+      "details": "Which database tables would you access from each of your assigned screens/functions? What are the transaction (query, insert, update, delete) from each screen to the related database table?"
+    },
+    {
+      "session_no": "12",
+      "name": "CQ4.3",
+      "details": "How would you organize your source codes into packages/folders? - What are the packages/folders you would have? - What is the role/description of each package/folder? - What are the file naming convension in each package/folder?"
+    },
+    {
+      "session_no": "16",
+      "name": "CQ6.1",
+      "details": "Which data/components would you have/handle on each of you’re assigned screens/functions? What are the transactions/events that each of your assigned screens/functions handle?"
+    },
+    {
+      "session_no": "17",
+      "name": "CQ6.2",
+      "details": "What are the business logics/rules that you would have to implement or include in each of your assigned screens/functions"
+    },
+    {
+      "session_no": "18",
+      "name": "CQ6.3",
+      "details": "Your plan for the iteration 2? - What are the functions/screens that you would choose? Why? - Is there any unclear things that need to clarify or concerning you?"
+    },
+    {
+      "session_no": "19",
+      "name": "CQ7.1",
+      "details": "Which functions/screens have you completed and ready for demonstrating in the last iteration? What are pending issues with each of those?"
+    },
+    {
+      "session_no": "20",
+      "name": "CQ7.2",
+      "details": "To implement your assigned screens/functions what are the code modules (classes/files, methods) you would need? - What are the code modules you would have? - What are the purposes of each module?"
+    },
+    {
+      "session_no": "21",
+      "name": "CQ7.3",
+      "details": "Which screens/functions do you have to integrate to from each of you assigned functions/screens? What do you check on each of those functions/screens interface? What are common issues you have discovered after testing/integrating?"
+    },
+    {
+      "session_no": "25",
+      "name": "CQ9.1",
+      "details": "What are the tasks or outputs that you have completed last week? What are still in progress or pending? Are there any issues or difficulties so far?"
+    },
+    {
+      "session_no": "26",
+      "name": "CQ9.2",
+      "details": "What are the business logics/rules that you would have to implement or include in each of your assigned screens/functions"
+    },
+    {
+      "session_no": "27",
+      "name": "CQ9.3",
+      "details": "Your plan for the iteration 3? - What are the functions/screens that you would choose? Why? - Is there any unclear things that need to clarify or concerning you?"
+    },
+    {
+      "session_no": "31",
+      "name": "CQ11.1",
+      "details": "Which functions/screens have you completed and ready for demonstrating in the last iteration? What are pending issues with each of those?"
+    },
+    {
+      "session_no": "32",
+      "name": "CQ11.2",
+      "details": "To implement your assigned screens/functions what are the code modules (classes/files, methods) you would need? - What are the code modules you would have? - What are the purposes of each module?"
+    },
+    {
+      "session_no": "33",
+      "name": "CQ11.3",
+      "details": "Which screens/functions do you have to integrate to from each of you assigned functions/screens? What do you check on each of those functions/screens interface? What are common issues you have discovered after testing/integrating?"
+    },
+    {
+      "session_no": "37",
+      "name": "CQ13.1",
+      "details": "What are the tasks or outputs that you have completed last week? What are still in progress or pending? Are there any issues or difficulties so far?"
+    },
+    {
+      "session_no": "38",
+      "name": "CQ13.2",
+      "details": "What are the business logics/rules that you would have to implement or include in each of your assigned screens/functions"
+    },
+    {
+      "session_no": "39",
+      "name": "CQ13.3",
+      "details": "Your plan for the iteration 3? - What are the functions/screens that you would choose? Why? - Is there any unclear things that need to clarify or concerning you?"
+    },
+    {
+      "session_no": "43",
+      "name": "CQ15.1",
+      "details": "Which functions/screens have you completed and ready for demonstrating in the last iteration? What are pending issues with each of those?"
+    },
+    {
+      "session_no": "44",
+      "name": "CQ15.2",
+      "details": "To implement your assigned screens/functions what are the code modules (classes/files, methods) you would need? - What are the code modules you would have? - What are the purposes of each module?"
+    },
+    {
+      "session_no": "45",
+      "name": "CQ15.3",
+      "details": "Which screens/functions do you have to integrate to from each of you assigned functions/screens? What do you check on each of those functions/screens interface? What are common issues you have discovered after testing/integrating?"
+    },
+    {
+      "session_no": "52",
+      "name": "CQ18.1",
+      "details": "What are the updates or optimizations you would have in the final iteration?"
+    },
+    {
+      "session_no": "53",
+      "name": "CQ18.2",
+      "details": "How do you evaluate your work results in this Iteration? What things you need to improve in your team (communication skills, documentation, project coding, etc.)?"
+    },
+    {
+      "session_no": "54",
+      "name": "CQ18.3",
+      "details": "What things that your team have learnt from the project?"
+    }
+  ],
+  "assessment_scheme": [
+    {
+      "category": "On-going Assessment 1",
+      "type": "on-going",
+      "part": "1",
+      "weight": "20.0%",
+      "completion_criteria": ">0",
+      "duration": "Option 1: 45'/team; Option 2 (For Constructivism Approach only): Follow lecturer's proposal",
+      "clo": "LO1, LO2, LO3, LO4, LO5",
+      "question_type": "Option 1: N/A; Option 2 (For Constructivism Approach only): Follow lecturer's proposal",
+      "no_question": "Option 1: Project Presentation; Option 2 (For Constructivism Approach only): Follow lecturer's proposal",
+      "knowledge_and_skill": "Requirement Analysing Designing Coding Testing Integrating",
+      "grading_guide": "Main evaluating items: - Submitted materials: SRS, SDS, Codes, Tasks/Issues Log - LOC Evaluation: evaluate based on the complexity & quality of the screens/functions",
+      "note": "To get the maximum LOC Evaluation, each student need to have 180 LOC as the rated LOC"
+    },
+    {
+      "category": "On-going Assessment 2",
+      "type": "on-going",
+      "part": "1",
+      "weight": "20.0%",
+      "completion_criteria": ">0",
+      "duration": "Option 1: 45'/team; Option 2 (For Constructivism Approach only): Follow lecturer's proposal",
+      "clo": "LO1, LO2, LO3, LO4, LO5",
+      "question_type": "Option 1: N/A; Option 2 (For Constructivism Approach only): Follow lecturer's proposal",
+      "no_question": "Option 1: Project Presentation; Option 2 (For Constructivism Approach only): Follow lecturer's proposal",
+      "knowledge_and_skill": "Requirement Analysing Designing Coding Testing Integrating",
+      "grading_guide": "Main evaluating items: - Submitted materials: SRS, SDS, Codes, Tasks/Issues Log - LOC Evaluation: evaluate based on the complexity & quality of the screens/functions",
+      "note": "To get the maximum LOC Evaluation, each student need to have 180 LOC as the rated LOC"
+    },
+    {
+      "category": "On-going Assessment 3",
+      "type": "on-going",
+      "part": "1",
+      "weight": "20.0%",
+      "completion_criteria": ">0",
+      "duration": "Option 1: 45'/team; Option 2 (For Constructivism Approach only): Follow lecturer's proposal",
+      "clo": "LO1, LO2, LO3, LO4, LO5",
+      "question_type": "Option 1: N/A; Option 2 (For Constructivism Approach only): Follow lecturer's proposal",
+      "no_question": "Option 1: Project Presentation; Option 2 (For Constructivism Approach only): Follow lecturer's proposal",
+      "knowledge_and_skill": "Requirement Analysing Designing Coding Testing Integrating",
+      "grading_guide": "Main evaluating items: - Submitted materials: SRS, SDS, Codes, Tasks/Issues Log - LOC Evaluation: evaluate based on the complexity & quality of the screens/functions",
+      "note": "To get the maximum LOC Evaluation, each student need to have 180 LOC as the rated LOC"
+    },
+    {
+      "category": "Final Project Presentation:",
+      "type": "Final exam",
+      "part": "1",
+      "weight": "40.0%",
+      "completion_criteria": "5",
+      "duration": "45'/each",
+      "clo": "LO1, LO2, LO3, LO4, LO5",
+      "question_type": "",
+      "no_question": "Project Presentation",
+      "knowledge_and_skill": "Requirement Analysing Designing Coding Testing Integrating",
+      "grading_guide": "The exam is organized by exam board. Must have at least 2 teachers for grading Final Project Presentation. Each team have 45 minutes for presentation. Main evaluating items (for the whole project) - Submitted materials: Release Document, SRS, SDS, Codes, Tasks/Issues Log - LOC Evaluation: based on the complexity, quality, and the reality of the screens/functions",
+      "note": "1. To be selected to the Final Presentation, each student needs: * Average on-going grade assessment >=5/10 * No cheating during the project progress 2. To get the maximum LOC Evaluation, each student need to have 720 LOC as the rated LOC"
+    }
+  ],
+  "references": [
+    "1286/QĐ-ĐHFPT dated 11/22/2024"
+  ]
+}

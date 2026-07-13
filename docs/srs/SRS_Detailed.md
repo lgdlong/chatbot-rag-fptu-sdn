@@ -1,5 +1,9 @@
 # SRS Detailed — Academic RAG Assistant
 
+> Status: Current
+> Audience: Stakeholder / BA / PM
+> Canonical: Yes
+> Owner: Business
 > Phiên bản: 1.0  
 > Cập nhật: 2026-06-23
 
@@ -18,7 +22,7 @@ Xây dựng một trợ lý học tập cho sinh viên FPT, kết hợp:
 - syllabus mini theo môn học
 - quản lý theo `môn học`, không quản lý theo `chương`
 - search bằng `subject code` hoặc tên môn
-- chat theo `1 selected syllabus/workspace`
+- chat theo `1 syllabus` đang chọn
 - upload `PDF`
 - lecturer quản trị nội dung, xem syllabus và chat theo syllabus được chọn
 - admin quản trị tài khoản lecturer và whitelist student
@@ -40,7 +44,7 @@ Xây dựng một trợ lý học tập cho sinh viên FPT, kết hợp:
 | `ADMIN` | Email/password | Tạo lecturer, disable lecturer, quản whitelist |
 | `LECTURER` | Email/password | CRUD syllabus, view syllabus detail, open chat theo syllabus được chọn, upload/delete PDF |
 | `STUDENT` | Google OAuth + whitelist | Search, xem syllabus, chat, xem history |
-| `SYSTEM` | Nội bộ | Tạo snapshot syllabus từ DB, sync AnythingLLM, retrieval, answer/refusal |
+| `SYSTEM` | Nội bộ | Tổng hợp kiến thức syllabus, truy xuất, trả lời hoặc từ chối |
 
 ## 4. Business model
 
@@ -52,18 +56,18 @@ Xây dựng một trợ lý học tập cho sinh viên FPT, kết hợp:
 
 ### 4.2 Lifecycle
 
-| Trạng thái | isApproved | isActive |
-|---|---:|---:|
-| Draft | false | false |
-| Approved but hidden | true | false |
-| Published | true | true |
+| Trạng thái | Đã duyệt | Đang kích hoạt |
+|---|:---:|:---:|
+| Draft | Không | Không |
+| Approved but hidden | Có | Không |
+| Published | Có | Có |
 
 ### 4.3 Document scope
 
-- Mỗi `syllabus` có đúng `1 snapshot markdown canonical` sinh từ dữ liệu DB
+- Mỗi `syllabus` có đúng `1 bản kiến thức chuẩn` được tổng hợp từ dữ liệu syllabus
 - Mỗi `PDF` gắn với đúng một syllabus
-- Snapshot syllabus và các PDF của syllabus đó cùng nằm trong đúng `1 workspace` của syllabus
-- Chatbot chỉ truy xuất trong phạm vi syllabus/workspace đang mở
+- Kiến thức syllabus và các PDF của syllabus đó cùng thuộc `1 phạm vi kiến thức` duy nhất của syllabus
+- Chatbot chỉ truy xuất trong phạm vi kiến thức của syllabus đang mở
 - Không quản lý document theo `chương`
 - Không có version riêng cho document trong Release A
 
@@ -108,7 +112,7 @@ Xây dựng một trợ lý học tập cho sinh viên FPT, kết hợp:
 |---|---|
 | FR-04.1 | Upload PDF |
 | FR-04.2 | Validate PDF type/size/empty |
-| FR-04.3 | Async ingest |
+| FR-04.3 | Xử lý tự động |
 | FR-04.4 | View document status |
 | FR-04.5 | Delete document |
 | FR-04.6 | Re-upload để re-index |
@@ -118,13 +122,13 @@ Xây dựng một trợ lý học tập cho sinh viên FPT, kết hợp:
 | ID | Requirement |
 |---|---|
 | FR-05.1 | Open chat trong trang syllabus đang chọn |
-| FR-05.2 | Tạo session chat theo đúng syllabus/workspace đang mở |
+| FR-05.2 | Tạo session chat theo đúng syllabus đang mở |
 | FR-05.3 | Gửi câu hỏi |
 | FR-05.4 | Giữ ngữ cảnh trong cùng session |
 | FR-05.5 | Trả về citation |
 | FR-05.6 | Xem history của chính user |
 | FR-05.7 | Xóa session chat |
-| FR-05.8 | Trả lời đúng thông tin assessment | Nếu câu hỏi hỏi về assessment, hệ thống trả lời đúng theo dữ liệu assessment đang lưu trong snapshot syllabus hiện hành của workspace |
+| FR-05.8 | Trả lời đúng thông tin assessment | Nếu câu hỏi hỏi về assessment, hệ thống trả lời đúng theo dữ liệu assessment đang lưu trong kiến thức syllabus hiện hành |
 | FR-05.9 | Lecturer có thể open chat cho syllabus được chọn để phục vụ tra cứu/biên soạn/chỉnh sửa |
 
 ### FR-06. Admin governance
@@ -134,40 +138,41 @@ Xây dựng một trợ lý học tập cho sinh viên FPT, kết hợp:
 | FR-06.1 | Xem danh sách lecturer |
 | FR-06.2 | Tạo lecturer thủ công |
 | FR-06.3 | Disable lecturer |
+| FR-06.3b | Enable lecturer (UNDO disable) | Kích hoạt lại tài khoản lecturer đã bị disable |
 | FR-06.4 | Xem whitelist |
 | FR-06.5 | Thêm email whitelist |
 | FR-06.6 | Xóa email whitelist |
 
-### FR-07. RAG internal
+### FR-07. Knowledge scope and retrieval
 
 | ID | Requirement |
 |---|---|
-| FR-07.1 | Mỗi syllabus có workspace/scope riêng trong AnythingLLM |
-| FR-07.2 | Hệ thống sinh `snapshot markdown` từ dữ liệu syllabus trong DB |
-| FR-07.3 | Snapshot syllabus được sync vào AnythingLLM như một loại document trong workspace của syllabus |
-| FR-07.4 | PDF được sync vào đúng workspace của syllabus |
-| FR-07.5 | Retrieval chỉ trong phạm vi syllabus/workspace đang mở |
-| FR-07.6 | Trả lời từ snapshot syllabus và/hoặc tài liệu PDF của đúng syllabus đang mở | Nếu câu hỏi hỏi về assessment, snapshot syllabus là nguồn chuẩn trong workspace |
-| FR-07.7 | Từ chối an toàn nếu không có context phù hợp |
+| FR-07.1 | Mỗi syllabus có phạm vi kiến thức riêng |
+| FR-07.2 | Hệ thống tự tổng hợp kiến thức syllabus từ dữ liệu đã lưu |
+| FR-07.3 | Kiến thức syllabus được đưa vào phạm vi kiến thức của syllabus |
+| FR-07.4 | PDF được đưa vào phạm vi kiến thức của syllabus tương ứng |
+| FR-07.5 | Truy xuất chỉ trong phạm vi kiến thức của syllabus đang mở |
+| FR-07.6 | Trả lời dựa trên kiến thức syllabus và/hoặc tài liệu PDF của đúng syllabus đang mở | Nếu câu hỏi hỏi về assessment, kiến thức syllabus là nguồn chuẩn |
+| FR-07.7 | Từ chối an toàn nếu không có ngữ cảnh phù hợp |
 
 ## 6. Business rules
 
 | ID | Rule |
 |---|---|
-| BR-01 | Chat chỉ theo `1 selected syllabus/workspace` |
+| BR-01 | Chat chỉ theo `1 syllabus` đang chọn |
 | BR-02 | Student chỉ thấy syllabus `approved + active` |
 | BR-03 | Mỗi subject chỉ có tối đa `1 syllabus active` |
 | BR-04 | Activate mới phải auto deactivate bản cũ |
 | BR-05 | `lecturer request` chỉ còn là legacy route bị khóa, không phải flow nghiệp vụ chính thức |
 | BR-06 | Chỉ `ADMIN` được quản whitelist |
-| BR-07 | Release A chỉ cho user upload `PDF`; `syllabus snapshot` do hệ thống tự sinh từ DB |
+| BR-07 | Release A chỉ cho user upload `PDF`; kiến thức syllabus do hệ thống tự tổng hợp từ dữ liệu syllabus |
 | BR-08 | Không có video trong core |
 | BR-09 | Delete document thì chatbot không được dùng lại nội dung đó |
-| BR-10 | Update syllabus phải regenerate và replace `snapshot markdown` tương ứng trong workspace |
+| BR-10 | Update syllabus phải cập nhật lại kiến thức syllabus tương ứng trong phạm vi truy xuất |
 | BR-11 | Nếu syllabus thay đổi lớn thì tạo `subject code` mới |
 | BR-12 | Nếu thay đổi nhỏ thì patch trực tiếp các field của syllabus hiện tại |
-| BR-13 | Assessment phải được trả lời đúng theo dữ liệu đang lưu trong snapshot syllabus hiện hành, không suy diễn thêm |
-| BR-14 | Nếu snapshot syllabus và PDF mâu thuẫn nhau thì syllabus snapshot được xem là nguồn chuẩn hơn cho thông tin syllabus |
+| BR-13 | Assessment phải được trả lời đúng theo dữ liệu đang lưu trong kiến thức syllabus hiện hành, không suy diễn thêm |
+| BR-14 | Nếu kiến thức syllabus và PDF mâu thuẫn nhau thì kiến thức syllabus được xem là nguồn chuẩn hơn cho thông tin syllabus |
 
 ## 7. Edge cases
 
@@ -177,14 +182,14 @@ Xây dựng một trợ lý học tập cho sinh viên FPT, kết hợp:
 | EC-02 | Assessment total != 100% | Chặn lưu |
 | EC-03 | Upload không phải PDF | Từ chối upload |
 | EC-04 | PDF quá lớn | Từ chối upload |
-| EC-05 | PDF không trích xuất được text | Failed ingest |
-| EC-06 | AnythingLLM ingest lỗi | File ở trạng thái failed |
+| EC-05 | PDF không trích xuất được text | File ở trạng thái failed |
+| EC-06 | Quá trình xử lý tài liệu lỗi | File ở trạng thái failed |
 | EC-07 | Hỏi ngoài phạm vi môn | Refusal chuyên biệt |
 | EC-08 | Không tìm thấy context | Fallback an toàn |
 | EC-09 | Session chat quá dài | Yêu cầu tạo phiên mới |
 | EC-10 | Lecturer bị disable | Không login được |
 | EC-11 | Câu hỏi assessment nhưng dữ liệu assessment thiếu | Trả lời theo phần dữ liệu hiện có, không tự bịa phần còn thiếu |
-| EC-12 | Update syllabus nhưng sync snapshot sang AnythingLLM lỗi | Workspace tạm thời chưa dùng bản syllabus mới, hệ thống phải báo trạng thái sync lỗi để retry |
+| EC-12 | Update syllabus nhưng đồng bộ kiến thức syllabus lỗi | Hệ thống tạm thời chưa dùng bản syllabus mới, phải báo trạng thái đồng bộ lỗi để retry |
 
 ## 8. NFR
 
@@ -192,10 +197,10 @@ Xây dựng một trợ lý học tập cho sinh viên FPT, kết hợp:
 |---|---|
 | NFR-01 | Role-based access đúng |
 | NFR-02 | Subject detail phải dùng được ngay cả khi không mở chat |
-| NFR-03 | Upload/index phải async |
+| NFR-03 | Upload và xử lý tài liệu phải chạy nền, không chặn thao tác của user |
 | NFR-04 | Câu trả lời phải truy nguồn được |
 | NFR-05 | Kiến trúc mở rộng được sang multi-format ở Release B |
-| NFR-06 | Snapshot syllabus trong workspace phải đồng bộ kịp thời sau khi syllabus thay đổi |
+| NFR-06 | Kiến thức syllabus trong phạm vi truy xuất phải đồng bộ kịp thời sau khi syllabus thay đổi |
 
 ### Giới hạn kỹ thuật Release A
 
@@ -223,5 +228,5 @@ Xây dựng một trợ lý học tập cho sinh viên FPT, kết hợp:
 
 ## 10. Demo data scope
 
-- Database design hỗ trợ mở rộng toàn trường
+- Thiết kế hệ thống hỗ trợ mở rộng toàn trường
 - Demo data chốt ở các môn chuyên ngành `SE`, học kỳ `1-8`

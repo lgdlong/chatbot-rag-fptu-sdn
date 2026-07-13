@@ -1,0 +1,277 @@
+{
+  "metadata": {
+    "syllabus_id": "12594",
+    "syllabus_name": "Academic Skills for University Success_Kỹ năng học tập ở Đại học",
+    "syllabus_name_english": "",
+    "subject_code": "SSL101c",
+    "credits": "3",
+    "degree_level": "Bachelor",
+    "time_allocation": "42 hours online +  4.5 hrs offline (3 slots) + 1hr exam + 102.5 hours self-study",
+    "prerequisites": "None",
+    "description": "Upon finishing the course, students can:\n1) Knowledge: Understand\n- Method to develop your Information & Digital Literacy Skills\n- Method to develop your Problem Solving and Creativity Skills\n- How to develop your Critical Thinking Skills\n- How to develop your Communication Skills\n2) Able to (ABET)\n- Access, search, filter, manage and organize Information by using a variety of digital tools, from wide variety of source for use in academic study.\n- Critically evaluate the reliability of sources and use digital tools for referencing in order to avoid plagiarism.\n- Demonstrate awareness of ethical issues related to academic integrity surrounding the access and use of information\n- Develop a toolkit to be able to identify real problems and goals within ill-defined problem & Recognize and apply analytical & creative problem solving technique\n- Use a variety of thinking tools to improve critical thinking\n- Identify types of argument, and bias within arguments\n- Demonstrate, negotiate, and further understanding through spoken, written, visual, and conversational modes\n- Effectively formulate arguments and communicate research findings through the process of researching, composing, and editing\n3) Others: (ABET)\n- Improve study skills (academic reading, information searching, ...)",
+    "student_tasks": "1. Join the online course (spec.) when being invited by the admin.\n2. Enroll in each MOOC of spec., regularly study MOOCs at least 5hrs/week by watching videos, reading materials, taking quizzes, doing assignments... as required\n3. Respect the Coursera Code of Conduct, at  https://learner.coursera.help/hc/en-us/articles/208280036-Coursera-Code-of-Conduct\n3. Keep online learning progress promptly (bonus will be awarded)\n4. Communicate and discuss in forum\n5. Attend off-line sessions in the Campus (Optional)\n6. Must complete all MOOCs of spec. with certification in order to take the Final Exam at Campus",
+    "tools": "Online Spec. https://www.coursera.org/specializations/academic-skills; University of Sydney, including:\n- MOOC1: Introduction to Information & Digital Literacy for University Success ,  https://www.coursera.org/learn/digital-literacy/home/welcome\n- MOOC2: Introduction to Problem-Solving Skill for University Success, https://www.coursera.org/learn/problem-solving-skills/home/welcome\n- MOOC3: Critical Thinking Skills for University Success, https://www.coursera.org/learn/critical-thinking-skills/home/welcome\n- MOOC4: Communication Skills for University Success, https://www.coursera.org/learn/communication-skills/home/welcome\n- MOOC5: Academic Skills for University Success: Capstone, https://www.coursera.org/learn/academic-skills-project/home/welcome",
+    "scoring_scale": "10",
+    "decision_no": "359/QĐ-ĐHFPT dated 04/09/2025",
+    "is_approved": "True",
+    "note": "1) Ongoing assessment: Students who complete all MOOCs before the course deadline will receive 1 bonus point; otherwise, no bonus point will be awarded.\n2) Theoretical Exam (TE)\n3) Final Result (FR) =min (10, TE + Bonus)\n4) Completion Criteria:  TE>=4 and FR>=5",
+    "min_avg_mark_to_pass": "5",
+    "is_active": "True",
+    "approved_date": "4/9/2025"
+  },
+  "materials": [
+    {
+      "description": "https://www.coursera.org/specializations/academic-skills",
+      "author": "",
+      "publisher": "Coursera",
+      "published_date": "",
+      "edition": "",
+      "isbn": "",
+      "is_main_material": "",
+      "is_hard_copy": "",
+      "is_online": "",
+      "note": "SPEC: Academic Skills for University Success Specialization"
+    },
+    {
+      "description": "https://www.coursera.org/learn/digital-literacy",
+      "author": "",
+      "publisher": "Coursera",
+      "published_date": "",
+      "edition": "",
+      "isbn": "",
+      "is_main_material": "",
+      "is_hard_copy": "",
+      "is_online": "",
+      "note": "MOOC 01: Introduction to Information & Digital Literacy for University Success"
+    },
+    {
+      "description": "https://www.coursera.org/learn/problem-solving-skills",
+      "author": "",
+      "publisher": "Coursera",
+      "published_date": "",
+      "edition": "",
+      "isbn": "",
+      "is_main_material": "",
+      "is_hard_copy": "",
+      "is_online": "",
+      "note": "MOOC 02: Introduction to Problem-Solving Skill for University Success"
+    },
+    {
+      "description": "https://www.coursera.org/learn/critical-thinking-skills",
+      "author": "",
+      "publisher": "Coursera",
+      "published_date": "",
+      "edition": "",
+      "isbn": "",
+      "is_main_material": "",
+      "is_hard_copy": "",
+      "is_online": "",
+      "note": "MOOC 03: Critical Thinking Skills for University Success"
+    },
+    {
+      "description": "https://www.coursera.org/learn/communication-skills",
+      "author": "",
+      "publisher": "Coursera",
+      "published_date": "",
+      "edition": "",
+      "isbn": "",
+      "is_main_material": "",
+      "is_hard_copy": "",
+      "is_online": "",
+      "note": "MOOC 04: Communication Skills for University Success"
+    },
+    {
+      "description": "https://www.coursera.org/learn/academic-skills-project",
+      "author": "",
+      "publisher": "Coursera",
+      "published_date": "",
+      "edition": "",
+      "isbn": "",
+      "is_main_material": "",
+      "is_hard_copy": "",
+      "is_online": "",
+      "note": "MOOC 05: Academic Skills for University Success: Capstone"
+    }
+  ],
+  "clos": [
+    {
+      "clo_name": "1",
+      "clo_details": "CLO1",
+      "lo_details": "Understand and demonstrate how to develop Information & Digital Literacy Skills to help you achieve success in university studies"
+    },
+    {
+      "clo_name": "2",
+      "clo_details": "CLO2",
+      "lo_details": "Develop Problem Solving and Creativity Skills"
+    },
+    {
+      "clo_name": "3",
+      "clo_details": "CLO3",
+      "lo_details": "Develop Critical Thinking Skills"
+    },
+    {
+      "clo_name": "4",
+      "clo_details": "CLO4",
+      "lo_details": "Develop Communication Skills"
+    },
+    {
+      "clo_name": "5",
+      "clo_details": "CLO5",
+      "lo_details": "Apply all knowledge of skills learned in the courses to build a Capstone Project"
+    }
+  ],
+  "schedule": [
+    {
+      "session": "1",
+      "topic": "Introduction to the online course SSL101 (offline) Module 1 (MOOC 1): (online) - Welcome - Introduction to Academic Culture & Digital Literacy - Academic Integrity - How it Works - Tool and Tips Module 2 (MOOC 1): (online) - Information Types by Field - How to Read a Journal Article in the Humanities - How to Read a Journal Article in the Sciences - Characteristics of Journal Article Accessing Information - Accessing & Defining an Information Need - Developing a Search Strategy - Documenting and Evaluating the Search Strategy",
+      "learning_method": "Offline,Online",
+      "lo": "LO1",
+      "itu": "",
+      "student_materials": "Online",
+      "s_download": "",
+      "student_tasks": "Enroll to the spec on Coursera for FPT University Platform Module 1 (MOOC 1): (online) - Watch all videos, read all materials in the module - Finish quiz: Summative Quiz, discussion board self assessment, assignment Module 2 (MOOC 1): (online) - Watch all videos, read all materials in the module - Finish quiz: Summative Quiz, discussion board self-assessment, assignment ***Should students need any support, please contact: - For the course's content-related questions: Coursera's instructors/other learners of the course via the discussion forum and/or FPTU's course mentors - For other inquiries: Coursera help center and/or FPTU's Student service department.",
+      "urls": ""
+    },
+    {
+      "session": "2",
+      "topic": "Module 3 (MOOC 1): - Critically Evaluating Information & Web Resources & Wikipedia - Establishing Relevance - Managing Information: Files & Folders - Processing and Coding",
+      "learning_method": "Online,Offline",
+      "lo": "LO1",
+      "itu": "",
+      "student_materials": "Online",
+      "s_download": "",
+      "student_tasks": "- Watch all videos, read all materials in the module - Finish quiz: Summative Quiz, discussion board self assessment, assignment",
+      "urls": ""
+    },
+    {
+      "session": "3",
+      "topic": "Module 4 (MOOC 1): (online) - Avoiding Plagiarism - Referencing & Attributing Resources - Paraphrasing and Summarizing & Referencing Software - Mendeley, EndNote Module 5 (MOOC 1): (online) - Copyright ; Creative Commons Licensing - Digital Networks for Learning and Research - Managing Digital Identity - Presenting yourself online - Communicating Online; Emailing Lecturers; Writing an Email",
+      "learning_method": "Online",
+      "lo": "LO1",
+      "itu": "",
+      "student_materials": "Online",
+      "s_download": "",
+      "student_tasks": "Module 4 (MOOC 1): - Watch all videos, read all materials in the module - Finish quiz: Summative Quiz, discussion board self assessment, assignment Module 5 (MOOC 1): - Watch all videos, read all materials in the module - Finish quiz: Summative Quiz, discussion board self-assessment, assignment Optional Practice: Coursera - FPT University Private Authored Courses: SSL101c - How To Avoid Plagiarism with Digital Tools (Guided Project)",
+      "urls": ""
+    },
+    {
+      "session": "4",
+      "topic": "Module 1 & 2 (MOOC 2): - Introduction to the Course - Introduction to Problem Solving & Academic Culture Module 3 (MOOC 2): - Strategies for Undemanding and Beginning the Problem5m - Strategies for Problem-Solving with Specialized Knowledge & Special Cases - Defining & Categorizing Problems - Descriptive & Analytical Tasks and Problems - The Problem Solving Process 2.4b The Problem Solving Process4m",
+      "learning_method": "Online",
+      "lo": "LO2",
+      "itu": "",
+      "student_materials": "Online",
+      "s_download": "",
+      "student_tasks": "Module 1 & 2 (MOOC 2): - Watch all videos, read all materials in the module - Finish quiz: Summative Quiz, discussion board self assessment, assignment Module 3 (MOOC 2): - Watch all videos, read all materials in the module - Finish quiz: Summative Quiz",
+      "urls": ""
+    },
+    {
+      "session": "5",
+      "topic": "Module 4 (MOOC 2): (online) - Seeking Different Perspectives - Applying Forms of Reasoning and Thinking - Questioning Assumptions & Considering Alternatives - Using Creative Strategies - Strategies for Evaluating Solutions Module 5 ( MOOC2) Communicating Solutions - Communicating Solutions: in Written & Oral Form, in Exams - Group Problem Solving - Group Work at University - Organization & Time Management",
+      "learning_method": "Online",
+      "lo": "LO2",
+      "itu": "",
+      "student_materials": "Online",
+      "s_download": "",
+      "student_tasks": "Module 4 & 5 (MOOC 2): - Watch all videos, read all materials in the module - Finish quiz: Summative Quiz, discussion board self assessment, assignment",
+      "urls": ""
+    },
+    {
+      "session": "6",
+      "topic": "Module 1, Module 2 (MOOC 3): - Introduction to Critical Thinking Dispositions & Habits of Mind for Critical Thinking - Dispositions & Habits of Mind for Critical Thinking Expert Video - Argument Spheres & Field - Questioning in Critical Thinking & a Text Module 3, Module 4 (MOOC 3): - Logic & Reasoning : Formal Logic Structures; Common Fallacies - Forms of Reasoning - Applying Systems Thinking - Claims and Evidence - Identifying Biases and Assumptions - Using Critical Thinking & Criteria to Evaluate Arguments -Types of Argument",
+      "learning_method": "Online",
+      "lo": "LO3",
+      "itu": "",
+      "student_materials": "Online",
+      "s_download": "",
+      "student_tasks": "Module 1, Module 2 (MOOC 3): - Watch all videos, read all materials in the module - Finish quiz: Summative Quiz, discussion board self assessment, assignment Module 3, Module 4 (MOOC 3): - Watch all videos, read all materials in the module - Finish quiz: Summative Quiz, discussion board self assessment, assignment",
+      "urls": ""
+    },
+    {
+      "session": "7",
+      "topic": "Module 5 ( MOOC 3) (online) - Demonstrating Critical Thinking - Argument Structures & Chains - Models for Academic Argumentation - Critical Thinking, Critique and Reflective Writing Summative Assessment & Peer-graded Assignment",
+      "learning_method": "Online",
+      "lo": "LO3",
+      "itu": "",
+      "student_materials": "Online",
+      "s_download": "",
+      "student_tasks": "Module 5 ( MOOC 3) - Watch all videos, read all materials in the module - Finish quiz: Summative Quiz, discussion board self assessment, assignment Review MOOC 1, 2, 3 - All Students should participate in review slot(if any question)",
+      "urls": ""
+    },
+    {
+      "session": "8",
+      "topic": "Module 1, Module 2 (MOOC 4): - Introduce & Participate to Communication in Academic Culture - Introduction to Academic Culture & Communication - Resilience & Motivation for University - Introduction to rhetorical situations at university - University course outlines & contexts of communication - Participation & Communication at University - Participating in Lectures & Tutorials, Online Forums, Group Work",
+      "learning_method": "Online",
+      "lo": "LO4",
+      "itu": "",
+      "student_materials": "Online",
+      "s_download": "",
+      "student_tasks": "Module 1, Module 2 (MOOC 4) - Watch all videos, read all materials in the module - Finish quiz: Summative Quiz, discussion board self assessment, assignment",
+      "urls": ""
+    },
+    {
+      "session": "9",
+      "topic": "Module 3 & 4 (MOOC 4) Interpreting, Researching & Planning Written Assignments; and Writing Effective & Concise Written Assignments - Understanding Essay Assignments - Interpreting Essay Questions - Understanding and Interpreting Reports & Proposals - Conducting Research for Essays, Reports & Proposals - Planning Essays, Reports & Proposals - Drafting Essays, Reports & Proposals - Coherence & Cohesion for Essays & Reports - Polishing & Refining Essays, Reports & Proposals - Incorporating Visual Aids in Written Assignments - Formatting and Proofreading Written Assignments for Submission Module 5 (MOOC 4) (online) Giving Persuasive & Engaging Presentations - Planning Presentations & Preparing Visual Aids - Writing your Script & Practicing your Script - Finding your Presentation Style - Facilitating Audience Interaction and Fielding Questions",
+      "learning_method": "Online",
+      "lo": "LO4",
+      "itu": "",
+      "student_materials": "Online",
+      "s_download": "",
+      "student_tasks": "Module 3 & 4 & 5 (MOOC 4) - Watch all videos, read all materials in the module - Finish quiz: Summative Quiz, discussion board self assessment, assignment",
+      "urls": ""
+    },
+    {
+      "session": "10",
+      "topic": "Module 1 & 2 (MOOC 5): (online) Introduction to Capstone & Researching the Current State - Identifying a Real World Problem - Causes & Effects - Writing a Problem Statement - Searching for, Evaluating & Using Information for the Capstone - Writing a Background Paragraph",
+      "learning_method": "Online",
+      "lo": "LO5",
+      "itu": "",
+      "student_materials": "Online",
+      "s_download": "",
+      "student_tasks": "Module 1 & 2 (MOOC 5): - All Students should participate in review slot (course 4) - Watch all videos, read all materials in the modules - Finish all quizzes and assignments in the module",
+      "urls": ""
+    },
+    {
+      "session": "11",
+      "topic": "Module 3, Module 4 (MOOC 5): Solving the problem ; Write the Project Proposal - Defining the Desired State - Evaluating the Actions - Big Picture & SMART goal & Plan - Participants & Resources - Titles & Refining and Polishing",
+      "learning_method": "Online",
+      "lo": "LO5",
+      "itu": "",
+      "student_materials": "Online",
+      "s_download": "",
+      "student_tasks": "- Watch all videos, read all materials in the modules - Finish all quizzes and assignments in the module",
+      "urls": ""
+    },
+    {
+      "session": "12",
+      "topic": "Module 5 (MOOC 5): Plan, write, and produce the video presentation - Introduction to the Video Presentation - Creating the Storyboard - Writing the Script - Preparing & Recording the Scrip Summative Assessment & Peer-graded Assignment Review MOOC 4,5 (offline)",
+      "learning_method": "Online,Offline",
+      "lo": "LO5",
+      "itu": "",
+      "student_materials": "Online",
+      "s_download": "",
+      "student_tasks": "- Watch all videos, read all materials in the modules - Finish all quizzes and assignments in the module - All Students should participate in review slot(if any question) - Review MOOC 4,5 Summative Assessment & Peer-graded Assignment Deadline of Course Completion: End of Friday of the week.",
+      "urls": ""
+    }
+  ],
+  "constructive_questions": [],
+  "assessment_scheme": [
+    {
+      "category": "Theoretical Exam (TE)",
+      "type": "Final exam",
+      "part": "1",
+      "weight": "100.0%",
+      "completion_criteria": "4",
+      "duration": "60'",
+      "clo": "LO1, LO2, LO3, LO4, LO5",
+      "question_type": "Multiple choice",
+      "no_question": "60",
+      "knowledge_and_skill": "The whole course content. Each module of course contributes 3-5 questions.",
+      "grading_guide": "by exam board",
+      "note": ""
+    }
+  ],
+  "references": [
+    "359/QĐ-ĐHFPT dated 04/09/2025"
+  ]
+}

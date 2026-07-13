@@ -77,21 +77,6 @@ async function main() {
       create: { email: acc.email },
     });
 
-    if (acc.role !== "STUDENT") {
-      console.log(`Ensuring lecturer/admin request exists for ${acc.email}...`);
-      await prisma.lecturerRequest.upsert({
-        where: { email: acc.email },
-        update: {},
-        create: {
-          name: acc.name,
-          email: acc.email,
-          reason: "Tự động tạo tài khoản thử nghiệm hệ thống",
-          status: "APPROVED",
-        },
-      });
-    }
-
-
     // Call API to Sign Up
     console.log(`Calling Better Auth signUpEmail API for ${acc.email}...`);
     const signupRes = await auth.api.signUpEmail({

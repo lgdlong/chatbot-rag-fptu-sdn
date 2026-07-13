@@ -1,10 +1,11 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { createTheme, MantineProvider, MantineColorsTuple } from "@mantine/core";
 import { Notifications } from "@mantine/notifications";
 import { ModalsProvider } from "@mantine/modals";
 import { NavigationProgress } from "@mantine/nprogress";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { AuthProvider } from "./contexts/AuthContext";
 
 // Define a unified FPT theme color palette (10 shades per Mantine requirement)
@@ -68,15 +69,27 @@ import "@mantine/dropzone/styles.css";
 import "@mantine/charts/styles.css";
 
 export function Providers({ children }: { children: React.ReactNode }) {
+  const [queryClient] = useState(() => new QueryClient({
+    defaultOptions: {
+      queries: {
+        staleTime: 30 * 1000,       // 30s before re-fetch
+        retry: 1,
+        refetchOnWindowFocus: false,
+      },
+    },
+  }));
+
   return (
-    <AuthProvider>
-      <MantineProvider theme={theme} defaultColorScheme="light" forceColorScheme="light">
-        <Notifications />
-        <NavigationProgress />
-        <ModalsProvider>
-          {children}
-        </ModalsProvider>
-      </MantineProvider>
-    </AuthProvider>
+    <QueryClientProvider client={queryClient}>
+      <AuthProvider>
+        <MantineProvider theme={theme} defaultColorScheme="light" forceColorScheme="light">
+          <Notifications position="top-right" />
+          <NavigationProgress />
+          <ModalsProvider>
+            {children}
+          </ModalsProvider>
+        </MantineProvider>
+      </AuthProvider>
+    </QueryClientProvider>
   );
 }

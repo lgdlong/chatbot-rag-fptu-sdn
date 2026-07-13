@@ -1,4 +1,7 @@
 import { PrismaClient } from '@prisma/client'
+import fs from 'node:fs'
+import path from 'node:path'
+import { fileURLToPath } from 'node:url'
 
 const prisma = new PrismaClient()
 
@@ -23,7 +26,6 @@ async function main() {
   await prisma.specialization.deleteMany()
   await prisma.major.deleteMany()
   await prisma.emailWhitelist.deleteMany()
-  await prisma.lecturerRequest.deleteMany()
   await prisma.account.deleteMany()
   await prisma.user.deleteMany()
 
@@ -35,7 +37,10 @@ async function main() {
     'student2@fpt.edu.vn',
     'longld@fpt.edu.vn',
     'longlgd@fpt.edu.vn',
-    'test@fpt.edu.vn'
+    'test@fpt.edu.vn',
+    'student-test@fpt.edu.vn',
+    'lecturer-test@fpt.edu.vn',
+    'admin-test@fpt.edu.vn'
   ]
 
   for (const email of whitelistEmails) {
@@ -104,7 +109,8 @@ async function main() {
     { code: 'FER202', name: 'Front-End Web Development with React' },
     { code: 'SDN302', name: 'Server-Side Development with NodeJS' },
     { code: 'MMA301', name: 'Multiplatform Mobile App Development' },
-    { code: 'WDP301', name: 'Web Development Project' }
+    { code: 'WDP301', name: 'Web Development Project' },
+    { code: 'PRN232', name: 'Building Cross-Platform Back-End Application With .NET' }
   ]
 
   const subjects: Record<string, any> = {}
@@ -117,6 +123,126 @@ async function main() {
     })
   }
   console.log(`📖 Đã tạo ${subjectsData.length} môn học trong DB.`);
+
+  // 6.2 Seed detailed Syllabus for FER202 and PRN232 from JSON files
+  const __filename = fileURLToPath(import.meta.url)
+  const __dirname = path.dirname(__filename)
+
+  const seedSyllabusFromJson = async (jsonFileName: string, courseCode: string) => {
+    const filePath = path.resolve(__dirname, '../../web/app/imports', jsonFileName)
+    if (!fs.existsSync(filePath)) {
+      console.log(`⚠️ Không tìm thấy file JSON syllabus tại: ${filePath}`)
+      return
+    }
+
+    const raw = fs.readFileSync(filePath, 'utf-8')
+    const data = JSON.parse(raw)
+    const { metadata, materials, clos, schedule, assessment_scheme } = data
+    const course = subjects[courseCode]
+
+    if (!course) {
+      console.log(`⚠️ Không tìm thấy môn học tương ứng trong DB: ${courseCode}`)
+      return
+    }
+
+    const syllabusId = parseInt(metadata.syllabus_id, 10)
+
+    await prisma.syllabus.create({
+      data: {
+        id: syllabusId,
+        courseId: course.id,
+        syllabusName: metadata.syllabus_name,
+        syllabusNameEnglish: metadata.syllabus_name_english,
+        credits: parseInt(metadata.credits, 10) || 3,
+        degreeLevel: metadata.degree_level || 'Bachelor',
+        timeAllocation: metadata.time_allocation || '',
+        prerequisites: metadata.prerequisites || '',
+        description: metadata.description || '',
+        studentTasks: metadata.student_tasks || '',
+        tools: metadata.tools || '',
+        scoringScale: metadata.scoring_scale || '10',
+        decisionNo: metadata.decision_no || '',
+        minAvgMarkToPass: parseFloat(metadata.min_avg_mark_to_pass) || 5.00,
+        isApproved: metadata.is_approved === 'True' || metadata.is_approved === true,
+        isActive: metadata.is_active === 'True' || metadata.is_active === true,
+        note: metadata.note || '',
+        
+        materials: {
+          create: (materials || []).map((m: any) => ({
+            description: m.description,
+            author: m.author || null,
+            publisher: m.publisher || null,
+            publishedDate: m.published_date || null,
+            edition: m.edition || null,
+            isbn: m.isbn || null,
+            isMainMaterial: m.is_main_material || null,
+            isHardCopy: m.is_hard_copy || null,
+            isOnline: m.is_online || null,
+            note: m.note || null,
+          }))
+        },
+        clos: {
+          create: (clos || []).map((c: any) => ({
+            cloName: c.clo_name,
+            cloDetails: c.clo_details,
+            loDetails: c.lo_details || null,
+          }))
+        },
+        schedules: {
+          create: (schedule || []).map((s: any) => ({
+            session: parseInt(s.session, 10),
+            topic: s.topic,
+            learningMethod: s.learning_method || null,
+            lo: s.lo || null,
+            itu: s.itu || null,
+            studentMaterials: s.student_materials || null,
+            sDownload: s.s_download || null,
+            studentTasks: s.student_tasks || null,
+            urls: s.urls || null,
+          }))
+        },
+        assessments: {
+          create: (assessment_scheme || []).map((a: any) => ({
+            category: a.category,
+            type: a.type || null,
+            part: a.part || null,
+            weight: parseFloat(a.weight) || 0.00,
+            completionCriteria: a.completion_criteria || null,
+            duration: a.duration || null,
+            clo: a.clo || null,
+            questionType: a.question_type || null,
+            noQuestion: a.no_question || null,
+            knowledgeAndSkill: a.knowledge_and_skill || null,
+            gradingGuide: a.grading_guide || null,
+            note: a.note || null,
+          }))
+        }
+      }
+    })
+
+    // Create a mock document to make the syllabus accessible by the chatbot
+    await prisma.document.create({
+      data: {
+        id: `mock-doc-id-${syllabusId}`,
+        name: `${metadata.subject_code}_Syllabus_Official.pdf`,
+        fileUrl: `/uploads/${metadata.subject_code}_Syllabus_Official.pdf`,
+        fileType: "pdf",
+        status: "COMPLETED",
+        syllabusId: syllabusId,
+      }
+    });
+
+    console.log(`ℹ️ Đã nạp chi tiết Syllabus và mock Document từ ${jsonFileName} cho môn học ${courseCode}`);
+  }
+
+  await seedSyllabusFromJson('20260522_133015_FER202_details.json', 'FER202')
+  await seedSyllabusFromJson('20260522_223218_PRN232_details.json', 'PRN232')
+
+  // Sync sequence để tránh conflict khi tạo syllabus mới qua UI (không set explicit id)
+  await prisma.$executeRawUnsafe(
+    `SELECT setval('syllabuses_id_seq', (SELECT MAX(id) + 1 FROM syllabuses), false);`,
+  )
+  console.log('ℹ️ Đã đồng bộ sequence syllabuses_id_seq');
 
   // 7. Seed CurriculumSubject (N:M liên kết khung CTĐT và môn học)
   const curriculumSubjects = [
@@ -196,25 +322,6 @@ async function main() {
   console.log('👨‍🏫 Đã tạo tài khoản giảng viên mặc định:');
   console.log('   - Email: teacher@fpt.edu.vn');
   console.log('   - Mật khẩu mặc định: dùng chung giá trị hash cấu hình sẵn trong seed');
-
-  // 10. Seed yêu cầu đăng ký giảng viên mẫu
-  await prisma.lecturerRequest.createMany({
-    data: [
-      {
-        name: 'Nguyễn Văn A',
-        email: 'lecturer-request-1@fpt.edu.vn',
-        reason: 'Bộ môn SE cần quyền quản lý syllabus FER202.',
-        status: 'PENDING',
-      },
-      {
-        name: 'Trần Thị B',
-        email: 'lecturer-request-2@fpt.edu.vn',
-        reason: 'Cần quyền upload học liệu SDN302 cho học kỳ mới.',
-        status: 'PENDING',
-      },
-    ],
-  })
-  console.log('📝 Đã tạo 2 yêu cầu đăng ký giảng viên mẫu.');
 
   console.log('🎉 Quá trình Seeding hoàn tất thành công!');
 }

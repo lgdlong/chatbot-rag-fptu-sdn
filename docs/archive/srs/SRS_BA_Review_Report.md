@@ -1,5 +1,11 @@
 # Báo Cáo Đánh Giá SRS — Business Analyst Review
 
+> Status: Archived
+> Audience: All
+> Canonical: No — superseded
+> Owner: Docs
+>
+
 > [!WARNING]
 > Đây là tài liệu review lịch sử, phản ánh các vòng phân tích trước đó.
 > File này không phải source of truth hiện hành.

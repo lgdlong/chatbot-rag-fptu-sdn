@@ -1,0 +1,457 @@
+{
+  "metadata": {
+    "syllabus_id": "13539",
+    "syllabus_name": "Vovinam 2",
+    "syllabus_name_english": "",
+    "subject_code": "VOV124",
+    "credits": "2",
+    "degree_level": "Bachelor",
+    "time_allocation": "28 slots",
+    "prerequisites": "Passed VOV114",
+    "description": "Mục tiêu: Học phần nhằm trang bị cho sinh viên kiến thức cơ bản võ đạo, vệ sinh học trong tâp luyện TDTT và 10 chiến lược trong môn võ Vovinam.Trình độ: Sinh viên không chuyên VovinamPhương pháp giảng dạy: Sử dụng các phương pháp dạy truyền thống và hiện đại như: Giảng giải, phân tích thị phạm, dùng hình ảnh trực quan kết hợp với tư duy tích cực của người học, thảo luận, nêu vấn đề, ......;Sử dụng phương tiện chuyên môn cơ bản của giáo dục thể chất (các bài tập thể thao) và các phương tiện về phục vụ dạy học hiện có của nhà trường.Đánh giá học phần: Thực hành: Kỹ thuật chiến lược Vovinam Việt Võ ĐạoThể Lực: Hệ thống bài tập thể lực phát triển thể lực chung Lý thuyết: Kiến thức võ đạo & Kiến thức vệ sinh học trong tập luyện TDTTNội dung giảng dạy:*Bài 1: Lý thuyết võ đạo từ câu 11 đến câu 30*Bài 2: Vệ sinh trong một buổi tập luyện TDTT*Bài 3:  Khái niệm cơ bản Vệ sinh dinh dưỡng trong tập luyện TDTTThực hành:* Chiến lược: Từ 1 - 10* Bài tập thể lực chung: Hệ thống các bài tập phát triển tố chất thể lực chung; sức nhanh, mạnh, bền, mền deo, khéo léo",
+    "student_tasks": "* Dự lớp: Đảm bảo dự ≥ 80% tổng thời lượng của kỳ học.* Bài tập: Thực hiện tốt yêu cầu, nhiệm vụ các bài tập được giao.* Khác: Thường xuyên hoạt động tập luyện ngoại khóa. (Sinh hoạt CLB TDTT ngoại khoá, đổi tuyển trường đi thi đấu, được cộng điểm khuyến khích)* Thực hành: Thực hiện các tập; bài kiểm tra; thi lấy điểm.",
+    "tools": "",
+    "scoring_scale": "10",
+    "decision_no": "932/QĐ-ĐHFPT dated 08/22/2025",
+    "is_approved": "True",
+    "note": "Điều kiện miễn giảm môn học* Các đối tượng được xét miễn môn học: Học sinh, sinh viên (HSSV) có bằng tốt nghiệp đại học chuyên nghành GDTC, huấn luyện thể thao.* Các đối tượng miễn học, phải thi: Theo quy định của nhà trường, Bộ môn GDTC giao 02 bài tập tại nhà, bài học lý thuyết, thi cuối kỳ tại lớp.* Các đối tượng được miễn tập luyện và thi các nội dung về thể lực thì xem xét chuyển học môn Cờ Vua. + Sinh viên có chứng nhận của cơ quan y tế chị định hạn chế và không tập luyện thể lực vì có nguy cơ đột tử về các bệnh: Tim, hen suyễn, gây chân, gẫy cột sống, xương thủy tinh, phì – võ mạch máu não – tim, thần kinh,.....;+ Các trường hợp có bệnh án của cơ quan ý tế gửi đơn xin xét miễn thể lực và bệnh án nộp về phòng Đào tạo, xem xét từ CNBM để được tư vấn và xem xét+ Có giấy chứng nhận khuyết tật theo quy định của pháp luật, tai nạn dấn đến chấn thương như gẫy tay, gẫy cột sống,....+ Các trường hợp sinh viên theo học từ đầu khóa, trong quá trình học, khônng may rủi ro tai nạn, các vấn đề khác,.......SV sẽ được giao 02 bài tập trị liệu để tập tại nhà, bài học lý thuyết, thi cuối kỳ tại lớp.* Các đối tượng được tạm hoãn học môn GDTC+ Sinh viên vì lý so sức khỏe phải dừng học trong thời gian điều trị, phải có giấy xác nhận của cơ quan ý tế noi sinh viên điều trị. Hết thời gian tạm hoãn, sinh viên đăng ký học lại chương trình GDTC theo từng học phần.+ Sinh viên là nữ đang mang thai hoặc trong thời gian nghỉ thai sản theo quy định hiện hành. Hết thời gian tạm hoãn, sinh viên đăng ký học lại các học phần GDTC theo từng học phần.",
+    "min_avg_mark_to_pass": "5",
+    "is_active": "True",
+    "approved_date": "8/22/2025"
+  },
+  "materials": [
+    {
+      "description": "Giáo trình Vệ sinh thể dục thể thao",
+      "author": "",
+      "publisher": "NXB TTTT, Hà Nội (2020)",
+      "published_date": "",
+      "edition": "",
+      "isbn": "",
+      "is_main_material": "",
+      "is_hard_copy": "",
+      "is_online": "",
+      "note": ""
+    },
+    {
+      "description": "Lý luận và phương pháp GDTC",
+      "author": "",
+      "publisher": "NXB TTTT, Hà Nội (2020)",
+      "published_date": "",
+      "edition": "",
+      "isbn": "",
+      "is_main_material": "",
+      "is_hard_copy": "",
+      "is_online": "",
+      "note": ""
+    },
+    {
+      "description": "Lý luận và phương pháp huấn luyện thể thao",
+      "author": "",
+      "publisher": "NXB TTTT, Hà Nội (2017)",
+      "published_date": "",
+      "edition": "",
+      "isbn": "",
+      "is_main_material": "",
+      "is_hard_copy": "",
+      "is_online": "",
+      "note": ""
+    },
+    {
+      "description": "Sách Kỹ thuật Vovinam-Việt Võ Đạo tập 1",
+      "author": "",
+      "publisher": "NXB TDTT, HN (2008)",
+      "published_date": "",
+      "edition": "",
+      "isbn": "",
+      "is_main_material": "",
+      "is_hard_copy": "",
+      "is_online": "",
+      "note": ""
+    },
+    {
+      "description": "Sách thức võ đạo Vovinam",
+      "author": "",
+      "publisher": "Tài liệu nội bộ Vovinam",
+      "published_date": "",
+      "edition": "",
+      "isbn": "",
+      "is_main_material": "",
+      "is_hard_copy": "",
+      "is_online": "",
+      "note": ""
+    }
+  ],
+  "clos": [
+    {
+      "clo_name": "1",
+      "clo_details": "CLO1",
+      "lo_details": "Có khả năng vận dụng kiến thức cơ bản về Vovinam Việt Võ Đạo bao gồm võ nghi, võ lễ và các tri thức nền tảng để tích cực, tự giác rèn luyện thể chất, hiểu và áp dụng được các nguyên tắc vệ sinh sinh dưỡng, vệ sinh chung trong một buổi luyện tập, từ đó nâng cao ý thức chăm sóc sức khỏe của bản thân."
+    },
+    {
+      "clo_name": "2",
+      "clo_details": "CLO2",
+      "lo_details": "Có khả năng thực hành và phân tích các kỹ thuật động tác căn bản phù hợp với đặc điểm giải phẫu cá nhân. Đồng thời vận dụng các bài tập đã học để tự rèn luyện, từ đó hình thành các kỹ năng, kỹ xảo một cách tương đối thuần thục."
+    },
+    {
+      "clo_name": "3",
+      "clo_details": "CLO3",
+      "lo_details": "Sinh viên có thể tự tin vận dụng kiến thức để trình bày, giải thích và tự tập luyện, chủ động giải quyết các vấn đề liên quan đến môn học."
+    }
+  ],
+  "schedule": [
+    {
+      "session": "1",
+      "topic": "Công tác tổ chức lớp * Ôn tập: Kiến thức lý thuyết học phần 1.* Lý thuyết võ đạo từ câu 11 – 30",
+      "learning_method": "offline; lý thuyết",
+      "lo": "CLO1",
+      "itu": "ITU",
+      "student_materials": "",
+      "s_download": "",
+      "student_tasks": "* Ôn tập các kỹ thuật căn bản đã học.* Rèn luyện thể lực.",
+      "urls": ""
+    },
+    {
+      "session": "2",
+      "topic": "Công tác tổ chức lớp * Ôn tập: Kiến thức lý thuyết học phần 1. * Vệ sinh trong một buổi tập luyện",
+      "learning_method": "offline; lý thuyết",
+      "lo": "CLO1",
+      "itu": "ITU",
+      "student_materials": "",
+      "s_download": "",
+      "student_tasks": "* Ôn tập các kỹ thuật căn bản đã học.* Rèn luyện thể lực.",
+      "urls": ""
+    },
+    {
+      "session": "3",
+      "topic": "Công tác tổ chức lớp * Khái niệm cơ bản Vệ sinh dinh dưỡng trong tập luyện TDTT* KT bài tập khởi động chung, chuyên môn",
+      "learning_method": "offline; lý thuyết",
+      "lo": "CLO1",
+      "itu": "ITU",
+      "student_materials": "",
+      "s_download": "",
+      "student_tasks": "* Ôn tập các kỹ thuật căn bản đã học.* Rèn luyện thể lực.",
+      "urls": ""
+    },
+    {
+      "session": "4",
+      "topic": "Kỹ thuật đòn chiến lược 1* Giảng dạy và hoàn thiện kỹ thuật. Phân tích được các giai đoạn thực hiện kỹ thuật chiến lược 1* Bài tập thể lực",
+      "learning_method": "offline; thực hành",
+      "lo": "CLO2;3;4",
+      "itu": "TU",
+      "student_materials": "",
+      "s_download": "",
+      "student_tasks": "* Ôn tập các kỹ thuật căn bản đã học.* Rèn luyện thể lực.",
+      "urls": ""
+    },
+    {
+      "session": "5",
+      "topic": "Kỹ thuật đòn chiến lược 1* Giảng dạy và hoàn thiện kỹ thuật. Phân tích được các giai đoạn thực hiện kỹ thuật chiến lược 1* Bài tập thể lực",
+      "learning_method": "offline; thực hành",
+      "lo": "CLO2;3;4",
+      "itu": "TU",
+      "student_materials": "",
+      "s_download": "",
+      "student_tasks": "* Ôn tập các kỹ thuật căn bản đã học.* Rèn luyện thể lực.",
+      "urls": ""
+    },
+    {
+      "session": "6",
+      "topic": "Kỹ thuật đòn chiến lược 2* Giảng dạy và hoàn thiện kỹ thuật. Phân tích được các giai đoạn thực hiện kỹ thuật chiến lược 2* Bài tập thể lực",
+      "learning_method": "offline; thực hành",
+      "lo": "CLO2;3;4",
+      "itu": "TU",
+      "student_materials": "",
+      "s_download": "",
+      "student_tasks": "* Ôn tập các kỹ thuật căn bản đã học.* Rèn luyện thể lực.",
+      "urls": ""
+    },
+    {
+      "session": "7",
+      "topic": "Kỹ thuật đòn chiến lược 2* Giảng dạy và hoàn thiện kỹ thuật. Phân tích được các giai đoạn thực hiện kỹ thuật chiến lược 2* Bài tập thể lực",
+      "learning_method": "offline; thực hành",
+      "lo": "CLO2;3;4",
+      "itu": "TU",
+      "student_materials": "",
+      "s_download": "",
+      "student_tasks": "* Ôn tập các kỹ thuật căn bản đã học.* Rèn luyện thể lực.",
+      "urls": ""
+    },
+    {
+      "session": "8",
+      "topic": "Kỹ thuật đòn chiến lược 3* Giảng dạy và hoàn thiện kỹ thuật. Phân tích được các giai đoạn thực hiện kỹ thuật chiến lược 3* Bài tập thể lực",
+      "learning_method": "offline; thực hành",
+      "lo": "CLO2;3;4",
+      "itu": "TU",
+      "student_materials": "",
+      "s_download": "",
+      "student_tasks": "* Ôn tập các kỹ thuật căn bản đã học.* Rèn luyện thể lực.",
+      "urls": ""
+    },
+    {
+      "session": "9",
+      "topic": "Kỹ thuật đòn chiến lược 3* Giảng dạy và hoàn thiện kỹ thuật. Phân tích được các giai đoạn thực hiện kỹ thuật chiến lược 3* Bài tập thể lực",
+      "learning_method": "offline; thực hành",
+      "lo": "CLO2;3;4",
+      "itu": "TU",
+      "student_materials": "",
+      "s_download": "",
+      "student_tasks": "* Ôn tập các kỹ thuật căn bản đã học.* Rèn luyện thể lực.",
+      "urls": ""
+    },
+    {
+      "session": "10",
+      "topic": "Kỹ thuật đòn chiến lược 4* Giảng dạy và hoàn thiện kỹ thuật. Phân tích được các giai đoạn thực hiện kỹ thuật chiến lược 4* Bài tập thể lực",
+      "learning_method": "offline; thực hành",
+      "lo": "CLO2;3;4",
+      "itu": "TU",
+      "student_materials": "",
+      "s_download": "",
+      "student_tasks": "* Ôn tập các kỹ thuật căn bản đã học. Review basic techniques that have been learned.* Rèn luyện thể lực.Strength training.",
+      "urls": ""
+    },
+    {
+      "session": "11",
+      "topic": "Kỹ thuật đòn chiến lược 4* Giảng dạy và hoàn thiện kỹ thuật. Phân tích được các giai đoạn thực hiện kỹ thuật chiến lược 4* Bài tập thể lực",
+      "learning_method": "offline; thực hành",
+      "lo": "CLO2;3;4",
+      "itu": "TU",
+      "student_materials": "",
+      "s_download": "",
+      "student_tasks": "* Ôn tập các kỹ thuật căn bản đã học.* Rèn luyện thể lực.",
+      "urls": ""
+    },
+    {
+      "session": "12",
+      "topic": "Kỹ thuật đòn chiến lược 5* Giảng dạy và hoàn thiện kỹ thuật. Phân tích được các giai đoạn thực hiện kỹ thuật chiến lược 5* Bài tập thể lực",
+      "learning_method": "offline; thực hành",
+      "lo": "CLO2;3;4",
+      "itu": "TU",
+      "student_materials": "",
+      "s_download": "",
+      "student_tasks": "* Ôn tập các kỹ thuật căn bản đã học.* Rèn luyện thể lực.",
+      "urls": ""
+    },
+    {
+      "session": "13",
+      "topic": "Kỹ thuật đòn chiến lược 5* Giảng dạy và hoàn thiện kỹ thuật. Phân tích được các giai đoạn thực hiện kỹ thuật chiến lược 5* Bài tập thể lực",
+      "learning_method": "offline; thực hành",
+      "lo": "CLO2;3;4",
+      "itu": "TU",
+      "student_materials": "",
+      "s_download": "",
+      "student_tasks": "* Ôn tập các kỹ thuật căn bản đã học.* Rèn luyện thể lực.",
+      "urls": ""
+    },
+    {
+      "session": "14",
+      "topic": "Kỹ thuật đòn chiến lược 6* Giảng dạy và hoàn thiện kỹ thuật. Phân tích được các giai đoạn thực hiện kỹ thuật chiến lược 6* Bài tập thể lực",
+      "learning_method": "offline; thực hành",
+      "lo": "CLO2;3;4",
+      "itu": "TU",
+      "student_materials": "",
+      "s_download": "",
+      "student_tasks": "* Ôn tập các kỹ thuật căn bản đã học.* Rèn luyện thể lực.",
+      "urls": ""
+    },
+    {
+      "session": "15",
+      "topic": "Kỹ thuật đòn chiến lược 6* Giảng dạy và hoàn thiện kỹ thuật. Phân tích được các giai đoạn thực hiện kỹ thuật chiến lược 6* Bài tập thể lực",
+      "learning_method": "offline; thực hành",
+      "lo": "CLO2;3;4",
+      "itu": "TU",
+      "student_materials": "",
+      "s_download": "",
+      "student_tasks": "* Ôn tập các kỹ thuật căn bản đã học.* Rèn luyện thể lực.",
+      "urls": ""
+    },
+    {
+      "session": "16",
+      "topic": "Kỹ thuật đòn chiến lược 7* Giảng dạy và hoàn thiện kỹ thuật. Phân tích được các giai đoạn thực hiện kỹ thuật chiến lược 7* Bài tập thể lực",
+      "learning_method": "offline; thực hành",
+      "lo": "CLO2;3;4",
+      "itu": "TU",
+      "student_materials": "",
+      "s_download": "",
+      "student_tasks": "* Ôn tập các kỹ thuật căn bản đã học.* Rèn luyện thể lực.",
+      "urls": ""
+    },
+    {
+      "session": "17",
+      "topic": "Kỹ thuật đòn chiến lược 7* Giảng dạy và hoàn thiện kỹ thuật. Phân tích được các giai đoạn thực hiện kỹ thuật chiến lược 7* Bài tập thể lực",
+      "learning_method": "offline; thực hành",
+      "lo": "CLO2;3;4",
+      "itu": "TU",
+      "student_materials": "",
+      "s_download": "",
+      "student_tasks": "* Ôn tập các kỹ thuật căn bản đã học.* Rèn luyện thể lực.",
+      "urls": ""
+    },
+    {
+      "session": "18",
+      "topic": "Kỹ thuật đòn chiến lược 8* Giảng dạy và hoàn thiện kỹ thuật. Phân tích được các giai đoạn thực hiện kỹ thuật chiến lược 8* Bài tập thể lực",
+      "learning_method": "offline; thực hành",
+      "lo": "CLO2;3;4",
+      "itu": "TU",
+      "student_materials": "",
+      "s_download": "",
+      "student_tasks": "* Ôn tập các kỹ thuật căn bản đã học.* Rèn luyện thể lực.",
+      "urls": ""
+    },
+    {
+      "session": "19",
+      "topic": "Kỹ thuật đòn chiến lược 8* Giảng dạy và hoàn thiện kỹ thuật. Phân tích được các giai đoạn thực hiện kỹ thuật chiến lược 8* Bài tập thể lực",
+      "learning_method": "offline; thực hành",
+      "lo": "CLO2;3;4",
+      "itu": "TU",
+      "student_materials": "",
+      "s_download": "",
+      "student_tasks": "* Ôn tập các kỹ thuật căn bản đã học.* Rèn luyện thể lực.",
+      "urls": ""
+    },
+    {
+      "session": "20",
+      "topic": "Kỹ thuật đòn chiến lược 9* Giảng dạy và hoàn thiện kỹ thuật. Phân tích được các giai đoạn thực hiện kỹ thuật chiến lược 9* Bài tập thể lực",
+      "learning_method": "offline; thực hành",
+      "lo": "CLO2;3;4",
+      "itu": "TU",
+      "student_materials": "",
+      "s_download": "",
+      "student_tasks": "* Ôn tập các kỹ thuật căn bản đã học.* Rèn luyện thể lực.",
+      "urls": ""
+    },
+    {
+      "session": "21",
+      "topic": "Kỹ thuật đòn chiến lược 9* Giảng dạy và hoàn thiện kỹ thuật. Phân tích được các giai đoạn thực hiện kỹ thuật chiến lược 9* Bài tập thể lực",
+      "learning_method": "offline; thực hành",
+      "lo": "CLO2;3;4",
+      "itu": "TU",
+      "student_materials": "",
+      "s_download": "",
+      "student_tasks": "* Ôn tập các kỹ thuật căn bản đã học.* Rèn luyện thể lực.",
+      "urls": ""
+    },
+    {
+      "session": "22",
+      "topic": "Kỹ thuật đòn chiến lược 10* Giảng dạy và hoàn thiện kỹ thuật. Phân tích được các giai đoạn thực hiện kỹ thuật chiến lược 10* Bài tập thể lực",
+      "learning_method": "offline; thực hành",
+      "lo": "CLO2;3;4",
+      "itu": "TU",
+      "student_materials": "",
+      "s_download": "",
+      "student_tasks": "* Ôn tập các kỹ thuật căn bản đã học.* Rèn luyện thể lực.",
+      "urls": ""
+    },
+    {
+      "session": "23",
+      "topic": "Kỹ thuật đòn chiến lược 10* Giảng dạy và hoàn thiện kỹ thuật. Phân tích được các giai đoạn thực hiện kỹ thuật chiến lược 10* Bài tập thể lực",
+      "learning_method": "offline; thực hành",
+      "lo": "CLO2;3;4",
+      "itu": "TU",
+      "student_materials": "",
+      "s_download": "",
+      "student_tasks": "* Ôn tập các kỹ thuật căn bản đã học.* Rèn luyện thể lực.",
+      "urls": ""
+    },
+    {
+      "session": "24",
+      "topic": "Ôn tập chiến lược 1-5* Bài tập thể lực",
+      "learning_method": "offline; thực hành",
+      "lo": "CLO2;3;4",
+      "itu": "U",
+      "student_materials": "",
+      "s_download": "",
+      "student_tasks": "* Ôn tập các kỹ thuật căn bản đã học.* Rèn luyện thể lực.",
+      "urls": ""
+    },
+    {
+      "session": "25",
+      "topic": "Ôn tập chiến lược 1-5* Bài tập thể lực",
+      "learning_method": "offline; thực hành",
+      "lo": "CLO2;3;4",
+      "itu": "U",
+      "student_materials": "",
+      "s_download": "",
+      "student_tasks": "* Ôn tập các kỹ thuật căn bản đã học.* Rèn luyện thể lực.",
+      "urls": ""
+    },
+    {
+      "session": "26",
+      "topic": "Ôn tập chiến lược 6-10* Bài tập thể lực",
+      "learning_method": "offline; thực hành",
+      "lo": "CLO2;3;4",
+      "itu": "U",
+      "student_materials": "",
+      "s_download": "",
+      "student_tasks": "* Ôn tập các kỹ thuật căn bản đã học.* Rèn luyện thể lực.",
+      "urls": ""
+    },
+    {
+      "session": "27",
+      "topic": "Ôn tập chiến lược 6-10* Bài tập thể lực",
+      "learning_method": "offline; thực hành",
+      "lo": "CLO2;3;4",
+      "itu": "U",
+      "student_materials": "",
+      "s_download": "",
+      "student_tasks": "* Ôn tập các kỹ thuật căn bản đã học.* Rèn luyện thể lực.",
+      "urls": ""
+    },
+    {
+      "session": "28",
+      "topic": "Tổng ôn tập",
+      "learning_method": "offline; thực hành",
+      "lo": "CLO1;2;3;4",
+      "itu": "U",
+      "student_materials": "",
+      "s_download": "",
+      "student_tasks": "* Ôn tập các kỹ thuật căn bản đã học.* Rèn luyện thể lực.",
+      "urls": ""
+    },
+    {
+      "session": "29",
+      "topic": "Thi cuối kỳ.",
+      "learning_method": "Thi thực hành",
+      "lo": "CLO1;2;3;4",
+      "itu": "U",
+      "student_materials": "",
+      "s_download": "",
+      "student_tasks": "Nghiêm túc tuyệt đối",
+      "urls": ""
+    },
+    {
+      "session": "30",
+      "topic": "Thi lần 2",
+      "learning_method": "Thi thực hành",
+      "lo": "CLO1;2;3;4",
+      "itu": "U",
+      "student_materials": "",
+      "s_download": "",
+      "student_tasks": "Nghiêm túc tuyệt đối",
+      "urls": ""
+    }
+  ],
+  "constructive_questions": [],
+  "assessment_scheme": [
+    {
+      "category": "Final exam",
+      "type": "Final exam",
+      "part": "1",
+      "weight": "100.0%",
+      "completion_criteria": "5",
+      "duration": "1.5 hours",
+      "clo": "",
+      "question_type": "Test techniques",
+      "no_question": "Số phần thi: 03* Lý thuyết.* Kỹ thuật chiến lược* Thể lực chung.",
+      "knowledge_and_skill": "* Lý thuyết.* Kỹ thuật chiến lược.* Thể lực chung.",
+      "grading_guide": "Chọn 1 trong 2 cách sau:* Sinh viên bốc thăm câu hỏi.* Giảng viên đặt yêu cầu để sinh viên thực hiện.",
+      "note": "Thành lập hội đồng chấm thi. Chủ nhiệm BM là chủ tịch hội đồng, phân công các GV vào các vị trí:* Thư ký hội đồng: giám sát tư cách dự thi của SV và tổng hợp điểm.* Các tổ chấm thi tương ứng với 3 phần thi."
+    }
+  ],
+  "references": [
+    "932/QĐ-ĐHFPT dated 08/22/2025",
+    "MaterialDescriptionAuthorPublisherPublishedDateEditionISBNIsMainMaterialIsHardCopyIsOnlineNote Giáo trình Vệ sinh thể dục thể thao NXB TTTT, Hà Nội (2020) Lý luận và phương pháp GDTC NXB TTTT, Hà Nội (2020) Lý luận và phương pháp huấn luyện thể thao NXB TTTT, Hà Nội (2017) Sách Kỹ thuật Vovinam-Việt Võ Đạo tập 1 NXB TDTT, HN (2008) Sách thức võ đạo Vovinam Tài liệu nội bộ Vovinam",
+    "Giáo trình Vệ sinh thể dục thể thao",
+    "NXB TTTT, Hà Nội (2020)",
+    "NXB TTTT, Hà Nội (2017)"
+  ]
+}

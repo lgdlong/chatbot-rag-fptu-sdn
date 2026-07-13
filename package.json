@@ -10,10 +10,21 @@
   "scripts": {
     "dev": "turbo dev",
     "build": "turbo build",
+    "check-types": "turbo check-types",
     "lint": "turbo lint",
     "clean": "turbo clean"
   },
+  "devEngines": {
+    "packageManager": {
+      "name": "npm",
+      "version": "11.11.1"
+    }
+  },
   "devDependencies": {
     "turbo": "^2.0.4"
+  },
+  "dependencies": {
+    "@tanstack/react-form": "^1.33.1",
+    "playwright": "^1.61.1"
   }
 }

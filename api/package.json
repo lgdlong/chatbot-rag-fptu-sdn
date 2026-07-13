@@ -6,23 +6,28 @@
     "build": "tsc",
     "start": "node dist/index.js",
     "lint": "echo 'No linting configured for api'",
+    "test": "vitest run",
     "test:smoke": "tsx src/scripts/phase-05-smoke.ts",
     "test:sse-contract": "tsx src/scripts/phase-05-sse-contract.ts",
-    "cleanup:orphans": "tsx src/scripts/cleanup-orphan-ingestion-jobs.ts"
+    "cleanup:orphans": "tsx src/scripts/cleanup-orphan-ingestion-jobs.ts",
+    "seed:syllabus": "tsx src/scripts/seed-syllabus.ts"
   },
   "dependencies": {
-    "@google/genai": "^2.4.0",
     "@hono/node-server": "^1.19.14",
     "@hono/swagger-ui": "^0.6.1",
     "@prisma/client": "^5.18.0",
+    "@supabase/supabase-js": "^2.110.2",
     "better-auth": "^1.6.11",
+    "cloudinary": "^2.10.0",
     "hono": "^4.12.19",
+    "resend": "^6.17.2",
     "winston": "^3.19.0"
   },
   "devDependencies": {
     "@types/node": "^20.11.17",
     "prisma": "^5.18.0",
     "tsx": "^4.7.1",
-    "typescript": "^5.8.3"
+    "typescript": "^5.8.3",
+    "vitest": "^4.1.10"
   }
 }

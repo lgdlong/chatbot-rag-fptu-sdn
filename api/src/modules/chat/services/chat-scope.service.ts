@@ -1,5 +1,8 @@
-import { prisma } from "../../auth/services/db.service.js";
 import { ChatSessionScopeMode } from "@prisma/client";
+import { UserRepository } from "../../auth/repositories/user.repository.js";
+import { CourseRepository } from "../../courses/repositories/course.repository.js";
+import { DocumentRepository } from "../../documents/repositories/document.repository.js";
+import { prisma } from "../../auth/services/db.service.js";
 
 export type ScopedCourse = {
   id: string;
@@ -57,37 +60,28 @@ function orderedScopedDocuments(documentIds: string[], documents: ScopedDocument
     .filter((document): document is ScopedDocument => Boolean(document));
 }
 
+/**
+ * Resolve the set of course ids a chat user can query against.
+ *
+ * "Accessible" here means: courses that have at least one syllabus.
+ * Syllabus snapshots are synced to AnythingLLM on creation, so even
+ * without uploaded PDF documents the chatbot can still answer based
+ * on syllabus data (FLM support).
+ *
+ * The original implementation limited this to courses with at least
+ * one COMPLETED document, which broke the FLM chatbot flow — students
+ * couldn't ask anything until a PDF was uploaded and ingested.
+ */
 export async function resolveAccessibleChatCourseIds(userId: string) {
-  const user = await prisma.user.findUnique({
-    where: { id: userId },
-    select: { id: true },
-  });
-
+  const user = await UserRepository.findById(userId);
   if (!user) {
     return [];
   }
 
-  const courses = await prisma.course.findMany({
-    where: {
-      syllabuses: {
-        some: {
-          documents: {
-            some: {
-              status: "COMPLETED",
-            },
-          },
-        },
-      },
-    },
-    select: {
-      id: true,
-    },
-    orderBy: {
-      createdAt: "desc",
-    },
+  const rows = await prisma.course.findMany({
+    select: { id: true },
   });
-
-  return courses.map((course) => course.id);
+  return rows.map((r) => r.id);
 }
 
 export async function resolveAccessibleChatDocuments(userId: string): Promise<ScopedDocument[]> {
@@ -97,39 +91,7 @@ export async function resolveAccessibleChatDocuments(userId: string): Promise<Sc
     return [];
   }
 
-  const documents = await prisma.document.findMany({
-    where: {
-      status: "COMPLETED",
-      syllabus: {
-        courseId: {
-          in: accessibleCourseIds,
-        },
-      },
-    },
-    select: {
-      id: true,
-      name: true,
-      fileType: true,
-      status: true,
-      syllabusId: true,
-      syllabus: {
-        select: {
-          courseId: true,
-          course: {
-            select: {
-              id: true,
-              code: true,
-              name: true,
-            },
-          },
-        },
-      },
-      createdAt: true,
-    },
-    orderBy: {
-      createdAt: "desc",
-    },
-  });
+  const documents = await DocumentRepository.findManyCompletedByCourseIds(accessibleCourseIds);
 
   return documents.map((doc) => ({
     id: doc.id,
@@ -158,18 +120,7 @@ export async function resolveChatScope(
   const accessibleCourseIdSet = new Set(accessibleCourseIds);
   const accessibleDocuments = await resolveAccessibleChatDocuments(userId);
   const accessibleDocumentIdSet = new Set(accessibleDocuments.map((document) => document.id));
-  const accessibleCourseRows = await prisma.course.findMany({
-    where: {
-      id: {
-        in: accessibleCourseIds,
-      },
-    },
-    select: {
-      id: true,
-      code: true,
-      name: true,
-    },
-  });
+  const accessibleCourseRows = await CourseRepository.findManyByIds(accessibleCourseIds);
   const accessibleCourseMap = new Map(accessibleCourseRows.map((course) => [course.id, course]));
 
   const selectedDocumentIds = unique(session.scopedDocuments?.map((item) => item.documentId) ?? []).filter((documentId) =>

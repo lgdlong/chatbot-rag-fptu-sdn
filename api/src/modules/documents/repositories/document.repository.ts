@@ -19,26 +19,138 @@ export class DocumentRepository {
     })
   }
 
-  static async update(id: string, data: Prisma.DocumentUpdateInput) {
-    return prisma.document.update({
+  static async update(
+    id: string,
+    data: Prisma.DocumentUpdateInput,
+    options?: { tx?: Prisma.TransactionClient },
+  ) {
+    const client = (options?.tx as any) || prisma
+    return client.document.update({
       where: { id },
       data,
     })
   }
 
-  static async delete(id: string) {
-    return prisma.document.delete({
+  static async delete(
+    id: string,
+    options?: { tx?: Prisma.TransactionClient },
+  ) {
+    const client = (options?.tx as any) || prisma
+    return client.document.delete({
       where: { id },
     })
   }
 
-  static async updateStatus(id: string, status: DocumentStatus, error?: string) {
+  static async updateStatus(
+    id: string,
+    status: DocumentStatus,
+    error?: string,
+    options?: { tx?: Prisma.TransactionClient },
+  ) {
     if (error) {
       console.error(`[DocumentRepository] Ingestion error for document ${id}: ${error}`)
     }
-    return prisma.document.update({
+    const client = (options?.tx as any) || prisma
+    return client.document.update({
       where: { id },
       data: { status },
     })
+  }
+
+  // ---------------------------------------------------------------------
+  // Track F additions -- chat-scope support
+  // ---------------------------------------------------------------------
+
+  /**
+   * Distinct course ids that have at least one COMPLETED document under
+   * any of their syllabuses. Replaces the inline
+   * `prisma.course.findMany({ where: { syllabuses: { some: { documents:
+   * { some: { status: 'COMPLETED' } } } } } })` query that the chat
+   * accessibility resolver used. We go through `document` (not `course`)
+   * because the filter is on a document property; the SQL is shorter and
+   * a single pass over documents gives us the course-id set without
+   * requiring a join through the syllabuses relation.
+   */
+  static async findCourseIdsWithCompletedDocuments(): Promise<string[]> {
+    const rows = await prisma.document.findMany({
+      where: { status: "COMPLETED" },
+      select: { syllabus: { select: { courseId: true } } },
+    })
+    return Array.from(new Set(rows.map((row) => row.syllabus.courseId)))
+  }
+
+  /**
+   * All COMPLETED documents whose syllabus belongs to one of the given
+   * course ids, ordered most-recent-first. Mirrors the pre-refactor
+   * `prisma.document.findMany({ where: { status, syllabus: { courseId:
+   * { in } } } })` query in chat-scope. The select shape matches the
+   * `ScopedDocument` type the chat module already exposes.
+   */
+  static async findManyCompletedByCourseIds(courseIds: string[]) {
+    if (courseIds.length === 0) {
+      return []
+    }
+    return prisma.document.findMany({
+      where: {
+        status: "COMPLETED",
+        syllabus: { courseId: { in: courseIds } },
+      },
+      select: {
+        id: true,
+        name: true,
+        fileType: true,
+        status: true,
+        syllabusId: true,
+        syllabus: {
+          select: {
+            courseId: true,
+            course: {
+              select: { id: true, code: true, name: true },
+            },
+          },
+        },
+        createdAt: true,
+      },
+      orderBy: { createdAt: "desc" },
+    })
+  }
+
+  /**
+   * All documents under any syllabus belonging to a specific course, no
+   * status filter. Mirrors the pre-refactor `prisma.document.findMany`
+   * call in `GET /api/chat/courses/:courseId/documents`. Returns the full
+   * row so the controller can decide which fields to expose.
+   */
+  static async findManyByCourseId(courseId: string) {
+    return prisma.document.findMany({
+      where: { syllabus: { courseId } },
+      orderBy: { createdAt: "desc" },
+    })
+  }
+
+  /**
+   * All documents across all syllabuses, with course + syllabus info,
+   * newest first. Used by the teacher document manager.
+   */
+  static async findAllWithCourse(page = 1, limit = 20) {
+    const skip = (page - 1) * limit;
+    const [documents, total] = await Promise.all([
+      prisma.document.findMany({
+        skip,
+        take: limit,
+        include: {
+          syllabus: {
+            select: {
+              id: true,
+              syllabusName: true,
+              course: { select: { code: true, name: true } },
+            },
+          },
+        },
+        orderBy: { createdAt: "desc" },
+      }),
+      prisma.document.count(),
+    ]);
+    return { documents, total, page, limit };
   }
 }

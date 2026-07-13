@@ -1,5 +1,10 @@
 # Use Cases
 
+> Status: Current
+> Audience: BA / Developer
+> Canonical: Yes — part of SRS
+> Owner: Business
+
 > Phiên bản: 1.0  
 > Cập nhật: 2026-06-23
 
@@ -29,6 +34,7 @@ graph TB
 
     SA --> P["Create lecturer"]
     SA --> Q["Disable lecturer"]
+    SA --> QA["Enable lecturer"]
     SA --> R["Manage whitelist"]
 
     SYS --> S["Generate syllabus snapshot"]

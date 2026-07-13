@@ -19,6 +19,8 @@ import {
   IconUpload,
   IconLogout,
   IconSchool,
+  IconSettings,
+  IconMessageChatbot,
 } from "@tabler/icons-react";
 import { useAuth } from "../contexts/AuthContext";
 import { ProtectedRoute } from "../../components/ProtectedRoute";
@@ -28,8 +30,8 @@ export default function TeacherLayout({ children }: { children: React.ReactNode 
   const router = useRouter();
   const { user, logout } = useAuth();
 
-  const handleLogout = () => {
-    logout();
+  const handleLogout = async () => {
+    await logout();
     router.push("/login");
   };
 
@@ -38,6 +40,8 @@ export default function TeacherLayout({ children }: { children: React.ReactNode 
     { name: "Chương trình đào tạo", href: "/teacher/curriculum", icon: IconSchool },
     { name: "Quản lý Syllabus", href: "/teacher/syllabus", icon: IconFileText },
     { name: "Tài liệu môn học", href: "/teacher/documents", icon: IconUpload },
+    { name: "AI Trợ lý", href: "/teacher/chat", icon: IconMessageChatbot },
+    { name: "Cài đặt", href: "/teacher/settings", icon: IconSettings },
   ];
 
   const isActive = (href: string) => {
@@ -50,7 +54,7 @@ export default function TeacherLayout({ children }: { children: React.ReactNode 
   const userInitial = user?.email?.charAt(0).toUpperCase() || "T";
 
   return (
-    <ProtectedRoute allowedRoles={["teacher"]}>
+    <ProtectedRoute allowedRoles={["LECTURER"]}>
       <AppShell
         navbar={{ width: 260, breakpoint: "sm" }}
         styles={{

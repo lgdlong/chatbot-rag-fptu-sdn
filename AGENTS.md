@@ -45,6 +45,19 @@ Thư mục này chứa các cẩm nang hướng dẫn Agent thực hiện các t
 > **Yêu Cầu Bắt Buộc Về Suy Nghĩ Tuần Tự (Sequential Thinking):**
 > Mọi AI Agent khi hoạt động trong repository này **BẮT BUỘC** phải sử dụng kỹ năng `sequential-thinking` (`mcp__reasoning__sequentialthinking`) trong **mọi prompt** để suy luận tuần tự, lập luận chi tiết từng bước, tự sửa lỗi và tối ưu hóa giải pháp trước khi thực hiện bất kỳ hành động viết code hay chỉnh sửa nào.
 
+> [!TIP]
+> **Ưu Tiên Dùng CodeGraph Để Tra Cứu Code:**
+> Dự án có cơ sở dữ liệu CodeGraph ở `.codegraph/`. Trước khi dùng `grep` hoặc `read` để tìm hiểu code, hãy gọi `codegraph_explore` trước. Một cú pháp ngắn (tên symbol, câu hỏi tự nhiên) trả về mã nguồn, call path và phạm vi ảnh hưởng — tiết kiệm đáng kể số lần đọc file so với grep/read thủ công. Chỉ dùng grep/read để xác nhận chi tiết mà codegraph chưa cover.
+
+> [!IMPORTANT]
+> **Mặc Định Dùng Caveman Mode:**
+> Agent **mặc định phải dùng caveman mode** nếu skill `caveman` có sẵn. Quy tắc chọn level dựa vào câu hỏi đầu tiên của user:
+> - **Code / Debug / Implementation** (thêm/tạo/sửa/viết code, fix bug, debug) → dùng **caveman mode full**
+> - **Business / Brainstorm / Hỏi ý kiến** (hỏi về business, brainstorm, thảo luận giải pháp, kiến trúc) → dùng **caveman mode lite**
+> - **Investigation / Research** (tra cứu, điều tra, tìm hiểu) → dùng **caveman mode lite**
+>
+> Mục đích: tiết kiệm token, giữ technical substance, bỏ fluff. Xem skill `caveman` để biết thêm chi tiết các level.
+
 ---
 
 ## 3. Bản Đồ Lệnh CLI (Commands Guide)
@@ -102,3 +115,5 @@ Hệ thống RAG phục vụ kho tài liệu học tiếng Việt tại Đại h
 > *   Không bao giờ được thay đổi cấu hình `.gitignore` nhằm loại bỏ việc bỏ qua các file bí mật (như `.env`).
 > *   **Quy tắc file cấu hình (.env):** Tuyệt đối không tạo hoặc sử dụng các file `.env` cục bộ trong từng thư mục con (`api/` hay `web/`). Toàn bộ biến môi trường phải được cấu hình tập trung tại duy nhất một file `.env` ở thư mục gốc (root) dự án. Mã nguồn Backend/Frontend sẽ nạp cấu hình từ file `.env` root này.
 > *   Luôn kiểm tra các lỗi linting và kiểu dữ liệu (TypeScript) trước khi báo cáo hoàn thành công việc.
+>
+> **Phân biệt Investigation và Implementation:** Khi prompt là câu hỏi, yêu cầu kiểm tra, tra cứu, hay điều tra — chỉ thực hiện đúng việc đó và báo cáo kết quả. **KHÔNG** tự động fix lỗi, implement, hay thay đổi code. Chỉ implement khi user dùng động từ implementation rõ ràng (thêm/tạo/sửa/viết).

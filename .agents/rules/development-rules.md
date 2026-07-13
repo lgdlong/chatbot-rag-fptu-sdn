@@ -5,6 +5,7 @@
 
 ## General
 
+- **[CRITICAL] Phân biệt câu hỏi (investigation) và yêu cầu (implementation):** Khi prompt là câu hỏi, yêu cầu kiểm tra, tra cứu, hay điều tra — chỉ thực hiện đúng việc đó và báo cáo kết quả. **KHÔNG** tự động fix lỗi, implement, hay thay đổi code. Chỉ implement khi user dùng động từ implementation rõ ràng (thêm/tạo/sửa/viết).
 - **File Naming**: Use kebab-case for file names with a meaningful name that describes the purpose of the file, doesn't matter if the file name is long, just make sure when LLMs read the file names while using Grep or other tools, they can understand the purpose of the file right away without reading the file content.
 - **File Size Management**: Keep individual code files under 200 lines for optimal context management
   - Split large files into smaller, focused components/modules
@@ -19,6 +20,11 @@
 - **[MANDATORY]** Mọi AI Agent BẮT BUỘC phải sử dụng kỹ năng `sequential-thinking` (sequential thinking) trong **mọi prompt** để suy luận tuần tự, phân tích sâu, lập kế hoạch chi tiết và tự sửa lỗi trước khi viết code hoặc trả lời.
 - Use `debugging` skill for systematic debugging, analyzing code, debugging, etc. if needed
 - **[IMPORTANT]** Follow the codebase structure and code standards in `./docs` during implementation.
+- **[CodeGraph]** Dự án có `.codegraph/` index. **Luôn ưu tiên dùng `codegraph_explore` trước `grep`/`read`** khi cần:
+  - Tra cứu symbol, file, flow (một call trả về source + call path + blast radius)
+  - Hiểu luồng code (gọi 2 tên symbol đầu-cuối, codegraph trả về đường đi giữa chúng)
+  - Xác định phạm vi ảnh hưởng trước khi sửa — codegraph hiểu dynamic dispatch, callback, JSX children mà grep không theo được.
+  - Sau khi edit, kiểm tra staleness banner: file nào pending re-index thì đọc trực tiếp để lấy nội dung mới nhất.
 - **[IMPORTANT]** Do not just simulate the implementation or mocking them, always implement the real code.
 
 ## Code Quality Guidelines

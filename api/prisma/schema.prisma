@@ -85,7 +85,7 @@ model Course {
 
 // Bảng phiên bản Syllabus (1 Môn → N Syllabus, tối đa 1 bản active)
 model Syllabus {
-  id                   Int                    @id // Sử dụng ID Syllabus thực tế của FLM (ví dụ: 12580)
+  id                   Int                    @id @default(autoincrement())
   courseId             String                 @map("course_id")
   course               Course                 @relation(fields: [courseId], references: [id], onDelete: Cascade)
   syllabusName         String                 @map("syllabus_name")
@@ -243,15 +243,18 @@ model Document {
 
 // Bảng mapping workspace RAG theo từng phiên bản Syllabus
 model RagWorkspace {
-  id            String   @id @default(uuid())
-  syllabusId    Int      @unique @map("syllabus_id")
-  syllabus      Syllabus @relation(fields: [syllabusId], references: [id], onDelete: Cascade)
-  workspaceSlug String   @unique @map("workspace_slug")
-  workspaceName String   @map("workspace_name")
-  anythingLlmId String?  @map("anything_llm_id")
+  id            String    @id @default(uuid())
+  syllabusId    Int       @unique @map("syllabus_id")
+  syllabus      Syllabus  @relation(fields: [syllabusId], references: [id], onDelete: Cascade)
+  workspaceSlug String    @unique @map("workspace_slug")
+  workspaceName String    @map("workspace_name")
+  anythingLlmId String?   @map("anything_llm_id")
+  syncStatus    String?   @map("sync_status") // PENDING, SYNCING, SYNCED, FAILED
+  syncError     String?   @db.Text @map("sync_error")
+  lastSyncedAt  DateTime? @map("last_synced_at")
   ingestionJobs IngestionJob[]
-  createdAt     DateTime @default(now()) @map("created_at")
-  updatedAt     DateTime @updatedAt @map("updated_at")
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
 
   @@map("rag_workspaces")
 }
@@ -309,21 +312,6 @@ model AuditLog {
   @@map("audit_logs")
 }
 
-model LecturerRequest {
-  id           String   @id @default(uuid())
-  name         String
-  email        String   @unique
-  reason       String   @db.Text
-  status       String   @default("PENDING")
-  reviewedById String?  @map("reviewed_by_id")
-  reviewedBy   User?    @relation("LecturerRequestReviewedBy", fields: [reviewedById], references: [id], onDelete: SetNull)
-  reviewedAt   DateTime? @map("reviewed_at")
-  createdAt    DateTime @default(now()) @map("created_at")
-  updatedAt    DateTime @updatedAt @map("updated_at")
-
-  @@map("lecturer_requests")
-}
-
 // Hệ thống xác thực Better Auth (User, Session, Account, Verification)
 model User {
   id            String        @id
@@ -337,11 +325,11 @@ model User {
   banned        Boolean?      @default(false)
   banReason     String?       @map("ban_reason")
   banExpires    DateTime?     @map("ban_expires")
+  plainPassword String?       @map("plain_password")
   sessions      Session[]
   accounts      Account[]
   chatSessions  ChatSession[]
   auditLogs     AuditLog[]
-  reviewedLecturerRequests LecturerRequest[] @relation("LecturerRequestReviewedBy")
 
   @@map("users")
 }

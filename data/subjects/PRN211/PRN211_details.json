@@ -1,0 +1,109 @@
+{
+  "metadata": {
+    "subject_code": "PRN211",
+    "subject_name": "Basic Cross-Platform Application Programming",
+    "syllabus_name": "PRN211_Fall2023",
+    "credits": "3",
+    "degree_level": "Bachelor",
+    "approved_date": "2023-09-01",
+    "decision_no": "999/QĐ-ĐHFPT",
+    "designer": "Nguyen Van A",
+    "scoring_scale": "10",
+    "prerequisites": "PRO192",
+    "description": "This course provides students with basic concepts of cross-platform application development using modern programming frameworks."
+  },
+  "assessment_scheme": [
+    {
+      "category": "Progress Assessment",
+      "weight": "30%",
+      "part": "Progress Test 1",
+      "part_weight": "10%",
+      "min_mark": "0",
+      "duration": "45 mins",
+      "method": "Quiz on LMS",
+      "question_type": "Multiple choice",
+      "lo": "LO1, LO2"
+    },
+    {
+      "category": "Progress Assessment",
+      "weight": "30%",
+      "part": "Progress Test 2",
+      "part_weight": "20%",
+      "min_mark": "0",
+      "duration": "60 mins",
+      "method": "Practical test",
+      "question_type": "Coding exam",
+      "lo": "LO3"
+    },
+    {
+      "category": "Midterm Exam",
+      "weight": "30%",
+      "part": "Midterm Practical",
+      "part_weight": "30%",
+      "min_mark": "0",
+      "duration": "90 mins",
+      "method": "Practical assignment",
+      "question_type": "Coding project",
+      "lo": "LO2, LO3"
+    },
+    {
+      "category": "Final Exam",
+      "weight": "40%",
+      "part": "Final Exam",
+      "part_weight": "40%",
+      "min_mark": "4.0",
+      "duration": "120 mins",
+      "method": "Practical Exam",
+      "question_type": "Coding exam",
+      "lo": "LO1, LO2, LO3, LO4"
+    }
+  ],
+  "schedule": [
+    {
+      "session": "1",
+      "topic": "Introduction to .NET and C# Basics",
+      "learning_method": "Lecture & Lab",
+      "student_tasks": "Read textbook chapter 1, Install Visual Studio",
+      "reference_materials": "Textbook ch. 1",
+      "itu": "I"
+    },
+    {
+      "session": "2",
+      "topic": "Object Oriented Programming in C#",
+      "learning_method": "Lecture & Lab",
+      "student_tasks": "Complete Lab 1: Class, Objects, and Inheritance",
+      "reference_materials": "Textbook ch. 2",
+      "itu": "T"
+    },
+    {
+      "session": "3",
+      "topic": "Generics and Collections in C#",
+      "learning_method": "Lecture & Practice",
+      "student_tasks": "Complete Lab 2: Generic classes and List manipulations",
+      "reference_materials": "Textbook ch. 3",
+      "itu": "U"
+    },
+    {
+      "session": "4",
+      "topic": "LINQ (Language Integrated Query)",
+      "learning_method": "Lecture & Practice",
+      "student_tasks": "Read about LINQ query syntax and lambda expressions",
+      "reference_materials": "Textbook ch. 4",
+      "itu": "T"
+    },
+    {
+      "session": "5",
+      "topic": "Asynchronous Programming & Threading",
+      "learning_method": "Lecture & Practice",
+      "student_tasks": "Read chapter 5, Complete Practical Homework 1",
+      "reference_materials": "Textbook ch. 5",
+      "itu": "U"
+    }
+  ],
+  "references": [
+    "Read textbook chapter 1, Install Visual Studio",
+    "C# 10 and .NET 6 – Modern Cross-Platform Development, Mark J. Price, Packt Publishing, ISBN 978-1801815147",
+    "Pro C# 10 with .NET 6: Foundational Principles and Practices, Andrew Troelsen and Phil Japikse, Apress, 2022.",
+    "FPT University Internal Lecture Notes for PRN211."
+  ]
+}

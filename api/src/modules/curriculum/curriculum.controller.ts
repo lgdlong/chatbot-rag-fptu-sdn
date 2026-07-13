@@ -1,6 +1,7 @@
 import { Hono, type Context } from "hono";
-import { prisma } from "../auth/services/db.service.js";
 import { auth } from "../auth/auth.js";
+import { CurriculumService, CurriculumServiceError } from "./services/curriculum.service.js";
+import { prisma } from "../auth/services/db.service.js";
 
 export const curriculumRouter = new Hono();
 
@@ -11,11 +12,25 @@ async function requireAdmin(c: Context) {
   }
 
   const role = session.user.role;
-  if (role !== "ADMIN") {
-    return { error: c.json({ error: "Forbidden: Admin role required" }, 403) as Response, session: null };
+  if (role !== "ADMIN" && role !== "LECTURER") {
+    return { error: c.json({ error: "Forbidden: Admin or Lecturer role required" }, 403) as Response, session: null };
   }
 
   return { error: null, session };
+}
+
+/**
+ * Map a service-thrown error onto the right HTTP status. Validation/business
+ * errors are 4xx (carried by `CurriculumServiceError.statusCode`); anything
+ * else falls through to 500 with the raw error message -- matching the
+ * pre-refactor controller's error semantics byte-for-byte.
+ */
+function respondWithServiceError(c: Context, err: unknown) {
+  if (err instanceof CurriculumServiceError) {
+    return c.json({ error: err.message }, err.statusCode as 400 | 404 | 409);
+  }
+  const message = err instanceof Error ? err.message : String(err);
+  return c.json({ error: message }, 500);
 }
 
 // ==========================================
@@ -28,9 +43,7 @@ curriculumRouter.get("/majors", async (c) => {
   if (!session?.user) return c.json({ error: "Unauthorized" }, 401);
 
   try {
-    const majors = await prisma.major.findMany({
-      orderBy: { code: "asc" }
-    });
+    const majors = await CurriculumService.listMajors();
     return c.json({ majors });
   } catch (err: any) {
     return c.json({ error: err.message }, 500);
@@ -44,26 +57,19 @@ curriculumRouter.post("/majors", async (c) => {
 
   try {
     const body = await c.req.json();
-    const code = typeof body.code === "string" ? body.code.trim().toUpperCase() : "";
-    const name = typeof body.name === "string" ? body.name.trim() : "";
-    const description = typeof body.description === "string" ? body.description.trim() : "";
+    const code = body.code;
+    const name = body.name;
+    const description = body.description;
 
-    if (!code || !name) {
-      return c.json({ error: "Major code and name are required" }, 400);
-    }
-
-    const exists = await prisma.major.findUnique({ where: { code } });
-    if (exists) {
-      return c.json({ error: "Major code already exists" }, 409);
-    }
-
-    const major = await prisma.major.create({
-      data: { code, name, description }
-    });
+    const major = await CurriculumService.createMajor(
+      typeof code === "string" ? code : "",
+      typeof name === "string" ? name : "",
+      typeof description === "string" ? description : "",
+    );
 
     return c.json({ major }, 201);
-  } catch (err: any) {
-    return c.json({ error: err.message }, 500);
+  } catch (err) {
+    return respondWithServiceError(c, err);
   }
 });
 
@@ -75,21 +81,18 @@ curriculumRouter.put("/majors/:id", async (c) => {
   const id = c.req.param("id");
   try {
     const body = await c.req.json();
-    const name = typeof body.name === "string" ? body.name.trim() : "";
-    const description = typeof body.description === "string" ? body.description.trim() : "";
+    const name = body.name;
+    const description = body.description;
 
-    if (!name) {
-      return c.json({ error: "Major name is required" }, 400);
-    }
-
-    const major = await prisma.major.update({
-      where: { id },
-      data: { name, description }
-    });
+    const major = await CurriculumService.updateMajor(
+      id,
+      typeof name === "string" ? name : "",
+      typeof description === "string" ? description : "",
+    );
 
     return c.json({ major });
-  } catch (err: any) {
-    return c.json({ error: err.message }, 500);
+  } catch (err) {
+    return respondWithServiceError(c, err);
   }
 });
 
@@ -100,16 +103,10 @@ curriculumRouter.delete("/majors/:id", async (c) => {
 
   const id = c.req.param("id");
   try {
-    // Kiểm tra xem có chuyên ngành hẹp nào liên kết không
-    const hasSpecs = await prisma.specialization.findFirst({ where: { majorId: id } });
-    if (hasSpecs) {
-      return c.json({ error: "Cannot delete Major. Please delete all associated Specializations first." }, 409);
-    }
-
-    await prisma.major.delete({ where: { id } });
+    await CurriculumService.deleteMajor(id);
     return c.json({ success: true });
-  } catch (err: any) {
-    return c.json({ error: err.message }, 500);
+  } catch (err) {
+    return respondWithServiceError(c, err);
   }
 });
 
@@ -123,11 +120,31 @@ curriculumRouter.get("/specializations", async (c) => {
   if (!session?.user) return c.json({ error: "Unauthorized" }, 401);
 
   try {
-    const specializations = await prisma.specialization.findMany({
-      orderBy: { code: "asc" },
-      include: { major: { select: { code: true, name: true } } }
-    });
+    const specializations = await CurriculumService.listSpecializations();
     return c.json({ specializations });
+  } catch (err: any) {
+    return c.json({ error: err.message }, 500);
+  }
+});
+
+// Đếm số môn đặc thù của một chuyên ngành hẹp
+curriculumRouter.get("/specializations/:specializationId/subject-count", async (c) => {
+  const session = await auth.api.getSession({ headers: c.req.raw.headers });
+  if (!session?.user) return c.json({ error: "Unauthorized" }, 401);
+
+  const specializationId = c.req.param("specializationId");
+  try {
+    const count = await prisma.curriculumSubject.count({
+      where: {
+        isSpecializationSpecific: true,
+        curriculum: { specializationId },
+      },
+    });
+
+    return c.json({
+      total: 4,
+      specializationSpecific: count,
+    });
   } catch (err: any) {
     return c.json({ error: err.message }, 500);
   }
@@ -140,32 +157,21 @@ curriculumRouter.post("/specializations", async (c) => {
 
   try {
     const body = await c.req.json();
-    const majorId = typeof body.majorId === "string" ? body.majorId : "";
-    const code = typeof body.code === "string" ? body.code.trim().toUpperCase() : "";
-    const name = typeof body.name === "string" ? body.name.trim() : "";
-    const description = typeof body.description === "string" ? body.description.trim() : "";
+    const majorId = body.majorId;
+    const code = body.code;
+    const name = body.name;
+    const description = body.description;
 
-    if (!majorId || !code || !name) {
-      return c.json({ error: "Major ID, code, and name are required" }, 400);
-    }
-
-    const majorExists = await prisma.major.findUnique({ where: { id: majorId } });
-    if (!majorExists) {
-      return c.json({ error: "Major not found" }, 404);
-    }
-
-    const exists = await prisma.specialization.findUnique({ where: { code } });
-    if (exists) {
-      return c.json({ error: "Specialization code already exists" }, 409);
-    }
-
-    const spec = await prisma.specialization.create({
-      data: { majorId, code, name, description }
-    });
+    const spec = await CurriculumService.createSpecialization(
+      typeof majorId === "string" ? majorId : "",
+      typeof code === "string" ? code : "",
+      typeof name === "string" ? name : "",
+      typeof description === "string" ? description : "",
+    );
 
     return c.json({ specialization: spec }, 201);
-  } catch (err: any) {
-    return c.json({ error: err.message }, 500);
+  } catch (err) {
+    return respondWithServiceError(c, err);
   }
 });
 
@@ -177,21 +183,18 @@ curriculumRouter.put("/specializations/:id", async (c) => {
   const id = c.req.param("id");
   try {
     const body = await c.req.json();
-    const name = typeof body.name === "string" ? body.name.trim() : "";
-    const description = typeof body.description === "string" ? body.description.trim() : "";
+    const name = body.name;
+    const description = body.description;
 
-    if (!name) {
-      return c.json({ error: "Specialization name is required" }, 400);
-    }
-
-    const spec = await prisma.specialization.update({
-      where: { id },
-      data: { name, description }
-    });
+    const spec = await CurriculumService.updateSpecialization(
+      id,
+      typeof name === "string" ? name : "",
+      typeof description === "string" ? description : "",
+    );
 
     return c.json({ specialization: spec });
-  } catch (err: any) {
-    return c.json({ error: err.message }, 500);
+  } catch (err) {
+    return respondWithServiceError(c, err);
   }
 });
 
@@ -202,16 +205,10 @@ curriculumRouter.delete("/specializations/:id", async (c) => {
 
   const id = c.req.param("id");
   try {
-    // Kiểm tra khung chương trình liên quan (EC-20)
-    const hasCurriculums = await prisma.curriculum.findFirst({ where: { specializationId: id } });
-    if (hasCurriculums) {
-      return c.json({ error: "Cannot delete Specialization. There are curriculums linked to this specialization." }, 409);
-    }
-
-    await prisma.specialization.delete({ where: { id } });
+    await CurriculumService.deleteSpecialization(id);
     return c.json({ success: true });
-  } catch (err: any) {
-    return c.json({ error: err.message }, 500);
+  } catch (err) {
+    return respondWithServiceError(c, err);
   }
 });
 
@@ -225,14 +222,7 @@ curriculumRouter.get("/curriculums", async (c) => {
   if (!session?.user) return c.json({ error: "Unauthorized" }, 401);
 
   try {
-    const curriculums = await prisma.curriculum.findMany({
-      orderBy: { curriculumId: "asc" },
-      include: {
-        major: { select: { code: true, name: true } },
-        specialization: { select: { code: true, name: true } },
-        _count: { select: { subjects: true } }
-      }
-    });
+    const curriculums = await CurriculumService.listCurriculums();
     return c.json({ curriculums });
   } catch (err: any) {
     return c.json({ error: err.message }, 500);
@@ -246,42 +236,10 @@ curriculumRouter.get("/curriculums/:curriculumId", async (c) => {
 
   const curriculumId = c.req.param("curriculumId");
   try {
-    const curr = await prisma.curriculum.findFirst({
-      where: {
-        OR: [
-          { id: curriculumId },
-          { curriculumId: curriculumId }
-        ]
-      },
-      include: {
-        major: true,
-        specialization: true,
-        subjects: {
-          orderBy: [{ semesterNo: "asc" }, { course: { code: "asc" } }],
-          include: {
-            course: {
-              select: {
-                id: true,
-                code: true,
-                name: true,
-                syllabuses: {
-                  where: { isActive: true, isApproved: true },
-                  select: { id: true }
-                }
-              }
-            }
-          }
-        }
-      }
-    });
-
-    if (!curr) {
-      return c.json({ error: "Curriculum not found" }, 404);
-    }
-
+    const curr = await CurriculumService.getCurriculumDetail(curriculumId);
     return c.json({ curriculum: curr });
-  } catch (err: any) {
-    return c.json({ error: err.message }, 500);
+  } catch (err) {
+    return respondWithServiceError(c, err);
   }
 });
 
@@ -292,42 +250,21 @@ curriculumRouter.post("/curriculums", async (c) => {
 
   try {
     const body = await c.req.json();
-    const curriculumId = typeof body.curriculumId === "string" ? body.curriculumId.trim().toUpperCase() : "";
-    const majorId = typeof body.majorId === "string" ? body.majorId : "";
-    const specializationId = typeof body.specializationId === "string" ? body.specializationId : null;
-    const batchCode = typeof body.batchCode === "string" ? body.batchCode.trim() : "";
+    const curriculumId = body.curriculumId;
+    const majorId = body.majorId;
+    const specializationId = body.specializationId;
+    const batchCode = body.batchCode;
 
-    if (!curriculumId || !majorId || !batchCode) {
-      return c.json({ error: "Curriculum ID (BIT_SE_NJS_19B), Major ID, and Batch Code are required" }, 400);
-    }
-
-    // Kiểm tra Major
-    const majorExists = await prisma.major.findUnique({ where: { id: majorId } });
-    if (!majorExists) return c.json({ error: "Major not found" }, 404);
-
-    // Kiểm tra Specialization nếu có
-    if (specializationId) {
-      const specExists = await prisma.specialization.findUnique({ where: { id: specializationId } });
-      if (!specExists) return c.json({ error: "Specialization not found" }, 404);
-    }
-
-    const exists = await prisma.curriculum.findUnique({ where: { curriculumId } });
-    if (exists) {
-      return c.json({ error: "Curriculum ID already exists" }, 409);
-    }
-
-    const curr = await prisma.curriculum.create({
-      data: {
-        curriculumId,
-        majorId,
-        specializationId,
-        batchCode
-      }
-    });
+    const curr = await CurriculumService.createCurriculum(
+      typeof curriculumId === "string" ? curriculumId : "",
+      typeof majorId === "string" ? majorId : "",
+      typeof specializationId === "string" ? specializationId : null,
+      typeof batchCode === "string" ? batchCode : "",
+    );
 
     return c.json({ curriculum: curr }, 201);
-  } catch (err: any) {
-    return c.json({ error: err.message }, 500);
+  } catch (err) {
+    return respondWithServiceError(c, err);
   }
 });
 
@@ -339,34 +276,20 @@ curriculumRouter.put("/curriculums/:id", async (c) => {
 
   try {
     const body = await c.req.json();
-    const majorId = typeof body.majorId === "string" ? body.majorId : "";
-    const specializationId = typeof body.specializationId === "string" ? body.specializationId : null;
-    const batchCode = typeof body.batchCode === "string" ? body.batchCode.trim() : "";
+    const majorId = body.majorId;
+    const specializationId = body.specializationId;
+    const batchCode = body.batchCode;
 
-    if (!majorId || !batchCode) {
-      return c.json({ error: "Major ID and Batch Code are required" }, 400);
-    }
-
-    const majorExists = await prisma.major.findUnique({ where: { id: majorId } });
-    if (!majorExists) return c.json({ error: "Major not found" }, 404);
-
-    if (specializationId) {
-      const specExists = await prisma.specialization.findUnique({ where: { id: specializationId } });
-      if (!specExists) return c.json({ error: "Specialization not found" }, 404);
-    }
-
-    const curriculum = await prisma.curriculum.update({
-      where: { id },
-      data: {
-        majorId,
-        specializationId,
-        batchCode,
-      },
-    });
+    const curriculum = await CurriculumService.updateCurriculum(
+      id,
+      typeof majorId === "string" ? majorId : "",
+      typeof specializationId === "string" ? specializationId : null,
+      typeof batchCode === "string" ? batchCode : "",
+    );
 
     return c.json({ curriculum });
-  } catch (err: any) {
-    return c.json({ error: err.message }, 500);
+  } catch (err) {
+    return respondWithServiceError(c, err);
   }
 });
 
@@ -377,10 +300,10 @@ curriculumRouter.delete("/curriculums/:id", async (c) => {
 
   const id = c.req.param("id");
   try {
-    await prisma.curriculum.delete({ where: { id } });
+    await CurriculumService.deleteCurriculum(id);
     return c.json({ success: true });
-  } catch (err: any) {
-    return c.json({ error: err.message }, 500);
+  } catch (err) {
+    return respondWithServiceError(c, err);
   }
 });
 
@@ -396,45 +319,36 @@ curriculumRouter.post("/curriculums/:curriculumId/subjects", async (c) => {
   const curriculumId = c.req.param("curriculumId");
   try {
     const body = await c.req.json();
-    const courseId = typeof body.courseId === "string" ? body.courseId : "";
-    const semesterNo = typeof body.semesterNo === "number" ? body.semesterNo : 1;
-    const isSpecializationSpecific = typeof body.isSpecializationSpecific === "boolean" ? body.isSpecializationSpecific : false;
+    const courseId = body.courseId;
+    const semesterNo = body.semesterNo;
+    const isSpecializationSpecific = body.isSpecializationSpecific;
 
-    if (!courseId || semesterNo < 1 || semesterNo > 9) {
-      return c.json({ error: "Course ID and a valid Semester No (1-9) are required" }, 400);
-    }
-
-    // Tìm Khung chương trình
-    const curr = await prisma.curriculum.findFirst({
-      where: {
-        OR: [
-          { id: curriculumId },
-          { curriculumId: curriculumId }
-        ]
-      }
-    });
-    if (!curr) return c.json({ error: "Curriculum not found" }, 404);
-
-    // Tìm Môn học
-    const course = await prisma.course.findUnique({ where: { id: courseId } });
-    if (!course) return c.json({ error: "Subject/Course not found" }, 404);
-
-    // Gán môn
-    const link = await prisma.curriculumSubject.create({
-      data: {
-        curriculumId: curr.id,
-        courseId,
-        semesterNo,
-        isSpecializationSpecific
-      }
-    });
+    const link = await CurriculumService.assignSubject(
+      curriculumId,
+      typeof courseId === "string" ? courseId : "",
+      typeof semesterNo === "number" ? semesterNo : 1,
+      typeof isSpecializationSpecific === "boolean"
+        ? isSpecializationSpecific
+        : false,
+    );
 
     return c.json({ success: true, link }, 201);
-  } catch (err: any) {
-    if (err?.code === "P2002") {
-      return c.json({ error: "This subject is already linked to this curriculum." }, 409);
-    }
-    return c.json({ error: err.message }, 500);
+  } catch (err) {
+    return respondWithServiceError(c, err);
+  }
+});
+
+// Quick-fill 44 core subjects into curriculum
+curriculumRouter.post("/curriculums/:curriculumId/quick-fill", async (c) => {
+  const authResult = await requireAdmin(c);
+  if (authResult.error) return authResult.error;
+
+  const curriculumId = c.req.param("curriculumId");
+  try {
+    const result = await CurriculumService.quickFillCoreSubjects(curriculumId);
+    return c.json(result, 201);
+  } catch (err) {
+    return respondWithServiceError(c, err);
   }
 });
 
@@ -447,27 +361,9 @@ curriculumRouter.delete("/curriculums/:curriculumId/subjects/:courseId", async (
   const courseId = c.req.param("courseId");
 
   try {
-    const curr = await prisma.curriculum.findFirst({
-      where: {
-        OR: [
-          { id: curriculumId },
-          { curriculumId: curriculumId }
-        ]
-      }
-    });
-    if (!curr) return c.json({ error: "Curriculum not found" }, 404);
-
-    await prisma.curriculumSubject.delete({
-      where: {
-        curriculumId_courseId: {
-          curriculumId: curr.id,
-          courseId
-        }
-      }
-    });
-
+    await CurriculumService.removeSubject(curriculumId, courseId);
     return c.json({ success: true });
-  } catch (err: any) {
-    return c.json({ error: err.message }, 500);
+  } catch (err) {
+    return respondWithServiceError(c, err);
   }
 });

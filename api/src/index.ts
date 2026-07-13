@@ -1,6 +1,5 @@
 import "./config/env.js"; // Load environment variables first!
 import { serve } from "@hono/node-server";
-import { serveStatic } from "@hono/node-server/serve-static";
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { auth } from "./modules/auth/auth.js";
@@ -22,7 +21,8 @@ import { chatRouter } from "./modules/chat/chat.controller.js";
 import { curriculumRouter } from "./modules/curriculum/curriculum.controller.js";
 import { syllabusRouter } from "./modules/syllabus/syllabus.controller.js";
 import { whitelistRouter } from "./modules/auth/whitelist.controller.js";
-import { lecturerRequestRouter } from "./modules/auth/lecturer-request.controller.js";
+import { lecturerAdminRouter } from "./modules/auth/lecturer-admin.controller.js";
+import { adminStatsRouter } from "./modules/admin/admin.controller.js";
 
 export const app = new Hono();
 
@@ -41,8 +41,7 @@ app.use(
   }),
 );
 
-// Serve uploaded documents statically from ./uploads directory
-app.use("/uploads/*", serveStatic({ root: "./" }));
+
 
 // Mount API modules
 app.route("/api/courses", ragRouter);
@@ -51,7 +50,8 @@ app.route("/api/chat", chatRouter);
 app.route("/api/curriculum", curriculumRouter);
 app.route("/api/syllabus", syllabusRouter);
 app.route("/api/whitelist", whitelistRouter);
-app.route("/api/auth-admin", lecturerRequestRouter);
+app.route("/api/admin", lecturerAdminRouter);
+app.route("/api/admin/stats", adminStatsRouter);
 
 
 
