@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useMemo, useCallback } from "react";
+import React, { useState, useMemo } from "react";
 import Link from "next/link";
 import {
   Title,
@@ -16,6 +16,8 @@ import {
   Box,
   Alert,
   Skeleton,
+  Menu,
+  Pagination,
 } from "@mantine/core";
 import {
   IconPlus,
@@ -26,43 +28,80 @@ import {
   IconClock,
   IconCircleX,
   IconAlertCircle,
-  IconLink,
+  IconCloudOff,
   IconBan,
   IconCircleDot,
   IconCloudUpload,
-  IconCloudOff,
+  IconDotsVertical,
 } from "@tabler/icons-react";
 import { modals } from "@mantine/modals";
 import { notifications } from "@mantine/notifications";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import * as api from "@/lib/api";
 import type { ApiSyllabusSummary } from "@/lib/api";
 
 export default function SyllabusManagementPage() {
+  const PAGE_SIZE = 15;
+  const queryClient = useQueryClient();
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
-  const [syllabi, setSyllabi] = useState<ApiSyllabusSummary[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [apiError, setApiError] = useState<string | null>(null);
-  const [syncingIds, setSyncingIds] = useState<Set<number>>(new Set());
+  const [page, setPage] = useState(1);
 
-  const loadSyllabi = useCallback(async () => {
-    setIsLoading(true);
-    setApiError(null);
-    try {
-      const { syllabuses } = await api.searchSyllabus();
-      setSyllabi(syllabuses);
-    } catch (err) {
-      console.error("Failed to load syllabi:", err);
-      setApiError("Không thể tải dữ liệu syllabus từ server.");
-      setSyllabi([]);
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
+  const syllabiQuery = useQuery({
+    queryKey: ["syllabuses", page],
+    queryFn: () => api.searchSyllabus(undefined, page),
+    placeholderData: (prev) => prev,
+  });
 
-  useEffect(() => {
-    void loadSyllabi();
-  }, [loadSyllabi]);
+  const syllabi = syllabiQuery.data?.syllabuses ?? [];
+  const total = syllabiQuery.data?.total ?? 0;
+  const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
+
+  const invalidate = () => queryClient.invalidateQueries({ queryKey: ["syllabuses"] });
+
+  const deleteMutation = useMutation({
+    mutationFn: (id: number) => api.deleteSyllabus(id),
+    onSuccess: (_data, id) => {
+      notifications.show({ title: "Thành công", message: `Đã xóa syllabus #${id}`, color: "green" });
+      invalidate();
+    },
+    onError: (err: any) => {
+      notifications.show({ title: "Lỗi", message: err.message || "Không thể xóa syllabus.", color: "red" });
+    },
+  });
+
+  const syncMutation = useMutation({
+    mutationFn: (id: number) => api.syncSyllabus(id),
+    onSuccess: (_data, id) => {
+      notifications.show({ title: "Đồng bộ thành công", message: `Đã gửi yêu cầu đồng bộ syllabus #${id} lên hệ thống RAG`, color: "green" });
+      invalidate();
+    },
+    onError: (err: any) => {
+      notifications.show({ title: "Lỗi đồng bộ", message: err.message || "Không thể đồng bộ syllabus.", color: "red" });
+    },
+  });
+
+  const activateMutation = useMutation({
+    mutationFn: (id: number) => api.activateSyllabus(id),
+    onSuccess: (_data, id) => {
+      notifications.show({ title: "Thành công", message: `Đã kích hoạt syllabus #${id}`, color: "green" });
+      invalidate();
+    },
+    onError: (err: any) => {
+      notifications.show({ title: "Lỗi", message: err.message || "Không thể kích hoạt syllabus.", color: "red" });
+    },
+  });
+
+  const deactivateMutation = useMutation({
+    mutationFn: (id: number) => api.deactivateSyllabus(id),
+    onSuccess: (_data, id) => {
+      notifications.show({ title: "Thành công", message: `Đã huỷ kích hoạt syllabus #${id}`, color: "green" });
+      invalidate();
+    },
+    onError: (err: any) => {
+      notifications.show({ title: "Lỗi", message: err.message || "Không thể huỷ kích hoạt syllabus.", color: "red" });
+    },
+  });
 
   const handleDeleteSyllabus = (syllabus: ApiSyllabusSummary) => {
     modals.openConfirmModal({
@@ -74,66 +113,8 @@ export default function SyllabusManagementPage() {
       ),
       labels: { confirm: "Xóa", cancel: "Hủy" },
       confirmProps: { color: "red" },
-      onConfirm: async () => {
-        try {
-          await api.deleteSyllabus(syllabus.id);
-          notifications.show({
-            title: "Thành công",
-            message: `Đã xóa syllabus #${syllabus.id}`,
-            color: "green",
-          });
-          void loadSyllabi();
-        } catch (err: any) {
-          notifications.show({
-            title: "Lỗi",
-            message: err.message || "Không thể xóa syllabus.",
-            color: "red",
-          });
-        }
-      },
+      onConfirm: () => deleteMutation.mutate(syllabus.id),
     });
-  };
-
-  const handleSync = async (syllabus: ApiSyllabusSummary) => {
-    setSyncingIds((prev) => new Set(prev).add(syllabus.id));
-    try {
-      await api.syncSyllabus(syllabus.id);
-      notifications.show({
-        title: "Đồng bộ thành công",
-        message: `Đã gửi yêu cầu đồng bộ syllabus #${syllabus.id} lên hệ thống RAG`,
-        color: "green",
-      });
-    } catch (err: any) {
-      notifications.show({
-        title: "Lỗi đồng bộ",
-        message: err.message || "Không thể đồng bộ syllabus lên hệ thống RAG.",
-        color: "red",
-      });
-    } finally {
-      setSyncingIds((prev) => {
-        const next = new Set(prev);
-        next.delete(syllabus.id);
-        return next;
-      });
-    }
-  };
-
-  const handleActivate = async (syllabus: ApiSyllabusSummary) => {
-    try {
-      await api.activateSyllabus(syllabus.id);
-      notifications.show({
-        title: "Thành công",
-        message: `Đã kích hoạt syllabus #${syllabus.id}`,
-        color: "green",
-      });
-      void loadSyllabi();
-    } catch (err: any) {
-      notifications.show({
-        title: "Lỗi",
-        message: err.message || "Không thể kích hoạt syllabus.",
-        color: "red",
-      });
-    }
   };
 
   const handleDeactivate = (syllabus: ApiSyllabusSummary) => {
@@ -147,27 +128,11 @@ export default function SyllabusManagementPage() {
       ),
       labels: { confirm: "Huỷ kích hoạt", cancel: "Hủy" },
       confirmProps: { color: "orange" },
-      onConfirm: async () => {
-        try {
-          await api.deactivateSyllabus(syllabus.id);
-          notifications.show({
-            title: "Thành công",
-            message: `Đã huỷ kích hoạt syllabus #${syllabus.id}`,
-            color: "green",
-          });
-          void loadSyllabi();
-        } catch (err: any) {
-          notifications.show({
-            title: "Lỗi",
-            message: err.message || "Không thể huỷ kích hoạt syllabus.",
-            color: "red",
-          });
-        }
-      },
+      onConfirm: () => deactivateMutation.mutate(syllabus.id),
     });
   };
 
-  const filteredSyllabi = useMemo(() => {
+  const displaySyllabi = useMemo(() => {
     const searchLower = searchTerm.trim().toLowerCase();
 
     return syllabi.filter((syllabus) => {
@@ -280,9 +245,9 @@ export default function SyllabusManagementPage() {
         </Button>
       </Group>
 
-      {apiError && (
+      {syllabiQuery.isError && (
         <Alert title="Lỗi API" color="red" radius={0}>
-          {apiError}
+          {syllabiQuery.error?.message || "Không thể tải dữ liệu syllabus từ server."}
         </Alert>
       )}
 
@@ -328,7 +293,7 @@ export default function SyllabusManagementPage() {
 
       {/* Table Card */}
       <Card p={0} radius={0} style={{ border: "1px solid #E2E8F0", backgroundColor: "white" }}>
-        {isLoading ? (
+        {syllabiQuery.isLoading ? (
           <Box p="xl">
             <Skeleton height={28} width={180} mb="md" />
             <Skeleton height={20} width="100%" mb="sm" />
@@ -351,7 +316,7 @@ export default function SyllabusManagementPage() {
                 </Table.Tr>
               </Table.Thead>
               <Table.Tbody>
-                {filteredSyllabi.map((syllabus) => (
+                {displaySyllabi.map((syllabus) => (
                   <Table.Tr key={syllabus.id}>
                     <Table.Td style={{ fontSize: "13px", color: "#64748B" }}>#{syllabus.id}</Table.Td>
                     <Table.Td style={{ fontSize: "13px", fontWeight: 700, color: "#1A1A1A" }}>{syllabus.course.code}</Table.Td>
@@ -363,51 +328,90 @@ export default function SyllabusManagementPage() {
                     <Table.Td>{getSyncBadge(syllabus.ragWorkspace)}</Table.Td>
                     <Table.Td style={{ fontSize: "13px", color: "#475569" }}>{syllabus.decisionNo ?? "-"}</Table.Td>
                     <Table.Td style={{ textAlign: "right" }}>
-                      <Group gap="xs" justify="flex-end">
-                        {syllabus.isActive && syllabus.isApproved && (
-                          <ActionIcon variant="subtle" color="orange" size="sm" title="Huỷ kích hoạt" onClick={() => handleDeactivate(syllabus)}>
-                            <IconBan size={16} />
+                      <Menu shadow="md" width={200} radius={0} withinPortal>
+                        <Menu.Target>
+                          <ActionIcon variant="subtle" color="gray" size="sm">
+                            <IconDotsVertical size={16} />
                           </ActionIcon>
-                        )}
-                        {!syllabus.isActive && syllabus.isApproved && (
-                          <ActionIcon variant="subtle" color="green" size="sm" title="Kích hoạt" onClick={() => handleActivate(syllabus)}>
-                            <IconCircleDot size={16} />
-                          </ActionIcon>
-                        )}
-                        <ActionIcon
-                          component={Link}
-                          href={`/teacher/syllabus/${syllabus.id}/edit`}
-                          variant="subtle"
-                          color="gray"
-                          size="sm"
-                          title="Chỉnh sửa"
-                        >
-                          <IconEdit size={16} />
-                        </ActionIcon>
-                        <ActionIcon
-                          variant="subtle"
-                          color="blue"
-                          size="sm"
-                          title="Đồng bộ lên hệ thống RAG"
-                          onClick={() => handleSync(syllabus)}
-                          loading={syncingIds.has(syllabus.id)}
-                        >
-                          <IconCloudUpload size={16} />
-                        </ActionIcon>
-                        <ActionIcon variant="subtle" color="red" size="sm" title="Xóa" onClick={() => handleDeleteSyllabus(syllabus)}>
-                          <IconTrash size={16} />
-                        </ActionIcon>
-                      </Group>
+                        </Menu.Target>
+
+                        <Menu.Dropdown>
+                          <Menu.Label style={{ fontSize: "10px", fontWeight: 700, textTransform: "uppercase" }}>
+                            #{syllabus.id} · {syllabus.course.code}
+                          </Menu.Label>
+
+                          {syllabus.isActive && syllabus.isApproved && (
+                            <Menu.Item
+                              color="orange"
+                              leftSection={<IconBan size={16} />}
+                              onClick={() => handleDeactivate(syllabus)}
+                            >
+                              Huỷ kích hoạt
+                            </Menu.Item>
+                          )}
+                          {!syllabus.isActive && syllabus.isApproved && (
+                            <Menu.Item
+                              color="green"
+                              leftSection={<IconCircleDot size={16} />}
+                              onClick={() => handleActivate(syllabus)}
+                            >
+                              Kích hoạt
+                            </Menu.Item>
+                          )}
+
+                          <Menu.Item
+                            component={Link}
+                            href={`/teacher/syllabus/${syllabus.id}/edit`}
+                            leftSection={<IconEdit size={16} />}
+                          >
+                            Chỉnh sửa
+                          </Menu.Item>
+
+                          <Menu.Item
+                            leftSection={<IconCloudUpload size={16} />}
+                            onClick={() => syncMutation.mutate(syllabus.id)}
+                            disabled={syncMutation.isPending}
+                          >
+                            {syncMutation.isPending ? "Đang đồng bộ..." : "Đồng bộ RAG"}
+                          </Menu.Item>
+
+                          <Menu.Divider />
+
+                          <Menu.Item
+                            color="red"
+                            leftSection={<IconTrash size={16} />}
+                            onClick={() => handleDeleteSyllabus(syllabus)}
+                          >
+                            Xoá
+                          </Menu.Item>
+                        </Menu.Dropdown>
+                      </Menu>
                     </Table.Td>
                   </Table.Tr>
                 ))}
               </Table.Tbody>
             </Table>
 
-            {filteredSyllabi.length === 0 && (
+            {displaySyllabi.length === 0 && (
               <Box p="xl" style={{ textAlign: "center", color: "#9CA3AF" }}>
                 <Text size="sm" fw={700}>Không tìm thấy kết quả phù hợp</Text>
               </Box>
+            )}
+
+            {totalPages > 1 && (
+              <Group justify="space-between" px="md" py="sm" style={{ borderTop: "1px solid #E2E8F0", backgroundColor: "#F8FAFC" }}>
+                <Text size="xs" c="dimmed" fw={600}>
+                  {total} syllabus · Trang {page}/{totalPages}
+                </Text>
+                <Pagination
+                  total={totalPages}
+                  value={page}
+                  onChange={(p) => setPage(p)}
+                  radius={0}
+                  size="sm"
+                  color="#1A3A5C"
+                />
+              </Group>
             )}
           </>
         )}
