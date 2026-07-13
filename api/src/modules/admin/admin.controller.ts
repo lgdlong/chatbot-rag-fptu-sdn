@@ -79,3 +79,19 @@ adminStatsRouter.get("/activity", async (c) => {
     return c.json({ error: (err as Error).message || "Failed to load activity log" }, 500);
   }
 });
+
+/**
+ * GET /api/admin/stats/teachers
+ * Teacher-related statistics: total, active last week, unsynced syllabuses, top 5 by sessions.
+ */
+adminStatsRouter.get("/teachers", async (c) => {
+  const authResult = await requireAdmin(c);
+  if (authResult.error) return authResult.error;
+
+  try {
+    const stats = await AdminStatsService.getTeacherStats();
+    return c.json(stats);
+  } catch (err) {
+    return c.json({ error: (err as Error).message || "Failed to load teacher stats" }, 500);
+  }
+});

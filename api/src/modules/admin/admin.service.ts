@@ -43,6 +43,18 @@ export interface ActivityItem {
   } | null;
 }
 
+export interface TeacherStats {
+  totalLecturers: number;
+  activeLastWeek: number;
+  unsyncedSyllabuses: number;
+  topTeachers: Array<{
+    userId: string;
+    name: string;
+    email: string;
+    sessionCount: number;
+  }>;
+}
+
 export class AdminStatsService {
   /**
    * Returns aggregate counts across all major entity tables.
@@ -118,5 +130,72 @@ export class AdminStatsService {
         ? { name: l.user.name, email: l.user.email }
         : null,
     }));
+  }
+
+  /**
+   * Returns teacher-related statistics for the admin dashboard.
+   *
+   * - totalLecturers: number of users with role LECTURER
+   * - activeLastWeek: LECTURER users who created a chat session in last 7 days
+   * - unsyncedSyllabuses: syllabuses without a SYNCED RagWorkspace
+   * - topTeachers: top 5 LECTURER users by chat session count
+   */
+  static async getTeacherStats(): Promise<TeacherStats> {
+    const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+
+    const [
+      totalLecturers,
+      activeUsers,
+      totalSyllabuses,
+      syncedWorkspaces,
+      topGroups,
+    ] = await Promise.all([
+      prisma.user.count({ where: { role: "LECTURER" } }),
+      prisma.chatSession.findMany({
+        where: {
+          createdAt: { gte: sevenDaysAgo },
+          user: { role: "LECTURER" },
+        },
+        select: { userId: true },
+        distinct: ["userId"],
+      }),
+      prisma.syllabus.count(),
+      prisma.ragWorkspace.count({ where: { syncStatus: "SYNCED" } }),
+      prisma.chatSession.groupBy({
+        by: ["userId"],
+        _count: { id: true },
+        where: { user: { role: "LECTURER" } },
+        orderBy: { _count: { id: "desc" } },
+        take: 5,
+      }),
+    ]);
+
+    const activeLastWeek = activeUsers.length;
+    const unsyncedSyllabuses = totalSyllabuses - syncedWorkspaces;
+
+    // Resolve user names/emails for top teachers
+    const topUserIds = topGroups.map((g) => g.userId);
+    const users =
+      topUserIds.length > 0
+        ? await prisma.user.findMany({
+            where: { id: { in: topUserIds } },
+            select: { id: true, name: true, email: true },
+          })
+        : [];
+    const userMap = new Map(users.map((u) => [u.id, u]));
+
+    const topTeachers = topGroups.map((g) => ({
+      userId: g.userId,
+      name: userMap.get(g.userId)?.name ?? "Unknown",
+      email: userMap.get(g.userId)?.email ?? "",
+      sessionCount: g._count.id,
+    }));
+
+    return {
+      totalLecturers,
+      activeLastWeek,
+      unsyncedSyllabuses,
+      topTeachers,
+    };
   }
 }

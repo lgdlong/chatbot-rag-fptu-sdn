@@ -28,14 +28,18 @@ import {
   IconFileText,
   IconMessages,
   IconSchool,
+  IconCloudOff,
+  IconCrown,
 } from "@tabler/icons-react";
 import {
   getAdminDashboardStats,
   getQueryTrend,
   getAdminActivity,
+  getTeacherStats,
   type DashboardStats,
   type QueryTrendItem,
   type ActivityItem,
+  type TeacherStats,
 } from "../../lib/api";
 
 // ── Helpers ──
@@ -82,6 +86,11 @@ export default function SuperAdminDashboardPage() {
     queryFn: () => getAdminActivity(20),
   });
 
+  const teacherStats = useQuery({
+    queryKey: ["teacher-stats"],
+    queryFn: getTeacherStats,
+  });
+
   // ── Denormalise for downstream ──
 
   const stats = dashboardStats.data;
@@ -91,7 +100,7 @@ export default function SuperAdminDashboardPage() {
 
   const refresh = () => {
     queryClient.invalidateQueries({
-      queryKey: ["admin-dashboard", "query-trend", "admin-activity"],
+      queryKey: ["admin-dashboard", "query-trend", "admin-activity", "teacher-stats"],
     });
   };
 
@@ -253,6 +262,126 @@ export default function SuperAdminDashboardPage() {
           })}
         </SimpleGrid>
       )}
+
+      {/* ── Teacher Statistics Section ── */}
+      <Box>
+        <Text
+          fw={800}
+          size="xs"
+          style={{ color: "#1A3A5C", letterSpacing: "1.5px", textTransform: "uppercase", marginBottom: "12px" }}
+        >
+          Thống kê giảng viên
+        </Text>
+        <SimpleGrid cols={{ base: 1, sm: 2, lg: 4 }} spacing="md">
+          {/* Total lecturers */}
+          <Card p="lg" radius={0} style={{ border: "1px solid #E2E8F0", backgroundColor: "white" }} className="hover-card">
+            <Stack gap="sm">
+              <Group justify="space-between">
+                <ThemeIcon size={44} radius={0} style={{ backgroundColor: "#E8EFF7", color: "#1A3A5C" }}>
+                  <IconSchool size={22} />
+                </ThemeIcon>
+              </Group>
+              <div>
+                <Text size="xs" fw={700} c="dimmed" style={{ textTransform: "uppercase", letterSpacing: "0.5px" }}>
+                  Tổng giảng viên
+                </Text>
+                <Text style={{ fontSize: "28px", fontWeight: 900, color: "#1A3A5C", marginTop: "4px" }}>
+                  {teacherStats.data ? formatCount(teacherStats.data.totalLecturers) : "—"}
+                </Text>
+                <Text size="11px" c="dimmed" mt={4}>
+                  Tài khoản role LECTURER
+                </Text>
+              </div>
+            </Stack>
+          </Card>
+
+          {/* Active last 7 days */}
+          <Card p="lg" radius={0} style={{ border: "1px solid #E2E8F0", backgroundColor: "white" }} className="hover-card">
+            <Stack gap="sm">
+              <Group justify="space-between">
+                <ThemeIcon size={44} radius={0} style={{ backgroundColor: "#DCFCE7", color: "#16A34A" }}>
+                  <IconActivity size={22} />
+                </ThemeIcon>
+              </Group>
+              <div>
+                <Text size="xs" fw={700} c="dimmed" style={{ textTransform: "uppercase", letterSpacing: "0.5px" }}>
+                  Hoạt động trong 7 ngày
+                </Text>
+                <Text style={{ fontSize: "28px", fontWeight: 900, color: "#1A3A5C", marginTop: "4px" }}>
+                  {teacherStats.data ? formatCount(teacherStats.data.activeLastWeek) : "—"}
+                </Text>
+                <Text size="11px" c="dimmed" mt={4}>
+                  Giảng viên có tương tác chatbot
+                </Text>
+              </div>
+            </Stack>
+          </Card>
+
+          {/* Unsynced syllabuses */}
+          <Card p="lg" radius={0} style={{ border: "1px solid #E2E8F0", backgroundColor: "white" }} className="hover-card">
+            <Stack gap="sm">
+              <Group justify="space-between">
+                <ThemeIcon size={44} radius={0} style={{ backgroundColor: "#FFEBEE", color: "#C62828" }}>
+                  <IconCloudOff size={22} />
+                </ThemeIcon>
+              </Group>
+              <div>
+                <Text size="xs" fw={700} c="dimmed" style={{ textTransform: "uppercase", letterSpacing: "0.5px" }}>
+                  Syllabus chưa đồng bộ
+                </Text>
+                <Text style={{ fontSize: "28px", fontWeight: 900, color: "#1A3A5C", marginTop: "4px" }}>
+                  {teacherStats.data ? formatCount(teacherStats.data.unsyncedSyllabuses) : "—"}
+                </Text>
+                <Text size="11px" c="dimmed" mt={4}>
+                  Chưa đồng bộ lên RAG workspace
+                </Text>
+              </div>
+            </Stack>
+          </Card>
+
+          {/* Top teachers */}
+          <Card p="lg" radius={0} style={{ border: "1px solid #E2E8F0", backgroundColor: "white" }} className="hover-card">
+            <Stack gap="sm">
+              <Group justify="space-between">
+                <ThemeIcon size={44} radius={0} style={{ backgroundColor: "#FFF3E0", color: "#E65100" }}>
+                  <IconCrown size={22} />
+                </ThemeIcon>
+              </Group>
+              <div>
+                <Text size="xs" fw={700} c="dimmed" style={{ textTransform: "uppercase", letterSpacing: "0.5px" }}>
+                  Top giảng viên
+                </Text>
+                <Text size="11px" c="dimmed" mt={4}>
+                  Nhiều hội thoại nhất
+                </Text>
+                {teacherStats.data && teacherStats.data.topTeachers.length > 0 ? (
+                  <Stack gap={4} mt="xs">
+                    {teacherStats.data.topTeachers.map((t, i) => (
+                      <Group key={t.userId} justify="space-between" gap="xs">
+                        <Group gap={6} style={{ flex: 1, minWidth: 0 }}>
+                          <Text size="xs" fw={800} c="dimmed" style={{ minWidth: 16 }}>
+                            #{i + 1}
+                          </Text>
+                          <Text size="xs" fw={600} truncate style={{ flex: 1 }}>
+                            {t.name}
+                          </Text>
+                        </Group>
+                        <Text size="xs" fw={700} c="#1A3A5C">
+                          {t.sessionCount}
+                        </Text>
+                      </Group>
+                    ))}
+                  </Stack>
+                ) : (
+                  <Text size="11px" c="dimmed" mt={4}>
+                    Chưa có dữ liệu
+                  </Text>
+                )}
+              </div>
+            </Stack>
+          </Card>
+        </SimpleGrid>
+      </Box>
 
       <Grid gap="md">
         <Grid.Col span={{ base: 12, lg: 8 }}>

@@ -809,8 +809,25 @@ export async function getQueryTrend(months = 12): Promise<QueryTrendItem[]> {
   return fetchApi(`/api/admin/stats/query-trend?months=${months}`);
 }
 
+export interface TeacherStats {
+  totalLecturers: number;
+  activeLastWeek: number;
+  unsyncedSyllabuses: number;
+  topTeachers: Array<{
+    userId: string;
+    name: string;
+    email: string;
+    sessionCount: number;
+  }>;
+}
+
 /** Recent audit-log entries */
 export async function getAdminActivity(limit = 20): Promise<ActivityItem[]> {
   return fetchApi(`/api/admin/stats/activity?limit=${limit}`);
+}
+
+/** Teacher-related stats for superadmin dashboard */
+export async function getTeacherStats(): Promise<TeacherStats> {
+  return fetchApi("/api/admin/stats/teachers");
 }
 
