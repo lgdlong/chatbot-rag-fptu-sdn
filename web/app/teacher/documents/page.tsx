@@ -226,7 +226,6 @@ export default function DocumentManagementPage() {
           radius={0}
           fw={700}
           onClick={() => setIsUploadModalOpen(true)}
-          disabled={!selectedSyllabusId}
         >
           Upload file mới
         </Button>
@@ -239,27 +238,13 @@ export default function DocumentManagementPage() {
       )}
 
       <Card p="md" radius={0} style={{ border: "1px solid #E2E8F0", backgroundColor: "white" }}>
-        <Group grow gap="md" align="center">
-          <TextInput
-            placeholder="Tìm kiếm theo tên tài liệu..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            leftSection={<IconSearch size={16} color="#9CA3AF" />}
-            radius={0}
-            style={{ flexGrow: 1 }}
-          />
-
-          <Select
-            label="Chọn syllabus"
-            placeholder={isLoadingSyllabi ? "Đang tải syllabus..." : "Chọn syllabus..."}
-            data={subjectOptions}
-            value={selectedSyllabusId ? String(selectedSyllabusId) : null}
-            onChange={(value) => setSelectedSyllabusId(value ? Number(value) : null)}
-            radius={0}
-            style={{ maxWidth: "300px" }}
-            disabled={isLoadingSyllabi}
-          />
-        </Group>
+        <TextInput
+          placeholder="Tìm kiếm theo tên tài liệu..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          leftSection={<IconSearch size={16} color="#9CA3AF" />}
+          radius={0}
+        />
       </Card>
 
       <Card p={0} radius={0} style={{ border: "1px solid #E2E8F0", backgroundColor: "white" }}>
@@ -332,9 +317,16 @@ export default function DocumentManagementPage() {
         }}
       >
         <Stack gap="md" py="md">
-          <Text size="sm" color="dimmed">
-            Upload PDF cho syllabus: <strong>{selectedSyllabus?.course.code ?? "-"}</strong>
-          </Text>
+          <Select
+            label="Chọn syllabus để upload tài liệu"
+            placeholder={isLoadingSyllabi ? "Đang tải syllabus..." : "Chọn syllabus..."}
+            data={subjectOptions}
+            value={selectedSyllabusId ? String(selectedSyllabusId) : null}
+            onChange={(value) => setSelectedSyllabusId(value ? Number(value) : null)}
+            radius={0}
+            disabled={isLoadingSyllabi}
+            required
+          />
 
           <Dropzone
             onDrop={(acceptedFiles) => setFiles(acceptedFiles)}

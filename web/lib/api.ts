@@ -71,6 +71,11 @@ export interface ApiSyllabusSummary {
     code: string;
     name: string;
   };
+  ragWorkspace: {
+    syncStatus: string | null;
+    syncError: string | null;
+    lastSyncedAt: string | null;
+  } | null;
 }
 
 export interface ApiSyllabusDetail {

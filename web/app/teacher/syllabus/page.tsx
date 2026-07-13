@@ -25,10 +25,12 @@ import {
   IconCircleCheck,
   IconClock,
   IconCircleX,
+  IconAlertCircle,
   IconLink,
   IconBan,
   IconCircleDot,
   IconCloudUpload,
+  IconCloudOff,
 } from "@tabler/icons-react";
 import { modals } from "@mantine/modals";
 import { notifications } from "@mantine/notifications";
@@ -98,13 +100,13 @@ export default function SyllabusManagementPage() {
       await api.syncSyllabus(syllabus.id);
       notifications.show({
         title: "Đồng bộ thành công",
-        message: `Đã gửi yêu cầu đồng bộ syllabus #${syllabus.id} lên AnythingLLM`,
+        message: `Đã gửi yêu cầu đồng bộ syllabus #${syllabus.id} lên hệ thống RAG`,
         color: "green",
       });
     } catch (err: any) {
       notifications.show({
         title: "Lỗi đồng bộ",
-        message: err.message || "Không thể đồng bộ syllabus lên AnythingLLM.",
+        message: err.message || "Không thể đồng bộ syllabus lên hệ thống RAG.",
         color: "red",
       });
     } finally {
@@ -184,6 +186,36 @@ export default function SyllabusManagementPage() {
       return matchesSearch && matchesStatus;
     });
   }, [searchTerm, statusFilter, syllabi]);
+
+  const getSyncBadge = (ragWorkspace: ApiSyllabusSummary["ragWorkspace"]) => {
+    const status = ragWorkspace?.syncStatus ?? null;
+    switch (status) {
+      case "SYNCED":
+        return (
+          <Badge color="green" radius={0} fw={700} variant="light" leftSection={<IconCircleCheck size={12} />}>
+            Đã đồng bộ
+          </Badge>
+        );
+      case "SYNCING":
+        return (
+          <Badge color="blue" radius={0} fw={700} variant="light" leftSection={<IconClock size={12} />}>
+            Đang đồng bộ...
+          </Badge>
+        );
+      case "FAILED":
+        return (
+          <Badge color="red" radius={0} fw={700} variant="light" leftSection={<IconAlertCircle size={12} />}>
+            Lỗi đồng bộ
+          </Badge>
+        );
+      default:
+        return (
+          <Badge color="gray" radius={0} fw={700} variant="light" leftSection={<IconCloudOff size={12} />}>
+            Chưa đồng bộ
+          </Badge>
+        );
+    }
+  };
 
   const getStatusBadge = (isActive: boolean, isApproved: boolean) => {
     if (isActive && isApproved) {
@@ -313,6 +345,7 @@ export default function SyllabusManagementPage() {
                   <Table.Th style={{ fontWeight: 700, fontSize: "12px", color: "#475569" }}>Tên môn học</Table.Th>
                   <Table.Th style={{ fontWeight: 700, fontSize: "12px", color: "#475569" }}>Syllabus Name</Table.Th>
                   <Table.Th style={{ width: "150px", fontWeight: 700, fontSize: "12px", color: "#475569" }}>Trạng thái</Table.Th>
+                  <Table.Th style={{ width: "150px", fontWeight: 700, fontSize: "12px", color: "#475569" }}>Đồng bộ hệ thống RAG</Table.Th>
                   <Table.Th style={{ fontWeight: 700, fontSize: "12px", color: "#475569" }}>Decision No</Table.Th>
                   <Table.Th style={{ width: "100px", fontWeight: 700, fontSize: "12px", color: "#475569", textAlign: "right" }}>Thao tác</Table.Th>
                 </Table.Tr>
@@ -327,6 +360,7 @@ export default function SyllabusManagementPage() {
                       {syllabus.syllabusName}
                     </Table.Td>
                     <Table.Td>{getStatusBadge(syllabus.isActive, syllabus.isApproved)}</Table.Td>
+                    <Table.Td>{getSyncBadge(syllabus.ragWorkspace)}</Table.Td>
                     <Table.Td style={{ fontSize: "13px", color: "#475569" }}>{syllabus.decisionNo ?? "-"}</Table.Td>
                     <Table.Td style={{ textAlign: "right" }}>
                       <Group gap="xs" justify="flex-end">
@@ -354,7 +388,7 @@ export default function SyllabusManagementPage() {
                           variant="subtle"
                           color="blue"
                           size="sm"
-                          title="Đồng bộ lên AnythingLLM"
+                          title="Đồng bộ lên hệ thống RAG"
                           onClick={() => handleSync(syllabus)}
                           loading={syncingIds.has(syllabus.id)}
                         >
