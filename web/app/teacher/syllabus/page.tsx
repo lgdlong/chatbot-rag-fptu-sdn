@@ -132,6 +132,21 @@ export default function SyllabusManagementPage() {
     });
   };
 
+  const handleActivate = (syllabus: ApiSyllabusSummary) => {
+    modals.openConfirmModal({
+      title: "Kích hoạt Syllabus",
+      children: (
+        <Text size="sm">
+          Bạn có chắc chắn muốn kích hoạt syllabus <b>#{syllabus.id} - {syllabus.syllabusName}</b>?
+          Syllabus sẽ hiển thị cho sinh viên trên trang tìm kiếm.
+        </Text>
+      ),
+      labels: { confirm: "Kích hoạt", cancel: "Hủy" },
+      confirmProps: { color: "green" },
+      onConfirm: () => activateMutation.mutate(syllabus.id),
+    });
+  };
+
   const displaySyllabi = useMemo(() => {
     const searchLower = searchTerm.trim().toLowerCase();
 

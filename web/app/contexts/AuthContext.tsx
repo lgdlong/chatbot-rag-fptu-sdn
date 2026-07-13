@@ -68,10 +68,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const login = useCallback(async (email: string, password: string) => {
     const result = await authClient.signIn.email({ email, password });
     if (result.error) {
-      return {
-        success: false,
-        error: result.error.message ?? "Đăng nhập thất bại",
-      };
+      const msg = (result.error.message ?? "").toLowerCase();
+      let vietnameseMsg: string;
+      if (msg.includes("invalid email") || msg.includes("invalid password") || (msg.includes("email") && msg.includes("password"))) {
+        vietnameseMsg = "Email hoặc mật khẩu không chính xác.";
+      } else if (msg.includes("user not found") || msg.includes("account not found")) {
+        vietnameseMsg = "Tài khoản không tồn tại.";
+      } else if (msg.includes("banned") || msg.includes("disabled") || msg.includes("suspended")) {
+        vietnameseMsg = "Tài khoản đã bị vô hiệu hóa. Liên hệ admin để được hỗ trợ.";
+      } else if (msg.includes("rate limit") || msg.includes("too many")) {
+        vietnameseMsg = "Quá nhiều lần thử đăng nhập. Vui lòng đợi vài phút.";
+      } else {
+        vietnameseMsg = result.error.message ?? "Đăng nhập thất bại.";
+      }
+      return { success: false, error: vietnameseMsg };
     }
     await refetch();
     return { success: true };

@@ -741,15 +741,10 @@ export async function removeSubjectFromCurriculum(
 
 export interface CreateLecturerResponse {
   success: boolean;
-  credentials: {
-    email: string;
-    temporaryPassword: string;
-  };
-  resetLink: string;
+  email: string;
 }
 
 export async function createLecturer(payload: {
-  name: string;
   email: string;
 }): Promise<CreateLecturerResponse> {
   return fetchApi("/api/admin/create-lecturer", {
@@ -766,6 +761,12 @@ export async function disableLecturer(userId: string): Promise<{ success: boolea
 
 export async function enableLecturer(userId: string): Promise<{ success: boolean }> {
   return fetchApi(`/api/admin/enable-lecturer/${userId}`, {
+    method: "POST",
+  });
+}
+
+export async function resetLecturerPassword(userId: string): Promise<{ success: boolean }> {
+  return fetchApi(`/api/admin/reset-lecturer-password/${userId}`, {
     method: "POST",
   });
 }

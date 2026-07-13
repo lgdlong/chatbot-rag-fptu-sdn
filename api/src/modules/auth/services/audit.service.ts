@@ -11,9 +11,12 @@ export type AuditAction =
   | "DELETE_DOCUMENT"
   | "DISABLE_LECTURER"
   | "ENABLE_LECTURER"
-  | "CREATE_LECTURER";
+  | "CREATE_LECTURER"
+  | "RESET_LECTURER_PASSWORD"
+  | "UPDATE_LECTURER"
+  | "LOGIN";
 
-export type AuditEntityType = "Syllabus" | "Document" | "Lecturer" | "User";
+export type AuditEntityType = "Syllabus" | "Document" | "Lecturer" | "User" | "Session";
 
 export async function createAuditLog(params: {
   userId: string;

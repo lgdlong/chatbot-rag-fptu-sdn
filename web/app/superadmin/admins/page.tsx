@@ -36,6 +36,7 @@ import {
   IconTrash,
   IconBan,
   IconCircleCheck,
+  IconKey,
 } from "@tabler/icons-react";
 import { authClient, apiFetch } from "../../../lib/auth-client";
 import type { UserRole } from "../../contexts/AuthContext";
@@ -77,6 +78,9 @@ export default function AdminManagementPage() {
   const [roleFilter, setRoleFilter] = useState<RoleFilter>("ALL");
   const [showAddModal, setShowAddModal] = useState(false);
   const [creating, setCreating] = useState(false);
+  const [showCreateLecturerModal, setShowCreateLecturerModal] = useState(false);
+  const [createLecturerEmail, setCreateLecturerEmail] = useState("");
+  const [creatingLecturer, setCreatingLecturer] = useState(false);
 
   const [newEmail, setNewEmail] = useState("");
   const [newPassword, setNewPassword] = useState("");
@@ -159,6 +163,26 @@ export default function AdminManagementPage() {
     },
   });
 
+  const resetPasswordMutation = useMutation({
+    mutationFn: (userId: string) => api.resetLecturerPassword(userId),
+    onSuccess: (_data, userId) => {
+      const user = users.find((u) => u.id === userId);
+      notifications.show({
+        title: "Thành công",
+        message: `Đã gửi mật khẩu mới qua email ${user?.email ?? ""}`,
+        color: "green",
+      });
+      queryClient.invalidateQueries({ queryKey: ["admin-users"] });
+    },
+    onError: (err) => {
+      notifications.show({
+        title: "Lỗi",
+        message: err instanceof Error ? err.message : "Không thể cấp lại mật khẩu",
+        color: "red",
+      });
+    },
+  });
+
   const handleDeleteUser = (user: AdminListUser) => {
     modals.openConfirmModal({
       title: "Xóa tài khoản người dùng",
@@ -216,6 +240,21 @@ export default function AdminManagementPage() {
           });
         }
       },
+    });
+  };
+
+  const handleResetLecturerPassword = (user: AdminListUser) => {
+    modals.openConfirmModal({
+      title: "Cấp lại mật khẩu",
+      children: (
+        <Text size="sm">
+          Cấp lại mật khẩu cho giảng viên <b>{user.name} ({user.email})</b>?
+          Mật khẩu mới sẽ được gửi qua email.
+        </Text>
+      ),
+      labels: { confirm: "Cấp lại", cancel: "Hủy" },
+      confirmProps: { color: "orange" },
+      onConfirm: () => resetPasswordMutation.mutate(user.id),
     });
   };
 
@@ -296,6 +335,32 @@ export default function AdminManagementPage() {
     }
   };
 
+  const handleCreateLecturer = async () => {
+    setErrorMsg("");
+    const email = createLecturerEmail.trim().toLowerCase();
+    if (!email) {
+      setErrorMsg("Email là bắt buộc");
+      return;
+    }
+
+    setCreatingLecturer(true);
+    try {
+      await api.createLecturer({ email });
+      notifications.show({
+        title: "Thành công",
+        message: `Mật khẩu đã được gửi qua email ${email}`,
+        color: "green",
+      });
+      setShowCreateLecturerModal(false);
+      setCreateLecturerEmail("");
+      queryClient.invalidateQueries({ queryKey: ["admin-users"] });
+    } catch (err: any) {
+      setErrorMsg(err.message || "Không thể tạo tài khoản giảng viên");
+    } finally {
+      setCreatingLecturer(false);
+    }
+  };
+
   const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
 
   return (
@@ -305,35 +370,35 @@ export default function AdminManagementPage() {
           <Title order={1} style={{ fontSize: "24px", fontWeight: 900, color: "#1A3A5C" }}>
             Quản lý tài khoản
           </Title>
-          <Text size="sm" c="dimmed">
-            Danh sách người dùng hệ thống (Admin Plugin — 00_auth.md §3)
-          </Text>
         </div>
-        <Button
-          leftSection={<IconPlus size={16} />}
-          style={{ backgroundColor: "#F26F21" }}
-          radius={0}
-          fw={700}
-          onClick={() => {
-            setErrorMsg("");
-            setShowAddModal(true);
-          }}
-        >
-          Tạo người dùng
-        </Button>
+        <Group gap="sm">
+          <Button
+            variant="outline"
+            color="gray"
+            radius={0}
+            fw={700}
+            onClick={() => {
+              setErrorMsg("");
+              setCreateLecturerEmail("");
+              setShowCreateLecturerModal(true);
+            }}
+          >
+            Tạo giảng viên
+          </Button>
+          <Button
+            leftSection={<IconPlus size={16} />}
+            style={{ backgroundColor: "#F26F21" }}
+            radius={0}
+            fw={700}
+            onClick={() => {
+              setErrorMsg("");
+              setShowAddModal(true);
+            }}
+          >
+            Tạo người dùng
+          </Button>
+        </Group>
       </Group>
-
-      <Alert
-        color="indigo"
-        radius={0}
-        title="API Admin Plugin"
-        icon={<IconAlertCircle size={20} />}
-        styles={{ title: { fontWeight: 700 } }}
-      >
-        <Text size="sm">
-          Sử dụng <b>list-users</b> và <b>create-user</b>. Chi tiết từng tài khoản tại trang xem chi tiết.
-        </Text>
-      </Alert>
 
       <Card p="md" radius={0} style={{ border: "1px solid #E2E8F0", backgroundColor: "white" }}>
         <Group gap="md" wrap="wrap">
@@ -459,6 +524,17 @@ export default function AdminManagementPage() {
                             <IconCircleCheck size={16} />
                           </ActionIcon>
                         )}
+                        {user.role === "LECTURER" && (
+                          <ActionIcon
+                            variant="subtle"
+                            color="orange"
+                            size="sm"
+                            aria-label="Cấp lại mật khẩu"
+                            onClick={() => handleResetLecturerPassword(user)}
+                          >
+                            <IconKey size={16} />
+                          </ActionIcon>
+                        )}
                         <ActionIcon
                           variant="subtle"
                           color="red"
@@ -492,6 +568,56 @@ export default function AdminManagementPage() {
           </>
         )}
       </Card>
+
+      <Modal
+        opened={showCreateLecturerModal}
+        onClose={() => setShowCreateLecturerModal(false)}
+        title="Tạo giảng viên"
+        centered
+        radius={0}
+        styles={{
+          title: { fontWeight: 900, color: "#1A3A5C", textTransform: "uppercase", fontSize: "16px" },
+          header: { borderBottom: "1px solid #E2E8F0" },
+        }}
+      >
+        <Stack gap="md" py="md">
+          {errorMsg && (
+            <Alert icon={<IconAlertCircle size={16} />} color="red" radius={0}>
+              {errorMsg}
+            </Alert>
+          )}
+
+          <Text size="sm" c="dimmed">
+            Hệ thống sẽ tự động tạo tài khoản và gửi thông tin đăng nhập qua email.
+          </Text>
+
+          <TextInput
+            label="Email"
+            placeholder="giangvien@fpt.edu.vn"
+            required
+            type="email"
+            radius={0}
+            value={createLecturerEmail}
+            onChange={(e) => setCreateLecturerEmail(e.target.value)}
+            leftSection={<IconMail size={16} />}
+          />
+
+          <Group justify="flex-end" mt="md">
+            <Button variant="outline" color="gray" radius={0} onClick={() => setShowCreateLecturerModal(false)} fw={700}>
+              Hủy bỏ
+            </Button>
+            <Button
+              style={{ backgroundColor: "#F26F21" }}
+              radius={0}
+              onClick={() => void handleCreateLecturer()}
+              fw={700}
+              loading={creatingLecturer}
+            >
+              Tạo giảng viên
+            </Button>
+          </Group>
+        </Stack>
+      </Modal>
 
       <Modal
         opened={showAddModal}

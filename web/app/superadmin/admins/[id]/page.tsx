@@ -33,8 +33,10 @@ import {
   IconUserCheck,
   IconLogout,
   IconSwitchHorizontal,
+  IconKey,
 } from "@tabler/icons-react";
 import { authClient } from "../../../../lib/auth-client";
+import * as api from "@/lib/api";
 import {
   useAuth,
   portalPathForRole,
@@ -212,6 +214,24 @@ export default function AdminUserDetailPage() {
     },
   });
 
+  const resetPasswordMutation = useMutation({
+    mutationFn: () => api.resetLecturerPassword(userId),
+    onSuccess: () => {
+      notifications.show({
+        title: "Thành công",
+        message: "Đã gửi mật khẩu mới qua email",
+        color: "green",
+      });
+    },
+    onError: (err) => {
+      notifications.show({
+        title: "Lỗi",
+        message: err instanceof Error ? err.message : "Không thể cấp lại mật khẩu",
+        color: "red",
+      });
+    },
+  });
+
   const removeUserMutation = useMutation({
     mutationFn: () => authClient.admin.removeUser({ userId }),
     onSuccess: () => {
@@ -249,7 +269,8 @@ export default function AdminUserDetailPage() {
     unbanMutation.isPending ||
     setPasswordMutation.isPending ||
     impersonateMutation.isPending ||
-    removeUserMutation.isPending;
+    removeUserMutation.isPending ||
+    resetPasswordMutation.isPending;
 
   const handleSetRole = () => {
     if (isSelf) return;
@@ -298,6 +319,22 @@ export default function AdminUserDetailPage() {
       return;
     }
     setPasswordMutation.mutate(newPassword);
+  };
+
+  const handleResetLecturerPassword = () => {
+    if (isSelf) return;
+    modals.openConfirmModal({
+      title: "Cấp lại mật khẩu",
+      children: (
+        <Text size="sm">
+          Cấp lại mật khẩu cho giảng viên <b>{detail?.email}</b>?
+          Mật khẩu mới sẽ được gửi qua email.
+        </Text>
+      ),
+      labels: { confirm: "Cấp lại", cancel: "Hủy" },
+      confirmProps: { color: "orange" },
+      onConfirm: () => resetPasswordMutation.mutate(),
+    });
   };
 
   const handleRemoveUser = () => {
@@ -537,6 +574,19 @@ export default function AdminUserDetailPage() {
           >
             Đóng vai
           </Button>
+          {detail.role === "LECTURER" && (
+            <Button
+              leftSection={<IconKey size={16} />}
+              variant="outline"
+              color="orange"
+              radius={0}
+              onClick={handleResetLecturerPassword}
+              disabled={isSelf}
+              loading={actionLoading}
+            >
+              Cấp lại mật khẩu
+            </Button>
+          )}
           <Button
             leftSection={<IconTrash size={16} />}
             color="red"

@@ -118,21 +118,13 @@ export function ChatbotWidget({ subjectCode, courseId }: ChatbotWidgetProps) {
       },
       onCitations: (citations) => {
         if (citations && citations.length > 0) {
-          // Append citation info to the bot message
-          const citationText = (citations as Array<{ source?: string; excerpt?: string }>)
-            .map((c, i) => `[${i + 1}] ${c.source || "Nguồn tài liệu"}`)
-            .join("\n");
+          const typed = citations as Array<{ documentName?: string }>;
+          const uniqueDocs = [...new Set(typed.map((c) => c.documentName || "Tài liệu"))];
 
           setMessages((prev) =>
             prev.map((m) =>
               m.id === botMsgId
-                ? {
-                    ...m,
-                    citation: {
-                      source: "Trích dẫn từ tài liệu",
-                      excerpt: citationText,
-                    },
-                  }
+                ? { ...m, citation: { source: uniqueDocs.join(", "), excerpt: "" } }
                 : m
             )
           );

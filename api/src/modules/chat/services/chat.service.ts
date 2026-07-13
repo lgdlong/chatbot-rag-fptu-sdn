@@ -21,11 +21,13 @@ export type ChatHistoryItem = {
   parts: string[];
 };
 
+/**
+ * ChatCitation — normalized citation returned to the frontend.
+ * Transformed from raw AnythingLLM sources in RagService.
+ */
 export type ChatCitation = {
-  documentId: string;
   documentName: string;
-  fileUrl: string | null;
-  page: number;
+  excerpt: string;
 };
 
 export type SendMessageInput = {

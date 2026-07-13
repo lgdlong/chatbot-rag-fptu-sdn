@@ -46,9 +46,11 @@ export default function SettingsPage() {
       });
 
       if (error) {
+        const isPasswordMismatch = error.message?.toLowerCase().includes("password") && 
+          (error.message?.toLowerCase().includes("incorrect") || error.message?.toLowerCase().includes("wrong") || error.message?.toLowerCase().includes("invalid") || error.message?.toLowerCase().includes("mismatch") || error.message?.toLowerCase().includes("not match"));
         notifications.show({
           title: "Lỗi",
-          message: error.message || "Đổi mật khẩu thất bại.",
+          message: isPasswordMismatch ? "Mật khẩu hiện tại không đúng. Vui lòng kiểm tra lại." : (error.message || "Đổi mật khẩu thất bại."),
           color: "red",
         });
       } else {

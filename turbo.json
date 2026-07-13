@@ -2,13 +2,23 @@
   "ui": "tui",
   "$schema": "https://turbo.build/schema.json",
   "tasks": {
+    "generate": {
+      "cache": false,
+      "outputs": []
+    },
     "build": {
       "dependsOn": [
         "^build"
       ],
       "outputs": [
         ".next/**",
+        "!.next/cache/**",
         "dist/**"
+      ]
+    },
+    "check-types": {
+      "dependsOn": [
+        "^check-types"
       ]
     },
     "dev": {
@@ -19,6 +29,9 @@
       "dependsOn": [
         "^lint"
       ]
+    },
+    "clean": {
+      "cache": false
     }
   }
 }

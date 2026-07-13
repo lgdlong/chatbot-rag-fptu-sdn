@@ -152,7 +152,7 @@ export default function DocumentManagementPage() {
 
   const filteredDocs = useMemo(() => {
     const searchLower = searchTerm.trim().toLowerCase();
-    return (documentsQuery.data ?? []).filter((doc) =>
+    return (documentsQuery.data?.documents ?? []).filter((doc) =>
       searchLower === "" || doc.name.toLowerCase().includes(searchLower)
     );
   }, [searchTerm, documentsQuery.data]);

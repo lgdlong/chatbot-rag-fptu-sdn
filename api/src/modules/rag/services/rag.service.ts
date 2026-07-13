@@ -32,6 +32,59 @@ function stripMarkdown(text: string): string {
   return text.trim();
 }
 
+export type Citation = {
+  documentName: string;
+  excerpt: string;
+};
+
+/** Clean up internal AnythingLLM document names for display. */
+function formatDocumentName(raw: string): string {
+  if (/^syllabus_\d+_snapshot(\.md)?$/i.test(raw)) {
+    return "syllabus";
+  }
+  // Keep real filenames, strip .md extension for readability
+  return raw.replace(/\.md$/i, "");
+}
+
+function transformCitations(sources: unknown[]): Citation[] {
+  return sources.map((source) => {
+    if (!source || typeof source !== "object") {
+      return { documentName: "Tài liệu", excerpt: "" };
+    }
+    const record = source as Record<string, unknown>;
+
+    // Try every field name AnythingLLM might use
+    const rawTitle =
+      typeof record.title === "string"
+        ? record.title
+        : typeof record.filename === "string"
+          ? record.filename
+          : typeof (record as any).metadata?.title === "string"
+            ? (record as any).metadata.title
+            : typeof (record as any).documentName === "string"
+              ? (record as any).documentName
+              : "";
+
+    const textContent =
+      typeof record.textContent === "string"
+        ? record.textContent
+        : typeof record.content === "string"
+          ? record.content
+          : typeof record.text === "string"
+            ? record.text
+            : typeof record.snippet === "string"
+              ? record.snippet
+              : typeof (record as any).excerpt === "string"
+                ? (record as any).excerpt
+                : "";
+
+    return {
+      documentName: formatDocumentName(rawTitle || "Tài liệu"),
+      excerpt: textContent ? textContent.substring(0, 200).trim() : "",
+    };
+  });
+}
+
 export class RagService {
   public static async retrieveAndGenerate(
     query: string,
@@ -66,7 +119,12 @@ export class RagService {
         onChunk: onChunkClean,
       });
 
-      return { ...result, fullAnswer: stripMarkdown(result.fullAnswer) };
+      return {
+        citations: Array.isArray(result.citations)
+          ? transformCitations(result.citations)
+          : [],
+        fullAnswer: stripMarkdown(result.fullAnswer),
+      };
     } catch (error) {
       console.error("[RagService] AnythingLLM stream failed:", error);
       const errMsg = error instanceof Error ? error.message : String(error);

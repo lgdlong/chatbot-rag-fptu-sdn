@@ -34,7 +34,7 @@ export default function SuperAdminLayout({ children }: { children: React.ReactNo
 
   const navigation = [
     { name: "Dashboard", href: "/superadmin", icon: IconLayoutDashboard },
-    { name: "Admin Accounts", href: "/superadmin/admins", icon: IconShield },
+    { name: "Quản lý tài khoản", href: "/superadmin/admins", icon: IconShield },
     { name: "Student Whitelist", href: "/superadmin/whitelist", icon: IconUserCheck },
   ];
 

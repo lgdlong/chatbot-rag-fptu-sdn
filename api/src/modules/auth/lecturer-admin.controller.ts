@@ -25,8 +25,7 @@ async function requireAdmin(c: Context): Promise<AdminAuthResult> {
 }
 
 // POST /api/admin/create-lecturer
-// Admin trực tiếp tạo tài khoản Giảng viên (bỏ qua flow yêu cầu đăng ký).
-// Trả về credentials + reset link để admin chuyển cho giảng viên mới.
+// Admin tạo tài khoản Giảng viên — chỉ cần email. Password tự gen + gửi email.
 lecturerAdminRouter.post("/create-lecturer", async (c) => {
   const authResult = await requireAdmin(c);
   if (authResult.error) return authResult.error;
@@ -34,7 +33,6 @@ lecturerAdminRouter.post("/create-lecturer", async (c) => {
   try {
     const body = await c.req.json().catch(() => ({}));
     const result = await LecturerAdminService.createLecturer({
-      name: typeof body.name === "string" ? body.name : "",
       email: typeof body.email === "string" ? body.email : "",
       adminUserId: authResult.session.user.id,
     });
@@ -44,6 +42,28 @@ lecturerAdminRouter.post("/create-lecturer", async (c) => {
       return c.json({ error: err.message }, err.status as any);
     }
     return c.json({ error: (err as Error).message || "Failed to create lecturer" }, 500);
+  }
+});
+
+// POST /api/admin/reset-lecturer-password/:userId
+// Admin cấp lại mật khẩu cho tài khoản giảng viên (gửi qua email)
+lecturerAdminRouter.post("/reset-lecturer-password/:userId", async (c) => {
+  const authResult = await requireAdmin(c);
+  if (authResult.error) return authResult.error;
+
+  const userId = c.req.param("userId");
+
+  try {
+    const result = await LecturerAdminService.resetLecturerPassword(
+      userId,
+      authResult.session.user.id
+    );
+    return c.json(result);
+  } catch (err) {
+    if (err instanceof ValidationError) {
+      return c.json({ error: err.message }, err.status as any);
+    }
+    return c.json({ error: (err as Error).message || "Failed to reset lecturer password" }, 500);
   }
 });
 
