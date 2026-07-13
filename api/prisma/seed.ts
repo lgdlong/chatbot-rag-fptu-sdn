@@ -238,6 +238,12 @@ async function main() {
   await seedSyllabusFromJson('20260522_133015_FER202_details.json', 'FER202')
   await seedSyllabusFromJson('20260522_223218_PRN232_details.json', 'PRN232')
 
+  // Sync sequence để tránh conflict khi tạo syllabus mới qua UI (không set explicit id)
+  await prisma.$executeRawUnsafe(
+    `SELECT setval('syllabuses_id_seq', (SELECT MAX(id) + 1 FROM syllabuses), false);`,
+  )
+  console.log('ℹ️ Đã đồng bộ sequence syllabuses_id_seq');
+
   // 7. Seed CurriculumSubject (N:M liên kết khung CTĐT và môn học)
   const curriculumSubjects = [
     // Môn chung
