@@ -40,7 +40,12 @@ export class SyllabusRepository {
 
     return client.syllabus.findMany({
       where,
-      include: { course: { select: { code: true, name: true } } },
+      include: {
+        course: { select: { code: true, name: true } },
+        ragWorkspace: {
+          select: { syncStatus: true, syncError: true, lastSyncedAt: true },
+        },
+      },
       orderBy: { id: "desc" },
     });
   }
