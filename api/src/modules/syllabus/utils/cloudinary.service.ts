@@ -1,6 +1,13 @@
 import { Readable } from "node:stream";
-import { cloudinary } from "./cloudinary.config.js";
+import { cloudinary, initCloudinary } from "./cloudinary.config.js";
 import { logger } from "../../../utils/logger.js";
+
+// Initialize Cloudinary once at module load
+try {
+  initCloudinary();
+} catch (err) {
+  logger.warn("[Cloudinary] Init failed — upload will fail", { error: err instanceof Error ? err.message : String(err) });
+}
 
 // ── Error Hierarchy ──────────────────────────────────
 
@@ -62,7 +69,7 @@ interface UploadResult {
   publicId: string;
 }
 
-export async function uploadPdfBuffer(
+export async function uploadFileBuffer(
   buffer: Buffer,
   publicId: string,
 ): Promise<UploadResult> {
@@ -72,7 +79,7 @@ export async function uploadPdfBuffer(
         {
           public_id: publicId,
           resource_type: "raw",
-          folder: "fptu_rag",
+          folder: "sdn302/fptu_rag",
           use_filename: true,
           unique_filename: true,
           overwrite: false,

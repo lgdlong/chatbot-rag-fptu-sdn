@@ -127,4 +127,30 @@ export class DocumentRepository {
       orderBy: { createdAt: "desc" },
     })
   }
+
+  /**
+   * All documents across all syllabuses, with course + syllabus info,
+   * newest first. Used by the teacher document manager.
+   */
+  static async findAllWithCourse(page = 1, limit = 20) {
+    const skip = (page - 1) * limit;
+    const [documents, total] = await Promise.all([
+      prisma.document.findMany({
+        skip,
+        take: limit,
+        include: {
+          syllabus: {
+            select: {
+              id: true,
+              syllabusName: true,
+              course: { select: { code: true, name: true } },
+            },
+          },
+        },
+        orderBy: { createdAt: "desc" },
+      }),
+      prisma.document.count(),
+    ]);
+    return { documents, total, page, limit };
+  }
 }

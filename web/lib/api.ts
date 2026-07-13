@@ -184,6 +184,11 @@ export interface ApiDocument {
   fileType: string;
   status: string;
   createdAt: string;
+  syllabus?: {
+    id: number;
+    syllabusName: string;
+    course: { code: string; name: string };
+  };
 }
 
 export interface ApiChatSession {
@@ -264,6 +269,10 @@ export async function getSyllabusDocuments(
   syllabusId: number
 ): Promise<{ documents: ApiDocument[] }> {
   return fetchApi(`/api/syllabus/${syllabusId}/documents`);
+}
+
+export async function getAllDocuments(page = 1, limit = 20): Promise<{ documents: ApiDocument[]; total: number; page: number; limit: number }> {
+  return fetchApi(`/api/syllabus/documents/all?page=${page}&limit=${limit}`);
 }
 
 export async function uploadSyllabusDocument(

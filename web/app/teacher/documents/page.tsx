@@ -19,6 +19,7 @@ import {
   Box,
   ThemeIcon,
   Loader,
+  Pagination,
 } from "@mantine/core";
 import { Dropzone, FileWithPath } from "@mantine/dropzone";
 import {
@@ -46,9 +47,12 @@ interface FileStatus {
   error?: string;
 }
 
+const PAGE_SIZE = 20;
+
 export default function DocumentManagementPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedSyllabusId, setSelectedSyllabusId] = useState<number | null>(null);
+  const [page, setPage] = useState(1);
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
   const [fileStatuses, setFileStatuses] = useState<FileStatus[]>([]);
   const [isUploading, setIsUploading] = useState(false);
@@ -64,24 +68,17 @@ export default function DocumentManagementPage() {
   });
 
   const documentsQuery = useQuery({
-    queryKey: ["documents", selectedSyllabusId],
-    queryFn: () => api.getSyllabusDocuments(selectedSyllabusId!),
-    enabled: !!selectedSyllabusId,
+    queryKey: ["all-documents", page],
+    queryFn: () => api.getAllDocuments(page, PAGE_SIZE),
   });
 
   const deleteMutation = useMutation({
     mutationFn: ({ syllabusId, documentId }: { syllabusId: number; documentId: string }) =>
       api.deleteSyllabusDocument(syllabusId, documentId),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["documents", selectedSyllabusId] });
+      queryClient.invalidateQueries({ queryKey: ["all-documents"] });
     },
   });
-
-  useEffect(() => {
-    if (syllabiQuery.data && selectedSyllabusId === null) {
-      setSelectedSyllabusId(syllabiQuery.data[0]?.id ?? null);
-    }
-  }, [syllabiQuery.data, selectedSyllabusId]);
 
   const apiError = syllabiQuery.error || documentsQuery.error || deleteMutation.error
     ? (syllabiQuery.error instanceof Error ? syllabiQuery.error.message :
@@ -89,11 +86,6 @@ export default function DocumentManagementPage() {
        deleteMutation.error instanceof Error ? deleteMutation.error.message :
        "Không thể thực hiện thao tác.")
     : null;
-
-  const selectedSyllabus = useMemo(
-    () => (syllabiQuery.data ?? []).find((s) => s.id === selectedSyllabusId) ?? null,
-    [syllabiQuery.data, selectedSyllabusId]
-  );
 
   const handleFilesDrop = (acceptedFiles: FileWithPath[]) => {
     const newStatuses: FileStatus[] = acceptedFiles.map((file) => ({
@@ -117,20 +109,25 @@ export default function DocumentManagementPage() {
 
     const pendingFiles = fileStatuses.filter((fs) => fs.status === "pending");
     if (pendingFiles.length === 0) {
-      setUploadError("Vui lòng chọn file PDF để tải lên.");
+      setUploadError("Vui lòng chọn file để tải lên.");
       return;
     }
 
-    // Validate all pending files before starting
     for (const fs of pendingFiles) {
       if (fs.file.size > 50 * 1024 ** 2) {
         setUploadError(`File "${fs.file.name}" vượt quá giới hạn 50MB.`);
         return;
       }
-      const isPdf = fs.file.type === "application/pdf" || fs.file.name.toLowerCase().endsWith(".pdf");
-      if (!isPdf) {
-        setUploadError(`File "${fs.file.name}" không phải PDF. Hiện tại chỉ hỗ trợ file PDF.`);
-        return;
+      const allowedExts = ["pdf", "docx", "pptx", "txt", "md"];
+      const ext = fs.file.name.split(".").pop()?.toLowerCase() || "";
+      if (!allowedExts.includes(ext)) {
+        setUploadError(`File "${fs.file.name}" không được hỗ trợ. Các định dạng cho phép: PDF, DOCX, PPTX, TXT, Markdown.`);
+        return false;
+      }
+      // Reject filenames with special characters (& % # + = @ $ ; etc.)
+      if (!/^[\w\s.\-]+$/i.test(fs.file.name.replace(/\.[^.]+$/, ""))) {
+        setUploadError(`Tên file "${fs.file.name}" chứa ký tự đặc biệt không hợp lệ. Chỉ chấp nhận chữ cái, số, dấu cách, dấu gạch ngang và gạch dưới.`);
+        return false;
       }
     }
 
@@ -144,7 +141,6 @@ export default function DocumentManagementPage() {
     for (const fs of pendingFiles) {
       const fileIndex = fileStatuses.indexOf(fs);
 
-      // Mark as uploading
       setFileStatuses((prev) =>
         prev.map((item, i) => (i === fileIndex ? { ...item, status: "uploading" as FileUploadStatus } : item))
       );
@@ -156,8 +152,18 @@ export default function DocumentManagementPage() {
           prev.map((item, i) => (i === fileIndex ? { ...item, status: "success" as FileUploadStatus } : item))
         );
       } catch (err: unknown) {
-        console.error("Upload failed for", fs.file.name, err);
         const message = err instanceof Error ? err.message : "Lỗi không xác định.";
+        // Giới hạn 10 tài liệu → reset file về pending, dừng chuỗi, ko hiện summary
+        if (message.toLowerCase().includes("giới hạn") || message.toLowerCase().includes("tối đa 10")) {
+          setFileStatuses((prev) =>
+            prev.map((item, i) =>
+              i === fileIndex ? { ...item, status: "pending" as FileUploadStatus } : item
+            )
+          );
+          setUploadError(message);
+          setIsUploading(false);
+          return;
+        }
         setFileStatuses((prev) =>
           prev.map((item, i) =>
             i === fileIndex ? { ...item, status: "error" as FileUploadStatus, error: message } : item
@@ -166,12 +172,11 @@ export default function DocumentManagementPage() {
       }
     }
 
-    queryClient.invalidateQueries({ queryKey: ["documents", selectedSyllabusId] });
+    queryClient.invalidateQueries({ queryKey: ["all-documents"] });
     setUploadSummary(`Đã tải lên ${successCount}/${totalCount} file thành công.`);
     setIsUploading(false);
 
     if (successCount === totalCount) {
-      // All succeeded — clear after brief delay so user sees success state
       setTimeout(() => {
         setFileStatuses([]);
         setIsUploadModalOpen(false);
@@ -181,10 +186,12 @@ export default function DocumentManagementPage() {
   };
 
   const handleDelete = async (documentId: string) => {
-    if (!selectedSyllabusId) return;
+    setUploadError(null);
+    const doc = allDocs.find((d) => d.id === documentId);
+    if (!doc) return;
 
     try {
-      await deleteMutation.mutateAsync({ syllabusId: selectedSyllabusId, documentId });
+      await deleteMutation.mutateAsync({ syllabusId: doc.syllabus!.id, documentId });
     } catch (err) {
       console.error("Delete failed:", err);
     }
@@ -199,12 +206,14 @@ export default function DocumentManagementPage() {
     [syllabiQuery.data]
   );
 
+  const allDocs = documentsQuery.data?.documents ?? [];
+
   const filteredDocs = useMemo(() => {
     const searchLower = searchTerm.trim().toLowerCase();
-    return (documentsQuery.data?.documents ?? []).filter((doc) =>
+    return allDocs.filter((doc) =>
       searchLower === "" || doc.name.toLowerCase().includes(searchLower)
     );
-  }, [searchTerm, documentsQuery.data]);
+  }, [searchTerm, allDocs]);
 
   const getFileIcon = (type: string) => {
     switch (type) {
@@ -214,6 +223,9 @@ export default function DocumentManagementPage() {
         return <IconFileText size={20} color="#2563EB" />;
       case "pptx":
         return <IconFileText size={20} color="#D97706" />;
+      case "txt":
+      case "md":
+        return <IconFileText size={20} color="#6B7280" />;
       case "image":
         return <IconPhoto size={20} color="#16A34A" />;
       case "video":
@@ -245,7 +257,7 @@ export default function DocumentManagementPage() {
     );
   };
 
-  const documentCountLabel = selectedSyllabus ? `${filteredDocs.length} tài liệu` : "Chọn syllabus để xem tài liệu";
+  const documentCountLabel = `${filteredDocs.length} tài liệu`;
 
   return (
     <Stack gap="xl">
@@ -256,7 +268,7 @@ export default function DocumentManagementPage() {
             Quản lý Tài liệu
           </Title>
           <Text size="sm" c="dimmed">
-            Tải lên slide bài giảng PDF để chunking & embedding vào Qdrant cho Chatbot RAG.
+              Tải lên tài liệu môn học (PDF, DOCX, PPTX, TXT, Markdown) để chunking & embedding vào Qdrant cho Chatbot RAG.
           </Text>
         </div>
         <Button
@@ -287,30 +299,24 @@ export default function DocumentManagementPage() {
       </Card>
 
       <Card p={0} radius={0} style={{ border: "1px solid #E2E8F0", backgroundColor: "white" }}>
-        <Group justify="space-between" align="center" style={{ padding: "20px" }}>
-          <Text size="sm" color="dimmed">
-            {documentCountLabel}
-          </Text>
-          {selectedSyllabus && (
-            <Text size="sm" color="dimmed">
-              {selectedSyllabus.course.code} • {selectedSyllabus.syllabusName}
-            </Text>
-          )}
-        </Group>
+        <Box px="md" py="sm" style={{ borderBottom: "1px solid #E2E8F0" }}>
+          <Text size="sm" c="dimmed">{documentCountLabel}</Text>
+        </Box>
 
         {documentsQuery.isLoading ? (
           <Box p="xl" style={{ textAlign: "center" }}>
             <Loader />
           </Box>
         ) : (
-          <Table layout="fixed" highlightOnHover striped>
+          <Table highlightOnHover striped>
             <Table.Thead style={{ backgroundColor: "#F8FAFC" }}>
               <Table.Tr>
-                <Table.Th style={{ width: "60px", fontWeight: 700, fontSize: "12px", color: "#475569", textAlign: "center" }}>Loại</Table.Th>
+                <Table.Th style={{ width: "50px", fontWeight: 700, fontSize: "12px", color: "#475569", textAlign: "center" }}>Loại</Table.Th>
                 <Table.Th style={{ fontWeight: 700, fontSize: "12px", color: "#475569" }}>Tên tài liệu</Table.Th>
-                <Table.Th style={{ width: "140px", fontWeight: 700, fontSize: "12px", color: "#475569" }}>Trạng thái</Table.Th>
-                <Table.Th style={{ width: "120px", fontWeight: 700, fontSize: "12px", color: "#475569" }}>Ngày tải lên</Table.Th>
-                <Table.Th style={{ width: "80px", fontWeight: 700, fontSize: "12px", color: "#475569", textAlign: "right" }}>Xóa</Table.Th>
+                <Table.Th style={{ width: "100px", fontWeight: 700, fontSize: "12px", color: "#475569" }}>Môn học</Table.Th>
+                <Table.Th style={{ width: "120px", fontWeight: 700, fontSize: "12px", color: "#475569" }}>Trạng thái</Table.Th>
+                <Table.Th style={{ width: "100px", fontWeight: 700, fontSize: "12px", color: "#475569" }}>Ngày tải lên</Table.Th>
+                <Table.Th style={{ width: "60px", fontWeight: 700, fontSize: "12px", color: "#475569", textAlign: "right" }}>Xóa</Table.Th>
               </Table.Tr>
             </Table.Thead>
             <Table.Tbody>
@@ -318,10 +324,15 @@ export default function DocumentManagementPage() {
                 <Table.Tr key={doc.id}>
                   <Table.Td style={{ textAlign: "center" }}>{getFileIcon(doc.fileType || doc.name.split(".").pop() || "pdf")}</Table.Td>
                   <Table.Td style={{ fontSize: "13px", fontWeight: 700 }}>{doc.name}</Table.Td>
+                  <Table.Td style={{ fontSize: "12px", color: "#1A3A5C", fontWeight: 600 }}>
+                    {doc.syllabus?.course.code || "—"}
+                  </Table.Td>
                   <Table.Td>{getStatusBadge(doc.status)}</Table.Td>
-                  <Table.Td style={{ fontSize: "13px", color: "#64748B" }}>{new Date(doc.createdAt).toLocaleDateString()}</Table.Td>
+                  <Table.Td style={{ fontSize: "12px", color: "#64748B" }}>
+                    {new Date(doc.createdAt).toLocaleDateString("vi-VN")}
+                  </Table.Td>
                   <Table.Td style={{ textAlign: "right" }}>
-                    <ActionIcon variant="subtle" color="red" size="sm" onClick={() => void handleDelete(String(doc.id))}>
+                    <ActionIcon variant="subtle" color="red" size="sm" onClick={() => void handleDelete(doc.id)}>
                       <IconTrash size={16} />
                     </ActionIcon>
                   </Table.Td>
@@ -331,15 +342,20 @@ export default function DocumentManagementPage() {
           </Table>
         )}
 
-        {!selectedSyllabusId && !syllabiQuery.isLoading && (
+        {filteredDocs.length === 0 && !documentsQuery.isLoading && (
           <Box p="xl" style={{ textAlign: "center", color: "#9CA3AF" }}>
-            <Text size="sm" fw={700}>Vui lòng chọn syllabus để xem tài liệu</Text>
+            <Text size="sm" fw={700}>Không tìm thấy tài liệu phù hợp</Text>
           </Box>
         )}
 
-        {selectedSyllabusId && filteredDocs.length === 0 && !documentsQuery.isLoading && (
-          <Box p="xl" style={{ textAlign: "center", color: "#9CA3AF" }}>
-            <Text size="sm" fw={700}>Không tìm thấy tài liệu phù hợp</Text>
+        {documentsQuery.data && documentsQuery.data.total > PAGE_SIZE && (
+          <Box p="md" style={{ display: "flex", justifyContent: "center" }}>
+            <Pagination
+              total={Math.ceil(documentsQuery.data.total / PAGE_SIZE)}
+              value={page}
+              onChange={setPage}
+              radius={0}
+            />
           </Box>
         )}
       </Card>
@@ -379,7 +395,7 @@ export default function DocumentManagementPage() {
           <Dropzone
             onDrop={handleFilesDrop}
             multiple
-            accept={{ "application/pdf": [".pdf"] }}
+              accept={{ "application/pdf": [".pdf"], "application/vnd.openxmlformats-officedocument.wordprocessingml.document": [".docx"], "application/vnd.openxmlformats-officedocument.presentationml.presentation": [".pptx"], "text/plain": [".txt", ".md"] }}
             maxSize={50 * 1024 ** 2}
             radius={0}
             disabled={isUploading}
@@ -392,7 +408,7 @@ export default function DocumentManagementPage() {
                 <IconUpload size={24} />
               </ThemeIcon>
               <Text size="sm" fw={700}>Kéo thả file vào đây, hoặc click để chọn file</Text>
-              <Text size="xs" c="dimmed">Hỗ trợ: PDF (Tối đa 50MB) — Chọn được nhiều file cùng lúc</Text>
+              <Text size="xs" c="dimmed">Hỗ trợ: PDF, DOCX, PPTX, TXT, Markdown (Tối đa 50MB) — Chọn được nhiều file cùng lúc</Text>
             </Stack>
           </Dropzone>
 

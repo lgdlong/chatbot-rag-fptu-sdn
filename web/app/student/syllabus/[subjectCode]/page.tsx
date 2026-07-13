@@ -5,10 +5,8 @@ import { useQuery } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import {
-  Anchor,
   Box,
   Badge,
-  Breadcrumbs,
   Button,
   Card,
   Container,
@@ -214,18 +212,6 @@ export default function SyllabusViewerPage() {
 
   return (
     <Box style={{ backgroundColor: "#F0F4F8", minHeight: "100vh", paddingBottom: "120px" }}>
-
-      {/* ─── Breadcrumb ─── */}
-      <Container fluid py="sm" style={{ backgroundColor: "#F0F4F8" }}>
-        <Breadcrumbs separator="·" fz="sm">
-          <Anchor href="/student" fw={600} size="sm" style={{ color: "#1A3A5C" }}>
-            Trang chủ
-          </Anchor>
-          <Text size="sm" c="dimmed">
-            {subjectCode}
-          </Text>
-        </Breadcrumbs>
-      </Container>
 
       {/* ─── Page Header Banner ─── */}
       <Box

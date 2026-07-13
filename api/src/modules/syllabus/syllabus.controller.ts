@@ -4,7 +4,7 @@ import { auth } from "../auth/auth.js";
 import { ValidationError } from "../courses/services/course.service.js";
 import { SyllabusService } from "./services/syllabus.service.js";
 import { SyllabusSyncService } from "./services/syllabus-sync.service.js";
-import { isPdfByContent, sanitizeFilename } from "./utils/file-validation.utils.js";
+import { detectFileType, sanitizeFilename, SUPPORTED_TYPES } from "./utils/file-validation.utils.js";
 
 export const syllabusRouter = new Hono();
 
@@ -250,6 +250,24 @@ syllabusRouter.delete("/:id", async (c) => {
 // 9. API QUẢN LÝ TÀI LIỆU CỦA SYLLABUS
 // ==========================================
 
+// GET /documents/all — all documents across all syllabuses (teacher document manager)
+syllabusRouter.get("/documents/all", async (c) => {
+  const session = await auth.api.getSession({ headers: c.req.raw.headers });
+  if (!session?.user) {
+    return c.json({ error: "Unauthorized" }, 401);
+  }
+
+  try {
+    const query = c.req.query();
+    const page = Math.max(1, parseInt(query.page || "1", 10));
+    const limit = Math.min(100, Math.max(1, parseInt(query.limit || "20", 10)));
+    const result = await SyllabusService.getAllDocuments(page, limit);
+    return c.json(result);
+  } catch (err: unknown) {
+    return respondWithServiceError(c, err);
+  }
+});
+
 // GET /:syllabusId/documents
 syllabusRouter.get("/:syllabusId/documents", async (c) => {
   const session = await auth.api.getSession({ headers: c.req.raw.headers });
@@ -288,18 +306,15 @@ syllabusRouter.post("/:syllabusId/documents", async (c) => {
     return c.json({ error: "File size exceeds the maximum limit of 50MB" }, 400);
   }
 
-  // Edge case: Kiểm tra định dạng file (chỉ PDF)
-  const fileExtension = file.name.split(".").pop()?.toLowerCase();
-  if (fileExtension !== "pdf") {
+  // Kiểm tra định dạng file — extension + magic bytes
+  const headerBytes = Math.max(4, Math.min(512, file.size));
+  const headerBuffer = Buffer.from(await file.slice(0, headerBytes).arrayBuffer());
+  const detected = detectFileType(file.name, headerBuffer);
+  if (!detected) {
+    const supported = Object.values(SUPPORTED_TYPES).map((t) => t.label).join(", ");
     return c.json({
-      error: "Unsupported file format. Please export your slide or document to PDF format before uploading.",
+      error: `Định dạng file không được hỗ trợ. Các định dạng cho phép: ${supported}.`,
     }, 400);
-  }
-
-  // Magic byte check (security: verify actual content is PDF)
-  const headerBuffer = Buffer.from(await file.slice(0, 4).arrayBuffer());
-  if (!isPdfByContent(headerBuffer)) {
-    return c.json({ error: "File content does not appear to be a valid PDF" }, 400);
   }
 
   try {
@@ -307,7 +322,7 @@ syllabusRouter.post("/:syllabusId/documents", async (c) => {
       syllabusId,
       file,
       filename: sanitizeFilename(file.name),
-      fileType: "pdf",
+      fileType: detected.ext,
       userId: authResult.session.user.id,
     });
 

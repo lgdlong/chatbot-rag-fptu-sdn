@@ -85,10 +85,10 @@ export class AnythingLlmAdapter {
     await this.updateWorkspaceSystemPrompt(workspaceSlug);
   }
 
-  public static async uploadPdf(fileName: string, buffer: Uint8Array) {
+  public static async uploadDocument(fileName: string, buffer: Uint8Array, mimeType = "application/pdf") {
     const formData = new FormData();
     const payloadBuffer = (buffer.buffer as ArrayBuffer).slice(buffer.byteOffset, buffer.byteOffset + buffer.byteLength);
-    const fileBlob = new Blob([payloadBuffer], { type: "application/pdf" });
+    const fileBlob = new Blob([payloadBuffer], { type: mimeType });
     formData.append("file", fileBlob, fileName);
 
     const response = await fetch(`${baseUrl()}/api/v1/document/upload`, {

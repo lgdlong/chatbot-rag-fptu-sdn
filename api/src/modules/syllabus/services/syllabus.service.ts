@@ -23,11 +23,11 @@ import { ValidationError } from "../../courses/services/course.service.js";
 import { SyllabusSyncService } from "./syllabus-sync.service.js";
 import { removeChunkFiles, removeFileIfExists } from "../utils/file-system.utils.js";
 import {
-  uploadPdfBuffer,
+  uploadFileBuffer,
   deleteByUrl,
   CloudinaryError,
 } from "../utils/cloudinary.service.js";
-import { buildPublicId } from "../utils/file-validation.utils.js";
+import { buildPublicId, SUPPORTED_TYPES } from "../utils/file-validation.utils.js";
 import { logger } from "../../../utils/logger.js";
 
 export type UploadDocumentInput = {
@@ -183,6 +183,10 @@ export class SyllabusService {
 
   static async getDocuments(syllabusId: number): Promise<unknown[]> {
     return DocumentRepository.findManyBySyllabus(syllabusId);
+  }
+
+  static async getAllDocuments(page = 1, limit = 20) {
+    return DocumentRepository.findAllWithCourse(page, limit);
   }
 
   // ---------------------------------------------------------------------
@@ -706,11 +710,11 @@ export class SyllabusService {
     }
 
     // Step 3: Upload to Cloudinary
-    const publicId = buildPublicId(syllabus.course.code, input.file.name);
+    const publicId = buildPublicId(syllabus.course.code, input.file.name, syllabus.id);
     let secureUrl: string;
 
     try {
-      const result = await uploadPdfBuffer(buffer, publicId);
+      const result = await uploadFileBuffer(buffer, publicId);
       secureUrl = result.secureUrl;
     } catch (err) {
       logger.error("[Upload] Cloudinary upload failed", {
@@ -735,7 +739,7 @@ export class SyllabusService {
           data: {
             name: input.filename,
             fileUrl: secureUrl,
-            fileType: "pdf",
+            fileType: input.fileType,
             status: DocumentStatus.PENDING,
             syllabus: { connect: { id: input.syllabusId } },
           },
@@ -815,9 +819,11 @@ export class SyllabusService {
         logger.info(`[Ingestion] Starting for workspace "${workspaceSlug}"`);
         await AnythingLlmAdapter.ensureWorkspace(workspaceSlug);
 
-        const docLocation = await AnythingLlmAdapter.uploadPdf(
+        const mimeType = SUPPORTED_TYPES[input.fileType as keyof typeof SUPPORTED_TYPES]?.mime || "application/pdf";
+        const docLocation = await AnythingLlmAdapter.uploadDocument(
           input.file.name,
           buffer,
+          mimeType,
         );
 
         await AnythingLlmAdapter.updateWorkspaceEmbeddings(workspaceSlug, {
