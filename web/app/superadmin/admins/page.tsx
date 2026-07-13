@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import {
   Title,
@@ -41,6 +41,7 @@ import { authClient, apiFetch } from "../../../lib/auth-client";
 import type { UserRole } from "../../contexts/AuthContext";
 import { modals } from "@mantine/modals";
 import * as api from "@/lib/api";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
 const PAGE_SIZE = 10;
 
@@ -70,13 +71,10 @@ function formatDate(value: string | Date | undefined): string {
 }
 
 export default function AdminManagementPage() {
-  const [users, setUsers] = useState<AdminListUser[]>([]);
-  const [total, setTotal] = useState(0);
   const [page, setPage] = useState(1);
   const [searchInput, setSearchInput] = useState("");
-  const [searchTerm, setSearchTerm] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
   const [roleFilter, setRoleFilter] = useState<RoleFilter>("ALL");
-  const [loading, setLoading] = useState(true);
   const [showAddModal, setShowAddModal] = useState(false);
   const [creating, setCreating] = useState(false);
 
@@ -88,6 +86,78 @@ export default function AdminManagementPage() {
 
   const { data: sessionData } = authClient.useSession();
   const currentUserId = sessionData?.user?.id;
+
+  const queryClient = useQueryClient();
+
+  // Debounce search
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearch(searchInput.trim());
+      setPage(1);
+    }, 350);
+    return () => clearTimeout(timer);
+  }, [searchInput]);
+
+  const { data, isLoading } = useQuery({
+    queryKey: ["admin-users", page, debouncedSearch, roleFilter],
+    queryFn: async () => {
+      const searchField = debouncedSearch.includes("@") ? "email" : "name";
+      const baseQuery: Record<string, string> = {
+        limit: roleFilter === "ALL" ? String(PAGE_SIZE) : "500",
+        offset: roleFilter === "ALL" ? String((page - 1) * PAGE_SIZE) : "0",
+      };
+      if (debouncedSearch) {
+        baseQuery.searchValue = debouncedSearch;
+        baseQuery.searchField = searchField;
+      }
+
+      const res = await authClient.admin.listUsers({ query: baseQuery });
+      if (res.error) {
+        throw new Error(res.error.message ?? "Không tải được danh sách người dùng");
+      }
+
+      let list = (res.data?.users ?? []) as AdminListUser[];
+      let count = res.data?.total ?? list.length;
+
+      if (roleFilter !== "ALL") {
+        list = list.filter((u) => u.role === roleFilter);
+        count = list.length;
+        const start = (page - 1) * PAGE_SIZE;
+        list = list.slice(start, start + PAGE_SIZE);
+      }
+
+      return { users: list, total: count };
+    },
+    placeholderData: (prev) => prev,
+  });
+
+  const users = data?.users ?? [];
+  const total = data?.total ?? 0;
+
+  const deleteMutation = useMutation({
+    mutationFn: async (userId: string) => {
+      const res = await authClient.admin.removeUser({ userId });
+      if (res.error) throw new Error(res.error.message || "Không thể xóa tài khoản");
+      return res.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["admin-users"] });
+    },
+  });
+
+  const disableMutation = useMutation({
+    mutationFn: (userId: string) => api.disableLecturer(userId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["admin-users"] });
+    },
+  });
+
+  const enableMutation = useMutation({
+    mutationFn: (userId: string) => api.enableLecturer(userId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["admin-users"] });
+    },
+  });
 
   const handleDeleteUser = (user: AdminListUser) => {
     modals.openConfirmModal({
@@ -102,18 +172,12 @@ export default function AdminManagementPage() {
       confirmProps: { color: "red" },
       onConfirm: async () => {
         try {
-          const res = await authClient.admin.removeUser({
-            userId: user.id,
-          });
-          if (res.error) {
-            throw new Error(res.error.message || "Không thể xóa tài khoản");
-          }
+          await deleteMutation.mutateAsync(user.id);
           notifications.show({
             title: "Thành công",
             message: `Đã xóa tài khoản ${user.email}`,
             color: "green",
           });
-          void loadUsers();
         } catch (err: any) {
           notifications.show({
             title: "Lỗi",
@@ -138,13 +202,12 @@ export default function AdminManagementPage() {
       confirmProps: { color: "red" },
       onConfirm: async () => {
         try {
-          await api.disableLecturer(user.id);
+          await disableMutation.mutateAsync(user.id);
           notifications.show({
             title: "Thành công",
             message: `Đã vô hiệu hoá tài khoản ${user.email}`,
             color: "green",
           });
-          void loadUsers();
         } catch (err: any) {
           notifications.show({
             title: "Lỗi",
@@ -169,13 +232,12 @@ export default function AdminManagementPage() {
       confirmProps: { color: "green" },
       onConfirm: async () => {
         try {
-          await api.enableLecturer(user.id);
+          await enableMutation.mutateAsync(user.id);
           notifications.show({
             title: "Thành công",
             message: `Đã kích hoạt lại tài khoản ${user.email}`,
             color: "green",
           });
-          void loadUsers();
         } catch (err: any) {
           notifications.show({
             title: "Lỗi",
@@ -186,58 +248,6 @@ export default function AdminManagementPage() {
       },
     });
   };
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setSearchTerm(searchInput.trim());
-      setPage(1);
-    }, 350);
-    return () => clearTimeout(timer);
-  }, [searchInput]);
-
-  const loadUsers = useCallback(async () => {
-    setLoading(true);
-    try {
-      const searchField = searchTerm.includes("@") ? "email" : "name";
-      const baseQuery: Record<string, string> = {
-        limit: roleFilter === "ALL" ? String(PAGE_SIZE) : "500",
-        offset: roleFilter === "ALL" ? String((page - 1) * PAGE_SIZE) : "0",
-      };
-      if (searchTerm) {
-        baseQuery.searchValue = searchTerm;
-        baseQuery.searchField = searchField;
-      }
-
-      const res = await authClient.admin.listUsers({ query: baseQuery });
-      if (res.error) {
-        throw new Error(res.error.message ?? "Không tải được danh sách người dùng");
-      }
-
-      let list = (res.data?.users ?? []) as AdminListUser[];
-      let count = res.data?.total ?? list.length;
-
-      if (roleFilter !== "ALL") {
-        list = list.filter((u) => u.role === roleFilter);
-        count = list.length;
-        const start = (page - 1) * PAGE_SIZE;
-        list = list.slice(start, start + PAGE_SIZE);
-      }
-
-      setUsers(list);
-      setTotal(count);
-    } catch (err) {
-      const message = err instanceof Error ? err.message : "Lỗi tải danh sách";
-      notifications.show({ title: "Lỗi", message, color: "red" });
-      setUsers([]);
-      setTotal(0);
-    } finally {
-      setLoading(false);
-    }
-  }, [page, searchTerm, roleFilter]);
-
-  useEffect(() => {
-    void loadUsers();
-  }, [loadUsers]);
 
   const handleAddUser = async () => {
     setErrorMsg("");
@@ -278,7 +288,7 @@ export default function AdminManagementPage() {
       setNewPassword("");
       setNewName("");
       setNewRole("STUDENT");
-      void loadUsers();
+      queryClient.invalidateQueries({ queryKey: ["admin-users"] });
     } catch (err) {
       setErrorMsg(err instanceof Error ? err.message : "Không tạo được tài khoản");
     } finally {
@@ -356,7 +366,7 @@ export default function AdminManagementPage() {
       </Card>
 
       <Card p={0} radius={0} style={{ border: "1px solid #E2E8F0", backgroundColor: "white" }}>
-        {loading ? (
+        {isLoading ? (
           <Center py="xl">
             <Loader color="#1A3A5C" type="bars" />
           </Center>

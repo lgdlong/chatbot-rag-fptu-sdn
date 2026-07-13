@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import {
@@ -120,45 +121,28 @@ export default function SyllabusViewerPage() {
 
   const [activeTab, setActiveTab] = useState<string | null>("overview");
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [syllabusData, setSyllabusData] = useState<any>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [courseId, setCourseId] = useState<string | null>(null);
-
-  const loadSyllabus = useCallback(async () => {
-    setIsLoading(true);
-    setError(null);
-    try {
-      // Step 1: Search by subject code to find the syllabus ID
+  const { data: queryResult, isLoading, error: queryError } = useQuery({
+    queryKey: ["syllabus-detail", subjectCode],
+    queryFn: async () => {
       const { syllabuses } = await api.searchSyllabus(subjectCode);
-
       if (!syllabuses || syllabuses.length === 0) {
-        setError("NOT_FOUND");
-        setIsLoading(false);
-        return;
+        throw new Error("NOT_FOUND");
       }
-
-      // Pick the first active+approved syllabus, or just the first one
       const target =
         syllabuses.find((s) => s.isActive && s.isApproved) || syllabuses[0];
-
-      // Step 2: Fetch full detail by ID
       const { syllabus } = await api.getSyllabusDetail(target.id);
       const adapted = adaptApiToLegacyShape(syllabus);
-      setSyllabusData(adapted);
-      setCourseId(syllabus.courseId);
-    } catch (err) {
-      console.error("Failed to load syllabus:", err);
-      setError("API_ERROR");
-    } finally {
-      setIsLoading(false);
-    }
-  }, [subjectCode]);
+      return { adapted, courseId: syllabus.courseId ?? null };
+    },
+  });
 
-  useEffect(() => {
-    loadSyllabus();
-  }, [loadSyllabus]);
+  const syllabusData = queryResult?.adapted ?? null;
+  const courseId = queryResult?.courseId ?? null;
+  const error = queryError
+    ? queryError.message === "NOT_FOUND"
+      ? "NOT_FOUND"
+      : "API_ERROR"
+    : null;
 
   // Loading state
   if (isLoading) {

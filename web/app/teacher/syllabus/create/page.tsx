@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useMutation } from "@tanstack/react-query";
 import { useForm, useStore } from "@tanstack/react-form";
 import {
   Title,
@@ -112,6 +113,96 @@ export default function CreateSyllabusPage() {
     });
   };
 
+  const createMutation = useMutation({
+    mutationFn: async (value: any) => {
+      const step1: CreateSyllabusPayload = {
+        courseId: value.courseId,
+        syllabusName: value.syllabusName,
+        syllabusNameEnglish: value.syllabusNameEnglish || undefined,
+        credits: value.credits,
+        prerequisites: value.prerequisites || undefined,
+        description: value.description || undefined,
+        studentTasks: value.studentTasks || undefined,
+        tools: value.tools || undefined,
+        scoringScale: value.scoringScale || "10",
+        minAvgMarkToPass: value.minAvgMarkToPass ?? 5,
+        decisionNo: value.decisionNo || undefined,
+        note: value.note || undefined,
+        degreeLevel: value.degreeLevel || "Bachelor",
+        timeAllocation: value.timeAllocation || undefined,
+      };
+
+      const { syllabus } = await createSyllabus(step1);
+
+      await updateSyllabusFull(syllabus.id, {
+        syllabusName: value.syllabusName,
+        syllabusNameEnglish: value.syllabusNameEnglish || undefined,
+        clos: value.clos.filter((c: any) => c.cloName || c.cloDetails).map((c: any) => ({
+          cloName: c.cloName,
+          cloDetails: c.cloDetails,
+          loDetails: c.loDetails || null,
+        })),
+        schedules: value.schedules.filter((s: any) => s.topic).map((s: any) => ({
+          session: s.session,
+          topic: s.topic,
+          learningMethod: s.learningMethod || null,
+          lo: s.lo || null,
+          studentTasks: s.studentTasks || null,
+          itu: s.itu || null,
+          studentMaterials: s.studentMaterials || null,
+          sDownload: s.sDownload || null,
+          urls: s.urls || null,
+        })),
+        assessments: value.assessments.filter((a: any) => a.category).map((a: any) => ({
+          category: a.category,
+          type: a.type || null,
+          weight: a.weight,
+          clo: a.clo || null,
+          completionCriteria: a.completionCriteria || null,
+          gradingGuide: a.gradingGuide || null,
+          part: a.part || null,
+          duration: a.duration || null,
+          questionType: a.questionType || null,
+          noQuestion: a.noQuestion || null,
+          knowledgeAndSkill: a.knowledgeAndSkill || null,
+          note: a.note || null,
+        })),
+        materials: value.materials.filter((m: any) => m.description).map((m: any) => ({
+          description: m.description,
+          author: m.author || null,
+          publisher: m.publisher || null,
+          isMainMaterial: m.isMainMaterial || null,
+          publishedDate: m.publishedDate || null,
+          edition: m.edition || null,
+          isbn: m.isbn || null,
+          isHardCopy: m.isHardCopy || null,
+          isOnline: m.isOnline || null,
+          note: m.note || null,
+        })),
+      });
+
+      return syllabus;
+    },
+    onSuccess: (syllabus) => {
+      notifications.show({
+        title: "Thành công",
+        message: `Đã tạo syllabus "${syllabus.syllabusName}"`,
+        color: "green",
+      });
+      router.push("/teacher/syllabus");
+    },
+    onError: (err: any) => {
+      notifications.show({
+        title: "Lỗi",
+        message: err?.message || "Không thể tạo syllabus",
+        color: "red",
+      });
+    },
+    onSettled: () => {
+      setSubmitting(false);
+    },
+  });
+
   const form = useForm({
     defaultValues: {
       courseId: "",
@@ -140,88 +231,7 @@ export default function CreateSyllabusPage() {
     },
     onSubmit: async ({ value }) => {
       setSubmitting(true);
-      try {
-        const step1: CreateSyllabusPayload = {
-          courseId: value.courseId,
-          syllabusName: value.syllabusName,
-          syllabusNameEnglish: value.syllabusNameEnglish || undefined,
-          credits: value.credits,
-          prerequisites: value.prerequisites || undefined,
-          description: value.description || undefined,
-          studentTasks: value.studentTasks || undefined,
-          tools: value.tools || undefined,
-          scoringScale: value.scoringScale || "10",
-          minAvgMarkToPass: value.minAvgMarkToPass ?? 5,
-          decisionNo: value.decisionNo || undefined,
-          note: value.note || undefined,
-          degreeLevel: value.degreeLevel || "Bachelor",
-          timeAllocation: value.timeAllocation || undefined,
-        };
-
-        const { syllabus } = await createSyllabus(step1);
-
-        await updateSyllabusFull(syllabus.id, {
-          syllabusName: value.syllabusName,
-          syllabusNameEnglish: value.syllabusNameEnglish || undefined,
-          clos: value.clos.filter((c) => c.cloName || c.cloDetails).map((c) => ({
-            cloName: c.cloName,
-            cloDetails: c.cloDetails,
-            loDetails: c.loDetails || null,
-          })),
-          schedules: value.schedules.filter((s) => s.topic).map((s) => ({
-            session: s.session,
-            topic: s.topic,
-            learningMethod: s.learningMethod || null,
-            lo: s.lo || null,
-            studentTasks: s.studentTasks || null,
-            itu: s.itu || null,
-            studentMaterials: s.studentMaterials || null,
-            sDownload: s.sDownload || null,
-            urls: s.urls || null,
-          })),
-          assessments: value.assessments.filter((a) => a.category).map((a) => ({
-            category: a.category,
-            type: a.type || null,
-            weight: a.weight,
-            clo: a.clo || null,
-            completionCriteria: a.completionCriteria || null,
-            gradingGuide: a.gradingGuide || null,
-            part: a.part || null,
-            duration: a.duration || null,
-            questionType: a.questionType || null,
-            noQuestion: a.noQuestion || null,
-            knowledgeAndSkill: a.knowledgeAndSkill || null,
-            note: a.note || null,
-          })),
-          materials: value.materials.filter((m) => m.description).map((m) => ({
-            description: m.description,
-            author: m.author || null,
-            publisher: m.publisher || null,
-            isMainMaterial: m.isMainMaterial || null,
-            publishedDate: m.publishedDate || null,
-            edition: m.edition || null,
-            isbn: m.isbn || null,
-            isHardCopy: m.isHardCopy || null,
-            isOnline: m.isOnline || null,
-            note: m.note || null,
-          })),
-        });
-
-        notifications.show({
-          title: "Thành công",
-          message: `Đã tạo syllabus "${syllabus.syllabusName}"`,
-          color: "green",
-        });
-        router.push("/teacher/syllabus");
-      } catch (err: any) {
-        notifications.show({
-          title: "Lỗi",
-          message: err?.message || "Không thể tạo syllabus",
-          color: "red",
-        });
-      } finally {
-        setSubmitting(false);
-      }
+      createMutation.mutate(value);
     },
   });
 

@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useState, useEffect, useMemo, useCallback } from "react";
+import React, { useState, useEffect, useMemo } from "react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   Title,
   Text,
@@ -39,64 +40,57 @@ import type { ApiSyllabusSummary, ApiDocument } from "@/lib/api";
 export default function DocumentManagementPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedSyllabusId, setSelectedSyllabusId] = useState<number | null>(null);
-  const [syllabi, setSyllabi] = useState<ApiSyllabusSummary[]>([]);
-  const [documents, setDocuments] = useState<ApiDocument[]>([]);
-  const [isLoadingSyllabi, setIsLoadingSyllabi] = useState(true);
-  const [isLoadingDocs, setIsLoadingDocs] = useState(false);
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
   const [files, setFiles] = useState<FileWithPath[]>([]);
   const [isUploading, setIsUploading] = useState(false);
-  const [apiError, setApiError] = useState<string | null>(null);
   const [uploadError, setUploadError] = useState<string | null>(null);
 
-  const loadSyllabi = useCallback(async () => {
-    setIsLoadingSyllabi(true);
-    setApiError(null);
-    try {
-      const { syllabuses } = await api.searchSyllabus();
-      setSyllabi(syllabuses);
-      setSelectedSyllabusId(syllabuses[0]?.id ?? null);
-    } catch (err) {
-      console.error("Failed to load syllabi:", err);
-      setApiError("Không thể tải danh sách syllabus từ server.");
-    } finally {
-      setIsLoadingSyllabi(false);
-    }
-  }, []);
+  const queryClient = useQueryClient();
 
-  const loadDocuments = useCallback(
-    async (syllabusId: number) => {
-      setIsLoadingDocs(true);
-      setApiError(null);
-      try {
-        const { documents } = await api.getSyllabusDocuments(syllabusId);
-        setDocuments(documents);
-      } catch (err) {
-        console.error("Failed to load documents:", err);
-        setApiError("Không thể tải danh sách tài liệu.");
-        setDocuments([]);
-      } finally {
-        setIsLoadingDocs(false);
-      }
+  const syllabiQuery = useQuery({
+    queryKey: ["syllabuses"],
+    queryFn: () => api.searchSyllabus(),
+    select: (data) => data.syllabuses,
+  });
+
+  const documentsQuery = useQuery({
+    queryKey: ["documents", selectedSyllabusId],
+    queryFn: () => api.getSyllabusDocuments(selectedSyllabusId!),
+    enabled: !!selectedSyllabusId,
+  });
+
+  const uploadMutation = useMutation({
+    mutationFn: ({ syllabusId, file }: { syllabusId: number; file: File }) =>
+      api.uploadSyllabusDocument(syllabusId, file),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["documents", selectedSyllabusId] });
     },
-    []
-  );
+  });
+
+  const deleteMutation = useMutation({
+    mutationFn: ({ syllabusId, documentId }: { syllabusId: number; documentId: string }) =>
+      api.deleteSyllabusDocument(syllabusId, documentId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["documents", selectedSyllabusId] });
+    },
+  });
 
   useEffect(() => {
-    void loadSyllabi();
-  }, [loadSyllabi]);
-
-  useEffect(() => {
-    if (selectedSyllabusId !== null) {
-      void loadDocuments(selectedSyllabusId);
-    } else {
-      setDocuments([]);
+    if (syllabiQuery.data && selectedSyllabusId === null) {
+      setSelectedSyllabusId(syllabiQuery.data[0]?.id ?? null);
     }
-  }, [selectedSyllabusId, loadDocuments]);
+  }, [syllabiQuery.data, selectedSyllabusId]);
+
+  const apiError = syllabiQuery.error || documentsQuery.error || deleteMutation.error
+    ? (syllabiQuery.error instanceof Error ? syllabiQuery.error.message :
+       documentsQuery.error instanceof Error ? documentsQuery.error.message :
+       deleteMutation.error instanceof Error ? deleteMutation.error.message :
+       "Không thể thực hiện thao tác.")
+    : null;
 
   const selectedSyllabus = useMemo(
-    () => syllabi.find((s) => s.id === selectedSyllabusId) ?? null,
-    [syllabi, selectedSyllabusId]
+    () => (syllabiQuery.data ?? []).find((s) => s.id === selectedSyllabusId) ?? null,
+    [syllabiQuery.data, selectedSyllabusId]
   );
 
   const handleUpload = async () => {
@@ -125,10 +119,9 @@ export default function DocumentManagementPage() {
     setUploadError(null);
     setIsUploading(true);
     try {
-      await api.uploadSyllabusDocument(selectedSyllabusId, file);
+      await uploadMutation.mutateAsync({ syllabusId: selectedSyllabusId, file });
       setFiles([]);
       setIsUploadModalOpen(false);
-      void loadDocuments(selectedSyllabusId);
     } catch (err: unknown) {
       console.error("Upload failed:", err);
       const message = err instanceof Error ? err.message : "Lỗi khi upload tài liệu.";
@@ -140,32 +133,29 @@ export default function DocumentManagementPage() {
 
   const handleDelete = async (documentId: string) => {
     if (!selectedSyllabusId) return;
-    setApiError(null);
 
     try {
-      await api.deleteSyllabusDocument(selectedSyllabusId, documentId);
-      void loadDocuments(selectedSyllabusId);
+      await deleteMutation.mutateAsync({ syllabusId: selectedSyllabusId, documentId });
     } catch (err) {
       console.error("Delete failed:", err);
-      setApiError("Không thể xóa tài liệu.");
     }
   };
 
   const subjectOptions = useMemo(
     () =>
-      syllabi.map((syllabus) => ({
+      (syllabiQuery.data ?? []).map((syllabus) => ({
         value: String(syllabus.id),
         label: `${syllabus.course.code} - ${syllabus.course.name}`,
       })),
-    [syllabi]
+    [syllabiQuery.data]
   );
 
   const filteredDocs = useMemo(() => {
     const searchLower = searchTerm.trim().toLowerCase();
-    return documents.filter((doc) =>
+    return (documentsQuery.data ?? []).filter((doc) =>
       searchLower === "" || doc.name.toLowerCase().includes(searchLower)
     );
-  }, [searchTerm, documents]);
+  }, [searchTerm, documentsQuery.data]);
 
   const getFileIcon = (type: string) => {
     switch (type) {
@@ -259,7 +249,7 @@ export default function DocumentManagementPage() {
           )}
         </Group>
 
-        {isLoadingDocs ? (
+        {documentsQuery.isLoading ? (
           <Box p="xl" style={{ textAlign: "center" }}>
             <Loader />
           </Box>
@@ -292,13 +282,13 @@ export default function DocumentManagementPage() {
           </Table>
         )}
 
-        {!selectedSyllabusId && !isLoadingSyllabi && (
+        {!selectedSyllabusId && !syllabiQuery.isLoading && (
           <Box p="xl" style={{ textAlign: "center", color: "#9CA3AF" }}>
             <Text size="sm" fw={700}>Vui lòng chọn syllabus để xem tài liệu</Text>
           </Box>
         )}
 
-        {selectedSyllabusId && filteredDocs.length === 0 && !isLoadingDocs && (
+        {selectedSyllabusId && filteredDocs.length === 0 && !documentsQuery.isLoading && (
           <Box p="xl" style={{ textAlign: "center", color: "#9CA3AF" }}>
             <Text size="sm" fw={700}>Không tìm thấy tài liệu phù hợp</Text>
           </Box>
@@ -319,12 +309,12 @@ export default function DocumentManagementPage() {
         <Stack gap="md" py="md">
           <Select
             label="Chọn syllabus để upload tài liệu"
-            placeholder={isLoadingSyllabi ? "Đang tải syllabus..." : "Chọn syllabus..."}
+            placeholder={syllabiQuery.isLoading ? "Đang tải syllabus..." : "Chọn syllabus..."}
             data={subjectOptions}
             value={selectedSyllabusId ? String(selectedSyllabusId) : null}
             onChange={(value) => setSelectedSyllabusId(value ? Number(value) : null)}
             radius={0}
-            disabled={isLoadingSyllabi}
+            disabled={syllabiQuery.isLoading}
             required
           />
 

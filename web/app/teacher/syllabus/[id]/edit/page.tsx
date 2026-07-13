@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState, useMemo } from "react";
 import Link from "next/link";
 import { useRouter, useParams } from "next/navigation";
 import { useForm, useStore } from "@tanstack/react-form";
@@ -44,6 +44,7 @@ import {
   type ApiCourse,
   type UpdateSyllabusFullPayload,
 } from "@/lib/api";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
 type CloRow = { cloName: string; cloDetails: string; loDetails: string };
 
@@ -102,89 +103,81 @@ export default function EditSyllabusPage() {
   const params = useParams();
   const syllabusId = Number(params.id);
 
-  const [courses, setCourses] = useState<ApiCourse[]>([]);
-  const [coursesLoading, setCoursesLoading] = useState(true);
-  const [syllabusLoading, setSyllabusLoading] = useState(true);
-  const [initialValues, setInitialValues] = useState<SyllabusFormValues | null>(null);
+  const coursesQuery = useQuery({
+    queryKey: ["courses"],
+    queryFn: () => getCourses(),
+  });
 
-  useEffect(() => {
-    // 1. Fetch courses
-    getCourses()
-      .then((res) => setCourses(res.courses))
-      .catch(() => notifications.show({ title: "Lỗi", message: "Không thể tải danh sách môn học", color: "red" }))
-      .finally(() => setCoursesLoading(false));
+  const syllabusQuery = useQuery({
+    queryKey: ["syllabus-edit", syllabusId],
+    queryFn: () => getSyllabusDetail(syllabusId),
+    enabled: !!syllabusId,
+  });
 
-    // 2. Fetch syllabus details
-    if (syllabusId) {
-      getSyllabusDetail(syllabusId)
-        .then((res) => {
-          const s = res.syllabus;
-          const mapped: SyllabusFormValues = {
-            courseId: s.courseId,
-            syllabusName: s.syllabusName,
-            syllabusNameEnglish: s.syllabusNameEnglish || "",
-            credits: s.credits,
-            prerequisites: s.prerequisites || "",
-            description: s.description || "",
-            studentTasks: s.studentTasks || "",
-            tools: s.tools || "",
-            scoringScale: s.scoringScale || "10",
-            minAvgMarkToPass: s.minAvgMarkToPass ? parseFloat(s.minAvgMarkToPass) : 5,
-            decisionNo: s.decisionNo || "",
-            note: s.note || "",
-            degreeLevel: s.degreeLevel || "Bachelor",
-            timeAllocation: s.timeAllocation || "",
-            clos: s.clos.map((c) => ({
-              cloName: c.cloName,
-              cloDetails: c.cloDetails,
-              loDetails: c.loDetails || "",
-            })) as CloRow[],
-            schedules: s.schedules.map((sc) => ({
-              session: sc.session,
-              topic: sc.topic,
-              learningMethod: sc.learningMethod || "",
-              lo: sc.lo || "",
-              studentTasks: sc.studentTasks || "",
-              itu: sc.itu || "",
-              studentMaterials: sc.studentMaterials || "",
-              sDownload: sc.sDownload || "",
-              urls: sc.urls || "",
-            })) as ScheduleRow[],
-            assessments: s.assessments.map((a) => ({
-              category: a.category,
-              type: a.type || "on-going",
-              part: a.part || "",
-              weight: typeof a.weight === "string" ? parseFloat(a.weight) : a.weight,
-              completionCriteria: a.completionCriteria || "",
-              duration: a.duration || "",
-              clo: a.clo || "",
-              questionType: a.questionType || "",
-              noQuestion: a.noQuestion || "",
-              knowledgeAndSkill: a.knowledgeAndSkill || "",
-              gradingGuide: a.gradingGuide || "",
-              note: a.note || "",
-            })) as AssessmentRow[],
-            materials: s.materials.map((m) => ({
-              description: m.description,
-              author: m.author || "",
-              publisher: m.publisher || "",
-              publishedDate: m.publishedDate || "",
-              edition: m.edition || "",
-              isbn: m.isbn || "",
-              isMainMaterial: m.isMainMaterial || "Main",
-              isHardCopy: m.isHardCopy || "Không",
-              isOnline: m.isOnline || "Có",
-              note: m.note || "",
-            })) as MaterialRow[],
-          };
-          setInitialValues(mapped);
-        })
-        .catch((err) => notifications.show({ title: "Lỗi", message: "Không thể tải thông tin syllabus: " + (err?.message || ""), color: "red" }))
-        .finally(() => setSyllabusLoading(false));
-    }
-  }, [syllabusId]);
+  const initialValues = useMemo<SyllabusFormValues | null>(() => {
+    if (!syllabusQuery.data) return null;
+    const s = syllabusQuery.data.syllabus;
+    return {
+      courseId: s.courseId,
+      syllabusName: s.syllabusName,
+      syllabusNameEnglish: s.syllabusNameEnglish || "",
+      credits: s.credits,
+      prerequisites: s.prerequisites || "",
+      description: s.description || "",
+      studentTasks: s.studentTasks || "",
+      tools: s.tools || "",
+      scoringScale: s.scoringScale || "10",
+      minAvgMarkToPass: s.minAvgMarkToPass ? parseFloat(s.minAvgMarkToPass) : 5,
+      decisionNo: s.decisionNo || "",
+      note: s.note || "",
+      degreeLevel: s.degreeLevel || "Bachelor",
+      timeAllocation: s.timeAllocation || "",
+      clos: s.clos.map((c) => ({
+        cloName: c.cloName,
+        cloDetails: c.cloDetails,
+        loDetails: c.loDetails || "",
+      })) as CloRow[],
+      schedules: s.schedules.map((sc) => ({
+        session: sc.session,
+        topic: sc.topic,
+        learningMethod: sc.learningMethod || "",
+        lo: sc.lo || "",
+        studentTasks: sc.studentTasks || "",
+        itu: sc.itu || "",
+        studentMaterials: sc.studentMaterials || "",
+        sDownload: sc.sDownload || "",
+        urls: sc.urls || "",
+      })) as ScheduleRow[],
+      assessments: s.assessments.map((a) => ({
+        category: a.category,
+        type: a.type || "on-going",
+        part: a.part || "",
+        weight: typeof a.weight === "string" ? parseFloat(a.weight) : a.weight,
+        completionCriteria: a.completionCriteria || "",
+        duration: a.duration || "",
+        clo: a.clo || "",
+        questionType: a.questionType || "",
+        noQuestion: a.noQuestion || "",
+        knowledgeAndSkill: a.knowledgeAndSkill || "",
+        gradingGuide: a.gradingGuide || "",
+        note: a.note || "",
+      })) as AssessmentRow[],
+      materials: s.materials.map((m) => ({
+        description: m.description,
+        author: m.author || "",
+        publisher: m.publisher || "",
+        publishedDate: m.publishedDate || "",
+        edition: m.edition || "",
+        isbn: m.isbn || "",
+        isMainMaterial: m.isMainMaterial || "Main",
+        isHardCopy: m.isHardCopy || "Không",
+        isOnline: m.isOnline || "Có",
+        note: m.note || "",
+      })) as MaterialRow[],
+    };
+  }, [syllabusQuery.data]);
 
-  if (coursesLoading || syllabusLoading || !initialValues) {
+  if (coursesQuery.isPending || syllabusQuery.isPending || !initialValues) {
     return (
       <Box style={{ position: "relative", minHeight: 400 }}>
         <LoadingOverlay visible={true} />
@@ -196,7 +189,7 @@ export default function EditSyllabusPage() {
     <EditSyllabusForm
       syllabusId={syllabusId}
       initialValues={initialValues}
-      courses={courses}
+      courses={coursesQuery.data?.courses ?? []}
     />
   );
 }
@@ -210,92 +203,95 @@ interface EditSyllabusFormProps {
 function EditSyllabusForm({ syllabusId, initialValues, courses }: EditSyllabusFormProps) {
   const router = useRouter();
   const [activeStep, setActiveStep] = useState(0);
-  const [submitting, setSubmitting] = useState(false);
   const [expandedAssessments, setExpandedAssessments] = useState<Record<number, boolean>>({});
   const [expandedSchedules, setExpandedSchedules] = useState<Record<number, boolean>>({});
   const [expandedClos, setExpandedClos] = useState<Record<number, boolean>>({});
   const [expandedMaterials, setExpandedMaterials] = useState<Record<number, boolean>>({});
 
+  const queryClient = useQueryClient();
+
+  const updateMutation = useMutation({
+    mutationFn: (payload: UpdateSyllabusFullPayload) => updateSyllabusFull(syllabusId, payload),
+    onSuccess: (_data, variables) => {
+      queryClient.invalidateQueries({ queryKey: ["syllabus-edit", syllabusId] });
+      notifications.show({
+        title: "Thành công",
+        message: `Đã cập nhật syllabus "${variables.syllabusName}"`,
+        color: "green",
+      });
+      router.push("/teacher/syllabus");
+    },
+    onError: (err: any) => {
+      notifications.show({
+        title: "Lỗi",
+        message: err?.message || "Không thể cập nhật syllabus",
+        color: "red",
+      });
+    },
+  });
+
   const form = useForm({
     defaultValues: initialValues,
     onSubmit: async ({ value }) => {
-      setSubmitting(true);
-      try {
-        const payload: UpdateSyllabusFullPayload = {
-          syllabusName: value.syllabusName,
-          syllabusNameEnglish: value.syllabusNameEnglish || undefined,
-          credits: value.credits,
-          prerequisites: value.prerequisites || undefined,
-          description: value.description || undefined,
-          studentTasks: value.studentTasks || undefined,
-          tools: value.tools || undefined,
-          scoringScale: value.scoringScale || "10",
-          minAvgMarkToPass: value.minAvgMarkToPass ?? 5,
-          decisionNo: value.decisionNo || undefined,
-          note: value.note || undefined,
-          degreeLevel: value.degreeLevel || "Bachelor",
-          timeAllocation: value.timeAllocation || undefined,
-          clos: value.clos.filter((c) => c.cloName || c.cloDetails).map((c) => ({
-            cloName: c.cloName,
-            cloDetails: c.cloDetails,
-            loDetails: c.loDetails || null,
-          })),
-          schedules: value.schedules.filter((s) => s.topic).map((s) => ({
-            session: s.session,
-            topic: s.topic,
-            learningMethod: s.learningMethod || null,
-            lo: s.lo || null,
-            studentTasks: s.studentTasks || null,
-            itu: s.itu || null,
-            studentMaterials: s.studentMaterials || null,
-            sDownload: s.sDownload || null,
-            urls: s.urls || null,
-          })),
-          assessments: value.assessments.filter((a) => a.category).map((a) => ({
-            category: a.category,
-            type: a.type || null,
-            weight: a.weight,
-            clo: a.clo || null,
-            completionCriteria: a.completionCriteria || null,
-            gradingGuide: a.gradingGuide || null,
-            part: a.part || null,
-            duration: a.duration || null,
-            questionType: a.questionType || null,
-            noQuestion: a.noQuestion || null,
-            knowledgeAndSkill: a.knowledgeAndSkill || null,
-            note: a.note || null,
-          })),
-          materials: value.materials.filter((m) => m.description).map((m) => ({
-            description: m.description,
-            author: m.author || null,
-            publisher: m.publisher || null,
-            isMainMaterial: m.isMainMaterial || null,
-            publishedDate: m.publishedDate || null,
-            edition: m.edition || null,
-            isbn: m.isbn || null,
-            isHardCopy: m.isHardCopy || null,
-            isOnline: m.isOnline || null,
-            note: m.note || null,
-          })),
-        };
+      const payload: UpdateSyllabusFullPayload = {
+        syllabusName: value.syllabusName,
+        syllabusNameEnglish: value.syllabusNameEnglish || undefined,
+        credits: value.credits,
+        prerequisites: value.prerequisites || undefined,
+        description: value.description || undefined,
+        studentTasks: value.studentTasks || undefined,
+        tools: value.tools || undefined,
+        scoringScale: value.scoringScale || "10",
+        minAvgMarkToPass: value.minAvgMarkToPass ?? 5,
+        decisionNo: value.decisionNo || undefined,
+        note: value.note || undefined,
+        degreeLevel: value.degreeLevel || "Bachelor",
+        timeAllocation: value.timeAllocation || undefined,
+        clos: value.clos.filter((c) => c.cloName || c.cloDetails).map((c) => ({
+          cloName: c.cloName,
+          cloDetails: c.cloDetails,
+          loDetails: c.loDetails || null,
+        })),
+        schedules: value.schedules.filter((s) => s.topic).map((s) => ({
+          session: s.session,
+          topic: s.topic,
+          learningMethod: s.learningMethod || null,
+          lo: s.lo || null,
+          studentTasks: s.studentTasks || null,
+          itu: s.itu || null,
+          studentMaterials: s.studentMaterials || null,
+          sDownload: s.sDownload || null,
+          urls: s.urls || null,
+        })),
+        assessments: value.assessments.filter((a) => a.category).map((a) => ({
+          category: a.category,
+          type: a.type || null,
+          weight: a.weight,
+          clo: a.clo || null,
+          completionCriteria: a.completionCriteria || null,
+          gradingGuide: a.gradingGuide || null,
+          part: a.part || null,
+          duration: a.duration || null,
+          questionType: a.questionType || null,
+          noQuestion: a.noQuestion || null,
+          knowledgeAndSkill: a.knowledgeAndSkill || null,
+          note: a.note || null,
+        })),
+        materials: value.materials.filter((m) => m.description).map((m) => ({
+          description: m.description,
+          author: m.author || null,
+          publisher: m.publisher || null,
+          isMainMaterial: m.isMainMaterial || null,
+          publishedDate: m.publishedDate || null,
+          edition: m.edition || null,
+          isbn: m.isbn || null,
+          isHardCopy: m.isHardCopy || null,
+          isOnline: m.isOnline || null,
+          note: m.note || null,
+        })),
+      };
 
-        await updateSyllabusFull(syllabusId, payload);
-
-        notifications.show({
-          title: "Thành công",
-          message: `Đã cập nhật syllabus "${value.syllabusName}"`,
-          color: "green",
-        });
-        router.push("/teacher/syllabus");
-      } catch (err: any) {
-        notifications.show({
-          title: "Lỗi",
-          message: err?.message || "Không thể cập nhật syllabus",
-          color: "red",
-        });
-      } finally {
-        setSubmitting(false);
-      }
+      updateMutation.mutate(payload);
     },
   });
 
@@ -1395,14 +1391,14 @@ function EditSyllabusForm({ syllabusId, initialValues, courses }: EditSyllabusFo
           ) : (
             <Button
               onClick={handleSave}
-              disabled={!weightValid || submitting}
+              disabled={!weightValid || updateMutation.isPending}
               style={{ backgroundColor: "#F26F21" }}
               radius={0}
               fw={700}
               leftSection={<IconCheck size={18} />}
-              loading={submitting}
+              loading={updateMutation.isPending}
             >
-              {submitting ? "Đang lưu..." : "LƯU THAY ĐỔI"}
+              {updateMutation.isPending ? "Đang lưu..." : "LƯU THAY ĐỔI"}
             </Button>
           )}
         </Group>

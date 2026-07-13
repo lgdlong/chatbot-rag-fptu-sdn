@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState, useCallback } from "react";
+import React from "react";
 import Link from "next/link";
 import {
   Title,
@@ -17,13 +17,13 @@ import {
   Center,
 } from "@mantine/core";
 import { BarChart } from "@mantine/charts";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { notifications } from "@mantine/notifications";
 import {
   IconShield,
   IconUserCheck,
   IconActivity,
   IconUsers,
-  IconSettings,
   IconBook,
   IconFileText,
   IconMessages,
@@ -65,38 +65,35 @@ function formatMonth(ym: string): string {
 // ── Page ──
 
 export default function SuperAdminDashboardPage() {
-  const [stats, setStats] = useState<DashboardStats | null>(null);
-  const [chartData, setChartData] = useState<QueryTrendItem[]>([]);
-  const [activity, setActivity] = useState<ActivityItem[]>([]);
-  const [loading, setLoading] = useState(true);
+  const queryClient = useQueryClient();
 
-  const loadData = useCallback(async () => {
-    setLoading(true);
-    try {
-      const [dashboardStats, trend, recentActivity] = await Promise.all([
-        getAdminDashboardStats(),
-        getQueryTrend(12),
-        getAdminActivity(20),
-      ]);
+  const dashboardStats = useQuery({
+    queryKey: ["admin-dashboard"],
+    queryFn: getAdminDashboardStats,
+  });
 
-      setStats(dashboardStats);
-      setChartData(trend);
-      setActivity(recentActivity);
-    } catch (err) {
-      const message =
-        err instanceof Error ? err.message : "Không tải được số liệu dashboard";
-      notifications.show({ title: "Lỗi", message, color: "red" });
-      setStats(null);
-      setChartData([]);
-      setActivity([]);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+  const trend = useQuery({
+    queryKey: ["query-trend"],
+    queryFn: () => getQueryTrend(12),
+  });
 
-  useEffect(() => {
-    void loadData();
-  }, [loadData]);
+  const activityQuery = useQuery({
+    queryKey: ["admin-activity"],
+    queryFn: () => getAdminActivity(20),
+  });
+
+  // ── Denormalise for downstream ──
+
+  const stats = dashboardStats.data;
+  const chartData = trend.data ?? [];
+  const activity = activityQuery.data ?? [];
+  const loading = dashboardStats.isLoading && !dashboardStats.data;
+
+  const refresh = () => {
+    queryClient.invalidateQueries({
+      queryKey: ["admin-dashboard", "query-trend", "admin-activity"],
+    });
+  };
 
   // ── Stat cards ──
 
@@ -194,7 +191,7 @@ export default function SuperAdminDashboardPage() {
           variant="outline"
           size="xs"
           color="#1A3A5C"
-          onClick={loadData}
+          onClick={refresh}
           loading={loading}
         >
           Làm mới
@@ -388,27 +385,6 @@ export default function SuperAdminDashboardPage() {
                   </Title>
                   <Text size="xs" c="dimmed" mt={4}>
                     Quản lý email sinh viên được duyệt
-                  </Text>
-                </div>
-              </Group>
-            </Card>
-
-            <Card
-              p="lg"
-              radius={0}
-              style={{ border: "1px solid #E2E8F0", backgroundColor: "white", cursor: "pointer" }}
-              className="hover-card"
-            >
-              <Group gap="md">
-                <ThemeIcon size={44} radius={0} style={{ backgroundColor: "#F3E8FF", color: "#7C3AED" }}>
-                  <IconSettings size={22} />
-                </ThemeIcon>
-                <div>
-                  <Title order={3} style={{ fontSize: "15px", fontWeight: 800, color: "#1A3A5C" }}>
-                    GIÁM SÁT RAG
-                  </Title>
-                  <Text size="xs" c="dimmed" mt={4}>
-                    Theo dõi hiệu năng Vector DB & Gemini Chunks
                   </Text>
                 </div>
               </Group>

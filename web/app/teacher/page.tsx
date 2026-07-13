@@ -1,7 +1,8 @@
 "use client";
 
-import React, { useEffect, useState, useCallback } from "react";
+import React from "react";
 import Link from "next/link";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   Title,
   Text,
@@ -24,16 +25,10 @@ import {
 import * as api from "@/lib/api";
 
 export default function TeacherDashboardPage() {
-  const [loading, setLoading] = useState(true);
-  const [totalSyllabus, setTotalSyllabus] = useState(0);
-  const [activeSyllabus, setActiveSyllabus] = useState(0);
-  const [draftSyllabus, setDraftSyllabus] = useState(0);
-  const [totalDocs, setTotalDocs] = useState(0);
-  const [recentActivities, setRecentActivities] = useState<Array<{ type: string; action: string; time: string; user: string }>>([]);
-
-  const loadStats = useCallback(async () => {
-    setLoading(true);
-    try {
+  const queryClient = useQueryClient();
+  const { data = { totalSyllabus: 0, activeSyllabus: 0, draftSyllabus: 0, totalDocs: 0, activities: [] as Array<{ type: string; action: string; time: string; user: string }> }, isLoading } = useQuery({
+    queryKey: ["teacher-stats"],
+    queryFn: async () => {
       const [syllabusesRes, coursesRes] = await Promise.all([
         api.searchSyllabus(),
         api.getCourses(),
@@ -42,13 +37,12 @@ export default function TeacherDashboardPage() {
       const syllabuses = syllabusesRes.syllabuses || [];
       const courses = coursesRes.courses || [];
 
-      setTotalSyllabus(syllabuses.length);
-      setActiveSyllabus(syllabuses.filter((s) => s.isActive && s.isApproved).length);
-      setDraftSyllabus(syllabuses.filter((s) => !s.isApproved).length);
+      const totalSyllabus = syllabuses.length;
+      const activeSyllabus = syllabuses.filter((s) => s.isActive && s.isApproved).length;
+      const draftSyllabus = syllabuses.filter((s) => !s.isApproved).length;
 
       // Sum document counts
-      const docCount = courses.reduce((sum, c) => sum + (c.documentCount || 0), 0);
-      setTotalDocs(docCount);
+      const totalDocs = courses.reduce((sum, c) => sum + (c.documentCount || 0), 0);
 
       // Create recent activity lists based on newest syllabuses
       const sortedSyllabuses = [...syllabuses].slice(0, 5);
@@ -62,43 +56,35 @@ export default function TeacherDashboardPage() {
         };
       });
 
-      setRecentActivities(activities);
-    } catch (error) {
-      console.error("Failed to load dashboard stats:", error);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
-  useEffect(() => {
-    void loadStats();
-  }, [loadStats]);
+      return { totalSyllabus, activeSyllabus, draftSyllabus, totalDocs, activities };
+    },
+  });
 
   const stats = [
     {
       name: "Tổng Syllabus",
-      value: loading ? "—" : String(totalSyllabus),
+      value: isLoading ? "—" : String(data.totalSyllabus),
       icon: IconFileText,
       color: "blue",
       description: "Đề cương trong hệ thống",
     },
     {
       name: "Đang Hoạt Động",
-      value: loading ? "—" : String(activeSyllabus),
+      value: isLoading ? "—" : String(data.activeSyllabus),
       icon: IconCircleCheck,
       color: "green",
       description: "Đã phê duyệt & sử dụng",
     },
     {
       name: "Bản Nháp / Chờ duyệt",
-      value: loading ? "—" : String(draftSyllabus),
+      value: isLoading ? "—" : String(data.draftSyllabus),
       icon: IconClock,
       color: "yellow",
       description: "Đề cương chưa phê duyệt",
     },
     {
       name: "Tài Liệu Môn Học",
-      value: loading ? "—" : String(totalDocs),
+      value: isLoading ? "—" : String(data.totalDocs),
       icon: IconUpload,
       color: "orange",
       description: "Slide bài giảng đã index RAG",
@@ -117,7 +103,7 @@ export default function TeacherDashboardPage() {
         </Text>
       </div>
 
-      {loading ? (
+      {isLoading ? (
         <Center py="xl">
           <Loader color="#1A3A5C" type="bars" />
         </Center>
@@ -180,12 +166,12 @@ export default function TeacherDashboardPage() {
                 </Box>
 
                 <Stack gap={0}>
-                  {recentActivities.map((activity, index) => (
+                  {data.activities.map((activity, index) => (
                     <Box
                       key={index}
                       p="md"
                       style={{
-                        borderBottom: index === recentActivities.length - 1 ? "none" : "1px solid #F1F5F9",
+                        borderBottom: index === data.activities.length - 1 ? "none" : "1px solid #F1F5F9",
                         display: "flex",
                         alignItems: "flex-start",
                         gap: "16px",
@@ -212,7 +198,7 @@ export default function TeacherDashboardPage() {
                       </Box>
                     </Box>
                   ))}
-                  {recentActivities.length === 0 && (
+                  {data.activities.length === 0 && (
                     <Box p="xl" style={{ textAlign: "center", color: "#9CA3AF" }}>
                       <Text size="sm" fw={700}>Chưa có hoạt động nào được ghi nhận</Text>
                     </Box>

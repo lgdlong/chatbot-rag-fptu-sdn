@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import {
   Title,
   Text,
@@ -29,62 +30,54 @@ import * as api from "@/lib/api";
 
 export default function StudentDashboard() {
   const [searchTerm, setSearchTerm] = useState("");
-  const [results, setResults] = useState<Subject[]>([]);
-  const [hasSearched, setHasSearched] = useState(false);
-  const [isSearching, setIsSearching] = useState(false);
+  const [dismissedError, setDismissedError] = useState(false);
 
-  // API-loaded subjects
-  const [allSubjects, setAllSubjects] = useState<Subject[]>([]);
-  const [isLoadingSubjects, setIsLoadingSubjects] = useState(true);
-  const [apiError, setApiError] = useState<string | null>(null);
+  // Load all syllabuses on mount
+  const initialQuery = useQuery({
+    queryKey: ["student-syllabuses", ""],
+    queryFn: () => api.searchSyllabus(),
+  });
 
-  // Load all syllabuses from API on mount
-  const loadSubjects = useCallback(async () => {
-    setIsLoadingSubjects(true);
-    setApiError(null);
-    try {
-      const { syllabuses } = await api.searchSyllabus();
-      const mapped = syllabuses.map((s, i) => mapSyllabusToSubject(s, i));
-      setAllSubjects(mapped);
-    } catch (err) {
-      console.error("Failed to load subjects from API:", err);
-      setApiError("Không thể kết nối đến server. Đang hiển thị dữ liệu mẫu.");
-      setAllSubjects(ALL_SUBJECTS); // fallback
-    } finally {
-      setIsLoadingSubjects(false);
-    }
-  }, []);
+  // Search when user types 2+ characters
+  const searchQuery = useQuery({
+    queryKey: ["student-syllabuses", searchTerm],
+    queryFn: () => api.searchSyllabus(searchTerm || undefined),
+    enabled: searchTerm.length >= 2,
+  });
 
-  useEffect(() => {
-    loadSubjects();
-  }, [loadSubjects]);
+  // Derived state
+  const initialRaw = initialQuery.data?.syllabuses;
+  const allSubjects = initialRaw
+    ? initialRaw.map((s, i) => mapSyllabusToSubject(s, i))
+    : ALL_SUBJECTS;
+
+  const searchRaw = searchQuery.data?.syllabuses;
+  const results = searchTerm.length >= 2
+    ? (searchRaw ? searchRaw.map((s, i) => mapSyllabusToSubject(s, i)) : [])
+    : [];
+
+  const isSearching = searchTerm.length >= 2 ? searchQuery.isLoading : false;
+  const isLoadingSubjects = initialQuery.isLoading;
+  const hasSearched = searchTerm.length >= 2;
+
+  const apiError = !dismissedError && (
+    searchTerm.length >= 2
+      ? searchQuery.isError
+        ? "Không thể kết nối đến server."
+        : null
+      : initialQuery.isError
+        ? "Không thể kết nối đến server. Đang hiển thị dữ liệu mẫu."
+        : null
+  );
 
   // Featured: first 3 active+approved subjects
   const featuredSubjects = allSubjects
     .filter((s) => s.isActive && s.isApproved)
     .slice(0, 3);
 
-  const handleSearch = async () => {
+  const handleSearch = () => {
     if (searchTerm.trim().length < 2) return;
-
-    setIsSearching(true);
-    setHasSearched(true);
-
-    try {
-      const { syllabuses } = await api.searchSyllabus(searchTerm.trim());
-      const mapped = syllabuses.map((s, i) => mapSyllabusToSubject(s, i));
-      setResults(mapped);
-    } catch {
-      // Fallback to local filter if API fails
-      const filtered = allSubjects.filter(
-        (s) =>
-          s.code.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          s.name.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-      setResults(filtered);
-    } finally {
-      setIsSearching(false);
-    }
+    // Query fires automatically via enabled condition
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -95,8 +88,7 @@ export default function StudentDashboard() {
 
   const handleClear = () => {
     setSearchTerm("");
-    setHasSearched(false);
-    setResults([]);
+    setDismissedError(false);
   };
 
   return (
@@ -252,7 +244,7 @@ export default function StudentDashboard() {
             radius="md"
             mb="lg"
             withCloseButton
-            onClose={() => setApiError(null)}
+            onClose={() => setDismissedError(true)}
           >
             {apiError}
           </Alert>

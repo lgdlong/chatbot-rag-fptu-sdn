@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Title,
   Text,
@@ -35,6 +35,7 @@ import {
   IconAlertCircle,
 } from "@tabler/icons-react";
 import { apiFetch, ApiError } from "../../../lib/auth-client";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
 const PAGE_SIZE = 10;
 
@@ -67,22 +68,18 @@ function formatDate(value: string): string {
 }
 
 export default function WhitelistManagementPage() {
-  const [emails, setEmails] = useState<WhitelistEmail[]>([]);
-  const [total, setTotal] = useState(0);
-  const [totalPages, setTotalPages] = useState(1);
+  const queryClient = useQueryClient();
+
   const [page, setPage] = useState(1);
   const [searchInput, setSearchInput] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
-  const [loading, setLoading] = useState(true);
 
   const [showAddModal, setShowAddModal] = useState(false);
   const [newEmail, setNewEmail] = useState("");
-  const [errorMsg, setErrorMsg] = useState("");
-  const [adding, setAdding] = useState(false);
+  const [addError, setAddError] = useState<string | null>(null);
 
   const [showBulkModal, setShowBulkModal] = useState(false);
   const [bulkEmailsText, setBulkEmailsText] = useState("");
-  const [importing, setImporting] = useState(false);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -92,61 +89,63 @@ export default function WhitelistManagementPage() {
     return () => clearTimeout(timer);
   }, [searchInput]);
 
-  const loadWhitelist = useCallback(async () => {
-    setLoading(true);
-    try {
-      const params = new URLSearchParams({
-        page: String(page),
-        limit: String(PAGE_SIZE),
-      });
-      if (searchTerm) params.set("q", searchTerm);
+  const q = searchTerm;
+  const { data, isLoading } = useQuery({
+    queryKey: ["whitelist", page, q],
+    queryFn: () =>
+      apiFetch<WhitelistListResponse>(`/api/whitelist?page=${page}&limit=${PAGE_SIZE}&q=${encodeURIComponent(q || "")}`),
+    placeholderData: (prev) => prev,
+  });
 
-      const data = await apiFetch<WhitelistListResponse>(`/api/whitelist?${params.toString()}`);
-      setEmails(data.emails);
-      setTotal(data.pagination.total);
-      setTotalPages(Math.max(1, data.pagination.totalPages));
-    } catch (err) {
-      const message = err instanceof ApiError ? err.message : "Không tải được whitelist";
-      notifications.show({ title: "Lỗi", message, color: "red" });
-      setEmails([]);
-      setTotal(0);
-      setTotalPages(1);
-    } finally {
-      setLoading(false);
-    }
-  }, [page, searchTerm]);
+  const emails = data?.emails ?? [];
+  const total = data?.pagination?.total ?? 0;
+  const totalPages = Math.max(1, data?.pagination?.totalPages ?? 1);
 
-  useEffect(() => {
-    void loadWhitelist();
-  }, [loadWhitelist]);
-
-  const handleAddEmail = async () => {
-    setErrorMsg("");
-    const email = newEmail.trim().toLowerCase();
-    if (!email) {
-      setErrorMsg("Email là bắt buộc");
-      return;
-    }
-
-    setAdding(true);
-    try {
-      await apiFetch("/api/whitelist", {
-        method: "POST",
-        body: JSON.stringify({ email }),
-      });
-      notifications.show({
-        title: "Thành công",
-        message: `Đã thêm ${email} vào whitelist`,
-        color: "green",
-      });
+  const addMutation = useMutation({
+    mutationFn: (email: string) =>
+      apiFetch("/api/whitelist", { method: "POST", body: JSON.stringify({ email }) }),
+    onSuccess: (_data, variables) => {
+      queryClient.invalidateQueries({ queryKey: ["whitelist"] });
+      notifications.show({ title: "Thành công", message: `Đã thêm ${variables} vào whitelist`, color: "green" });
       setShowAddModal(false);
       setNewEmail("");
-      void loadWhitelist();
-    } catch (err) {
-      setErrorMsg(err instanceof ApiError ? err.message : "Không thêm được email");
-    } finally {
-      setAdding(false);
+      setAddError(null);
+    },
+    onError: (err) => {
+      setAddError(err instanceof ApiError ? err.message : "Không thêm được email");
+    },
+  });
+
+  const deleteMutation = useMutation({
+    mutationFn: ({ id }: { id: string }) =>
+      apiFetch(`/api/whitelist/${id}`, { method: "DELETE" }),
+  });
+
+  const importMutation = useMutation({
+    mutationFn: (emails: string[]) =>
+      apiFetch<WhitelistImportResponse>("/api/whitelist/import", { method: "POST", body: JSON.stringify({ emails }) }),
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ["whitelist"] });
+      notifications.show({
+        title: "Import hoàn tất",
+        message: `Thêm ${data.importedCount} email, bỏ qua ${data.skippedCount}`,
+        color: "green",
+      });
+      setShowBulkModal(false);
+      setBulkEmailsText("");
+    },
+    onError: (err) => {
+      notifications.show({ title: "Lỗi", message: err instanceof ApiError ? err.message : "Import thất bại", color: "red" });
+    },
+  });
+
+  const handleAddEmail = () => {
+    const email = newEmail.trim().toLowerCase();
+    if (!email) {
+      setAddError("Email là bắt buộc");
+      return;
     }
+    addMutation.mutate(email);
   };
 
   const handleDeleteEmail = (item: WhitelistEmail) => {
@@ -159,27 +158,24 @@ export default function WhitelistManagementPage() {
       ),
       labels: { confirm: "Xóa", cancel: "Hủy" },
       confirmProps: { color: "red" },
-      onConfirm: async () => {
-        try {
-          await apiFetch(`/api/whitelist/${item.id}`, { method: "DELETE" });
-          notifications.show({
-            title: "Đã xóa",
-            message: item.email,
-            color: "green",
-          });
-          void loadWhitelist();
-        } catch (err) {
-          notifications.show({
-            title: "Lỗi",
-            message: err instanceof ApiError ? err.message : "Không xóa được email",
-            color: "red",
-          });
-        }
+      onConfirm: () => {
+        deleteMutation.mutate(
+          { id: item.id },
+          {
+            onSuccess: () => {
+              queryClient.invalidateQueries({ queryKey: ["whitelist"] });
+              notifications.show({ title: "Đã xóa", message: item.email, color: "green" });
+            },
+            onError: (err) => {
+              notifications.show({ title: "Lỗi", message: err instanceof ApiError ? err.message : "Không xóa được email", color: "red" });
+            },
+          },
+        );
       },
     });
   };
 
-  const handleBulkUpload = async () => {
+  const handleBulkUpload = () => {
     if (!bulkEmailsText.trim()) {
       notifications.show({ title: "Lỗi", message: "Danh sách email trống", color: "red" });
       return;
@@ -195,29 +191,7 @@ export default function WhitelistManagementPage() {
       return;
     }
 
-    setImporting(true);
-    try {
-      const result = await apiFetch<WhitelistImportResponse>("/api/whitelist/import", {
-        method: "POST",
-        body: JSON.stringify({ emails: emailList }),
-      });
-      notifications.show({
-        title: "Import hoàn tất",
-        message: `Thêm ${result.importedCount} email, bỏ qua ${result.skippedCount}`,
-        color: "green",
-      });
-      setShowBulkModal(false);
-      setBulkEmailsText("");
-      void loadWhitelist();
-    } catch (err) {
-      notifications.show({
-        title: "Lỗi",
-        message: err instanceof ApiError ? err.message : "Import thất bại",
-        color: "red",
-      });
-    } finally {
-      setImporting(false);
-    }
+    importMutation.mutate(emailList);
   };
 
   const handleExport = async () => {
@@ -281,7 +255,7 @@ export default function WhitelistManagementPage() {
           </Button>
           <Button
             onClick={() => {
-              setErrorMsg("");
+              setAddError(null);
               setShowAddModal(true);
             }}
             style={{ backgroundColor: "#F26F21" }}
@@ -319,7 +293,7 @@ export default function WhitelistManagementPage() {
       </Card>
 
       <Card p={0} radius={0} style={{ border: "1px solid #E2E8F0", backgroundColor: "white" }}>
-        {loading ? (
+        {isLoading ? (
           <Center py="xl">
             <Loader color="#1A3A5C" type="bars" />
           </Center>
@@ -398,9 +372,9 @@ export default function WhitelistManagementPage() {
         }}
       >
         <Stack gap="md" py="md">
-          {errorMsg && (
+          {addError && (
             <Alert icon={<IconAlertCircle size={16} />} color="red" radius={0}>
-              {errorMsg}
+              {addError}
             </Alert>
           )}
 
@@ -423,7 +397,7 @@ export default function WhitelistManagementPage() {
               radius={0}
               onClick={() => void handleAddEmail()}
               fw={700}
-              loading={adding}
+              loading={addMutation.isPending}
             >
               Thêm vào Whitelist
             </Button>
@@ -461,7 +435,7 @@ export default function WhitelistManagementPage() {
               radius={0}
               onClick={() => void handleBulkUpload()}
               fw={700}
-              loading={importing}
+              loading={importMutation.isPending}
             >
               Bắt đầu tải lên
             </Button>
@@ -480,7 +454,7 @@ export default function WhitelistManagementPage() {
                 Tổng Whitelist
               </Text>
               <Text fw={900} size="xl" style={{ color: "#1A1A1A" }}>
-                {loading ? "—" : total.toLocaleString("vi-VN")}
+                {isLoading ? "—" : total.toLocaleString("vi-VN")}
               </Text>
             </div>
           </Group>
@@ -496,7 +470,7 @@ export default function WhitelistManagementPage() {
                 Trang hiện tại
               </Text>
               <Text fw={900} size="xl" style={{ color: "#1A1A1A" }}>
-                {loading ? "—" : `${page} / ${totalPages}`}
+                {isLoading ? "—" : `${page} / ${totalPages}`}
               </Text>
             </div>
           </Group>

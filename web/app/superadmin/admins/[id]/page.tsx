@@ -1,8 +1,9 @@
 "use client";
 
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   Title,
   Text,
@@ -75,67 +76,180 @@ export default function AdminUserDetailPage() {
   const userId = params.id;
   const router = useRouter();
   const { user: currentUser, refetchSession } = useAuth();
+  const queryClient = useQueryClient();
 
-  const [detail, setDetail] = useState<AdminUserDetail | null>(null);
-  const [sessions, setSessions] = useState<UserSession[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [sessionsLoading, setSessionsLoading] = useState(false);
-  const [actionLoading, setActionLoading] = useState(false);
   const [selectedRole, setSelectedRole] = useState<UserRole>("STUDENT");
   const [newPassword, setNewPassword] = useState("");
   const [banReason, setBanReason] = useState("");
 
   const isSelf = currentUser?.id === userId;
 
-  const loadUser = useCallback(async () => {
-    setLoading(true);
-    try {
+  const { data: detail, isLoading: loading } = useQuery<AdminUserDetail>({
+    queryKey: ["admin-user", userId],
+    queryFn: async () => {
       const res = await authClient.admin.getUser({ query: { id: userId } });
       if (res.error) {
         throw new Error(res.error.message ?? "Không tải được thông tin người dùng");
       }
       const user = res.data as AdminUserDetail;
-      setDetail(user);
       if (user.role === "ADMIN" || user.role === "LECTURER" || user.role === "STUDENT") {
         setSelectedRole(user.role);
       }
-    } catch (err) {
-      notifications.show({
-        title: "Lỗi",
-        message: err instanceof Error ? err.message : "Không tải được người dùng",
-        color: "red",
-      });
-      setDetail(null);
-    } finally {
-      setLoading(false);
-    }
-  }, [userId]);
+      return user;
+    },
+  });
 
-  const loadSessions = useCallback(async () => {
-    setSessionsLoading(true);
-    try {
+  const {
+    data: sessionsResponse,
+    isLoading: sessionsLoading,
+    refetch: refetchSessions,
+  } = useQuery<UserSession[]>({
+    queryKey: ["admin-user-sessions", userId],
+    queryFn: async () => {
       const res = await authClient.admin.listUserSessions({ userId });
       if (res.error) {
         throw new Error(res.error.message ?? "Không tải được phiên đăng nhập");
       }
-      const list = Array.isArray(res.data) ? res.data : (res.data as { sessions?: UserSession[] })?.sessions ?? [];
-      setSessions(list as UserSession[]);
-    } catch (err) {
+      const list = Array.isArray(res.data)
+        ? res.data
+        : (res.data as { sessions?: UserSession[] })?.sessions ?? [];
+      return list as UserSession[];
+    },
+  });
+
+  const sessions = sessionsResponse ?? [];
+
+  const setRoleMutation = useMutation({
+    mutationFn: (role: UserRole) => authClient.admin.setRole({ userId, role }),
+    onSuccess: () => {
+      notifications.show({ title: "Thành công", message: "Đã cập nhật vai trò", color: "green" });
+      queryClient.invalidateQueries({ queryKey: ["admin-user", userId] });
+    },
+    onError: (err) => {
       notifications.show({
         title: "Lỗi",
-        message: err instanceof Error ? err.message : "Không tải được phiên",
+        message: err instanceof Error ? err.message : "Không đổi được vai trò",
         color: "red",
       });
-      setSessions([]);
-    } finally {
-      setSessionsLoading(false);
-    }
-  }, [userId]);
+    },
+  });
 
-  useEffect(() => {
-    void loadUser();
-    void loadSessions();
-  }, [loadUser, loadSessions]);
+  const banMutation = useMutation({
+    mutationFn: (reason?: string) =>
+      authClient.admin.banUser({
+        userId,
+        banReason: reason?.trim() || undefined,
+      }),
+    onSuccess: () => {
+      notifications.show({ title: "Thành công", message: "Đã cấm tài khoản", color: "green" });
+      queryClient.invalidateQueries({ queryKey: ["admin-user", userId] });
+    },
+    onError: (err) => {
+      notifications.show({
+        title: "Lỗi",
+        message: err instanceof Error ? err.message : "Không cấm được tài khoản",
+        color: "red",
+      });
+    },
+  });
+
+  const unbanMutation = useMutation({
+    mutationFn: () => authClient.admin.unbanUser({ userId }),
+    onSuccess: () => {
+      notifications.show({ title: "Thành công", message: "Đã gỡ cấm tài khoản", color: "green" });
+      queryClient.invalidateQueries({ queryKey: ["admin-user", userId] });
+    },
+    onError: (err) => {
+      notifications.show({
+        title: "Lỗi",
+        message: err instanceof Error ? err.message : "Không gỡ cấm được",
+        color: "red",
+      });
+    },
+  });
+
+  const setPasswordMutation = useMutation({
+    mutationFn: async (password: string) => {
+      const res1 = await authClient.admin.setUserPassword({
+        userId,
+        newPassword: password,
+      });
+      if (res1.error) throw new Error(res1.error.message);
+
+      const res2 = await authClient.admin.updateUser({
+        userId,
+        data: { plainPassword: password },
+      });
+      if (res2.error) throw new Error(res2.error.message);
+    },
+    onSuccess: () => {
+      notifications.show({ title: "Thành công", message: "Đã đặt mật khẩu mới", color: "green" });
+      setNewPassword("");
+      queryClient.invalidateQueries({ queryKey: ["admin-user", userId] });
+    },
+    onError: (err) => {
+      notifications.show({
+        title: "Lỗi",
+        message: err instanceof Error ? err.message : "Không đặt được mật khẩu",
+        color: "red",
+      });
+    },
+  });
+
+  const impersonateMutation = useMutation({
+    mutationFn: () => authClient.admin.impersonateUser({ userId }),
+    onSuccess: () => {
+      refetchSession();
+      const role = (detail?.role as UserRole) ?? "STUDENT";
+      router.push(portalPathForRole(role));
+    },
+    onError: (err) => {
+      notifications.show({
+        title: "Lỗi",
+        message: err instanceof Error ? err.message : "Không đóng vai được",
+        color: "red",
+      });
+    },
+  });
+
+  const removeUserMutation = useMutation({
+    mutationFn: () => authClient.admin.removeUser({ userId }),
+    onSuccess: () => {
+      notifications.show({ title: "Đã xóa", message: "Tài khoản đã bị xóa", color: "green" });
+      router.push("/superadmin/admins");
+    },
+    onError: (err) => {
+      notifications.show({
+        title: "Lỗi",
+        message: err instanceof Error ? err.message : "Không xóa được tài khoản",
+        color: "red",
+      });
+    },
+  });
+
+  const revokeSessionMutation = useMutation({
+    mutationFn: (sessionToken: string) =>
+      authClient.admin.revokeUserSession({ sessionToken }),
+    onSuccess: () => {
+      notifications.show({ title: "Thành công", message: "Đã thu hồi phiên", color: "green" });
+      queryClient.invalidateQueries({ queryKey: ["admin-user-sessions", userId] });
+    },
+    onError: (err) => {
+      notifications.show({
+        title: "Lỗi",
+        message: err instanceof Error ? err.message : "Không thu hồi được phiên",
+        color: "red",
+      });
+    },
+  });
+
+  const actionLoading =
+    setRoleMutation.isPending ||
+    banMutation.isPending ||
+    unbanMutation.isPending ||
+    setPasswordMutation.isPending ||
+    impersonateMutation.isPending ||
+    removeUserMutation.isPending;
 
   const handleSetRole = () => {
     if (isSelf) return;
@@ -148,23 +262,7 @@ export default function AdminUserDetailPage() {
       ),
       labels: { confirm: "Xác nhận", cancel: "Hủy" },
       confirmProps: { color: "orange" },
-      onConfirm: async () => {
-        setActionLoading(true);
-        try {
-          const res = await authClient.admin.setRole({ userId, role: selectedRole });
-          if (res.error) throw new Error(res.error.message);
-          notifications.show({ title: "Thành công", message: "Đã cập nhật vai trò", color: "green" });
-          await loadUser();
-        } catch (err) {
-          notifications.show({
-            title: "Lỗi",
-            message: err instanceof Error ? err.message : "Không đổi được vai trò",
-            color: "red",
-          });
-        } finally {
-          setActionLoading(false);
-        }
-      },
+      onConfirm: () => setRoleMutation.mutate(selectedRole),
     });
   };
 
@@ -185,79 +283,21 @@ export default function AdminUserDetailPage() {
       ),
       labels: { confirm: "Cấm", cancel: "Hủy" },
       confirmProps: { color: "red" },
-      onConfirm: async () => {
-        setActionLoading(true);
-        try {
-          const res = await authClient.admin.banUser({
-            userId,
-            banReason: banReason.trim() || undefined,
-          });
-          if (res.error) throw new Error(res.error.message);
-          notifications.show({ title: "Thành công", message: "Đã cấm tài khoản", color: "green" });
-          await loadUser();
-        } catch (err) {
-          notifications.show({
-            title: "Lỗi",
-            message: err instanceof Error ? err.message : "Không cấm được tài khoản",
-            color: "red",
-          });
-        } finally {
-          setActionLoading(false);
-        }
-      },
+      onConfirm: () => banMutation.mutate(banReason),
     });
   };
 
-  const handleUnban = async () => {
+  const handleUnban = () => {
     if (isSelf) return;
-    setActionLoading(true);
-    try {
-      const res = await authClient.admin.unbanUser({ userId });
-      if (res.error) throw new Error(res.error.message);
-      notifications.show({ title: "Thành công", message: "Đã gỡ cấm tài khoản", color: "green" });
-      await loadUser();
-    } catch (err) {
-      notifications.show({
-        title: "Lỗi",
-        message: err instanceof Error ? err.message : "Không gỡ cấm được",
-        color: "red",
-      });
-    } finally {
-      setActionLoading(false);
-    }
+    unbanMutation.mutate();
   };
 
-  const handleSetPassword = async () => {
+  const handleSetPassword = () => {
     if (!newPassword || newPassword.length < 8) {
       notifications.show({ title: "Lỗi", message: "Mật khẩu tối thiểu 8 ký tự", color: "red" });
       return;
     }
-    setActionLoading(true);
-    try {
-      const res = await authClient.admin.setUserPassword({ userId, newPassword });
-      if (res.error) throw new Error(res.error.message);
-      
-      // Đồng thời cập nhật mật khẩu plain text trong CSDL
-      await authClient.admin.updateUser({
-        userId,
-        data: {
-          plainPassword: newPassword,
-        }
-      });
-
-      notifications.show({ title: "Thành công", message: "Đã đặt mật khẩu mới", color: "green" });
-      setNewPassword("");
-      // Tải lại thông tin để hiển thị mật khẩu mới
-      void loadUser();
-    } catch (err) {
-      notifications.show({
-        title: "Lỗi",
-        message: err instanceof Error ? err.message : "Không đặt được mật khẩu",
-        color: "red",
-      });
-    } finally {
-      setActionLoading(false);
-    }
+    setPasswordMutation.mutate(newPassword);
   };
 
   const handleRemoveUser = () => {
@@ -271,23 +311,7 @@ export default function AdminUserDetailPage() {
       ),
       labels: { confirm: "Xóa", cancel: "Hủy" },
       confirmProps: { color: "red" },
-      onConfirm: async () => {
-        setActionLoading(true);
-        try {
-          const res = await authClient.admin.removeUser({ userId });
-          if (res.error) throw new Error(res.error.message);
-          notifications.show({ title: "Đã xóa", message: "Tài khoản đã bị xóa", color: "green" });
-          router.push("/superadmin/admins");
-        } catch (err) {
-          notifications.show({
-            title: "Lỗi",
-            message: err instanceof Error ? err.message : "Không xóa được tài khoản",
-            color: "red",
-          });
-        } finally {
-          setActionLoading(false);
-        }
-      },
+      onConfirm: () => removeUserMutation.mutate(),
     });
   };
 
@@ -301,24 +325,7 @@ export default function AdminUserDetailPage() {
         </Text>
       ),
       labels: { confirm: "Đóng vai", cancel: "Hủy" },
-      onConfirm: async () => {
-        setActionLoading(true);
-        try {
-          const res = await authClient.admin.impersonateUser({ userId });
-          if (res.error) throw new Error(res.error.message);
-          refetchSession();
-          const role = (detail?.role as UserRole) ?? "STUDENT";
-          router.push(portalPathForRole(role));
-        } catch (err) {
-          notifications.show({
-            title: "Lỗi",
-            message: err instanceof Error ? err.message : "Không đóng vai được",
-            color: "red",
-          });
-        } finally {
-          setActionLoading(false);
-        }
-      },
+      onConfirm: () => impersonateMutation.mutate(),
     });
   };
 
@@ -328,20 +335,7 @@ export default function AdminUserDetailPage() {
       children: <Text size="sm">Đăng xuất phiên này khỏi thiết bị của người dùng?</Text>,
       labels: { confirm: "Thu hồi", cancel: "Hủy" },
       confirmProps: { color: "red" },
-      onConfirm: async () => {
-        try {
-          const res = await authClient.admin.revokeUserSession({ sessionToken });
-          if (res.error) throw new Error(res.error.message);
-          notifications.show({ title: "Thành công", message: "Đã thu hồi phiên", color: "green" });
-          await loadSessions();
-        } catch (err) {
-          notifications.show({
-            title: "Lỗi",
-            message: err instanceof Error ? err.message : "Không thu hồi được phiên",
-            color: "red",
-          });
-        }
-      },
+      onConfirm: () => revokeSessionMutation.mutate(sessionToken),
     });
   };
 
@@ -494,7 +488,7 @@ export default function AdminUserDetailPage() {
             leftSection={<IconLock size={16} />}
           />
           <Button
-            onClick={() => void handleSetPassword()}
+            onClick={() => handleSetPassword()}
             loading={actionLoading}
             radius={0}
             style={{ backgroundColor: "#F26F21" }}
@@ -514,7 +508,7 @@ export default function AdminUserDetailPage() {
               leftSection={<IconUserCheck size={16} />}
               color="green"
               radius={0}
-              onClick={() => void handleUnban()}
+              onClick={() => handleUnban()}
               disabled={isSelf}
               loading={actionLoading}
             >
@@ -567,7 +561,7 @@ export default function AdminUserDetailPage() {
             <Title order={3} size="sm" fw={800} c="#1A3A5C">
               Phiên đăng nhập
             </Title>
-            <Button size="xs" variant="light" radius={0} loading={sessionsLoading} onClick={() => void loadSessions()}>
+            <Button size="xs" variant="light" radius={0} loading={sessionsLoading} onClick={() => refetchSessions()}>
               Làm mới
             </Button>
           </Group>
